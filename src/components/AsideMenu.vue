@@ -407,7 +407,7 @@ export default {
         :text-color="'white'"
         :user-icon="warn"
         :link="'https://www.leadertask.ru/alpha'"
-        :message-text="user?.tarif === 'trial' ? 'Пробный тариф.' : 'Закончилась лицензия.'"
+        :message-text="user?.tarif === 'trial' ? 'Пробный тариф' : 'Закончилась лицензия'"
       />
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">

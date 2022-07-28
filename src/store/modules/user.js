@@ -10,7 +10,10 @@ import {
 const state = {
   user: null,
   status: '',
-  hasLoadedOnce: false
+  justRegistered: false,
+  hasLoadedOnce: false,
+  showIntro: false,
+  visitedModals: []
 }
 
 const getters = {}

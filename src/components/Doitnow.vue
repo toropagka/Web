@@ -1,4 +1,21 @@
 <template>
+  <modal-box-description
+    v-model="showModal"
+    button="warning"
+    has-button
+    button-label="Понятно"
+    @confirm="showModal = false"
+  >
+    <p class="font-bold p-3">
+      Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентовНе отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+    </p>
+    <p class="text-sm p-3">
+      Очередь позволит вам работать и в конце концов выполнить конкретную задачу или поручение. Вы не знаете, какая задача будет следующей, а следовательно не думаете о ней, и выполняете только ту, которая сейчас у вас перед глазами.
+    </p>
+    <p class="text-sm p-3">
+      Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
+    </p>
+  </modal-box-description>
   <inspector-modal-box
     v-model="showInspector"
     button="warning"
@@ -37,7 +54,7 @@
       />
     </button>
   </div>
-  <DoitnowSkeleton v-if="isLoading"/>
+  <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
     <DoitnowTask
       v-if="tasksCount && !isLoading"
@@ -67,6 +84,7 @@ import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
+import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -82,7 +100,8 @@ export default {
     DoitnowSkeleton,
     DoitnowTask,
     InspectorModalBox,
-    Icon
+    Icon,
+    ModalBoxDescription
   },
   setup () {
     return {
@@ -103,7 +122,9 @@ export default {
     unsortedTasks: [],
     overdueReaded: [],
     showInspector: false,
-    tasksLoaded: false
+    tasksLoaded: false,
+    showModal: false,
+    isDisplayOnboarding: true
   }),
   computed: {
     tasksCount () {
@@ -181,6 +202,11 @@ export default {
   },
   mounted: function () {
     this.loadAllTasks()
+    if (this.$store.state.user.visitedModals.includes('doitnow')) {
+      return
+    }
+    this.showModal = this.$store.state.user.showIntro
+    this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
     loadAllTasks: function () {
@@ -310,6 +336,10 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    closeOnboadringModal () {
+      this.isDisplayOnboarding = false
+      return this.isDisplayOnboarding
     }
   }
 }

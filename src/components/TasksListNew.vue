@@ -82,7 +82,6 @@
         />
       </div>
     </div>
-
     <!-- Skeleton -->
     <TasksSkeleton
       v-if="status == 'loading'"
@@ -337,7 +336,6 @@ import cut from '@/icons/cut.js'
 import bin from '@/icons/bin.js'
 import linkify from 'vue-linkify'
 /* /Icons */
-
 export default {
   components: {
     tree: treeview,
@@ -354,6 +352,7 @@ export default {
     TaskListActionHoverPanel,
     TaskListModalBoxLicenseLimit
   },
+
   directives: {
     linkify
   },
