@@ -95,7 +95,6 @@ import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
-import ModalBoxOnboarding from '@/components/modals/ModalBoxOnBoarding.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
@@ -108,7 +107,8 @@ export default {
     InspectorModalBox,
     Icon,
     ModalBoxDescription,
-    ModalBoxOnboarding
+    ModalBoxOnboarding,
+    Icon
   },
   setup () {
     return {
@@ -130,8 +130,9 @@ export default {
     overdueReaded: [],
     showInspector: false,
     tasksLoaded: false,
-    shouldShowModalBox: true,
-    isDisplayOnboarding: true
+    shouldShowModalBox: false,
+    isDisplayOnboarding: true,
+    tasksLoaded: false
   }),
   computed: {
     tasksCount () {
