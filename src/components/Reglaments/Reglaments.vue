@@ -1,10 +1,10 @@
 <template>
   <modal-box-description
-    v-model="$store.state.user.showIntro"
+    v-model="shouldShowModalBox"
     button="warning"
     has-button
     button-label="Понятно"
-    @confirm="$store.state.user.showIntro = false"
+    @confirm="shouldShowModalBox"
   >
     <p class="font-bold p-3">
       Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
@@ -172,6 +172,12 @@ export default {
   },
   created () {
     setLocalStorageItem('isGridView', true)
+  },
+  mounted () {
+    if (this.$store.state.user.visitedModals.includes('reglaments')) {
+      return
+    }
+    this.shouldShowModalBox = this.$store.state.user.showIntro
   },
   methods: {
     updateGridView (value) {

@@ -1,10 +1,10 @@
 <template>
   <modal-box-description
-    v-model="$store.state.user.showIntro"
+    v-model="showModal"
     button="warning"
     has-button
     button-label="Понятно"
-    @confirm="$store.state.user.showIntro = false"
+    @confirm="showModal = false"
   >
     <p class="font-bold p-3">
       Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентовНе отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
@@ -123,6 +123,7 @@ export default {
     overdueReaded: [],
     showInspector: false,
     tasksLoaded: false,
+    showModal: false,
     isDisplayOnboarding: true
   }),
   computed: {
@@ -201,6 +202,11 @@ export default {
   },
   mounted: function () {
     this.loadAllTasks()
+    if (this.$store.state.user.visitedModals.includes('doitnow')) {
+      return
+    }
+    this.showModal = this.$store.state.user.showIntro
+    this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
     loadAllTasks: function () {

@@ -185,13 +185,15 @@ export default {
   },
   data () {
     return {
-      shouldShowModalBox: false,
-      isDisplayOnboarding: true
+      shouldShowModalBox: false
     }
   },
   computed: {
     mainSectionState () {
       return this.$store.state.mainSectionState
+    },
+    isDisplayOnboarding () {
+      return this.$store.state.user.justRegistered
     },
     greedPath () {
       return this.$store.state.greedPath
@@ -244,7 +246,7 @@ export default {
     },
     setSettings (val) {
       this.$store.state.user.showIntro = val
-      this.isDisplayOnboarding = false
+      this.$store.state.user.justRegistered = false
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {

@@ -12,7 +12,8 @@ const state = {
   status: '',
   justRegistered: false,
   hasLoadedOnce: false,
-  showIntro: false
+  showIntro: false,
+  visitedModals: []
 }
 
 const getters = {}
