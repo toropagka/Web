@@ -1,5 +1,5 @@
 <template>
-  <modal-box-onboarding
+  <ModalBoxOnboarding
     v-if="isDisplayOnboarding"
     :cancel="closeOnboadringModal"
   />
@@ -76,7 +76,7 @@ import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
-import ModalBoxOnboarding from './modals/ModalBoxOnboarding.vue'
+import ModalBoxOnboarding from '@/components/modals/ModalBoxOnBoarding.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
