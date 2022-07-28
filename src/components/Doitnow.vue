@@ -1,4 +1,8 @@
 <template>
+  <modal-box-onboarding
+    v-if="isDisplayOnboarding"
+    :cancel="closeOnboadringModal"
+  />
   <inspector-modal-box
     v-model="showInspector"
     button="warning"
@@ -72,6 +76,7 @@ import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
+import ModalBoxOnboarding from './modals/ModalBoxOnboarding.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
@@ -82,7 +87,8 @@ export default {
     DoitnowSkeleton,
     DoitnowTask,
     InspectorModalBox,
-    Icon
+    Icon,
+    ModalBoxOnboarding
   },
   setup () {
     return {
@@ -103,7 +109,8 @@ export default {
     unsortedTasks: [],
     overdueReaded: [],
     showInspector: false,
-    tasksLoaded: false
+    tasksLoaded: false,
+    isDisplayOnboarding: true
   }),
   computed: {
     tasksCount () {
@@ -310,6 +317,10 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    closeOnboadringModal () {
+      this.isDisplayOnboarding = false
+      return this.isDisplayOnboarding
     }
   }
 }
