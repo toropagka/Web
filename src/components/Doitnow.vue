@@ -1,8 +1,4 @@
 <template>
-  <ModalBoxOnboarding
-    v-if="isDisplayOnboarding"
-    :cancel="closeOnboadringModal"
-  />
   <inspector-modal-box
     v-model="showInspector"
     button="warning"
@@ -76,7 +72,6 @@ import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
-import ModalBoxOnboarding from '@/components/modals/ModalBoxOnBoarding.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
@@ -87,8 +82,7 @@ export default {
     DoitnowSkeleton,
     DoitnowTask,
     InspectorModalBox,
-    Icon,
-    ModalBoxOnboarding
+    Icon
   },
   setup () {
     return {
@@ -109,8 +103,7 @@ export default {
     unsortedTasks: [],
     overdueReaded: [],
     showInspector: false,
-    tasksLoaded: false,
-    isDisplayOnboarding: true
+    tasksLoaded: false
   }),
   computed: {
     tasksCount () {

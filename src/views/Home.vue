@@ -34,6 +34,10 @@
       class="text-blue-400"
     >Firefox</a>
   </modal-box-notification-instruction>
+  <ModalBoxOnboarding
+    v-if="isDisplayOnboarding"
+    @cancel="isDisplayOnboarding = false"
+  />
   <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
@@ -125,6 +129,7 @@ import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import Overlay from '@/components/modals/Overlay.vue'
+import ModalBoxOnboarding from '@/components/modals/ModalBoxOnBoarding.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
@@ -167,6 +172,7 @@ export default {
     Boards,
     Doitnow,
     Dashboard,
+    ModalBoxOnboarding,
     Other,
     Tags,
     TagWithChildren,
@@ -180,7 +186,7 @@ export default {
   data () {
     return {
       shouldShowModalBox: false,
-      shouldShowOnboard: true
+      isDisplayOnboarding: true
     }
   },
   computed: {

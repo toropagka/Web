@@ -1,13 +1,13 @@
 <template>
-  <overlay @overlay-click="cancel">
+  <overlay @overlay-click="$emit('cancel')">
     <card-component
       class="shadow-3xl border border-gray-300 max-h-modal md:w-3/5 lg:w-2/5 z-50 rounded-2xl"
-      @header-icon-click="cancel"
+      @header-icon-click="$emit('cancel')"
     >
       <div class="block">
         <div
           class="flex justify-end hover:cursor-pointer"
-          @click="cancel"
+          @click="$emit('cancel')"
         >
           <svg
             width="20"
@@ -68,7 +68,7 @@
         <div class="flex justify-end">
           <button
             class="bg-orange-400 text-white mt-2 text-lg p-2 rounded-md"
-            @click="cancel"
+            @click="$emit('cancel')"
           >
             Понятно
           </button>
@@ -85,9 +85,6 @@ export default {
   components: {
     Overlay,
     CardComponent
-  },
-  props: {
-    cancel: Boolean
   },
   emits: ['cancel']
 }
