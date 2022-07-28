@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios'
-import { mdiEmailOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft, mdiKey } from '@mdi/js'
+import { mdiEmailOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft, mdiKey, mdiPhoneOutline } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
@@ -27,10 +27,12 @@ export default {
       mdiAccountOutline,
       mdiArrowRight,
       mdiChevronLeft,
+      mdiPhoneOutline,
       form: {
         email: '',
         password: '',
         username: '',
+        phone: '',
         showError: false,
         errorMessage: '',
         isEmailValid: false,
@@ -65,6 +67,7 @@ export default {
         email: this.form.email,
         password: this.form.password,
         name: this.form.username,
+        phone: this.form.phone,
         system: 'web',
         language: 'russian',
         type_device: 'mobile'
@@ -127,6 +130,7 @@ export default {
       this.form.email = ''
       this.form.password = ''
       this.form.username = ''
+      this.form.phone = ''
       this.form.startScreenText = 'ЛидерТаск'
       this.form.emailMdi = mdiEmailOutline
       this.form.emailIconClass = ''
@@ -287,6 +291,19 @@ export default {
               autocomplete="username"
               placeholder="Имя пользователя"
               :valid="form.username.length > 2"
+            />
+          </field>
+
+          <field
+            help="Введите ваш номер телефона"
+          >
+            <control
+              v-model="form.phone"
+              type="text"
+              :icon="mdiPhoneOutline"
+              name="phone"
+              autocomplete="phone"
+              placeholder="Номер телефона"
             />
           </field>
 
