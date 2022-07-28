@@ -1,13 +1,13 @@
 <template>
-  <overlay @overlay-click="$emit('cancel')">
+  <overlay @overlay-click="$emit('cancel', false)">
     <card-component
       class="shadow-3xl border border-gray-300 max-h-modal md:w-3/5 lg:w-2/5 z-50 rounded-2xl"
-      @header-icon-click="$emit('cancel')"
+      @header-icon-click="$emit('cancel', false)"
     >
       <div class="block">
         <div
           class="flex justify-end hover:cursor-pointer"
-          @click="$emit('cancel')"
+          @click="$emit('cancel', false)"
         >
           <svg
             width="20"
@@ -68,9 +68,9 @@
         <div class="flex justify-end">
           <button
             class="bg-orange-400 text-white mt-2 text-lg p-2 rounded-md"
-            @click="$emit('cancel')"
+            @click="$emit('cancel', true)"
           >
-            Понятно
+            Пройти обучение
           </button>
         </div>
       </footer>

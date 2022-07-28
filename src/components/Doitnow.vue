@@ -1,10 +1,10 @@
 <template>
   <modal-box-description
-    v-model="shouldShowModalBox"
+    v-model="$store.state.user.showIntro"
     button="warning"
     has-button
     button-label="Понятно"
-    @confirm="shouldShowModalBox=false"
+    @confirm="$store.state.user.showIntro = false"
   >
     <p class="font-bold p-3">
       Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентовНе отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
@@ -16,11 +16,6 @@
       Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
     </p>
   </modal-box-description>
-
-  <ModalBoxOnBoarding
-    v-if="isDisplayOnboarding"
-    :cancel="closeOnboadringModal"
-  />
   <inspector-modal-box
     v-model="showInspector"
     button="warning"
@@ -90,7 +85,6 @@ import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
 import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
-import ModalBoxOnBoarding from '@/components/modals/ModalBoxOnBoarding.vue'
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -107,8 +101,7 @@ export default {
     DoitnowTask,
     InspectorModalBox,
     Icon,
-    ModalBoxDescription,
-    ModalBoxOnBoarding
+    ModalBoxDescription
   },
   setup () {
     return {
@@ -130,7 +123,6 @@ export default {
     overdueReaded: [],
     showInspector: false,
     tasksLoaded: false,
-    shouldShowModalBox: false,
     isDisplayOnboarding: true
   }),
   computed: {

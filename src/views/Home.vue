@@ -36,7 +36,7 @@
   </modal-box-notification-instruction>
   <ModalBoxOnboarding
     v-if="isDisplayOnboarding"
-    @cancel="isDisplayOnboarding = false"
+    @cancel="setSettings"
   />
   <main-section class="h-full">
     <aside-menu
@@ -241,6 +241,10 @@ export default {
           setLocalStorageItem('shouldShowModal', '0')
         }
       })
+    },
+    setSettings (val) {
+      this.$store.state.user.showIntro = val
+      this.isDisplayOnboarding = false
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {

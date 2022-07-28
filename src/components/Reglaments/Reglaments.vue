@@ -1,10 +1,10 @@
 <template>
   <modal-box-description
-    v-model="shouldShowModalBox"
+    v-model="$store.state.user.showIntro"
     button="warning"
     has-button
     button-label="Понятно"
-    @confirm="shouldShowModalBox=false"
+    @confirm="$store.state.user.showIntro = false"
   >
     <p class="font-bold p-3">
       Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов

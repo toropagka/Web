@@ -11,7 +11,8 @@ const state = {
   user: null,
   status: '',
   justRegistered: false,
-  hasLoadedOnce: false
+  hasLoadedOnce: false,
+  showIntro: false
 }
 
 const getters = {}
