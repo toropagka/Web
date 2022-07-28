@@ -75,6 +75,7 @@ export default {
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/')
+          this.$store.state.user.user.justRegistered = true
         })
         .catch(() => {
           this.form.showError = true
