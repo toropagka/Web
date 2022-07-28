@@ -82,24 +82,6 @@
         />
       </div>
     </div>
-    <div>
-      <VOnboardingWrapper
-        ref="wrapper"
-        :steps="steps"
-      />
-      <button @click="() => goToStep(1)">
-        Click to go second step
-      </button>
-      <div>
-        <button @click="start">
-          Start Onboarding
-        </button>
-        <button @click="finish">
-          Finish Onboarding
-        </button>
-      </div>
-    </div>
-
     <!-- Skeleton -->
     <TasksSkeleton
       v-if="status == 'loading'"
@@ -314,7 +296,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
@@ -354,12 +336,6 @@ import cut from '@/icons/cut.js'
 import bin from '@/icons/bin.js'
 import linkify from 'vue-linkify'
 /* /Icons */
-
-/* onboarding */
-import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
-import 'v-onboarding/dist/style.css'
-/* /onboarding */
-
 export default {
   components: {
     tree: treeview,
@@ -374,33 +350,11 @@ export default {
     TaskStatus,
     contenteditable,
     TaskListActionHoverPanel,
-    TaskListModalBoxLicenseLimit,
-    VOnboardingWrapper
+    TaskListModalBoxLicenseLimit
   },
 
   directives: {
     linkify
-  },
-  setup () {
-    const wrapper = ref(null)
-    const { start, goToStep, finish } = useVOnboarding(wrapper)
-    const steps = [
-      {
-        attachTo: { element: '#task' },
-        content: {
-          title: 'Do it!',
-          description: "This is a description field and I really don't know what to write here..."
-        }
-      }
-    ]
-
-    return {
-      wrapper,
-      steps,
-      start,
-      finish,
-      goToStep
-    }
   },
   data () {
     return {
