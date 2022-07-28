@@ -17,7 +17,7 @@
     </p>
   </modal-box-description>
 
-  <ModalBoxOnboarding
+  <ModalBoxOnBoarding
     v-if="isDisplayOnboarding"
     :cancel="closeOnboadringModal"
   />
@@ -59,7 +59,7 @@
       />
     </button>
   </div>
-  <DoitnowSkeleton v-if="isLoading"/>
+  <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
     <DoitnowTask
       v-if="tasksCount && !isLoading"
@@ -90,6 +90,7 @@ import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
 import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
+import ModalBoxOnBoarding from '@/components/modals/ModalBoxOnBoarding.vue'
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -107,8 +108,7 @@ export default {
     InspectorModalBox,
     Icon,
     ModalBoxDescription,
-    ModalBoxOnboarding,
-    Icon
+    ModalBoxOnBoarding
   },
   setup () {
     return {
@@ -131,8 +131,7 @@ export default {
     showInspector: false,
     tasksLoaded: false,
     shouldShowModalBox: false,
-    isDisplayOnboarding: true,
-    tasksLoaded: false
+    isDisplayOnboarding: true
   }),
   computed: {
     tasksCount () {
