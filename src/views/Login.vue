@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios'
-import { mdiEmailOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
+import { mdiEmailOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft, mdiKey } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
@@ -23,7 +23,7 @@ export default {
   data () {
     return {
       mdiEmailOutline,
-      mdiEyeOffOutline,
+      mdiKey,
       mdiAccountOutline,
       mdiArrowRight,
       mdiChevronLeft,
@@ -225,7 +225,7 @@ export default {
           <field>
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
+              :icon="mdiKey"
               type="password"
               name="password"
               autocomplete="current-password"
@@ -265,7 +265,7 @@ export default {
           >
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
+              :icon="mdiKey"
               type="password"
               name="password"
               placeholder="Пароль"
