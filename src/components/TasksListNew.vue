@@ -294,6 +294,7 @@
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
     <onBoarding
+      v-model="showOnboarding"
       :steps="steps"
     />
   </div>
@@ -376,6 +377,7 @@ export default {
       showTasksLimit: false,
       showFreeModal: false,
       showInspector: false,
+      showOnboarding: true,
       stop: true,
       SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
@@ -530,6 +532,11 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
+    if (this.$store.state.user.visitedModals.includes('today')) {
+      return
+    }
+    this.showOnboarding = this.$store.state.user.showIntro
+    this.$store.state.user.visitedModals.push('today')
   },
   methods: {
     scroll (step) {
