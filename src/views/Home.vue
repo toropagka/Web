@@ -179,7 +179,8 @@ export default {
   },
   data () {
     return {
-      shouldShowModalBox: false
+      shouldShowModalBox: false,
+      shouldShowOnboard: true
     }
   },
   computed: {

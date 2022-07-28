@@ -10,6 +10,7 @@ import {
 const state = {
   user: null,
   status: '',
+  justRegistered: false,
   hasLoadedOnce: false
 }
 
