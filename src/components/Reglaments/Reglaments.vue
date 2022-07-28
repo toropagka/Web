@@ -1,4 +1,21 @@
 <template>
+  <modal-box-description
+    v-model="shouldShowModalBox"
+    button="warning"
+    has-button
+    button-label="Понятно"
+    @confirm="shouldShowModalBox=false"
+  >
+    <p class="font-bold p-3">
+      Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+    </p>
+    <p class="text-sm p-3">
+      Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверки знаний текущей команды.
+    </p>
+    <p class="text-sm p-3">
+      Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
+    </p>
+  </modal-box-description>
   <div class="w-full">
     <ReglamentAddLimit
       v-if="showAddLimit"
@@ -80,6 +97,7 @@
 </template>
 
 <script>
+import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import Icon from '@/components/Icon.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
@@ -94,6 +112,7 @@ import * as REGLAMENTS from '@/store/actions/reglaments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+
 export default {
   components: {
     Icon,
@@ -101,7 +120,8 @@ export default {
     ReglamentBlocItem,
     ReglamentAddLimit,
     ListBlocAdd,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    ModalBoxDescription
   },
   props: {
     items: {
@@ -114,7 +134,8 @@ export default {
       showAddReglament: false,
       showAddLimit: false,
       gridView,
-      listView
+      listView,
+      shouldShowModalBox: false
     }
   },
   computed: {
