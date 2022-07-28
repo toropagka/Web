@@ -54,12 +54,12 @@ const cancel = () => confirmCancel('cancel')
       class="shadow-3xl border border-gray-300 max-h-modal md:w-4/5 lg:w-2/5 z-50 p-5 rounded-2xl"
       @header-icon-click="cancel"
     >
-      <div class="space-y-3 justify-end">
+      <div class="space-y-3 justify-center">
         <slot />
       </div>
 
       <div
-        class="flex justify-center mt-3 mr-4"
+        class="flex justify-end mt-3 mr-4"
       >
         <jb-button
           v-if="hasButton"
