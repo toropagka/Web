@@ -23,7 +23,10 @@
     v-if="showFreeModal"
     @cancel="showFreeModal = false"
   />
-
+<VOnboardingWrapper ref="wrapper" :steps="steps" />
+  <div>
+    <button id="foo">Welcome</button>
+  </div>
   <div
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
@@ -296,7 +299,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
@@ -311,6 +314,8 @@ import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHover
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
+import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
+import 'v-onboarding/dist/style.css'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -350,9 +355,24 @@ export default {
     TaskStatus,
     contenteditable,
     TaskListActionHoverPanel,
-    TaskListModalBoxLicenseLimit
+    TaskListModalBoxLicenseLimit,
+    VOnboardingWrapper
   },
+  setup () {
+    const wrapper = ref(null)
+    // eslint-disable-next-line no-unused-vars
+    const { start, goToStep, finish } = useVOnboarding(wrapper)
+    const steps = [
+      { attachTo: { element: '#task' }, content: { title: 'Welcome!' } }
+    ]
 
+    onMounted(() => start())
+
+    return {
+      wrapper,
+      steps
+    }
+  },
   directives: {
     linkify
   },
