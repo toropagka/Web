@@ -342,7 +342,10 @@ export default {
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
+      <div
+        id="step3"
+        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
+      >
         <div
           class="group w-full cursor-pointer"
           @click="modalOneActive = true"
@@ -379,7 +382,7 @@ export default {
       </div>
       <div class="mt-[10px]">
         <DatePicker
-          id="step3"
+          id="step4"
           ref="calendarclass"
           dot="true"
           class="border-none pl-[22px] pr-[16px] calendar-nav-custom"
