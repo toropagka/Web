@@ -379,7 +379,7 @@ export default {
       </div>
       <div class="mt-[10px]">
         <DatePicker
-          id="Maincalendar"
+          id="step3"
           ref="calendarclass"
           dot="true"
           class="border-none pl-[22px] pr-[16px] calendar-nav-custom"

@@ -23,10 +23,6 @@
     v-if="showFreeModal"
     @cancel="showFreeModal = false"
   />
-<VOnboardingWrapper ref="wrapper" :steps="steps" />
-  <div>
-    <button id="foo">Welcome</button>
-  </div>
   <div
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
@@ -37,12 +33,14 @@
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-px pt-px relative lg:static top-0"
     >
       <button
+        id="step2"
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
         @click="shouldShowInspector"
       >
         Поручить
       </button>
       <div
+        id="step1"
         class="flex items-center bg-[#FAFAFB] border dark:bg-gray-700 rounded-[8px] w-full"
       >
         <div
@@ -295,14 +293,18 @@
     <EmptyTasksListPics
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
+    <onBoarding
+      :steps="steps"
+    />
   </div>
 </template>
 
 <script>
-import { computed, ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
+import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics.vue'
 import ModalBoxDelete from './Common/ModalBoxDelete.vue'
@@ -314,8 +316,6 @@ import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHover
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
-import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
-import 'v-onboarding/dist/style.css'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -356,22 +356,7 @@ export default {
     contenteditable,
     TaskListActionHoverPanel,
     TaskListModalBoxLicenseLimit,
-    VOnboardingWrapper
-  },
-  setup () {
-    const wrapper = ref(null)
-    // eslint-disable-next-line no-unused-vars
-    const { start, goToStep, finish } = useVOnboarding(wrapper)
-    const steps = [
-      { attachTo: { element: '#task' }, content: { title: 'Welcome!' } }
-    ]
-
-    onMounted(() => start())
-
-    return {
-      wrapper,
-      steps
-    }
+    onBoarding
   },
   directives: {
     linkify
@@ -381,6 +366,11 @@ export default {
       createTaskText: '',
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
+      steps: [
+        { attachTo: { element: '#step1' }, content: { title: 'кто такой' } },
+        { attachTo: { element: '#step2' }, content: { title: 'этот ваш' } },
+        { attachTo: { element: '#step3' }, content: { title: 'kakeoff' } }
+      ],
       showConfirm: false,
       showTasksLimit: false,
       showFreeModal: false,
@@ -998,6 +988,10 @@ export default {
 </script>
 
 <style>
+:root{
+   --v-onboarding-overlay-z: 40;
+   --v-onboarding-step-z: 40;
+}
 .tree-level {
   flex: 1;
   margin-left: 0 !important;
