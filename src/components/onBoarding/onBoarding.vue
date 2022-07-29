@@ -4,8 +4,10 @@
     :steps="steps"
   >
     <template #default="{ previous, next, step, exit, isFirst, isLast, index }">
-      <VOnboardingStep>
-        <div class="bg-white shadow sm:rounded-lg mt-[10px] max-w-[400px]">
+      <VOnboardingStep
+        :title="options"
+      >
+        <div class="bg-white shadow rounded mt-[10px] max-w-[400px] ml-3">
           <div class="px-4 py-5 sm:p-6 flex">
             <div class="sm:flex sm:items-center sm:justify-between flex-col">
               <div v-if="step.content">
@@ -43,8 +45,9 @@
                   {{ isLast ? 'Завершить' : 'Далее' }}
                 </button>
                 <button
+                  v-if="!isLast"
                   type="button"
-                  class="inline-flex items-center rounded-md border border-transparent bg-[#a8a8a8] px-4 py-2 font-medium text-black shadow-sm hover:bg-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                  class="inline-flex items-center rounded-md border border-transparent bg-[#DCDCDC] px-4 py-2 font-medium text-black shadow-sm hover:bg-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
                   @click="exit"
                 >
                   Выход
@@ -79,6 +82,27 @@ export default {
     return {
       start,
       wrapper
+    }
+  },
+  data () {
+    return {
+      // кастомные настройки для онборда, документация: https://github.com/fatihsolhan/v-onboarding/blob/fa00ae45017eb0fc30550965278da9062277a7f1/docs/pages/3.props/2.options.md
+      options: {
+        popper: {},
+        overlay: {
+          enabled: true,
+          padding: 0,
+          borderRadius: 20
+        },
+        scrollToStep: {
+          enabled: true,
+          options: {
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+          }
+        }
+      }
     }
   },
   mounted () {

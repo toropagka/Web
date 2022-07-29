@@ -368,10 +368,42 @@ export default {
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
       steps: [
-        { attachTo: { element: '#step1' }, content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' } },
-        { attachTo: { element: '#step2' }, content: { title: 'Поручайте задачи через инспектора', description: 'Наш бот поможет вам правильно сформулировать поручение и проконтролирует его выполнение' } },
-        { attachTo: { element: '#step3' }, content: { title: 'Меню аккаунта', description: 'Нажмите сюда, чтобы посмотреть информацию об аккаунте, перейти на другой тариф или изменить настройки системы' } },
-        { attachTo: { element: '#step4' }, content: { title: 'Календарь', description: 'Используйте календарь, чтобы запланировать любой день. Точки у даты означают, что у вас есть на этот день задачи или поручения' } }
+        {
+          attachTo: { element: '#step1' },
+          content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step2' },
+          content: { title: 'Поручайте задачи через инспектора', description: 'Наш бот поможет вам правильно сформулировать поручение и проконтролирует его выполнение' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step3' },
+          content: { title: 'Меню аккаунта', description: 'Нажмите сюда, чтобы посмотреть информацию об аккаунте, перейти на другой тариф или изменить настройки системы' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step4' },
+          content: { title: 'Календарь', description: 'Используйте календарь, чтобы запланировать любой день. Точки у даты означают, что у вас есть на этот день задачи или поручения' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        }
       ],
       showConfirm: false,
       showTasksLimit: false,
