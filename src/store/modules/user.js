@@ -12,7 +12,8 @@ const state = {
   status: '',
   justRegistered: false,
   hasLoadedOnce: false,
-  showIntro: false,
+  showOnboarding: false,
+  showModals: false,
   visitedModals: []
 }
 
