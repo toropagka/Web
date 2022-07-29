@@ -68,6 +68,7 @@ export default {
         name: this.form.username,
         phone: this.form.phone,
         system: 'web',
+        cid: 'webnew',
         language: 'russian',
         type_device: 'mobile'
       }
