@@ -127,7 +127,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('assignment')) {
       return
     }
-    this.showModal = this.$store.state.user.showIntro
+    this.showModal = this.$store.state.user.showModals
     this.$store.state.user.visitedModals.push('assignment')
   },
   methods: {
