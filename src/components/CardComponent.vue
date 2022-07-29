@@ -76,6 +76,7 @@ const submit = e => {
 const startOnBoarding = () => {
   emit('header-icon-click')
   store.state.user.visitedModals = []
+  store.state.user.justRegistered = true
   store.state.user.showModals = true
   store.state.user.showOnboarding = true
   store.dispatch(TASK.TASKS_REQUEST)
