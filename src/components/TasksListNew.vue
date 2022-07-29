@@ -360,6 +360,7 @@ export default {
     TaskListModalBoxLicenseLimit,
     onBoarding
   },
+
   directives: {
     linkify
   },
