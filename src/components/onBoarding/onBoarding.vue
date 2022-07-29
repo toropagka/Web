@@ -3,7 +3,7 @@
     ref="wrapper"
     :steps="steps"
   >
-    <template #default="{ previous, next, step, exit, isFirst, isLast, index }">
+    <template #default="{ previous, next, step, isFirst, isLast, index }">
       <VOnboardingStep
         :title="options"
       >
@@ -38,17 +38,18 @@
                   </button>
                 </template>
                 <button
+                  v-if="!isLast"
                   type="button"
                   class="inline-flex items-center rounded-md border border-transparent bg-[#FF912380] px-4 py-2 font-medium text-black shadow-sm hover:bg-[#F5DEB3] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
                   @click="next"
                 >
-                  {{ isLast ? 'Завершить' : 'Далее' }}
+                  Далее
                 </button>
                 <button
-                  v-if="!isLast"
+                  v-if="isLast"
                   type="button"
                   class="inline-flex items-center rounded-md border border-transparent bg-[#DCDCDC] px-4 py-2 font-medium text-black shadow-sm hover:bg-[#8a8a8a] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                  @click="exit"
+                  @click="$emit('shouldShowOnboarding', false)"
                 >
                   Выход
                 </button>
@@ -74,6 +75,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['shouldShowOnboarding'],
   setup () {
     const wrapper = ref(null)
     // eslint-disable-next-line no-unused-vars
