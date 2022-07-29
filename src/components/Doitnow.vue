@@ -205,7 +205,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('doitnow')) {
       return
     }
-    this.showModal = this.$store.state.user.showIntro
+    this.showModal = this.$store.state.user.showModals
     this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
