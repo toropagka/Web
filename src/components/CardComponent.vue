@@ -72,6 +72,12 @@ const headerIconClick = () => {
 const submit = e => {
   emit('submit', e)
 }
+const startOnBoarding = () => {
+  emit('header-icon-click')
+  store.state.user.visitedModals = []
+  store.state.user.showModals = true
+  store.state.user.showOnboarding = true
+}
 </script>
 
 <template>
@@ -264,6 +270,13 @@ const submit = e => {
             </ul>
           </div>
         </div>
+        <button
+          type="button"
+          class="mt-[30px] bg-[#d9d9d9] text-black p-2 rounded-md"
+          @click="startOnBoarding"
+        >
+          Режим тестирования
+        </button>
       </form>
       <div class="w-full flex-wrap">
         <header
