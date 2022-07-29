@@ -245,6 +245,7 @@ export default {
       })
     },
     setSettings (val) {
+      this.$store.state.user.newUserTasks = true
       this.$store.state.user.showOnboarding = val
       this.$store.state.user.showModals = val
       this.$store.state.user.justRegistered = false

@@ -12,9 +12,10 @@ const state = {
   status: '',
   justRegistered: false,
   hasLoadedOnce: false,
+  visitedModals: [],
+  newUserTasks: false
   showOnboarding: false,
-  showModals: false,
-  visitedModals: []
+  showModals: false
 }
 
 const getters = {}
