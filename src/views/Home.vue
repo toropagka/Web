@@ -246,6 +246,7 @@ export default {
     },
     setSettings (val) {
       this.$store.state.user.showIntro = val
+      this.$store.state.user.newUserTasks = true
       this.$store.state.user.justRegistered = false
     },
     requestNotificationPermissionOrShowModalBox () {

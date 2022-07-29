@@ -13,7 +13,8 @@ const state = {
   justRegistered: false,
   hasLoadedOnce: false,
   showIntro: false,
-  visitedModals: []
+  visitedModals: [],
+  newUserTasks: false
 }
 
 const getters = {}

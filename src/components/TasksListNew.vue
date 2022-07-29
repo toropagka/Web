@@ -529,7 +529,7 @@ export default {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
     },
     isSetTaskForNewUser () {
-      return this.$store.state.user.justRegistered
+      return this.$store.state.user.newUserTasks
     }
   },
   watch: {
@@ -567,9 +567,12 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
-    this.$nextTick(() => {
-      this.setTaskForNewUser()
-    })
+    if (this.isSetTaskForNewUser) {
+      this.$nextTick(() => {
+        this.setTaskForNewUser()
+      })
+    }
+
     if (this.$store.state.user.visitedModals.includes('today')) {
       return
     }
@@ -775,6 +778,7 @@ export default {
           document.getElementById(data.uid).parentNode.draggable = false
           this.gotoNode(data.uid)
         }, 200)
+        this.$store.state.newUserTasks = false
       })
         .catch((e) => {
           if (e.response?.data?.error === 'limit. invalid license.') {
