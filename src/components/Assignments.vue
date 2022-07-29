@@ -1,4 +1,18 @@
 <template>
+  <modal-box-description
+    v-model="showModal"
+    button="warning"
+    has-button
+    button-label="Понятно"
+    @confirm="showModal = false"
+  >
+    <p class="font-bold p-2">
+      Управляйте сотрудниками и поручениями!
+    </p>
+    <p class="text-sm p-2">
+      Поручайте задачи команде и выполняйте поручения от сотрудников. Добавьте всю команду в разделе Сотрудники, поручите им задачи и следите за их выполнением в этом разделе.
+    </p>
+  </modal-box-description>
   <div class="w-full">
     <div
       v-for="(value, index) in assignments"
@@ -73,6 +87,7 @@
 </template>
 
 <script>
+import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import Icon from '@/components/Icon.vue'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import { setLocalStorageItem, UID_TO_ACTION } from '@/store/helpers/functions'
@@ -83,6 +98,7 @@ import listView from '@/icons/list-view.js'
 
 export default {
   components: {
+    ModalBoxDescription,
     Icon,
     ListBlocItem
   },
@@ -94,6 +110,7 @@ export default {
   },
   data () {
     return {
+      showModal: false,
       gridView,
       listView
     }
@@ -105,6 +122,13 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     }
+  },
+  mounted: function () {
+    if (this.$store.state.user.visitedModals.includes('assignment')) {
+      return
+    }
+    this.showModal = this.$store.state.user.showModals
+    this.$store.state.user.visitedModals.push('assignment')
   },
   methods: {
     updateGridView (value) {

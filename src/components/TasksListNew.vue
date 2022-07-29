@@ -569,10 +569,12 @@ export default {
     })
 
     if (this.$store.state.user.visitedModals.includes('today')) {
+      this.showOnboarding = false
       return
     }
     this.showOnboarding = this.$store.state.user.showOnboarding
     this.$store.state.user.visitedModals.push('today')
+    console.log(this.$store.state.user.visitedModals)
   },
   methods: {
     scroll (step) {
