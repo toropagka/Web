@@ -404,6 +404,15 @@ export default {
               borderRadius: 8
             }
           }
+        },
+        {
+          attachTo: { element: '#step5' },
+          content: { title: 'Прочее - задачи по категориям', description: 'Работайте только с определенными категориями задач, собранными в одном месте. Разбирайте Готово к сдаче или Просрочено, сконцентрируйте на задачах В Фокусе и т.д.' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
         }
       ],
       showConfirm: false,
