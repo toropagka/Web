@@ -377,7 +377,7 @@ export default {
       showTasksLimit: false,
       showFreeModal: false,
       showInspector: false,
-      showOnboarding: true,
+      showOnboarding: false,
       stop: true,
       SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
@@ -533,10 +533,12 @@ export default {
       }
     })
     if (this.$store.state.user.visitedModals.includes('today')) {
+      this.showOnboarding = false
       return
     }
     this.showOnboarding = this.$store.state.user.showIntro
     this.$store.state.user.visitedModals.push('today')
+    console.log(this.$store.state.user.visitedModals)
   },
   methods: {
     scroll (step) {
