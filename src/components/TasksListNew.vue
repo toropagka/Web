@@ -294,8 +294,9 @@
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
     <onBoarding
-      v-model="showOnboarding"
+      v-if="showOnboarding"
       :steps="steps"
+      @shouldShowOnboarding="shouldShowOnboarding"
     />
   </div>
 </template>
@@ -409,7 +410,6 @@ export default {
       showTasksLimit: false,
       showFreeModal: false,
       showInspector: false,
-      showOnboarding: true,
       stop: true,
       SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
@@ -457,6 +457,9 @@ export default {
   computed: {
     loadedTasks () {
       return this.$store.state.tasks.loadedTasks
+    },
+    showOnboarding () {
+      return this.$store.state.user.showOnboarding
     },
     employees () {
       return this.$store.state.employees.employees
@@ -576,7 +579,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('today')) {
       return
     }
-    this.showOnboarding = this.$store.state.user.showIntro
+    this.showOnboarding = this.$store.state.user.showOnboarding
     this.$store.state.user.visitedModals.push('today')
   },
   methods: {
@@ -586,6 +589,9 @@ export default {
       if (!this.stop) {
         setTimeout(() => { scroll(step) }, 20)
       }
+    },
+    shouldShowOnboarding (val) {
+      this.$store.state.user.showOnboarding = val
     },
     toggleTaskHoverPopper (visible, uid) {
       const el = document.getElementById(`hover-panel-${uid}`)
