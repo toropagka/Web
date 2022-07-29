@@ -215,7 +215,7 @@ export default {
       )
     },
     clickAddReglament () {
-      if (this.user.tarif !== 'alpha') {
+      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showAddLimit = true
         return
       }
