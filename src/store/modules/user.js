@@ -13,7 +13,7 @@ const state = {
   justRegistered: false,
   hasLoadedOnce: false,
   visitedModals: [],
-  newUserTasks: false
+  newUserTasks: false,
   showOnboarding: false,
   showModals: false
 }
