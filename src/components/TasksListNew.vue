@@ -294,8 +294,9 @@
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
     <onBoarding
-      v-model="showOnboarding"
+      v-if="showOnboarding"
       :steps="steps"
+      @shouldShowOnboarding="shouldShowOnboarding"
     />
   </div>
 </template>
@@ -368,16 +369,56 @@ export default {
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
       steps: [
-        { attachTo: { element: '#step1' }, content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' } },
-        { attachTo: { element: '#step2' }, content: { title: 'Поручайте задачи через инспектора', description: 'Наш бот поможет вам правильно сформулировать поручение и проконтролирует его выполнение' } },
-        { attachTo: { element: '#step3' }, content: { title: 'Меню аккаунта', description: 'Нажмите сюда, чтобы посмотреть информацию об аккаунте, перейти на другой тариф или изменить настройки системы' } },
-        { attachTo: { element: '#step4' }, content: { title: 'Календарь', description: 'Используйте календарь, чтобы запланировать любой день. Точки у даты означают, что у вас есть на этот день задачи или поручения' } }
+        {
+          attachTo: { element: '#step1' },
+          content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step2' },
+          content: { title: 'Поручайте задачи через инспектора', description: 'Наш бот поможет вам правильно сформулировать поручение и проконтролирует его выполнение' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step3' },
+          content: { title: 'Меню аккаунта', description: 'Нажмите сюда, чтобы посмотреть информацию об аккаунте, перейти на другой тариф или изменить настройки системы' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step4' },
+          content: { title: 'Календарь', description: 'Используйте календарь, чтобы запланировать любой день. Точки у даты означают, что у вас есть на этот день задачи или поручения' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step5' },
+          content: { title: 'Прочее - задачи по категориям', description: 'Работайте только с определенными категориями задач, собранными в одном месте. Разбирайте Готово к сдаче или Просрочено, сконцентрируйте на задачах В Фокусе и т.д.' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        }
       ],
       showConfirm: false,
       showTasksLimit: false,
       showFreeModal: false,
       showInspector: false,
-      showOnboarding: true,
       stop: true,
       SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
@@ -425,6 +466,9 @@ export default {
   computed: {
     loadedTasks () {
       return this.$store.state.tasks.loadedTasks
+    },
+    showOnboarding () {
+      return this.$store.state.user.showOnboarding
     },
     employees () {
       return this.$store.state.employees.employees
@@ -532,11 +576,14 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
+
     if (this.$store.state.user.visitedModals.includes('today')) {
+      this.showOnboarding = false
       return
     }
-    this.showOnboarding = this.$store.state.user.showIntro
+    this.showOnboarding = this.$store.state.user.showOnboarding
     this.$store.state.user.visitedModals.push('today')
+    console.log(this.$store.state.user.visitedModals)
   },
   methods: {
     scroll (step) {
@@ -545,6 +592,9 @@ export default {
       if (!this.stop) {
         setTimeout(() => { scroll(step) }, 20)
       }
+    },
+    shouldShowOnboarding (val) {
+      this.$store.state.user.showOnboarding = val
     },
     toggleTaskHoverPopper (visible, uid) {
       const el = document.getElementById(`hover-panel-${uid}`)

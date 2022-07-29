@@ -3,6 +3,7 @@ import { mdiCog } from '@mdi/js'
 import { computed, ref } from 'vue'
 import Icon from '@/components/Icon.vue'
 import AccKarmaLimit from '@/components/AccKarmaLimit'
+import * as TASK from '@/store/actions/tasks.js'
 import { useStore } from 'vuex'
 
 const props = defineProps({
@@ -71,6 +72,24 @@ const headerIconClick = () => {
 }
 const submit = e => {
   emit('submit', e)
+}
+const startOnBoarding = () => {
+  emit('header-icon-click')
+  store.state.user.visitedModals = []
+  store.state.user.justRegistered = true
+  store.state.user.showModals = true
+  store.state.user.showOnboarding = true
+  store.dispatch(TASK.TASKS_REQUEST)
+  const navElem = {
+    name: 'Сегодня',
+    key: 'taskListSource',
+    value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date() },
+    typeVal: new Date(),
+    type: 'date'
+  }
+  store.commit('updateStackWithInitValue', navElem)
+  store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
+  store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
 }
 </script>
 
@@ -264,6 +283,13 @@ const submit = e => {
             </ul>
           </div>
         </div>
+        <button
+          type="button"
+          class="mt-[30px] bg-[#d9d9d9] text-black p-2 rounded-md"
+          @click="startOnBoarding"
+        >
+          Режим тестирования
+        </button>
       </form>
       <div class="w-full flex-wrap">
         <header

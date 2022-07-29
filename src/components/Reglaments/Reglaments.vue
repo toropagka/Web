@@ -177,7 +177,8 @@ export default {
     if (this.$store.state.user.visitedModals.includes('reglaments')) {
       return
     }
-    this.shouldShowModalBox = this.$store.state.user.showIntro
+    this.shouldShowModalBox = this.$store.state.user.showModals
+    this.$store.state.user.visitedModals.push('reglaments')
   },
   methods: {
     updateGridView (value) {
@@ -214,7 +215,7 @@ export default {
       )
     },
     clickAddReglament () {
-      if (this.user.tarif !== 'alpha') {
+      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showAddLimit = true
         return
       }
