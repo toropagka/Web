@@ -530,9 +530,6 @@ export default {
     },
     date () {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
-    },
-    isSetTaskForNewUser () {
-      return this.$store.state.user.newUserTasks
     }
   },
   watch: {
@@ -570,11 +567,6 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
-    if (this.isSetTaskForNewUser) {
-      this.$nextTick(() => {
-        this.setTaskForNewUser()
-      })
-    }
 
     if (this.$store.state.user.visitedModals.includes('today')) {
       this.showOnboarding = false
@@ -770,29 +762,6 @@ export default {
       this.createTaskText = ''
 
       return false
-    },
-    setTaskForNewUser () {
-      const data = this.handleTaskSource()
-      const title = 'Нажмите на меня, чтобы увидеть подробности по задаче'
-      data.name = title
-      this.$store.dispatch(TASK.CREATE_TASK, data).then((resp) => {
-        console.log(213)
-        this.nodeSelected({ id: data.uid, info: resp.data })
-        if (this.navStack && this.navStack[this.navStack.length - 1].value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-          this.$store.commit('addDot', new Date(data.date_begin))
-        }
-        document.getElementById('task').firstElementChild.focus({ preventScroll: false })
-        setTimeout(() => {
-          document.getElementById(data.uid).parentNode.draggable = false
-          this.gotoNode(data.uid)
-        }, 200)
-        this.$store.state.newUserTasks = false
-      })
-        .catch((e) => {
-          if (e.response?.data?.error === 'limit. invalid license.') {
-            this.showTasksLimit = true
-          }
-        })
     },
     updateTask (event, task) {
       if (task._isEditable) {
