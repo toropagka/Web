@@ -5,6 +5,7 @@ import {
   mdiMenu
 } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem.vue'
+import Tabs from '@/components/Tabs/Tabs.vue'
 import Icon from '@/components/Icon.vue'
 import NavButtonsRight from '@/components/Navbar/NavBarButtonsRight.vue'
 
@@ -18,6 +19,7 @@ import { SELECT_PROJECT } from '@/store/actions/projects'
 export default {
   components: {
     NavBarItem,
+    Tabs,
     Icon,
     NavButtonsRight
   },
@@ -127,6 +129,7 @@ export default {
 </script>
 
 <template>
+  <Tabs />
   <pre
     v-if="navStack.length && showNoneUid.includes(navStack[navStack.length - 1].uid)"
     class="md:text-lg sm:text-base"
