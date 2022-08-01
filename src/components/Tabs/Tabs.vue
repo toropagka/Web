@@ -9,8 +9,8 @@
       >
         <p
           href="#"
-          class="inline-block py-2 px-5 text-black bg-[#FF912380] rounded-lg active"
-          :class="{'text-danger': hasError }"
+          class="inline-block py-2 px-5 text-black rounded-lg active ring-2 ring-orange-400"
+          :class="{'bg-[#FF912380]': tab.code === lastSelectedTabsCode ?? 'bg-white' }"
         >
           {{ tab.name }}
         </p>
@@ -22,6 +22,7 @@
 export default {
   data () {
     return {
+      lastSelectedTabsCode: '',
       currentTab: localStorage.getItem('lastTab') ?? 1,
       tabs: [
         {
@@ -152,6 +153,8 @@ export default {
   },
   methods: {
     switchTab (tab) {
+      console.log(tab.code)
+      this.lastSelectedTabsCode = tab.code
       localStorage.setItem('lastTab', tab.code)
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.state.navigator.menu = []
