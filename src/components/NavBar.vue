@@ -5,7 +5,6 @@ import {
   mdiMenu
 } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem.vue'
-import Tabs from '@/components/Tabs/Tabs.vue'
 import Icon from '@/components/Icon.vue'
 import NavButtonsRight from '@/components/Navbar/NavBarButtonsRight.vue'
 
@@ -19,7 +18,6 @@ import { SELECT_PROJECT } from '@/store/actions/projects'
 export default {
   components: {
     NavBarItem,
-    Tabs,
     Icon,
     NavButtonsRight
   },
@@ -129,7 +127,6 @@ export default {
 </script>
 
 <template>
-  <Tabs />
   <pre
     v-if="navStack.length && showNoneUid.includes(navStack[navStack.length - 1].uid)"
     class="md:text-lg sm:text-base"
@@ -138,7 +135,7 @@ export default {
   </pre>
   <nav
     v-show="isNavBarVisible"
-    class="top-0 left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
+    class="top-8 left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
     transition-position xl:ml-72 w-auto lg:items-center dark:bg-gray-800 dark:border-gray-800"
     :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
   >
