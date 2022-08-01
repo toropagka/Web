@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios'
-import { mdiEmailOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
+import { mdiEmailOutline, mdiEyeOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
@@ -26,6 +26,7 @@ export default {
       mdiAccountOutline,
       mdiArrowRight,
       mdiChevronLeft,
+      mdiEyeOutline,
       form: {
         email: '',
         password: '',
@@ -38,7 +39,8 @@ export default {
         emailControlDisabled: false,
         startScreenText: 'ЛидерТаск',
         showCheckButton: true,
-        showBackButton: false
+        showBackButton: false,
+        showPassword: false
       },
       showValues: {
         showRegisterInputsValue: false,
@@ -132,6 +134,7 @@ export default {
       this.form.showCheckButton = true
       this.form.showBackButton = false
       this.form.showError = false
+      this.form.showPassword = false
       this.form.errorMessage = ''
     },
     validateEmail () {
@@ -165,6 +168,9 @@ export default {
             })
         }
       }
+    },
+    togglePasswordVisibility () {
+      this.form.showPassword = !this.form.showPassword
     }
   }
 }
@@ -225,12 +231,14 @@ export default {
           <field>
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
-              type="password"
               name="password"
               autocomplete="current-password"
               placeholder="Пароль"
+              icon-class="cursor-pointer"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
               :valid="form.password.length > 7"
+              @icon-click="togglePasswordVisibility"
             />
           </field>
           <p
@@ -265,12 +273,14 @@ export default {
           >
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
-              type="password"
               name="password"
               placeholder="Пароль"
               autocomplete="current-password"
+              icon-class="cursor-pointer"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
               :valid="form.password.length > 7"
+              @icon-click="togglePasswordVisibility"
             />
           </field>
 
