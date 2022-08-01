@@ -70,7 +70,7 @@
             class="bg-orange-400 text-white mt-2 text-lg p-2 rounded-md"
             @click="$emit('cancel', true)"
           >
-            Пройти обучение
+            Понятно
           </button>
         </div>
       </footer>
