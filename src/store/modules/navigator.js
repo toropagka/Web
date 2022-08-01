@@ -37,7 +37,7 @@ import { visitChildren } from '../helpers/functions'
 const getDefaultState = () => {
   return {
     navigator: false,
-    lastTab: localStorage.getItem('lastTab'),
+    lastTab: localStorage.getItem('lastTab') ?? 1,
     status: '',
     computedNavigator: false,
     hasLoadedOnce: false,
@@ -56,7 +56,7 @@ function getAllMembersByDepartmentUID (emps, departmentUID) {
 }
 
 const state = getDefaultState()
-const tab = 'tasks'
+const nowTab = getDefaultState().lastTab
 
 const getters = {
   getNavigator: (state) => state.navigator,
@@ -210,10 +210,8 @@ const mutations = {
     state.hasLoadedOnce = true
 
     console.log('navigator ', resp)
-
     state.menu = []
-    if (tab === 'tasks') {
-      state.menu = []
+    if (nowTab === '1') {
       state.menu.push([
         {
           label: 'Очередь',
@@ -299,8 +297,7 @@ const mutations = {
           path: 'other'
         }
       ])
-    } else if (tab === 'directions') {
-      state.menu = []
+    } else if (nowTab === '2') {
       state.menu.push([
         {
           label: 'Регламенты',
@@ -329,7 +326,7 @@ const mutations = {
           iconBackgroundClass: ''
         }
       ])
-    } else if (tab === 'settings' || tab === 'clients') {
+    } else if (nowTab === '3' || nowTab === '4') {
       return
     }
     const newAssignments = []
