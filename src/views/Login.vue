@@ -62,12 +62,16 @@ export default {
     },
     register () {
       if (!this.form.password || !this.form.username) { return }
+      const date = new Date()
+      const timezone = date.getTimezoneOffset() / 60 * (-1)
       const data = {
         email: this.form.email,
         password: this.form.password,
         name: this.form.username,
         phone: this.form.phone,
+        timezone: timezone,
         system: 'web',
+        cid: 'webnew',
         language: 'russian',
         type_device: 'mobile'
       }
