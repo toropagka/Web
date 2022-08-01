@@ -4,7 +4,7 @@
       <li
         v-for="tab in tabs"
         :key="tab.name"
-        class="mr-2"
+        class="mr-2 cursor-pointer"
         @click="switchTab(tab)"
       >
         <p
@@ -116,7 +116,7 @@ export default {
         },
         {
           code: 2,
-          name: 'Справочникик',
+          name: 'Справочники',
           items: [
             [
               {
