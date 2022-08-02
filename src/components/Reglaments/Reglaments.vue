@@ -78,6 +78,13 @@
         v-if="shouldShowModalBox"
         class="flex flex-col"
       >
+        <img
+          class="mx-auto mt-10"
+          width="320"
+          height="314"
+          src="@/assets/images/emptydoitnow.png"
+          alt="Empty task image"
+        >
         <p class="font-bold p-3">
           Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
         </p>
