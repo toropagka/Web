@@ -8,17 +8,44 @@
         src="@/assets/images/emptydoitnow.png"
         alt="Empty task image"
       >
-      <p class="text-xl text-center font-bold mt-[17px]">
-        Отличная работа! В Очереди пусто.<br>
-        Запланируем еще дела?
-      </p>
-      <div class="grid grid-cols-1">
+      <div
+        v-if="showModal"
+        class="flex flex-col"
+        @confirm="showModal = false"
+      >
+        <p class="font-bold p-3">
+          Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+        </p>
+        <p class="text-sm p-3">
+          Очередь позволит вам работать и в конце концов выполнить конкретную задачу или поручение. Вы не знаете, какая задача будет следующей, а следовательно не думаете о ней, и выполняете только ту, которая сейчас у вас перед глазами.
+        </p>
+        <p class="text-sm p-3">
+          Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
+        </p>
         <button
           class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-          @click="goToday"
+          @click="showModal = false"
         >
-          Запланировать
+          Понятно
         </button>
+      </div>
+      <div
+        v-if="!showModal"
+      >
+        <p
+          class="text-xl text-center font-bold mt-[17px]"
+        >
+          Отличная работа! В Очереди пусто.<br>
+          Запланируем еще дела?
+        </p>
+        <div class="grid grid-cols-1">
+          <button
+            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+            @click="goToday"
+          >
+            Запланировать
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +55,14 @@
 import * as TASK from '@/store/actions/tasks'
 export default {
   emits: ['clickPlanning'],
+  data () {
+    return {
+      showModal: false
+    }
+  },
+  mounted () {
+    this.showModal = this.$store.state.user.showModals
+  },
   methods: {
     goToday: function () {
       this.$store.dispatch(TASK.TASKS_REQUEST)

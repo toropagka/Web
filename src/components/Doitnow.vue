@@ -1,21 +1,4 @@
 <template>
-  <modal-box-description
-    v-model="showModal"
-    button="warning"
-    has-button
-    button-label="Понятно"
-    @confirm="showModal = false"
-  >
-    <p class="font-bold p-3">
-      Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
-    </p>
-    <p class="text-sm p-3">
-      Очередь позволит вам работать и в конце концов выполнить конкретную задачу или поручение. Вы не знаете, какая задача будет следующей, а следовательно не думаете о ней, и выполняете только ту, которая сейчас у вас перед глазами.
-    </p>
-    <p class="text-sm p-3">
-      Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
-    </p>
-  </modal-box-description>
   <inspector-modal-box
     v-model="showInspector"
     button="warning"
@@ -84,7 +67,6 @@ import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
-import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -100,8 +82,7 @@ export default {
     DoitnowSkeleton,
     DoitnowTask,
     InspectorModalBox,
-    Icon,
-    ModalBoxDescription
+    Icon
   },
   setup () {
     return {
@@ -205,7 +186,6 @@ export default {
     if (this.$store.state.user.visitedModals.includes('doitnow')) {
       return
     }
-    this.showModal = this.$store.state.user.showModals
     this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
