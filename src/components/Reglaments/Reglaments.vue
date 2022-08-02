@@ -1,21 +1,4 @@
 <template>
-  <modal-box-description
-    v-model="shouldShowModalBox"
-    button="warning"
-    has-button
-    button-label="Понятно"
-    @confirm="shouldShowModalBox"
-  >
-    <p class="font-bold p-3">
-      Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
-    </p>
-    <p class="text-sm p-3">
-      Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
-    </p>
-    <p class="text-sm p-3">
-      Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
-    </p>
-  </modal-box-description>
   <div class="w-full">
     <ReglamentAddLimit
       v-if="showAddLimit"
@@ -91,13 +74,32 @@
           @click.stop="clickAddReglament"
         />
       </div>
+      <div
+        v-if="shouldShowModalBox"
+        class="flex flex-col"
+      >
+        <p class="font-bold p-3">
+          Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+        </p>
+        <p class="text-sm p-3">
+          Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
+        </p>
+        <p class="text-sm p-3">
+          Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
+        </p>
+        <button
+          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+          @click="shouldShowModalBox = false"
+        >
+          Понятно
+        </button>
+      </div>
     </div>
   </div>
   <EmptyTasksListPics v-if="isEmpty" />
 </template>
 
 <script>
-import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import Icon from '@/components/Icon.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
@@ -120,8 +122,7 @@ export default {
     ReglamentBlocItem,
     ReglamentAddLimit,
     ListBlocAdd,
-    EmptyTasksListPics,
-    ModalBoxDescription
+    EmptyTasksListPics
   },
   props: {
     items: {
