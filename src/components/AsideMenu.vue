@@ -430,7 +430,7 @@ export default {
           />
         </template>
         <ul
-          v-if="favoriteBoards || favoriteProjects"
+          v-if="(favoriteBoards || favoriteProjects) && $store.state.navigator.menu.code === 1"
           class="mt-[20px]"
         >
           <li

@@ -166,6 +166,7 @@ export default {
       localStorage.setItem('lastTab', tab.code)
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.state.navigator.menu = []
+      this.$store.state.navigator.menu.code = tab.code
       if (tab.items) {
         this.$store.state.navigator.menu.push(...tab.items)
       }
