@@ -244,78 +244,11 @@ export default {
         }
       })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
-    },
-    pad2 (n) {
-      return (n < 10 ? '0' : '') + n
-    },
-    getTodaysDate (val, isYearFirst = true) {
-      if (val == null) {
-        val = new Date()
-      }
-      if (typeof val === 'string') { // parse date from ISO 8601 string
-        val = new Date(val)
-      }
-      const month = this.pad2(val.getMonth() + 1)
-      const day = this.pad2(val.getDate())
-      const year = this.pad2(val.getFullYear())
-      if (isYearFirst) {
-        return year + '-' + month + '-' + day
-      } else {
-        return day + '-' + month + '-' + year
-      }
-    },
     setSettings (val) {
       this.$store.state.user.newUserTasks = true
       this.$store.state.user.showOnboarding = val
       this.$store.state.user.showModals = val
       this.$store.state.user.justRegistered = false
-      const data = {
-        uid: this.uuidv4(),
-        uid_parent: '00000000-0000-0000-0000-000000000000',
-        uid_customer: this.$store?.state?.user?.user?.current_user_uid,
-        uid_project: '00000000-0000-0000-0000-000000000000',
-        status: 0,
-        email_performer: '',
-        type: 1,
-        name: 'Нажмите на меня, чтобы увидеть подробности по задаче',
-        checklist: '0\r\nДобавить первую задачу\r\n\r\n0\r\nДобавить вторую задачу\r\n\r\n0\r\nУстановить чек-лист',
-        comment: `В этой области находится заметка по задаче. 
-        Вносите сюда подробное описание, что необходимо сделать.
-
-Вы также можете использовать чек-лист с помощью кнопки выше, чтобы расписать четкую последовательность действий по шагам.
-
-Используйте область ниже, чтобы добавить к задаче файл или написать комментарий`,
-        _addToList: true,
-        date_begin: this.getTodaysDate(new Date()) + 'T00:00:00',
-        date_end: this.getTodaysDate(new Date()) + 'T23:59:59'
-
-      }
-      this.$store.dispatch(TASK.CREATE_TASK, data).then(() => {
-        const newSubtask = {
-          date_create: new Date(),
-          uid: this.uuidv4(),
-          uid_customer: this.$store?.state?.user?.user?.current_user_uid,
-          email_performer: '',
-          name: 'Разбивайте сложные задачи на шаги - подзадачи',
-          emails: '',
-          comment: 'Чтобы добавить подзадачу наведите курсор на задачу нажмите кнопку Добавить подзадачу',
-          tags: [],
-          uid_marker: '00000000-0000-0000-0000-000000000000',
-          status: 0,
-          uid_parent: data.uid,
-          uid_project: '00000000-0000-0000-0000-000000000000',
-          type: 1,
-          SeriesType: 0,
-          _isEditing: true,
-          _isEditable: true,
-          _justCreated: true
-        }
-        this.$store.dispatch(TASK.ADD_SUBTASK, newSubtask)
-      })
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {

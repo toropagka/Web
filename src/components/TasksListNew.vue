@@ -293,11 +293,14 @@
     <EmptyTasksListPics
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
-    <onBoarding
-      v-if="showOnboarding"
-      :steps="steps"
-      @shouldShowOnboarding="shouldShowOnboarding"
-    />
+    <!--
+      Скрыто на первую версию!!
+
+      <onBoarding
+    v-if="showOnboarding"
+    :steps="steps"
+    @shouldShowOnboarding="shouldShowOnboarding"
+    /> -->
   </div>
 </template>
 
@@ -306,7 +309,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
-import onBoarding from '@/components/onBoarding/onBoarding.vue'
+// import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics.vue'
 import ModalBoxDelete from './Common/ModalBoxDelete.vue'
@@ -357,8 +360,8 @@ export default {
     TaskStatus,
     contenteditable,
     TaskListActionHoverPanel,
-    TaskListModalBoxLicenseLimit,
-    onBoarding
+    TaskListModalBoxLicenseLimit
+    // onBoarding
   },
   directives: {
     linkify
