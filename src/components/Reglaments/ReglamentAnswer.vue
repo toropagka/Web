@@ -77,7 +77,7 @@ export default {
   >
     <div
       :ref="answer.uid + 'input'"
-      placeholder="Текст ответа"
+      :placeholder="isEditing ? 'Текст вопроса' : ''"
       class="font-[300] text-[14px] min-w-[10px] min-h-[10px]"
       :class="{'cursor-editing': isEditing}"
       :contenteditable="isEditing"

@@ -154,7 +154,7 @@ export default {
     <div class="px-1 flex justify-between items-center group">
       <div
         :ref="question.uid + 'input'"
-        placeholder="Текст вопроса"
+        :placeholder="isEditing && canEdit ? 'Текст вопроса' : ''"
         class="font-[500] text-[18px] my-3 min-w-[10px] min-h-[10px]"
         :contenteditable="isEditing && canEdit"
         @blur="changeQuestionName($event)"
