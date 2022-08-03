@@ -26,6 +26,7 @@ const menuClick = (event, item) => {
       :key="index"
     >
       <aside-menu-item
+        :id="item.path === 'other' ? 'step5' : ''"
         :item="item"
         :is-submenu-list="isSubmenuList"
         @menu-click="menuClick"

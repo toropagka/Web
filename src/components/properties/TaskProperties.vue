@@ -218,7 +218,6 @@
       <TaskPropsCommentEditor
         :comment="selectedTask.comment ?? ''"
         :can-edit="canEditComment"
-        @scrollToEnd="scrollToEnd"
         @changeComment="onChangeComment"
       />
       <!-- Show all -->
@@ -470,9 +469,6 @@ export default {
   methods: {
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)
-    },
-    scrollToEnd () {
-      document.getElementById('aside-right').scrollTo(0, document.getElementById('taskPropsCommentEditor').scrollHeight)
     },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n

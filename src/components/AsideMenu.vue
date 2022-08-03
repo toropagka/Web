@@ -124,6 +124,7 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
+      console.log(item)
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -343,7 +344,10 @@ export default {
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
+      <div
+        id="step3"
+        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
+      >
         <div
           class="group w-full cursor-pointer"
           @click="modalOneActive = true"
@@ -380,7 +384,7 @@ export default {
       </div>
       <div class="mt-[10px]">
         <DatePicker
-          id="Maincalendar"
+          id="step4"
           ref="calendarclass"
           dot="true"
           class="border-none pl-[22px] pr-[16px] calendar-nav-custom"
@@ -408,7 +412,7 @@ export default {
         :text-color="'white'"
         :user-icon="warn"
         :link="'https://www.leadertask.ru/alpha'"
-        :message-text="user?.tarif === 'trial' ? 'Пробный тариф.' : 'Закончилась лицензия.'"
+        :message-text="user?.tarif === 'trial' ? 'Пробный тариф' : 'Закончилась лицензия'"
       />
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">

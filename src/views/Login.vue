@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios'
-import { mdiEmailOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
+import { mdiEmailOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft, mdiKey, mdiPhoneOutline } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
@@ -22,14 +22,16 @@ export default {
   data () {
     return {
       mdiEmailOutline,
-      mdiEyeOffOutline,
+      mdiKey,
       mdiAccountOutline,
       mdiArrowRight,
       mdiChevronLeft,
+      mdiPhoneOutline,
       form: {
         email: '',
         password: '',
         username: '',
+        phone: '',
         showError: false,
         errorMessage: '',
         isEmailValid: false,
@@ -60,17 +62,23 @@ export default {
     },
     register () {
       if (!this.form.password || !this.form.username) { return }
+      const date = new Date()
+      const timezone = date.getTimezoneOffset() / 60 * (-1)
       const data = {
         email: this.form.email,
         password: this.form.password,
         name: this.form.username,
+        phone: this.form.phone,
+        timezone: timezone,
         system: 'web',
+        cid: 'webnew',
         language: 'russian',
         type_device: 'mobile'
       }
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/')
+          this.$store.state.user.justRegistered = true
         })
         .catch(() => {
           this.form.showError = true
@@ -126,6 +134,7 @@ export default {
       this.form.email = ''
       this.form.password = ''
       this.form.username = ''
+      this.form.phone = ''
       this.form.startScreenText = 'ЛидерТаск'
       this.form.emailMdi = mdiEmailOutline
       this.form.emailIconClass = ''
@@ -225,7 +234,7 @@ export default {
           <field>
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
+              :icon="mdiKey"
               type="password"
               name="password"
               autocomplete="current-password"
@@ -265,7 +274,7 @@ export default {
           >
             <control
               v-model="form.password"
-              :icon="mdiEyeOffOutline"
+              :icon="mdiKey"
               type="password"
               name="password"
               placeholder="Пароль"
@@ -287,6 +296,19 @@ export default {
               autocomplete="username"
               placeholder="Имя пользователя"
               :valid="form.username.length > 2"
+            />
+          </field>
+
+          <field
+            help="Введите ваш номер телефона"
+          >
+            <control
+              v-model="form.phone"
+              type="text"
+              :icon="mdiPhoneOutline"
+              name="phone"
+              autocomplete="phone"
+              placeholder="Номер телефона"
             />
           </field>
 

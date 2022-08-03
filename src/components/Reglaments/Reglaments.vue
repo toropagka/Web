@@ -77,6 +77,33 @@
           @click.stop="clickAddReglament(reg.uid)"
         />
       </div>
+      <div
+        v-if="shouldShowModalBox"
+        class="flex flex-col"
+      >
+        <img
+          class="mx-auto mt-10"
+          width="320"
+          height="314"
+          src="@/assets/images/emptydoitnow.png"
+          alt="Empty task image"
+        >
+        <p class="font-bold p-3">
+          Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+        </p>
+        <p class="text-sm p-3">
+          Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
+        </p>
+        <p class="text-sm p-3">
+          Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
+        </p>
+        <button
+          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+          @click="shouldShowModalBox = false"
+        >
+          Понятно
+        </button>
+      </div>
     </div>
     <div
       v-if="currentUserIsAdmin"
@@ -107,6 +134,7 @@ import * as REGLAMENTS from '@/store/actions/reglaments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+
 export default {
   components: {
     Icon,
@@ -129,7 +157,8 @@ export default {
       addReglamentDepartment: '',
       showAddLimit: false,
       gridView,
-      listView
+      listView,
+      shouldShowModalBox: false
     }
   },
   computed: {
@@ -218,6 +247,13 @@ export default {
   },
   created () {
     setLocalStorageItem('isGridView', true)
+  },
+  mounted () {
+    if (this.$store.state.user.visitedModals.includes('reglaments')) {
+      return
+    }
+    this.shouldShowModalBox = this.$store.state.user.showModals
+    this.$store.state.user.visitedModals.push('reglaments')
   },
   methods: {
     updateGridView (value) {

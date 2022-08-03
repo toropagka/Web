@@ -104,6 +104,8 @@ export default {
     overdueReaded: [],
     showInspector: false,
     tasksLoaded: false,
+    showModal: false,
+    isDisplayOnboarding: true
     childrens: []
   }),
   computed: {
@@ -186,6 +188,10 @@ export default {
   },
   mounted: function () {
     this.loadAllTasks()
+    if (this.$store.state.user.visitedModals.includes('doitnow')) {
+      return
+    }
+    this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
     loadAllTasks: function () {
@@ -315,6 +321,10 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    closeOnboadringModal () {
+      this.isDisplayOnboarding = false
+      return this.isDisplayOnboarding
     }
   }
 }
