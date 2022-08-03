@@ -2,6 +2,7 @@ import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
 import TaskFile from '@/views/TaskFile'
+import ClientsForm from '@/views/ClientsForm'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -90,6 +91,15 @@ const routes = [
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    meta: {
+      title: 'Форма заявки'
+    },
+    path: '/clientsform/:board_uid',
+    name: 'clientsform',
+    component: ClientsForm,
     beforeEnter: ifAuthenticated
   },
   {
