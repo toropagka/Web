@@ -133,6 +133,7 @@ export default {
 
       // do it now
       if (item.uid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
+        window.ym(89796698, 'reachGoal', 'doitnow')
         if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
           this.showFreeModal = true
           return
@@ -191,14 +192,15 @@ export default {
           this.$store.commit('updateStackWithInitValue', navElem)
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path] })
         } else {
+          console.log(item.uid)
           const navElem = {
             name: item.label,
             key: 'greedSource',
             greedPath: item.path,
-            value: this.storeNavigator[item.path].items
+            value: this.storeNavigator[item.path]?.items
           }
           this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path].items })
+          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path]?.items })
         }
       }
     },
