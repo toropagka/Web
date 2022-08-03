@@ -188,10 +188,6 @@ export default {
   },
   mounted: function () {
     this.loadAllTasks()
-    if (this.$store.state.user.visitedModals.includes('doitnow')) {
-      return
-    }
-    this.$store.state.user.visitedModals.push('doitnow')
   },
   methods: {
     loadAllTasks: function () {

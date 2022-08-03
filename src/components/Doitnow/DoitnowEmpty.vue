@@ -9,9 +9,8 @@
         alt="Empty task image"
       >
       <div
-        v-if="showModal"
+        v-if="displayModal"
         class="flex flex-col"
-        @confirm="showModal = false"
       >
         <p class="font-bold p-3">
           Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
@@ -24,13 +23,13 @@
         </p>
         <button
           class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-          @click="showModal = false"
+          @click="okToModal"
         >
           Понятно
         </button>
       </div>
       <div
-        v-if="!showModal"
+        v-if="!displayModal"
       >
         <p
           class="text-xl text-center font-bold mt-[17px]"
@@ -57,11 +56,14 @@ export default {
   emits: ['clickPlanning'],
   data () {
     return {
-      showModal: false
+      displayModal: false
     }
   },
   mounted () {
-    this.showModal = this.$store.state.user.showModals
+    if (this.$store.state.user.visitedModals.includes('doitnow')) {
+      return
+    }
+    this.displayModal = this.$store.state.user.showModals
   },
   methods: {
     goToday: function () {
@@ -76,6 +78,10 @@ export default {
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+    },
+    okToModal () {
+      this.displayModal = false
+      this.$store.state.user.visitedModals.push('doitnow')
     }
   }
 }

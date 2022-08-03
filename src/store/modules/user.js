@@ -15,7 +15,8 @@ const state = {
   visitedModals: [],
   newUserTasks: false,
   showOnboarding: false,
-  showModals: false
+  showModals: false,
+  showSetStartInfo: false
 }
 
 const getters = {}
