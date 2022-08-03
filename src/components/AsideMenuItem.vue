@@ -26,7 +26,7 @@ const itemHref = computed(() => props.item.href || null)
 const itemTarget = computed(() =>
   componentIs.value === 'a' && props.item.target ? props.item.target : null
 )
-const isActive = computed(() => props.item.uid === navStack.value[0].value.uid || props.item.label === navStack.value[0].name ? 1 : 0)
+const isActive = computed(() => props.item.uid === navStack?.value[0]?.value?.uid || props.item.label === navStack?.value[0]?.name ? 1 : 0)
 
 const menuClick = (event) => {
   emit('menu-click', event, props.item)
