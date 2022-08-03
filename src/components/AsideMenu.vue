@@ -192,14 +192,15 @@ export default {
           this.$store.commit('updateStackWithInitValue', navElem)
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path] })
         } else {
+          console.log(item.uid)
           const navElem = {
             name: item.label,
             key: 'greedSource',
             greedPath: item.path,
-            value: this.storeNavigator[item.path].items
+            value: this.storeNavigator[item.path]?.items
           }
           this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path].items })
+          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path]?.items })
         }
       }
     },

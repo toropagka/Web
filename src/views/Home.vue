@@ -77,6 +77,9 @@
       <dashboard
         v-if="greedPath === 'dashboard'"
       />
+      <clients
+        v-if="greedPath === 'clients'"
+      />
       <other
         v-if="greedPath === 'other'"
       />
@@ -129,6 +132,7 @@ import Overlay from '@/components/modals/Overlay.vue'
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
+import Clients from '@/components/Clients/Clients.vue'
 import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import Boards from '@/components/Boards.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
@@ -164,6 +168,7 @@ export default {
     TasksListNew,
     Projects,
     Reglaments,
+    Clients,
     Boards,
     Doitnow,
     Dashboard,
@@ -579,8 +584,8 @@ export default {
           } else {
             // colors and reglaments
             this.$store.commit('basic', {
-              key: this.navStack[this.navStack.length - 1].key,
-              value: this.storeNavigator[this.navStack[this.navStack.length - 1].greedPath].items
+              key: this.navStack[this.navStack.length - 1]?.key,
+              value: this.storeNavigator[this.navStack[this.navStack.length - 1]?.greedPath]?.items
             })
           }
         }
