@@ -105,7 +105,7 @@ export default {
     showInspector: false,
     tasksLoaded: false,
     showModal: false,
-    isDisplayOnboarding: true
+    isDisplayOnboarding: true,
     childrens: []
   }),
   computed: {
