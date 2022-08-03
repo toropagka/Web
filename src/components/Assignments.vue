@@ -1,18 +1,4 @@
 <template>
-  <modal-box-description
-    v-model="showModal"
-    button="warning"
-    has-button
-    button-label="Понятно"
-    @confirm="showModal = false"
-  >
-    <p class="font-bold p-2">
-      Управляйте сотрудниками и поручениями!
-    </p>
-    <p class="text-sm p-2">
-      Поручайте задачи команде и выполняйте поручения от сотрудников. Добавьте всю команду в разделе Сотрудники, поручите им задачи и следите за их выполнением в этом разделе.
-    </p>
-  </modal-box-description>
   <div class="w-full">
     <div
       v-for="(value, index) in assignments"
@@ -83,11 +69,34 @@
         </template>
       </div>
     </div>
+    <div
+      v-if="showModal"
+      class="flex flex-col justify-center items-center"
+    >
+      <img
+        class="mx-auto mt-4"
+        width="320"
+        height="314"
+        src="@/assets/images/pic.png"
+        alt="Empty task image"
+      >
+      <p class="font-bold p-2">
+        Управляйте сотрудниками и поручениями!
+      </p>
+      <p class="text-sm p-2 w-[600px]">
+        Поручайте задачи команде и выполняйте поручения от сотрудников. Добавьте всю команду в разделе Сотрудники, поручите им задачи и следите за их выполнением в этом разделе.
+      </p>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+        @click="showModal = false"
+      >
+        Понятно
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-import ModalBoxDescription from '@/components/modals/ModalBoxDescription.vue'
 import Icon from '@/components/Icon.vue'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import { setLocalStorageItem, UID_TO_ACTION } from '@/store/helpers/functions'
@@ -98,7 +107,6 @@ import listView from '@/icons/list-view.js'
 
 export default {
   components: {
-    ModalBoxDescription,
     Icon,
     ListBlocItem
   },

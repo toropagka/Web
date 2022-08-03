@@ -38,6 +38,10 @@
     v-if="isDisplayOnboarding"
     @cancel="setSettings"
   />
+  <ModalBoxStartInfo
+    v-if="isSetStartInfo"
+    @confirm="setInfo"
+  />
   <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
@@ -154,6 +158,7 @@ import { USER_REQUEST } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
+import ModalBoxStartInfo from '../components/modals/ModalBoxStartInfo.vue'
 
 export default {
   components: {
@@ -181,7 +186,8 @@ export default {
     ReglamentContent,
     Employees,
     Colors,
-    Assignments
+    Assignments,
+    ModalBoxStartInfo
   },
   data () {
     return {
@@ -194,6 +200,9 @@ export default {
     },
     isDisplayOnboarding () {
       return this.$store.state.user.justRegistered
+    },
+    isSetStartInfo () {
+      return this.$store.state.user.showSetStartInfo
     },
     greedPath () {
       return this.$store.state.greedPath
@@ -249,6 +258,10 @@ export default {
       this.$store.state.user.showOnboarding = val
       this.$store.state.user.showModals = val
       this.$store.state.user.justRegistered = false
+      this.$store.state.user.showSetStartInfo = true
+    },
+    setInfo () {
+      this.$store.state.user.showSetStartInfo = false
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {
