@@ -58,7 +58,7 @@
             class="focus:ring min-w-[90px] focus:outline-none inline-flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md border border-[#ff9123] bg-white text-[#ff9123] text-[13px] leading-[15px] font-medium font-roboto"
             @click="onDecline"
           >
-            {{ cancel }}
+            {{ decline }}
           </button>
           <button
             v-if="cancel"
