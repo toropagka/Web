@@ -208,12 +208,13 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
+              :delay="80"
+              :touch-start-threshold="10"
+              :animation="100"
               :disabled="!board || board.type_access === 0 || isFiltered"
               :move="checkMoveDragCard"
-              :fallback-tolerance="1"
+              :scroll-sensitivity="100"
               :force-fallback="true"
-              :animation="180"
-              :scroll-sensitivity="250"
               @start="startDragCard"
               @end="endDragCard"
               @change="changeDragCard"
@@ -300,8 +301,8 @@
 </template>
 
 <script>
-import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import PopMenu from '@/components/modals/PopMenu.vue'
+import PopMenuItem from '@/components/modals/PopMenuItem.vue'
 import draggable from 'vuedraggable'
 import BoardCard from '@/components/Board/BoardCard.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
@@ -725,9 +726,6 @@ export default {
           targetColumn.UID,
           newOrder
         )
-      }
-      if (this.dragCardParam?.change?.length === 0 && this.dragCardParam?.move?.card) {
-        this.selectCard(this.dragCardParam?.move?.card)
       }
       this.dragCardParam = null
     },
