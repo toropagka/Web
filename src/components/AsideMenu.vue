@@ -381,6 +381,7 @@ export default {
       </div>
       <div class="mt-[10px]">
         <DatePicker
+          v-if="$store.state.navigator.menu.code === 1"
           id="Maincalendar"
           ref="calendarclass"
           dot="true"
