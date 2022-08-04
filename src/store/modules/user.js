@@ -10,7 +10,7 @@ import {
 const state = {
   user: null,
   status: '',
-  justRegistered: true,
+  justRegistered: false,
   hasLoadedOnce: false,
   visitedModals: [],
   newUserTasks: false,
