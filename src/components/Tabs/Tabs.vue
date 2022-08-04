@@ -16,7 +16,7 @@
         <p
           href="#"
           class="inline-block py-2 px-5 text-black rounded-lg active ring-2 ring-orange-400"
-          :class="{'bg-[#FF912380]': tab.code === lastSelectedTabsCode ?? 'bg-white' }"
+          :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
         >
           {{ tab.name }}
         </p>
@@ -42,23 +42,16 @@ export default {
       showInspector: false,
       showFreeModal: false,
       lastSelectedTabsCode: '',
-      currentTab: localStorage.getItem('lastTab') ?? 1,
       tabs: [
         {
           code: 1,
+          name: 'Очередь',
+          items: [{}]
+        },
+        {
+          code: 2,
           name: 'Задачи',
           items: [
-            [{
-              label: 'Очередь',
-              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
-              bold: 0,
-              icon: 'M5 6.89471C5 6.65742 5.08975 6.42985 5.2495 6.26206C5.40925 6.09426 5.62593 6 5.85185 6H22.5926C22.8185 6 23.0352 6.09426 23.1949 6.26206C23.3547 6.42985 23.4444 6.65742 23.4444 6.89471C23.4444 7.13201 23.3547 7.35958 23.1949 7.52737C23.0352 7.69517 22.8185 7.78943 22.5926 7.78943H5.85185C5.62593 7.78943 5.40925 7.69517 5.2495 7.52737C5.08975 7.35958 5 7.13201 5 6.89471ZM14.0741 13.1577H5.85185C5.62593 13.1577 5.40925 13.252 5.2495 13.4198C5.08975 13.5876 5 13.8151 5 14.0524C5 14.2897 5.08975 14.5173 5.2495 14.6851C5.40925 14.8529 5.62593 14.9471 5.85185 14.9471H14.0741C14.3 14.9471 14.5167 14.8529 14.6764 14.6851C14.8362 14.5173 14.9259 14.2897 14.9259 14.0524C14.9259 13.8151 14.8362 13.5876 14.6764 13.4198C14.5167 13.252 14.3 13.1577 14.0741 13.1577ZM14.0741 20.3154H5.85185C5.62593 20.3154 5.40925 20.4097 5.2495 20.5775C5.08975 20.7453 5 20.9729 5 21.2102C5 21.4474 5.08975 21.675 5.2495 21.8428C5.40925 22.0106 5.62593 22.1049 5.85185 22.1049H14.0741C14.3 22.1049 14.5167 22.0106 14.6764 21.8428C14.8362 21.675 14.9259 21.4474 14.9259 21.2102C14.9259 20.9729 14.8362 20.7453 14.6764 20.5775C14.5167 20.4097 14.3 20.3154 14.0741 20.3154ZM26 17.6313C26.0009 17.784 25.964 17.9343 25.8931 18.0676C25.8222 18.2009 25.7196 18.3126 25.5954 18.3918L18.7805 22.8654C18.6517 22.9494 18.5038 22.9958 18.3522 22.9997C18.2006 23.0037 18.0507 22.965 17.918 22.8877C17.7862 22.8091 17.6764 22.6953 17.5997 22.5578C17.5231 22.4204 17.4823 22.2642 17.4815 22.1049V13.1577C17.4816 12.9985 17.5222 12.8423 17.5991 12.7051C17.6759 12.5679 17.7862 12.4547 17.9186 12.3772C18.051 12.2997 18.2006 12.2607 18.3522 12.2642C18.5037 12.2677 18.6516 12.3136 18.7805 12.3972L25.5954 16.8708C25.7196 16.95 25.8222 17.0617 25.8931 17.195C25.964 17.3283 26.0009 17.4786 26 17.6313ZM23.5403 17.6313L19.1852 14.7682V20.4944L23.5403 17.6313Z',
-              width: 30,
-              height: 30,
-              iconBox: '0 0 30 30',
-              type: 'uid',
-              iconBackgroundClass: ''
-            }],
             [
               {
                 label: 'Сегодня',
@@ -194,7 +187,7 @@ export default {
           ]
         },
         {
-          code: 2,
+          code: 3,
           name: 'Справочники',
           items: [
             [
@@ -254,14 +247,19 @@ export default {
           ]
         },
         {
-          code: 3,
+          code: 4,
           name: 'Настройки'
         },
         {
-          code: 4,
+          code: 5,
           name: 'Клиенты'
         }
       ]
+    }
+  },
+  computed: {
+    lastTab () {
+      return this.$store.state.navigator.lastTab
     }
   },
   methods: {
@@ -269,11 +267,23 @@ export default {
       console.log(tab.code)
       this.lastSelectedTabsCode = tab.code
       localStorage.setItem('lastTab', tab.code)
+      switch (tab.code) {
+        case 1:
+          this.$router.push('/doitnow')
+          break
+        case 2:
+          this.$router.push('/tasks')
+          break
+        case 3:
+          this.$router.push('/directory')
+          break
+      }
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.state.navigator.menu = []
       this.$store.state.navigator.menu.code = tab.code
       if (tab.items) {
         this.$store.state.navigator.menu.push(...tab.items)
+        console.log(this.$store.state.navigator.menu, tab.items)
       }
     },
     shouldShowInspector () {

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="tasksCount && !isLoading"
-    class="flex items-center mb-5 justify-between"
+    class="flex items-center mb-5 justify-between pr-60"
   >
     <!-- header -->
     <div class="flex items-center">

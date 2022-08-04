@@ -1,4 +1,8 @@
 <script setup>
+import AsideMenu from '@/components/AsideMenu.vue'
+import Tabs from '@/components/Tabs/Tabs.vue'
+
+import { computed } from 'vue'
 
 import { useStore } from 'vuex'
 
@@ -13,6 +17,10 @@ const store = useStore()
 
 store.dispatch(LOCALIZATION_REQUEST)
 
+const menu = computed(() => store.state.navigator.menu)
+
+const lastTab = computed(() => store.state.navigator.lastTab)
+
 const fm = document.createElement('script')
 fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
 fm.onload = () => {
@@ -26,5 +34,10 @@ document.head.appendChild(fm)
 </script>
 
 <template>
+  <Tabs class="fixed left-0 top-0 z-[50] ml-3" />
+  <AsideMenu
+    v-if="lastTab != '1'"
+    :menu="menu"
+  />
   <router-view />
 </template>

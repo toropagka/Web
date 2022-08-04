@@ -1,5 +1,4 @@
 <template>
-  <Tabs class="fixed left-0 top-0 z-[50] ml-3" />
   <modal-box-notification-instruction
     v-model="shouldShowModalBox"
     button="warning"
@@ -129,7 +128,6 @@ import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
-import Tabs from '@/components/Tabs/Tabs.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
@@ -183,8 +181,7 @@ export default {
     ReglamentContent,
     Employees,
     Colors,
-    Assignments,
-    Tabs
+    Assignments
   },
   data () {
     return {
