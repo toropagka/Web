@@ -6,10 +6,17 @@
       v-if="displayModal"
       class="flex flex-col justify-center items-center"
     >
-      <p class="font-bold p-3 text-center">
+      <img
+        class="mx-auto mt-4"
+        width="450"
+        height="450"
+        src="@/assets/images/35.svg"
+        alt="Empty task image"
+      >
+      <p class="font-bold p-3 text-center w-[600px]">
         Добавьте всех сотрудников в ЛидерТаск, чтобы поручать им задачи, работать над общими проектами и досками и многое другое
       </p>
-      <p class="text-sm">
+      <p class="text-sm w-[600px]">
         Управляйте командой с помощью раздела Сотрудники: создавайте отделы, добавляйте в них сотрудников, устанавливайте права доступа.
       </p>
       <button
