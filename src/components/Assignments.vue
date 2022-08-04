@@ -1,83 +1,87 @@
 <template>
   <div class="w-full">
     <div
-      v-for="(value, index) in assignments"
-      :key="index"
+      v-if="!displayModal"
     >
       <div
-        class="flex items-center w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+        v-for="(value, index) in assignments"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ value.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex items-center w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
-          />
-        </div>
-      </div>
-      <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <template
-          v-for="user in value.items"
-          :key="user.uid"
-        >
-          <ListBlocItem
-            :color="index ? '#ec452e': '#3fbf64'"
-            :title="user.name"
-            :sub-title="user.email"
-            @click.stop="gotoChildren(user)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ value.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
           >
-            <img
-              v-if="user.fotolink"
-              :src="user.fotolink"
-              class="rounded-[6px]"
-              width="20"
-              height="20"
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="user in value.items"
+            :key="user.uid"
+          >
+            <ListBlocItem
+              :color="index ? '#ec452e': '#3fbf64'"
+              :title="user.name"
+              :sub-title="user.email"
+              @click.stop="gotoChildren(user)"
             >
-          </ListBlocItem>
-        </template>
+              <img
+                v-if="user.fotolink"
+                :src="user.fotolink"
+                class="rounded-[6px]"
+                width="20"
+                height="20"
+              >
+            </ListBlocItem>
+          </template>
+        </div>
       </div>
     </div>
     <div
-      v-if="showModal"
+      v-if="displayModal"
       class="flex flex-col justify-center items-center"
     >
       <img
         class="mx-auto mt-4"
-        width="320"
-        height="314"
-        src="@/assets/images/pic.png"
+        width="450"
+        height="450"
+        src="@/assets/images/assigments.svg"
         alt="Empty task image"
       >
       <p class="font-bold p-2">
@@ -88,7 +92,7 @@
       </p>
       <button
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-        @click="showModal = false"
+        @click="okToModal"
       >
         Понятно
       </button>
@@ -118,7 +122,7 @@ export default {
   },
   data () {
     return {
-      showModal: false,
+      displayModal: false,
       gridView,
       listView
     }
@@ -135,7 +139,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('assignment')) {
       return
     }
-    this.showModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals
   },
   methods: {
     updateGridView (value) {

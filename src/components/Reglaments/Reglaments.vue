@@ -1,111 +1,115 @@
 <template>
   <div class="w-full">
-    <ReglamentAddLimit
-      v-if="showAddLimit"
-      @cancel="showAddLimit = false"
-      @ok="showAddLimit = false"
-    />
-    <BoardModalBoxRename
-      v-if="showAddReglament"
-      :show="showAddReglament"
-      title="Создать регламент"
-      @cancel="showAddReglament = false"
-      @save="onAddNewReglament"
-    />
     <div
-      v-for="(value, index) in reglaments"
-      :key="index"
+      v-if="!displayModal"
     >
+      <ReglamentAddLimit
+        v-if="showAddLimit"
+        @cancel="showAddLimit = false"
+        @ok="showAddLimit = false"
+      />
+      <BoardModalBoxRename
+        v-if="showAddReglament"
+        :show="showAddReglament"
+        title="Создать регламент"
+        @cancel="showAddReglament = false"
+        @save="onAddNewReglament"
+      />
       <div
-        class="flex w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+        v-for="(value, index) in reglaments"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ value.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ value.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
+          >
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="reglament in value.items"
+            :key="reglament.uid"
+          >
+            <ReglamentBlocItem
+              :reglament="reglament"
+              @click.stop="gotoReglamentContent(reglament)"
+            />
+          </template>
+          <ListBlocAdd
+            v-if="index == 0"
+            @click.stop="clickAddReglament"
           />
         </div>
-      </div>
-      <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <template
-          v-for="reglament in value.items"
-          :key="reglament.uid"
-        >
-          <ReglamentBlocItem
-            :reglament="reglament"
-            @click.stop="gotoReglamentContent(reglament)"
-          />
-        </template>
-        <ListBlocAdd
-          v-if="index == 0"
-          @click.stop="clickAddReglament"
-        />
-      </div>
-      <div
-        v-if="shouldShowModalBox"
-        class="flex flex-col justify-center items-center"
-      >
-        <img
-          class="mx-auto mt-4"
-          width="320"
-          height="314"
-          src="@/assets/images/emptydoitnow.png"
-          alt="Empty task image"
-        >
-        <div class="w-[1000px] text-2xl">
-          <p class="font-bold p-3 text-center">
-            Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
-          </p>
-          <p class="text-sm p-1">
-            Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
-          </p>
-          <p class="text-sm p-1">
-            Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
-          </p>
-        </div>
-        <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-          @click="shouldShowModalBox = false"
-        >
-          Понятно
-        </button>
       </div>
     </div>
+    <EmptyTasksListPics v-if="isEmpty" />
   </div>
-  <EmptyTasksListPics v-if="isEmpty" />
+  <div
+    v-if="displayModal"
+    class="flex flex-col justify-center items-center"
+  >
+    <img
+      class="mx-auto mt-4"
+      width="450"
+      height="450"
+      src="@/assets/images/regl.svg"
+      alt="Empty task image"
+    >
+    <div class="w-[1000px] text-2xl">
+      <p class="font-bold p-3 text-center">
+        Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+      </p>
+      <p class="text-sm p-1">
+        Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
+      </p>
+      <p class="text-sm p-1">
+        Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
+      </p>
+    </div>
+    <button
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+      @click="okToModal"
+    >
+      Понятно
+    </button>
+  </div>
 </template>
 
 <script>
@@ -145,7 +149,7 @@ export default {
       showAddLimit: false,
       gridView,
       listView,
-      shouldShowModalBox: false
+      displayModal: false
     }
   },
   computed: {
@@ -187,8 +191,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('reglaments')) {
       return
     }
-    this.shouldShowModalBox = this.$store.state.user.showModals
-    this.$store.state.user.visitedModals.push('reglaments')
+    this.displayModal = this.$store.state.user.showModals
   },
   methods: {
     updateGridView (value) {
@@ -251,6 +254,10 @@ export default {
           this.gotoReglamentContent(reglament)
         })
       }
+    },
+    okToModal () {
+      this.displayModal = false
+      this.$store.state.user.visitedModals.push('reglaments')
     }
   }
 }

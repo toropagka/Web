@@ -1,82 +1,86 @@
 <template>
   <div class="w-full">
-    <BoardModalBoxRename
-      v-if="showAddBoard"
-      :show="showAddBoard"
-      title="Добавить доску"
-      @cancel="showAddBoard = false"
-      @save="onAddNewBoard"
-    />
-    <BoardModalBoxBoardsLimit
-      v-if="showBoardsLimit"
-      @cancel="showBoardsLimit = false"
-      @ok="showBoardsLimit = false"
-    />
     <div
-      v-for="(value, index) in boards"
-      :key="index"
+      v-if="!displayModal"
     >
+      <BoardModalBoxRename
+        v-if="showAddBoard"
+        :show="showAddBoard"
+        title="Добавить доску"
+        @cancel="showAddBoard = false"
+        @save="onAddNewBoard"
+      />
+      <BoardModalBoxBoardsLimit
+        v-if="showBoardsLimit"
+        @cancel="showBoardsLimit = false"
+        @ok="showBoardsLimit = false"
+      />
       <div
-        class="flex items-center w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+        v-for="(value, index) in boards"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ value.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex items-center w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ value.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
+          >
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="board in value.items"
+            :key="board.uid"
+          >
+            <BoardBlocItem
+              :board="board"
+              @click.stop="gotoChildren(board)"
+            />
+          </template>
+          <ListBlocAdd
+            v-if="index == 0"
+            @click.stop="clickAddBoard"
           />
         </div>
       </div>
-      <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <template
-          v-for="board in value.items"
-          :key="board.uid"
-        >
-          <BoardBlocItem
-            :board="board"
-            @click.stop="gotoChildren(board)"
-          />
-        </template>
-        <ListBlocAdd
-          v-if="index == 0"
-          @click.stop="clickAddBoard"
-        />
-      </div>
     </div>
     <div
-      v-if="showModal"
+      v-if="displayModal"
       class="flex flex-col justify-center items-center"
     >
       <img
@@ -94,7 +98,7 @@
       </p>
       <button
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-        @click="showModal = false"
+        @click="okToModal"
       >
         Понятно
       </button>
@@ -134,7 +138,7 @@ export default {
     return {
       showAddBoard: false,
       showBoardsLimit: false,
-      showModal: false,
+      displayModal: false,
       gridView,
       listView
     }
@@ -151,7 +155,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('boards')) {
       return
     }
-    this.showModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals
   },
   methods: {
     print (val) {
