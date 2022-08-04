@@ -105,8 +105,7 @@ export default {
     showInspector: false,
     tasksLoaded: false,
     showModal: false,
-    isDisplayOnboarding: true,
-    childrens: []
+    isDisplayOnboarding: true
   }),
   computed: {
     tasksCount () {
@@ -166,10 +165,6 @@ export default {
   watch: {
     firstTask (newtask, oldtask) {
       if (newtask) {
-        this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
-          .then((resp) => {
-            this.childrens = resp.data.tasks
-          })
         this.$store.commit(TASK.SELECT_TASK, newtask)
         this.$store.dispatch(MSG.MESSAGES_REQUEST, newtask.uid)
           .then(() => {

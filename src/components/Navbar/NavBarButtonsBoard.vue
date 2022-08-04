@@ -7,12 +7,6 @@
       @cancel="showDeleteBoard = false"
       @yes="onDeleteBoard"
     />
-    <ClientsFormModalBox
-      v-if="showClientsForm"
-      title="Настройка формы"
-      @cancel="showClientsForm = false"
-      @save="onShowClientsForm"
-    />
     <PopMenu>
       <NavBarButtonIcon
         icon="filter"
@@ -72,11 +66,6 @@
           Удалить доску
         </PopMenuItem>
         <PopMenuItem
-          @click="clickShowClientsForm"
-        >
-          Форма сбора заявок
-        </PopMenuItem>
-        <PopMenuItem
           @click="favoriteToggle"
         >
           {{ !isFavorite ? 'Добавить в избранное' : 'Удалить из избранного' }}
@@ -88,11 +77,10 @@
 
 <script>
 import NavBarButtonIcon from '@/components/Navbar/NavBarButtonIcon.vue'
-import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
-import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
+import PopMenu from '@/components/modals/PopMenu.vue'
+import PopMenuItem from '@/components/modals/PopMenuItem.vue'
+import PopMenuDivider from '@/components/modals/PopMenuDivider.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
-import ClientsFormModalBox from '@/components/modals/ClientsFormModalBox.vue'
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
@@ -103,8 +91,7 @@ export default {
     PopMenu,
     PopMenuItem,
     PopMenuDivider,
-    BoardModalBoxDelete,
-    ClientsFormModalBox
+    BoardModalBoxDelete
   },
   props: {
     boardUid: {
@@ -115,8 +102,7 @@ export default {
   emits: ['popNavBar'],
   data () {
     return {
-      showDeleteBoard: false,
-      showClientsForm: false
+      showDeleteBoard: false
     }
   },
   computed: {
@@ -170,9 +156,6 @@ export default {
           //
           this.$emit('popNavBar')
         })
-    },
-    clickShowClientsForm () {
-      this.showClientsForm = true
     },
     clickBoardMyCards () {
       this.$store.commit(BOARD.SHOW_BOARD_MY_CARDS_WHERE_IAM_RESPONSIBLE, !this.showOnlyCardsWhereIAmResponsible)
