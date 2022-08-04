@@ -75,6 +75,30 @@
         />
       </div>
     </div>
+    <div
+      v-if="showModal"
+      class="flex flex-col justify-center items-center"
+    >
+      <img
+        class="mx-auto mt-4"
+        width="320"
+        height="314"
+        src="@/assets/images/pic.png"
+        alt="Empty task image"
+      >
+      <p class="font-bold p-2">
+        Доски – самый простой способ визуализировать ваши цели, проекты и командную работу
+      </p>
+      <p class="text-sm p-2 w-[600px]">
+        Создавайте карточки, перемещайте их между этапами, приглашайте коллег для совместной работы – весь рабочий процесс у вас перед глазами
+      </p>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+        @click="showModal = false"
+      >
+        Понятно
+      </button>
+    </div>
   </div>
 </template>
 
@@ -110,6 +134,7 @@ export default {
     return {
       showAddBoard: false,
       showBoardsLimit: false,
+      showModal: false,
       gridView,
       listView
     }
@@ -121,6 +146,12 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     }
+  },
+  mounted: function () {
+    if (this.$store.state.user.visitedModals.includes('boards')) {
+      return
+    }
+    this.showModal = this.$store.state.user.showModals
   },
   methods: {
     print (val) {
@@ -211,6 +242,10 @@ export default {
           this.gotoChildren(board)
         })
       }
+    },
+    okToModal () {
+      this.displayModal = false
+      this.$store.state.user.visitedModals.push('boards')
     }
   }
 }

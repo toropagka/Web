@@ -371,7 +371,7 @@ export default {
       createTaskText: '',
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
-      steps: [
+      /* steps: [
         {
           attachTo: { element: '#step1' },
           content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' },
@@ -417,7 +417,7 @@ export default {
             }
           }
         }
-      ],
+      ], */
       showConfirm: false,
       showTasksLimit: false,
       showFreeModal: false,
@@ -581,12 +581,10 @@ export default {
     })
 
     if (this.$store.state.user.visitedModals.includes('today')) {
-      this.showOnboarding = false
       return
     }
+    this.displayModal = this.$store.state.user.showModals
     this.showOnboarding = this.$store.state.user.showOnboarding
-    this.$store.state.user.visitedModals.push('today')
-    console.log(this.$store.state.user.visitedModals)
   },
   methods: {
     scroll (step) {

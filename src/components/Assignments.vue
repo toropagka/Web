@@ -136,7 +136,6 @@ export default {
       return
     }
     this.showModal = this.$store.state.user.showModals
-    this.$store.state.user.visitedModals.push('assignment')
   },
   methods: {
     updateGridView (value) {
@@ -159,6 +158,10 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+    },
+    okToModal () {
+      this.displayModal = false
+      this.$store.state.user.visitedModals.push('assignment')
     }
   }
 }
