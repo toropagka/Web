@@ -332,19 +332,18 @@ export default {
           this.$store.commit('basic', {
             key: 'taskListSource',
             value: {
-              uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
               param: null
             }
           })
           this.$store.commit(
             'updateStackWithInitValue',
             {
-              name: 'Сегодня',
-              key: 'taskListSource',
+              name: 'Очередь',
               type: 'date',
               typeVal: new Date(),
               value: {
-                uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+                uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
                 param: new Date()
               }
             }
