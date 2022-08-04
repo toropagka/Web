@@ -1,11 +1,5 @@
 <template>
   <div class="flex flex-row items-center h-[50px]">
-    <button
-      class="bg-[#FF912380] py-2 px-5 h-[38px] rounded-[8px] text-black text-sm mr-[7px] mt-1 hover:bg-[#F5DEB3]"
-      @click="shouldShowInspector"
-    >
-      Добавить задачу
-    </button>
     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
       <li
         v-for="tab in tabs"
@@ -29,6 +23,12 @@
         button-label="Delete"
       />
     </ul>
+    <button
+      class="bg-[#FF912380] py-2 px-5 h-[38px] rounded-[8px] text-black text-sm mr-[7px] mt-1 hover:bg-[#F5DEB3]"
+      @click="shouldShowInspector"
+    >
+      Добавить задачу
+    </button>
   </div>
 </template>
 <script>

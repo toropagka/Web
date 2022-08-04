@@ -134,6 +134,7 @@ export default {
     У вас пока нет задач этой категории!
   </pre>
   <nav
+    v-if="$store.state.navigator.menu.code === 1"
     v-show="isNavBarVisible"
     class="top-8 left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
     transition-position xl:ml-72 w-auto lg:items-center dark:bg-gray-800 dark:border-gray-800"
