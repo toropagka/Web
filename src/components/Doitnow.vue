@@ -1,11 +1,4 @@
 <template>
-  <inspector-modal-box
-    v-model="showInspector"
-    button="warning"
-    has-button
-    has-cancel
-    button-label="Delete"
-  />
   <div
     v-if="tasksCount && !isLoading"
     class="flex items-center mb-5 justify-between"
@@ -17,12 +10,6 @@
       >
         В очереди задач: {{ tasksCount }}
       </div>
-      <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm h-[35px] ml-2 hover:bg-[#F5DEB3]"
-        @click="showInspector = true"
-      >
-        Поручить
-      </button>
     </div>
     <button
       class="border border-slate-600 py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
@@ -67,7 +54,6 @@ import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
-import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
@@ -81,7 +67,6 @@ export default {
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    InspectorModalBox,
     Icon
   },
   setup () {
@@ -102,7 +87,6 @@ export default {
     projectTasks: [],
     unsortedTasks: [],
     overdueReaded: [],
-    showInspector: false,
     tasksLoaded: false,
     childrens: []
   }),
