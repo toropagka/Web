@@ -1,14 +1,7 @@
 <template>
-  <inspector-modal-box
-    v-model="showInspector"
-    button="warning"
-    has-button
-    has-cancel
-    button-label="Delete"
-  />
   <div
     v-if="tasksCount && !isLoading"
-    class="flex items-center mb-5 justify-between"
+    class="flex items-center mb-5 justify-between pr-60"
   >
     <!-- header -->
     <div class="flex items-center">
@@ -17,12 +10,6 @@
       >
         В очереди задач: {{ tasksCount }}
       </div>
-      <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm h-[35px] ml-2 hover:bg-[#F5DEB3]"
-        @click="showInspector = true"
-      >
-        Поручить
-      </button>
     </div>
     <button
       class="border border-slate-600 py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
@@ -67,7 +54,6 @@ import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 
-import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
@@ -81,7 +67,6 @@ export default {
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    InspectorModalBox,
     Icon
   },
   setup () {
@@ -102,7 +87,6 @@ export default {
     projectTasks: [],
     unsortedTasks: [],
     overdueReaded: [],
-    showInspector: false,
     tasksLoaded: false,
     childrens: []
   }),
@@ -194,11 +178,11 @@ export default {
           // сортировка непрочитанных
           for (let i = 0; i < result[0].length; i++) {
             // Поручено мной
-            if (result[0][i].uid_customer === this.user.current_user_uid) {
+            if (result[0][i].uid_customer === this.user?.current_user_uid) {
               this.unreadDelegateByMe.unshift(result[0][i])
             } else {
               // Поручено мне
-              if (result[0][i].uid_performer === this.user.current_user_uid) {
+              if (result[0][i].uid_performer === this.user?.current_user_uid) {
                 this.unreadDelegateToMe.unshift(result[0][i])
               } else {
                 // Готово к сдаче
@@ -206,7 +190,7 @@ export default {
                   this.readyTasksUnreaded.push(result[0][i])
                 } else {
                   // Доступ
-                  if (result[0][i].emails.includes(this.user.current_user_email) || (result[0][i].uid_project !== '00000000-0000-0000-0000-000000000000')) {
+                  if (result[0][i].emails.includes(this.user?.current_user_email) || (result[0][i].uid_project !== '00000000-0000-0000-0000-000000000000')) {
                     this.openedTasks.push(result[0][i])
                   }
                 }

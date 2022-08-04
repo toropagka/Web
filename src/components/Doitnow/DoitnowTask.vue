@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between"
+    class="flex justify-between pr-60"
     :style="{ borderColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : ''}"
     :class="{
       'bg-gray-200 dark:bg-gray-800':
@@ -84,7 +84,7 @@
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
           <div
-            v-if="task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
+            v-if="task.emails.includes(user?.current_user_email) && task?.uid_performer !== user?.current_user_uid"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
           >
             Задача в доступе
@@ -179,18 +179,18 @@
         </div>
       </div>
       <TaskPropsCommentEditor
-        v-show="task.comment.length || task.uid_customer === user.current_user_uid"
+        v-show="task.comment.length || task.uid_customer === user?.current_user_uid"
         class="mt-3"
         :comment="task.comment"
-        :can-edit="task.uid_customer === user.current_user_uid"
+        :can-edit="task.uid_customer === user?.current_user_uid"
         @changeComment="onChangeComment"
       />
       <Checklist
         class="mt-3 checklist-custom font-medium"
         :task-uid="task.uid"
         :checklist="task.checklist"
-        :is-customer="task.uid_customer === user.current_user_uid"
-        :is-performer="task.uid_performer === user.current_user_uid"
+        :is-customer="task.uid_customer === user?.current_user_uid"
+        :is-performer="task.uid_performer === user?.current_user_uid"
         :task="task"
       />
       <div
@@ -209,7 +209,7 @@
           class="mt-3"
           :task="task"
           :task-messages="taskMessages"
-          :current-user-uid="user.current_user_uid"
+          :current-user-uid="user?.current_user_uid"
           :show-all-messages="true"
           :show-only-files="showOnlyFiles"
           @answerMessage="answerMessage"
@@ -229,13 +229,13 @@
       >
         <!-- accept -->
         <button
-          v-if="task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm hover:bg-white bg-green-100 hover:bg-opacity-90 font-medium border-green-400 min-h-[40px] w-[181px] rounded-lg border hover:text-green-500 mb-2 hover:animate-fadeIn"
           @click="accept"
         >
           <span
             class="ml-8 w-[70px]"
-          >{{ task.uid_customer === user.current_user_uid ? (task.uid_performer === user.current_user_uid ? 'Завершить' : 'Принять и завершить') : 'Готово к сдаче'
+          >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Завершить' : 'Принять и завершить') : 'Готово к сдаче'
           }}</span>
           <Icon
             :path="check.path"
@@ -247,13 +247,13 @@
         </button>
         <!-- redo -->
         <button
-          v-if="task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm bg-white w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
           @click="reDo"
         >
           <span
             class="ml-8 w-[70px]"
-          >{{ task.uid_customer === user.current_user_uid ? (task.uid_performer === user.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
+          >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
           }}</span>
           <Icon
             :path="close.path"
@@ -265,7 +265,7 @@
         </button>
         <!-- decline -->
         <button
-          v-if="task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 w-[181px] justify-center items-center text-sm bg-white hover:bg-gray-50 hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn"
           @click="decline"
         >
@@ -279,17 +279,17 @@
           />
         </button>
         <PerformButton
-          v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user.current_user_uid || task.uid_customer === task.uid_performer)"
+          v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
           class="hover:animate-fadeIn hover:cursor-pointer"
           :task-type="task.type"
-          :current-user-uid="user.current_user_uid"
+          :current-user-uid="user?.current_user_uid"
           :performer-email="task.email_performer"
           @changePerformer="onChangePerformer"
           @reAssign="onReAssignToUser"
         />
         <!-- Change access -->
         <button
-          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user.current_user_email)) && task.uid_customer !== user.current_user_uid && task.uid_performer !== user.current_user_uid"
+          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm bg-white w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
           @click="() => onChangeAccess(task.emails)"
         >
@@ -307,7 +307,7 @@
           />
         </button>
         <SetDate
-          v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user.current_user_uid"
+          v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
           class="hover:animate-fadeIn hover:cursor-pointer"
           :name="'Назначить срок'"
           :date-begin="task.date_begin"
@@ -493,7 +493,7 @@ export default {
       return this.$store.state.taskfilesandmessages.messages
     },
     isCustomer () {
-      return this.task.uid_customer === this.user.current_user_uid
+      return this.task.uid_customer === this.user?.current_user_uid
     },
     getTime () {
       let time
@@ -673,7 +673,7 @@ export default {
               // ставим статус "на доработку" когда прикладываем файл
               if (this.task.type === 2 || this.task.type === 3) {
                 if ([1, 5, 7, 8].includes(this.task.status)) {
-                  if (((this.task.uid_customer === this.cusers.current_user_uid) && ((this.task.status === 1) || (this.task.status === 5)))) {
+                  if (((this.task.uid_customer === this.cusers?.current_user_uid) && ((this.task.status === 1) || (this.task.status === 5)))) {
                     this.$emit('changeValue', { status: 9 })
                   }
                 }
@@ -735,7 +735,7 @@ export default {
     },
     editTaskName (task) {
       const data = {
-        _isEditable: this.user.current_user_uid === task.uid_customer
+        _isEditable: this.user?.current_user_uid === task.uid_customer
       }
       this.$emit('changeValue', data)
     },
@@ -874,21 +874,21 @@ export default {
     },
     reDo () {
       this.readTask()
-      if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
+      if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 7
         })
         this.$emit('changeValue', { status: 7 })
       }
-      if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer !== this.user.current_user_uid) {
+      if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer !== this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 8
         })
         this.$emit('changeValue', { status: 8 })
       }
-      if (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
+      if (this.task.uid_performer !== this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 9
@@ -899,8 +899,8 @@ export default {
     },
     accept () {
       this.readTask()
-      if ((this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) ||
-        (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid)) {
+      if ((this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) ||
+        (this.task.uid_performer !== this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid)) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 1
@@ -957,7 +957,7 @@ export default {
             this.changeValue(data)
           }
         )
-      if (user.current_user_email !== userEmail) {
+      if (user?.current_user_email !== userEmail) {
         this.$store.commit(TASK.REMOVE_TASK, taskUid)
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -981,7 +981,7 @@ export default {
 
       const data = {
         uid_task: this.task.uid,
-        uid_creator: this.user.current_user_uid,
+        uid_creator: this.user?.current_user_uid,
         uid: uid,
         uid_msg: uid,
         date_create: dateCreate,

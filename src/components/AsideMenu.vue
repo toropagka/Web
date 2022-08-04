@@ -381,6 +381,7 @@ export default {
       </div>
       <div class="mt-[10px]">
         <DatePicker
+          v-if="$store.state.navigator.lastTab === '2'"
           id="Maincalendar"
           ref="calendarclass"
           dot="true"
@@ -432,7 +433,7 @@ export default {
           />
         </template>
         <ul
-          v-if="(favoriteBoards || favoriteProjects) && $store.state.navigator.menu.code === 1"
+          v-if="(favoriteBoards || favoriteProjects) && $store.state.navigator.lastTab === '2'"
           class="mt-[20px] mb-10"
         >
           <li
