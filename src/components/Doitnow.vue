@@ -178,11 +178,11 @@ export default {
           // сортировка непрочитанных
           for (let i = 0; i < result[0].length; i++) {
             // Поручено мной
-            if (result[0][i].uid_customer === this.user.current_user_uid) {
+            if (result[0][i].uid_customer === this.user?.current_user_uid) {
               this.unreadDelegateByMe.unshift(result[0][i])
             } else {
               // Поручено мне
-              if (result[0][i].uid_performer === this.user.current_user_uid) {
+              if (result[0][i].uid_performer === this.user?.current_user_uid) {
                 this.unreadDelegateToMe.unshift(result[0][i])
               } else {
                 // Готово к сдаче
@@ -190,7 +190,7 @@ export default {
                   this.readyTasksUnreaded.push(result[0][i])
                 } else {
                   // Доступ
-                  if (result[0][i].emails.includes(this.user.current_user_email) || (result[0][i].uid_project !== '00000000-0000-0000-0000-000000000000')) {
+                  if (result[0][i].emails.includes(this.user?.current_user_email) || (result[0][i].uid_project !== '00000000-0000-0000-0000-000000000000')) {
                     this.openedTasks.push(result[0][i])
                   }
                 }

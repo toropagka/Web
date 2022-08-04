@@ -1,8 +1,9 @@
 import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
+import Settings from '@/components/Settings.vue'
 import Doitnow from '@/components/Doitnow.vue'
-import TasksListNew from '@/components/TasksListNew.vue'
+import Empty from '@/components/Empty.vue'
 import Reglament from '@/components/Reglaments/Reglaments.vue'
 import TaskFile from '@/views/TaskFile'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -105,13 +106,25 @@ const routes = [
     meta: {},
     path: '/tasks',
     name: 'tasks',
-    component: TasksListNew
+    component: Home
   },
   {
     meta: {},
     path: '/directory',
     name: 'directory',
     component: Reglament
+  },
+  {
+    meta: {},
+    path: '/settings',
+    name: 'settings',
+    component: Settings
+  },
+  {
+    meta: {},
+    path: '/clients',
+    name: 'clients',
+    component: Empty
   },
   {
     meta: {

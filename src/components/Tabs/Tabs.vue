@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center h-[50px]">
+  <div class="flex w-full flex-row items-center h-[50px]">
     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
       <li
         v-for="tab in tabs"
@@ -9,7 +9,7 @@
       >
         <p
           href="#"
-          class="inline-block py-2 px-5 text-black rounded-lg active ring-2 ring-orange-400"
+          class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[200px] active border-t-orange-400"
           :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
         >
           {{ tab.name }}
@@ -276,6 +276,12 @@ export default {
           break
         case 3:
           this.$router.push('/directory')
+          break
+        case 4:
+          this.$router.push('/settings')
+          break
+        case 5:
+          this.$router.push('/clients')
           break
       }
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
