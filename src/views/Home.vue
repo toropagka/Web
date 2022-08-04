@@ -38,10 +38,6 @@
     v-if="isDisplayOnboarding"
     @cancel="setSettings"
   />
-  <ModalBoxStartInfo
-    v-if="isSetStartInfo"
-    @confirm="setInfo"
-  />
   <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
@@ -158,7 +154,6 @@ import { USER_REQUEST } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
-import ModalBoxStartInfo from '../components/modals/ModalBoxStartInfo.vue'
 
 export default {
   components: {
@@ -186,8 +181,7 @@ export default {
     ReglamentContent,
     Employees,
     Colors,
-    Assignments,
-    ModalBoxStartInfo
+    Assignments
   },
   data () {
     return {
@@ -200,9 +194,6 @@ export default {
     },
     isDisplayOnboarding () {
       return this.$store.state.user.justRegistered
-    },
-    isSetStartInfo () {
-      return this.$store.state.user.showSetStartInfo
     },
     greedPath () {
       return this.$store.state.greedPath
@@ -258,10 +249,6 @@ export default {
       this.$store.state.user.showOnboarding = val
       this.$store.state.user.showModals = val
       this.$store.state.user.justRegistered = false
-      this.$store.state.user.showSetStartInfo = true
-    },
-    setInfo () {
-      this.$store.state.user.showSetStartInfo = false
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {
@@ -345,19 +332,18 @@ export default {
           this.$store.commit('basic', {
             key: 'taskListSource',
             value: {
-              uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
               param: null
             }
           })
           this.$store.commit(
             'updateStackWithInitValue',
             {
-              name: 'Сегодня',
-              key: 'taskListSource',
+              name: 'Очередь',
               type: 'date',
               typeVal: new Date(),
               value: {
-                uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+                uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
                 param: new Date()
               }
             }

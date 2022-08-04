@@ -31,7 +31,6 @@
           </p>
           <p
             class="font-roboto text-[12px] leading-[14px] truncate"
-            :style="{ 'color': subTitleColor }"
           >
             {{ subTitle }}
           </p>
@@ -118,10 +117,6 @@ export default {
       default: ''
     },
     subTitle: {
-      type: String,
-      default: ''
-    },
-    subTitleColor: {
       type: String,
       default: ''
     },

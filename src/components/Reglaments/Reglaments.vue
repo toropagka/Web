@@ -1,123 +1,115 @@
 <template>
   <div class="w-full">
-    <ReglamentAddLimit
-      v-if="showAddLimit"
-      @cancel="showAddLimit = false"
-      @ok="showAddLimit = false"
-    />
-    <BoardModalBoxRename
-      v-if="showAddReglament"
-      :show="showAddReglament"
-      title="Создать регламент"
-      @cancel="showAddReglament = false"
-      @save="onAddNewReglament"
-    />
     <div
-      v-for="(reg, index) in reglaments"
-      :key="index"
+      v-if="!displayModal"
     >
+      <ReglamentAddLimit
+        v-if="showAddLimit"
+        @cancel="showAddLimit = false"
+        @ok="showAddLimit = false"
+      />
+      <BoardModalBoxRename
+        v-if="showAddReglament"
+        :show="showAddReglament"
+        title="Создать регламент"
+        @cancel="showAddReglament = false"
+        @save="onAddNewReglament"
+      />
       <div
-        class="flex w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
+        v-for="(value, index) in reglaments"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ reg.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ value.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
+          >
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="reglament in value.items"
+            :key="reglament.uid"
+          >
+            <ReglamentBlocItem
+              :reglament="reglament"
+              @click.stop="gotoReglamentContent(reglament)"
+            />
+          </template>
+          <ListBlocAdd
+            v-if="index == 0"
+            @click.stop="clickAddReglament"
           />
         </div>
-      </div>
-      <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <template
-          v-for="reglament in reg.items"
-          :key="reglament.uid"
-        >
-          <ReglamentBlocItem
-            :reglament="reglament"
-            @click.stop="gotoReglamentContent(reglament)"
-          />
-        </template>
-        <ReglamentBlocEmpty
-          v-if="!reg.is_my_dep && reg.items.length === 0"
-        />
-        <ListBlocAdd
-          v-if="reg.is_my_dep"
-          @click.stop="clickAddReglament(reg.uid)"
-        />
-      </div>
-      <div
-        v-if="shouldShowModalBox"
-        class="flex flex-col justify-center items-center"
-      >
-        <img
-          class="mx-auto mt-4"
-          width="320"
-          height="314"
-          src="@/assets/images/emptydoitnow.png"
-          alt="Empty task image"
-        >
-        <div class="w-[1000px] text-2xl">
-          <p class="font-bold p-3 text-center">
-            Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
-          </p>
-          <p class="text-sm p-1">
-            Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
-          </p>
-          <p class="text-sm p-1">
-            Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
-          </p>
-        </div>
-        <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-          @click="shouldShowModalBox = false"
-        >
-          Понятно
-        </button>
       </div>
     </div>
-    <div
-      v-if="currentUserIsAdmin"
-      class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
-      @click.stop="clickShowAll"
+    <EmptyTasksListPics v-if="isEmpty" />
+  </div>
+  <div
+    v-if="displayModal"
+    class="flex flex-col justify-center items-center"
+  >
+    <img
+      class="mx-auto mt-4"
+      width="450"
+      height="450"
+      src="@/assets/images/regl.svg"
+      alt="Empty task image"
     >
-      <p class="font-roboto text-[17px] leading-[22px]">
-        {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+    <div class="w-[1000px] text-2xl">
+      <p class="font-bold p-3 text-center">
+        Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+      </p>
+      <p class="text-sm p-1">
+        Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
+      </p>
+      <p class="text-sm p-1">
+        Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
       </p>
     </div>
+    <button
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+      @click="okToModal"
+    >
+      Понятно
+    </button>
   </div>
-  <EmptyTasksListPics v-if="isEmpty" />
 </template>
 
 <script>
@@ -125,7 +117,6 @@ import Icon from '@/components/Icon.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import ReglamentBlocItem from '@/components/Reglaments/ReglamentBlockItem.vue'
-import ReglamentBlocEmpty from '@/components/Reglaments/ReglamentBlocEmpty.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ReglamentAddLimit from '@/components/Reglaments/ReglamentAddLimit.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
@@ -142,7 +133,6 @@ export default {
     Icon,
     BoardModalBoxRename,
     ReglamentBlocItem,
-    ReglamentBlocEmpty,
     ReglamentAddLimit,
     ListBlocAdd,
     EmptyTasksListPics
@@ -156,11 +146,10 @@ export default {
   data () {
     return {
       showAddReglament: false,
-      addReglamentDepartment: '',
       showAddLimit: false,
       gridView,
       listView,
-      shouldShowModalBox: false
+      displayModal: false
     }
   },
   computed: {
@@ -177,28 +166,9 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    currentUserIsAdmin () {
-      const employees = this.$store.state.employees.employees
-      const userType = employees[this.user.current_user_uid]?.type ?? 0
-      return userType === 1 || userType === 2
-    },
-    allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      return deps
-    },
     reglaments () {
-      const reglaments = []
-      /*
       const currentUserEmail = this.user.current_user_email.toLowerCase()
+      const reglaments = []
       const myItems = this.items.filter(reglament => reglament.email_creator.toLowerCase() === currentUserEmail)
       const otherItems = this.items.filter(reglament => reglament.email_creator.toLowerCase() !== currentUserEmail)
       reglaments.push({
@@ -212,39 +182,6 @@ export default {
         })
       }
       return reglaments
-      */
-      const common = {
-        dep: 'Общие регламенты',
-        uid: '',
-        is_my_dep: true,
-        items: []
-      }
-      reglaments.push(common)
-      const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-      const departmentMap = {}
-      for (const dep of this.allDepartments) {
-        const reglament = {
-          dep: dep.name,
-          uid: dep.uid,
-          is_my_dep: dep.emails.find(email => email.toLowerCase() === currentUserEmail),
-          items: []
-        }
-        reglaments.push(reglament)
-        departmentMap[reglament.uid] = reglament
-      }
-      for (const item of this.items) {
-        const dep = departmentMap[item.department_uid]
-        if (dep) {
-          dep.items.push(item)
-        } else {
-          common.items.push(item)
-        }
-      }
-      if (this.showAllReglaments) return reglaments
-      return reglaments.filter(reg => reg.is_my_dep)
-    },
-    showAllReglaments () {
-      return this.$store.state.reglaments.showAll
     }
   },
   created () {
@@ -254,8 +191,7 @@ export default {
     if (this.$store.state.user.visitedModals.includes('reglaments')) {
       return
     }
-    this.shouldShowModalBox = this.$store.state.user.showModals
-    this.$store.state.user.visitedModals.push('reglaments')
+    this.displayModal = this.$store.state.user.showModals
   },
   methods: {
     updateGridView (value) {
@@ -291,20 +227,14 @@ export default {
         ).toString(16)
       )
     },
-    clickShowAll () {
-      this.$store.state.reglaments.showAll = !this.showAllReglaments
-    },
-    clickAddReglament (uid) {
+    clickAddReglament () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showAddLimit = true
         return
       }
-      this.addReglamentDepartment = uid
       this.showAddReglament = true
     },
     onAddNewReglament (name) {
-      const departmentUid = this.addReglamentDepartment
-      this.addReglamentDepartment = ''
       this.showAddReglament = false
       const title = name.trim()
       if (title) {
@@ -315,7 +245,6 @@ export default {
           email_creator: this.user.current_user_email,
           name: title,
           content: '',
-          department_uid: departmentUid,
           uid: this.uuidv4()
         }
 
@@ -325,6 +254,10 @@ export default {
           this.gotoReglamentContent(reglament)
         })
       }
+    },
+    okToModal () {
+      this.displayModal = false
+      this.$store.state.user.visitedModals.push('reglaments')
     }
   }
 }

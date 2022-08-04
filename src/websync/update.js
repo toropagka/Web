@@ -11,7 +11,6 @@ import { updateDepartment } from '@/websync/departments'
 import { updateReglament } from '@/websync/reglaments.js'
 import { updateReglamentQuestion } from '@/websync/reglament_question'
 import { updateReglamentAnswer } from '@/websync/reglament_answer'
-import { updateBoard } from '@/websync/board'
 
 export default function processUpdate (obj) {
   switch (obj.type) {
@@ -74,7 +73,6 @@ export default function processUpdate (obj) {
     case TYPES.TYPE_OBJECT_NOTIFICATION:
       break
     case TYPES.TYPE_OBJECT_BOARD:
-      updateBoard(obj)
       break
     case TYPES.TYPE_OBJECT_CARD:
       updateCard(obj)
