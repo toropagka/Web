@@ -1,6 +1,5 @@
 <script>
 import ReglamentAnswer from './ReglamentAnswer.vue'
-import * as ANSWER from '@/store/actions/reglament_answers.js'
 import ReglamentQuestionPopMenu from './ReglamentQuestionPopMenu.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 export default {
@@ -45,6 +44,12 @@ export default {
     gotoNode (uid) {
       this.$refs[uid][0].onFocus()
     },
+    questionPlaceholder (question) {
+      if (question.name === '' && question.invalid) {
+        return 'Поле вопроса не должно быть пустым'
+      }
+      return this.isEditing && this.canEdit ? 'Текст вопроса' : ''
+    },
     rightAnswersAmount (question) {
       let count = 0
       for (let i = 0; i < question.answers.length; i++) {
@@ -59,23 +64,27 @@ export default {
         name: '',
         uid: this.uuidv4(),
         uid_question: this.question.uid,
-        is_right: false
+        is_right: false,
+        needToCreate: true,
+        needToUpdate: false
       }
-      this.$store.dispatch(ANSWER.CREATE_REGLAMENT_ANSWER_REQUEST, data)
       this.$emit('pushAnswer', data)
       this.$nextTick(() => {
         this.gotoNode(data.uid)
       })
     },
-    setRightAnswer (answer) {
-      console.log(answer[0])
+    setRightAnswer (answerParams) {
+      const [answer, isRight] = answerParams
+      console.log(answer)
       const data = {
-        uid: answer[0].uid,
+        uid: answer.uid,
         uid_question: this.question.uid,
-        name: answer[0].name,
-        is_right: answer[1]
+        name: answer.name,
+        is_right: isRight,
+        needToCreate: answer.needToCreate,
+        needToUpdate: true
       }
-      this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, data)
+
       this.$emit('setRightAnswer', data)
     },
     onSelectAnswer (uid) {
@@ -101,18 +110,20 @@ export default {
     },
     onDeleteAnswer (uid) {
       this.$emit('deleteAnswer', uid)
-      this.$store.dispatch(ANSWER.DELETE_REGLAMENT_ANSWER_REQUEST, uid)
     },
     updateAnswerName (resp) {
-      console.log(resp)
+      const [name, answer] = resp
+      console.log(name, answer)
       const data = {
-        uid: resp[1].uid,
+        uid: answer.uid,
         uid_question: this.question.uid,
-        name: resp[0],
-        is_right: resp[1].is_right
+        name: name,
+        is_right: answer.is_right,
+        needToCreate: answer.needToCreate,
+        needToUpdate: answer.needToUpdate,
+        invalid: name === ''
       }
       this.$emit('updateAnswerName', data)
-      this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, data)
     },
     deleteQuestion () {
       this.showDeleteQuestion = false
@@ -121,10 +132,12 @@ export default {
     changeQuestionName (event) {
       const data = {
         uid: this.question.uid,
-        name: event.target.innerText
+        name: event.target.innerText,
+        needToCreate: this.question.needToCreate,
+        needToUpdate: true,
+        invalid: event.target.innerText === ''
       }
       this.$emit('updateQuestionName', data)
-      this.$store.dispatch('UPDATE_REGLAMENT_QUESTION_REQUEST', data)
     },
     onFocus () {
       this.$refs[this.question.uid + 'input'].focus()
@@ -154,8 +167,9 @@ export default {
     <div class="px-1 flex justify-between items-center group">
       <div
         :ref="question.uid + 'input'"
-        :placeholder="isEditing && canEdit ? 'Текст вопроса' : ''"
+        :placeholder="questionPlaceholder(question)"
         class="font-[500] text-[18px] my-3 min-w-[10px] min-h-[10px]"
+        :class="{ 'invalid': question.invalid}"
         :contenteditable="isEditing && canEdit"
         @blur="changeQuestionName($event)"
         @keydown.enter.exact.prevent="$emit('addQuestion')"
@@ -209,5 +223,8 @@ export default {
 [placeholder]:empty::before {
     content: attr(placeholder);
     color: #555;
+}
+.invalid[placeholder]:empty::before {
+    color: rgb(239 68 68);
 }
 </style>

@@ -201,6 +201,8 @@
 <script>
 import { QuillEditor } from '@vueup/vue-quill'
 import * as REGLAMENTS from '@/store/actions/reglaments.js'
+import * as QUESTIONS from '@/store/actions/reglament_questions.js'
+import * as ANSWER from '@/store/actions/reglament_answers.js'
 
 import ReglamentWrong from '@/components/Reglaments/ReglamentWrong.vue'
 import ReglamentInfo from '@/components/Reglaments/ReglamentInfo.vue'
@@ -470,22 +472,22 @@ export default {
         uid: this.uuidv4(),
         uid_question: question.uid,
         name: '',
-        is_right: 0
+        is_right: 0,
+        needToCreate: true,
+        needToUpdate: false
       }
-      this.$store.dispatch('CREATE_REGLAMENT_QUESTION_REQUEST', question).then(() => {
-        this.$store.dispatch('CREATE_REGLAMENT_ANSWER_REQUEST', answer).then(() => {
-          const questionToPush = {
-            uid: question.uid,
-            name: question.name,
-            uid_reglament: question.uid_reglament,
-            answers: [answer]
-          }
 
-          this.$store.commit(REGLAMENTS.REGLAMENT_PUSH_QUESTION, questionToPush)
-          this.$nextTick(() => {
-            this.gotoNode(questionToPush.uid)
-          })
-        })
+      const questionToPush = {
+        uid: question.uid,
+        name: question.name,
+        uid_reglament: question.uid_reglament,
+        needToCreate: true,
+        needToUpdate: false,
+        answers: [answer]
+      }
+      this.$store.commit(REGLAMENTS.REGLAMENT_PUSH_QUESTION, questionToPush)
+      this.$nextTick(() => {
+        this.gotoNode(questionToPush.uid)
       })
     },
     saveReglament () {
@@ -517,16 +519,16 @@ export default {
       }
     },
     onDeleteQuestion (uid) {
-      this.$store.dispatch('DELETE_REGLAMENT_QUESTION_REQUEST', uid).then(() => {
-        this.showDeleteQuestion = false
-        this.$store.commit(REGLAMENTS.REGLAMENT_DELETE_QUESTION, uid)
-      })
+      this.showDeleteQuestion = false
+      this.$store.commit(REGLAMENTS.REGLAMENT_DELETE_QUESTION, uid)
     },
     setEdit () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showEditLimit = true
         return
       }
+
+      let isFormInvalid = false
       if (this.isEditing) {
         const reglament = { ...this.currReglament }
         reglament.content = this.currText
@@ -536,9 +538,90 @@ export default {
         if (!reglament.name.length) {
           reglament.name = 'Регламент без названия'
         }
-        //
+
         this.saveContentStatus = 0
-        this.$store.dispatch('UPDATE_REGLAMENT_REQUEST', reglament).then(() => {
+        let firstInvalidQuestionUid
+        for (const question of this.questions) {
+          question.invalid = question.name === ''
+
+          if (!isFormInvalid && question.name === '') {
+            isFormInvalid = true
+            firstInvalidQuestionUid = question.uid
+          }
+
+          for (const answer of question.answers) {
+            answer.invalid = answer.name === ''
+
+            if (!isFormInvalid && answer.name === '') {
+              isFormInvalid = true
+              firstInvalidQuestionUid = question.uid
+            }
+          }
+        }
+
+        if (isFormInvalid) {
+          this.gotoNode(firstInvalidQuestionUid)
+          this.saveContentStatus = 1
+          return
+        }
+
+        for (const question of this.questions) {
+          if (question.needToCreate || question.needToUpdate) {
+            const questionData = {
+              name: question.name,
+              uid: question.uid,
+              uid_reglament: question.uid_reglament
+            }
+            Promise.resolve().then(() => {
+              if (question.needToCreate) {
+                return this.$store.dispatch(QUESTIONS.CREATE_REGLAMENT_QUESTION_REQUEST, questionData)
+              } else if (question.needToUpdate) {
+                return this.$store.dispatch(QUESTIONS.UPDATE_REGLAMENT_QUESTION_REQUEST, questionData)
+              }
+            })
+              .then(() => {
+                question.needToCreate = false
+                question.needToUpdate = false
+              })
+          }
+
+          for (const answer of question.answers) {
+            if (answer.needToCreate || answer.needToUpdate) {
+              const answerData = {
+                uid: answer.uid,
+                uid_question: answer.uid_question,
+                name: answer.name,
+                is_right: answer.is_right
+              }
+
+              Promise.resolve().then(() => {
+                if (answer.needToCreate) {
+                  return this.$store.dispatch(ANSWER.CREATE_REGLAMENT_ANSWER_REQUEST, answerData)
+                } else if (answer.needToUpdate) {
+                  return this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, answerData)
+                }
+              })
+                .then(() => {
+                  answer.needToCreate = false
+                  answer.needToUpdate = false
+                })
+            }
+          }
+        }
+
+        this.$store.state.reglaments.answersToDelete.forEach((uid, index) => {
+          this.$store.dispatch(ANSWER.DELETE_REGLAMENT_ANSWER_REQUEST, uid).then(() => {
+            this.$store.state.reglaments.answersToDelete.splice(index, 1)
+          })
+        })
+
+        this.$store.state.reglaments.questionsToDelete.forEach((uid, index) => {
+          this.$store.dispatch(QUESTIONS.DELETE_REGLAMENT_QUESTION_REQUEST, uid).then(() => {
+            this.$store.state.reglaments.questionsToDelete.splice(index, 1)
+          })
+        })
+
+        this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament).then(() => {
           if (this.shouldClear) {
             this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, reglament.uid)
             this.shouldClear = false
@@ -568,7 +651,7 @@ export default {
         answerJson: JSON.stringify(this.questions)
       }
       console.log(this.questions)
-      this.$store.dispatch('CRATE_USER_REGLAMENT_ANSWER', data).then((resp) => {
+      this.$store.dispatch(REGLAMENTS.CRATE_USER_REGLAMENT_ANSWER, data).then((resp) => {
         const reglament = { ...this.currReglament }
         reglament.is_passed = resp.data.is_passed
         this.$store.commit('NAVIGATOR_UPDATE_REGLAMENT', reglament)
