@@ -34,6 +34,15 @@
       class="text-blue-400"
     >Firefox</a>
   </modal-box-notification-instruction>
+  <ModalBox
+    v-if="showInviteModalBox"
+    title="Вас пригласили в компанию"
+    ok="Принять"
+    decline="Отказаться"
+    @ok="okInviteModalBox"
+    @decline="declineInviteModalBox"
+    @cancel="cancelInviteModalBox"
+  />
   <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
@@ -125,6 +134,7 @@ import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import Overlay from '@/components/modals/Overlay.vue'
+import ModalBox from '@/components/modals/ModalBox.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
@@ -145,7 +155,7 @@ import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import { USER_REQUEST } from '@/store/actions/user'
+import { USER_REQUEST, USER_INVITE_ME } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
@@ -175,7 +185,8 @@ export default {
     ReglamentContent,
     Employees,
     Colors,
-    Assignments
+    Assignments,
+    ModalBox
   },
   data () {
     return {
@@ -209,6 +220,10 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    showInviteModalBox () {
+      if (this.$store.state.navigator.navigator?.invite_me?.uid && this.$store.state.navigator.navigator?.invite_me?.uid !== '00000000-0000-0000-0000-000000000000') return true
+      return false
     }
   },
   mounted () {
@@ -608,6 +623,25 @@ export default {
           })
         })
       }
+    },
+    okInviteModalBox () {
+      const data = {
+        uid: this.$store.state.navigator.navigator?.invite_me?.uid,
+        accept: true
+      }
+      this.$store.dispatch(USER_INVITE_ME, data)
+      this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+    },
+    declineInviteModalBox () {
+      const data = {
+        uid: this.$store.state.navigator.navigator?.invite_me?.uid,
+        accept: false
+      }
+      this.$store.dispatch(USER_INVITE_ME, data)
+      this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+    },
+    cancelInviteModalBox () {
+      this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
     }
   }
 }
