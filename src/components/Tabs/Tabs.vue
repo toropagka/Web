@@ -231,7 +231,7 @@ export default {
                 width: 30,
                 height: 30,
                 type: 'uid',
-                path: 'tag'
+                path: 'tags'
               }
             ],
             [

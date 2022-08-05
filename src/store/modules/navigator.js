@@ -374,8 +374,7 @@ const mutations = {
           iconBox: '0 0 30 30',
           width: 30,
           height: 30,
-          type: 'uid',
-          path: 'tag'
+          path: 'tags'
         },
         {
           label: 'Цвета',
@@ -385,7 +384,6 @@ const mutations = {
           iconBox: '0 0 30 30',
           width: 30,
           height: 30,
-          type: 'uid',
           path: 'colors'
         }
       ])
