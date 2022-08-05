@@ -4,7 +4,8 @@ import {
   USER_CHANGE_PHOTO,
   USER_ERROR,
   USER_REQUEST,
-  USER_SUCCESS
+  USER_SUCCESS,
+  USER_INVITE_ME
 } from '../actions/user'
 
 const state = {
@@ -57,6 +58,22 @@ const actions = {
         data: data,
         url: url,
         method: 'PATCH'
+      })
+        .then((resp) => {
+          commit(USER_SUCCESS, resp)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [USER_INVITE_ME]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/emp/acceptinvite?uid=' + data.uid + '&accept=' + data.accept
+      axios({
+        url: url,
+        method: 'POST'
       })
         .then((resp) => {
           commit(USER_SUCCESS, resp)

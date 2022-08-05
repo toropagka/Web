@@ -209,7 +209,7 @@ export default {
         this.onCancel()
         return
       }
-      if (this.selectedBoard === this.currentBoard && this.selectedStage.UID !== this.currentCard.uid_stage) {
+      if (this.selectedBoard === this.currentBoard && this.selectedStage.UID !== this.currentCard.uid_stage && !Array.isArray(this.currentCard)) {
         this.$emit('changePosition', this.selectedPosition)
         return
       }
