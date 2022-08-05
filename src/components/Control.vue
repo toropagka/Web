@@ -52,7 +52,7 @@ const props = defineProps({
   valid: Boolean
 })
 
-const emit = defineEmits(['update:modelValue', 'right-icon-click', 'blur'])
+const emit = defineEmits(['update:modelValue', 'iconClick', 'blur'])
 
 const computedValue = computed({
   get: () => props.modelValue,
@@ -63,6 +63,10 @@ const computedValue = computed({
 
 const blur = e => {
   emit('blur', e)
+}
+
+const iconClick = e => {
+  emit('iconClick', e)
 }
 
 const inputElClass = computed(() => {
@@ -172,6 +176,7 @@ if (props.ctrlKFocus) {
       :icon="icon"
       :class="iconClass"
       :h="controlIconH"
+      @click="iconClick"
     />
   </div>
 </template>

@@ -685,34 +685,33 @@ export default {
     onChangeCardPosition (position) {
       this.showMoveCard = false
 
-      const moveInCurrentBoard = (itemUid) => {
+      if (Array.isArray(this.currentCard) && typeof position === 'object') {
+        const cards = this.currentCard.map(item => {
+          return {
+            uid: item.uid,
+            order: item.order
+          }
+        })
+        const data = {
+          cards,
+          boardFrom: this.board,
+          boardTo: position.boardUid,
+          stageTo: position.stageUid
+        }
+        this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
+          .then(res => {
+            res.data.forEach(card => {
+              this.$store.commit(CARD.CHANGE_CARD, card)
+            })
+          })
+      } else if (typeof position === 'number') {
         const column = this.usersColumns[position]
         if (this.currentCard && column) {
-          this.moveCard(itemUid, column.UID)
+          this.moveCard(this.currentCard.uid, column.UID)
         }
-      }
-      const moveInAnotherBoard = (card) => {
-        const newCard = { ...card, uid_board: position.boardUid, uid_stage: position.stageUid }
+      } else if (typeof position === 'object' && this.board.uid !== position.boardUid) {
+        const newCard = { ...this.currentCard, uid_board: position.boardUid, uid_stage: position.stageUid }
         this.$store.dispatch(CARD.MOVE_CARD_TO_ANOTHER_BOARD, newCard)
-      }
-
-      if (typeof position !== 'object' && typeof position === 'number') {
-        if (Array.isArray(this.currentCard)) {
-          this.currentCard.forEach(item => {
-            moveInCurrentBoard(item.uid)
-          })
-          return
-        }
-        moveInCurrentBoard(this.currentCard.uid)
-      } else {
-        this.$store.dispatch('asidePropertiesToggle', false)
-        if (Array.isArray(this.currentCard)) {
-          this.currentCard.forEach(card => {
-            moveInAnotherBoard(card)
-          })
-          return
-        }
-        moveInAnotherBoard(this.currentCard)
       }
     },
     onDeleteCard () {

@@ -227,6 +227,19 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CARD.MOVE_ALL_CARDS]: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        `${process.env.VUE_APP_LEADERTASK_API}/api/v1/cards/move?uid_board=${data.boardTo}&uid_stage=${data.stageTo}`
+      axios({ url, method: 'PATCH', data: { cards: data.cards } })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
