@@ -43,7 +43,6 @@ export default {
       mdiMenu,
       warn,
       showFreeModal: false,
-      modalOneActive: false,
       lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
       currentSettingsTab: 'account'
     }
@@ -105,13 +104,9 @@ export default {
   },
   methods: {
     logout () {
-      this.modalOneActive = false
       this.$store.dispatch(AUTH_LOGOUT)
       this.$router.push('/login')
       if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
-    },
-    changeSettingsTab (tabName) {
-      this.currentSettingsTab = tabName
     },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
@@ -227,12 +222,6 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     },
-    TitleName () {
-      if (this.currentSettingsTab === 'account') return ('Аккаунт')
-      else if (this.currentSettingsTab === 'tarif') return ('Тариф')
-      else if (this.currentSettingsTab === 'main') return ('Основное')
-      else if (this.currentSettingsTab === 'karma') return ('Карма')
-    },
     goToBoard (board) {
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -319,8 +308,6 @@ export default {
 <template>
   <!-- Profile modal -->
   <modal-box
-    v-model="modalOneActive"
-    :title="TitleName()"
     @currentSettingsTab="changeSettingsTab"
   >
     <DoitnowLimit
@@ -347,49 +334,11 @@ export default {
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-8 z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-8 z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
     :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', $store.state.navigator.lastTab == '4' ? 'mt-5' : '' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div
-        v-if="$store.state.navigator.lastTab != '4'"
-        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
-      >
-        <div
-          class="group w-full cursor-pointer"
-          @click="modalOneActive = true"
-        >
-          <div class="flex items-center">
-            <img
-              v-if="user?.foto_link"
-              :src="user?.foto_link"
-              width="32"
-              height="32"
-              class="rounded-[8px] ml-[5px] mr-[2px] border-2 border-white"
-            >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.7602 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.70104 8.44486C6.47133 8.67154 6.10681 8.68606 5.8598 8.47836L1.46869 4.78606C1.2045 4.56391 1.17041 4.16965 1.39256 3.90546C1.61471 3.64126 2.00897 3.60718 2.27316 3.82933L6.22839 7.15512L9.87636 3.55514C10.1221 3.31269 10.5178 3.31531 10.7602 3.56099Z"
-                fill="#7e7e80"
-              />
-            </svg>
-            <span
-              class="ml-[6px] text-[15px] group-hover:text-[#4c4c4d]/75 text-[#4c4c4d] font-roboto"
-            >
-              {{ user?.current_user_name ?? '' }}
-            </span>
-          </div>
-        </div>
-      </div>
       <div class="mt-[10px]">
         <DatePicker
           v-if="$store.state.navigator.lastTab === '2'"

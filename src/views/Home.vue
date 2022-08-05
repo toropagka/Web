@@ -34,7 +34,7 @@
       class="text-blue-400"
     >Firefox</a>
   </modal-box-notification-instruction>
-  <main-section class="h-full mt-6">
+  <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
       class="fixed"
