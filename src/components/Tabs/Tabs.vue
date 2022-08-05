@@ -315,6 +315,9 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    storeNavigator () {
+      return this.$store.state.navigator.navigator
     }
   },
   methods: {
@@ -328,9 +331,29 @@ export default {
           break
         case 2:
           this.$router.push('/tasks')
+          // asidemenu logic
+          this.$store.commit('updateStackWithInitValue', {
+            name: 'Сегодня',
+            key: 'taskListSource',
+            value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date() },
+            typeVal: new Date(),
+            type: 'date'
+          })
+          this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
+          this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
           break
         case 3:
           this.$router.push('/directory')
+          // asidemenu logic
+          this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+          this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+          this.$store.commit('updateStackWithInitValue', {
+            name: 'Регламенты',
+            key: 'greedSource',
+            greedPath: 'reglaments',
+            value: this.storeNavigator.reglaments?.items
+          })
+          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
           break
         case 4:
           this.$router.push('/settings')

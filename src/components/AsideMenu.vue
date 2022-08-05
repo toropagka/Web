@@ -131,8 +131,12 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
+      console.log(item)
+
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
+        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+        return
       }
 
       // do it now
