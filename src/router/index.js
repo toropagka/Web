@@ -18,7 +18,7 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next()
+    next('/tasks')
   } else {
     next('/login')
   }

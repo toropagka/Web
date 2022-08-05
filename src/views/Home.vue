@@ -148,8 +148,9 @@ import Dashboard from '@/components/Dashboard.vue'
 import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
-import { USER_REQUEST } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
+import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
+import { USER_REQUEST } from '@/store/actions/user'
 
 export default {
   components: {
@@ -215,16 +216,10 @@ export default {
   },
   mounted () {
     this.requestNotificationPermissionOrShowModalBox()
-
-    this.$store.dispatch(USER_REQUEST).then(resp => {
-      this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
-      this.initNavStackGreedView()
-      if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-        this.getTask(this.$router.currentRoute.value.params.id)
-      } else {
-        this.getTasks()
-      }
-    })
+    if (this.$store.state.auth.token) {
+      this.$store.dispatch(NAVIGATOR_REQUEST)
+      this.$store.dispatch(USER_REQUEST)
+    }
   },
   methods: {
     setShouldShowModalValue (value) {
