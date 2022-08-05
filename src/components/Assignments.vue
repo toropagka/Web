@@ -75,23 +75,27 @@
     </div>
     <div
       v-if="displayModal"
-      class="flex flex-col justify-center items-center"
+      class="flex flex-col items-center "
     >
       <img
-        class="mx-auto mt-4"
-        width="450"
-        height="450"
+        class="mx-auto mt-10"
+
+        width="320"
+        height="314"
+
         src="@/assets/images/assigments.svg"
         alt="Empty task image"
       >
-      <p class="font-bold p-2">
-        Управляйте сотрудниками и поручениями!
-      </p>
-      <p class="text-sm p-2 w-[600px]">
-        Поручайте задачи команде и выполняйте поручения от сотрудников. Добавьте всю команду в разделе Сотрудники, поручите им задачи и следите за их выполнением в этом разделе.
-      </p>
+      <div class="text-left w-[600px] mt-[10px]">
+        <p class="font-bold p-2">
+          Управляйте сотрудниками и поручениями!
+        </p>
+        <p class="text-sm p-2  text-left">
+          Поручайте задачи команде и выполняйте поручения от сотрудников. Добавьте всю команду в разделе Сотрудники, поручите им задачи и следите за их выполнением в этом разделе.
+        </p>
+      </div>
       <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
         @click="okToModal"
       >
         Понятно

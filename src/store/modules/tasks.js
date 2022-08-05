@@ -11,6 +11,7 @@ import axios from 'axios'
 import { PUSH_COLOR } from '../actions/colors'
 import { NAVIGATOR_UPDATE_ASSIGNMENTS } from '../actions/navigator'
 import * as TASK from '../actions/tasks'
+import slides from '../helpers/slides'
 
 const getDefaultState = () => {
   return {
@@ -79,7 +80,8 @@ const state = {
       viewBox: '0 0 18 30',
       draw: 'M1.11454 1.11439C2.15594 0.0729939 3.84438 0.0729939 4.88578 1.11439L16.8858 13.1144C17.9272 14.1558 17.9272 15.8442 16.8858 16.8856L4.88578 28.8856C3.84438 29.927 2.15594 29.927 1.11454 28.8856C0.0731465 27.8442 0.0731465 26.1558 1.11454 25.1144L11.2289 15L1.11454 4.88563C0.0731465 3.84423 0.0731465 2.15579 1.11454 1.11439Z'
     }
-  }
+  },
+  slides: slides
 }
 
 const getters = {

@@ -31,16 +31,16 @@
       >
       <div
         v-if="displayModal"
-        class="flex flex-col justify-center items-center"
+        class="flex flex-col w-[600px]"
       >
-        <p class="font-bold p-3 text-center">
+        <p class="font-bold p-3">
           Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
         </p>
-        <p class="text-sm">
+        <p class="text-sm p-3">
           Работайте с задачами и поручениями, которые должны быть выполнены сегодня
         </p>
         <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
           @click="okToModal"
         >
           Понятно
