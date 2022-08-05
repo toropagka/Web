@@ -149,6 +149,8 @@ import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
 import * as TASK from '@/store/actions/tasks'
+import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
+import { USER_REQUEST } from '@/store/actions/user'
 
 export default {
   components: {
@@ -214,6 +216,10 @@ export default {
   },
   mounted () {
     this.requestNotificationPermissionOrShowModalBox()
+    if (this.$store.state.auth.token) {
+      this.$store.dispatch(NAVIGATOR_REQUEST)
+      this.$store.dispatch(USER_REQUEST)
+    }
   },
   methods: {
     setShouldShowModalValue (value) {
