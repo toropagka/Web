@@ -1,5 +1,8 @@
 <template>
-  <div class="flex w-auto flex-row items-center h-[50px]">
+  <div
+    class="flex left-0 right-0 flex-row items-center h-[50px] bg-[#f4f5f7]"
+    :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
+  >
     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
       <li
         v-for="tab in tabs"
@@ -260,6 +263,12 @@ export default {
   computed: {
     lastTab () {
       return this.$store.state.navigator.lastTab
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    },
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
     }
   },
   methods: {
