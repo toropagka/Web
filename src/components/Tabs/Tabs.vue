@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-row items-center h-[50px]">
+  <div class="flex w-auto flex-row items-center h-[50px]">
     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
       <li
         v-for="tab in tabs"
