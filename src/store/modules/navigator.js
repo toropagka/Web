@@ -210,7 +210,7 @@ const mutations = {
     state.status = 'success'
     state.hasLoadedOnce = true
     console.log('navigator ', resp)
-    console.log(nowTab)
+    console.log('navigator', nowTab)
     state.menu = []
     if (nowTab === '2' || nowTab === 2) {
       state.menu.push([
