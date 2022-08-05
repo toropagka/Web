@@ -38,12 +38,11 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
-        this.$router.push('/')
+        this.$router.push('/login')
       })
       if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
     },
     changeSettingsTab (tabName) {
-      console.log(this.$store.state.navigator.currentSettingsTab)
       this.$store.state.navigator.currentSettingsTab = tabName
     }
   }
