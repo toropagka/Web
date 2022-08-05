@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="tasksCount && !isLoading"
-    class="flex items-center mb-5 justify-between pr-60"
+    class="flex items-center mb-5 justify-between mt-20"
   >
     <!-- header -->
     <div class="flex items-center">
       <div
-        class="font-Roboto font-medium text-sm bg-gray-200 px-2.5 py-2 rounded-lg flex"
+        class="font-Roboto font-medium text-sm bg-gray-200 px-2.5 mx-5 py-2 rounded-lg flex"
       >
         В очереди задач: {{ tasksCount }}
       </div>
@@ -24,7 +24,10 @@
       />
     </button>
   </div>
-  <DoitnowSkeleton v-if="isLoading" />
+  <DoitnowSkeleton
+    v-if="isLoading"
+    class="mt-20"
+  />
   <transition :name="taskTransition">
     <DoitnowTask
       v-if="tasksCount && !isLoading"
@@ -170,6 +173,7 @@ export default {
   },
   mounted: function () {
     this.loadAllTasks()
+    this.$store.dispatch('fullScreenToggle', 'add')
   },
   methods: {
     loadAllTasks: function () {
