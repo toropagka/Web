@@ -1,6 +1,5 @@
 <script>
 import EventAlert from '@/components/EventAlert.vue'
-import ModalBox from '@/components/ModalBox.vue'
 import { DatePicker } from 'v-calendar'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
@@ -17,7 +16,6 @@ import * as CARD from '@/store/actions/cards'
 export default {
   components: {
     EventAlert,
-    ModalBox,
     DoitnowLimit,
     DatePicker,
     AsideMenuSkeleton,
@@ -34,8 +32,7 @@ export default {
       mdiMenu,
       warn,
       showFreeModal: false,
-      lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
-      currentSettingsTab: 'account'
+      lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date()
     }
   },
   computed: {
@@ -307,16 +304,10 @@ export default {
 </script>
 
 <template>
-  <!-- Profile modal -->
-  <modal-box
-    @currentSettingsTab="changeSettingsTab"
-  >
-    <DoitnowLimit
-      v-if="showFreeModal"
-      @cancel="showFreeModal = false"
-    />
-  </modal-box>
-  <!-- /Profile modal -->
+  <DoitnowLimit
+    v-if="showFreeModal"
+    @cancel="showFreeModal = false"
+  />
   <aside
     v-show="!isFullScreen"
     id="aside"
