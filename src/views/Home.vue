@@ -148,12 +148,8 @@ import Dashboard from '@/components/Dashboard.vue'
 import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
-
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
-import initWebSync from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
 
 export default {
   components: {
@@ -222,7 +218,7 @@ export default {
 
     this.$store.dispatch(USER_REQUEST).then(resp => {
       this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
-      this.getNavigator()
+      this.initNavStackGreedView()
       if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
         this.getTask(this.$router.currentRoute.value.params.id)
       } else {
@@ -590,29 +586,6 @@ export default {
             })
           }
         }
-      }
-    },
-    getNavigator () {
-      if (this.$store.state.auth.token) {
-        const data = {
-          organization: this.$store?.state?.user?.user?.owner_email,
-          user_uid: this.$store?.state?.user?.user?.current_user_uid
-        }
-        let reglaments = []
-        this.$store.commit(NAVIGATOR_REQUEST)
-        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
-          reglaments = resp.data
-        }).finally(() => {
-          this.$store.dispatch(NAVIGATOR_REQUEST).then(() => {
-            this.storeNavigator.reglaments = {
-              uid: 'fake-uid',
-              items: reglaments
-            }
-            initWebSync()
-            initInspectorSocket()
-            this.initNavStackGreedView()
-          })
-        })
       }
     }
   }
