@@ -131,6 +131,10 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
+      if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
+        this.$store.state.navigator.currentSettingsTab = item.type
+      }
+
       // do it now
       if (item.uid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
         window.ym(89796698, 'reachGoal', 'doitnow')
@@ -340,11 +344,14 @@ export default {
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
     class="w-[292px] fixed top-8 z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
+    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', $store.state.navigator.lastTab == '4' ? 'mt-5' : '' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
+      <div
+        v-if="$store.state.navigator.lastTab != '4'"
+        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
+      >
         <div
           class="group w-full cursor-pointer"
           @click="modalOneActive = true"

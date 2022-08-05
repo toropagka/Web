@@ -225,7 +225,7 @@ export default {
       </p>
     </div>
   </ModalBox>
-  <form class=" mx-6 overscroll-auto">
+  <form class="mx-6 overscroll-auto bg-white p-2 rounded">
     <div class="flex pb-3">
       <form class="text-left w-40">
         <div class="text-center mb-3 mr-5">

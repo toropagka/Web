@@ -35,7 +35,7 @@ const updateSettings = () => {
 }
 </script>
 <template>
-  <form class="px-5">
+  <form class="p-5 bg-white rounded">
     <div class="my-2">
       <div class="flex mt-[15px]">
         <div class="checkbox">
