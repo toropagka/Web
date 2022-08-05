@@ -37,12 +37,14 @@ export default {
   },
   methods: {
     logout () {
-      this.$store.dispatch(AUTH_LOGOUT)
-      this.$router.push('/login')
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.$router.push('/')
+      })
       if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
     },
     changeSettingsTab (tabName) {
-      this.currentSettingsTab = tabName
+      console.log(this.$store.state.navigator.currentSettingsTab)
+      this.$store.state.navigator.currentSettingsTab = tabName
     }
   }
 }

@@ -113,7 +113,6 @@ export default {
 
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         return
       }
 
