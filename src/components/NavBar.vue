@@ -73,7 +73,6 @@ export default {
       return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
     },
     lastTab () {
-      console.log(this.$store.state.navigator.lastTab)
       return this.$store.state.navigator.lastTab
     }
   },
