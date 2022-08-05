@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between pr-60"
+    class="flex justify-between"
     :style="{ borderColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : ''}"
     :class="{
       'bg-gray-200 dark:bg-gray-800':
@@ -8,7 +8,7 @@
         task.uid_marker !== '00000000-0000-0000-0000-000000000000'
     }"
   >
-    <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
+    <div class="py-6 px-5 mx-5 w-5/6 bg-white rounded-lg">
       <div
         class="flex justify-between items-center mb-6 p-2 rounded-[8px]"
         :style="{ backgroundColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : '', color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"

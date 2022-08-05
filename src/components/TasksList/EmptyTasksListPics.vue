@@ -22,7 +22,7 @@ export default {
     navStackLastPath () { return this.navStack[this.navStack.length - 1].greedPath },
     shouldShowEmptyPics () {
       const lastNavStackElement = this.navStack[this.navStack.length - 1]
-      if (lastNavStackElement.value.uid === this.DATE_UID && new Date(lastNavStackElement.value.param).toDateString() === new Date().toDateString()) {
+      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement.value.param).toDateString() === new Date().toDateString()) {
         return true
       } else { return false }
     },

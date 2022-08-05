@@ -9,7 +9,7 @@ export default {
 
 </script>
 <template>
-  <form class="px-5 text-lg">
+  <form class="px-5 text-lg bg-white p-2 rounded">
     <div class="mt-[15px]">
       <p class="text-base font-medium">
         Владелец лицензии

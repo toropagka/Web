@@ -4,7 +4,6 @@ import Home from '@/views/Home'
 import Settings from '@/components/Settings.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
-import Reglament from '@/components/Reglaments/Reglaments.vue'
 import TaskFile from '@/views/TaskFile'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -18,7 +17,7 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next()
+    next('/tasks')
   } else {
     next('/login')
   }
@@ -112,7 +111,7 @@ const routes = [
     meta: {},
     path: '/directory',
     name: 'directory',
-    component: Reglament
+    component: Home
   },
   {
     meta: {},

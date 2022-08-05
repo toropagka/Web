@@ -70,7 +70,8 @@ export default {
         this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
           reglaments = resp.data
         }).finally(() => {
-          this.$store.dispatch(NAVIGATOR_REQUEST).then(() => {
+          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
+            console.log(resp.data)
             this.storeNavigator.reglaments = {
               uid: 'fake-uid',
               items: reglaments
@@ -176,7 +177,7 @@ export default {
     class="fixed left-0 top-0 z-[50] ml-3"
   />
   <AsideMenu
-    v-if="lastTab != '1' && lastTab != '4' && lastTab != '5'"
+    v-if="lastTab != '1' && lastTab != '5'"
     :menu="menu"
   />
   <router-view />
