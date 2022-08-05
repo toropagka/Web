@@ -22,7 +22,7 @@
           Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
         </p>
         <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
           @click="okToModal"
         >
           Понятно

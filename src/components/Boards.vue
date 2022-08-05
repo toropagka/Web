@@ -81,23 +81,25 @@
     </div>
     <div
       v-if="displayModal"
-      class="flex flex-col justify-center items-center"
+      class="flex flex-col justify-center items-center "
     >
       <img
-        class="mx-auto mt-4"
+        class="mx-auto mt-10"
         width="320"
         height="314"
-        src="@/assets/images/pic.png"
+        src="@/assets/images/boards.svg"
         alt="Empty task image"
       >
-      <p class="font-bold p-2">
-        Доски – самый простой способ визуализировать ваши цели, проекты и командную работу
-      </p>
-      <p class="text-sm p-2 w-[600px]">
-        Создавайте карточки, перемещайте их между этапами, приглашайте коллег для совместной работы – весь рабочий процесс у вас перед глазами
-      </p>
+      <div class="w-[600px]">
+        <p class="font-bold p-3">
+          Доски – самый простой способ визуализировать ваши цели, проекты и командную работу
+        </p>
+        <p class="text-sm p-3 ">
+          Создавайте карточки, перемещайте их между этапами, приглашайте коллег для совместной работы – весь рабочий процесс у вас перед глазами
+        </p>
+      </div>
       <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
         @click="okToModal"
       >
         Понятно
