@@ -86,25 +86,25 @@
     class="flex flex-col justify-center items-center"
   >
     <img
-      class="mx-auto mt-4"
-      width="450"
-      height="450"
+      class="mx-auto mt-10"
+      width="320"
+      height="314"
       src="@/assets/images/regl.svg"
       alt="Empty task image"
     >
-    <div class="w-[1000px] text-2xl">
-      <p class="font-bold p-3 text-center">
+    <div class="w-[600px]">
+      <p class="font-bold p-3 text-left">
         Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
       </p>
-      <p class="text-sm p-1">
+      <p class="text-sm p-3">
         Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
       </p>
-      <p class="text-sm p-1">
+      <p class="text-sm p-3">
         Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
       </p>
     </div>
     <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
       @click="okToModal"
     >
       Понятно
