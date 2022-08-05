@@ -605,6 +605,17 @@ const mutations = {
           state.navigator.new_private_projects[0].items.splice(i, 1)
         }
       }
+      for (
+        let i = 0;
+        i < state.navigator.new_private_projects[1].items.length;
+        i++
+      ) {
+        if (
+          state.navigator.new_private_projects[1].items[i].uid === project.uid
+        ) {
+          state.navigator.new_private_projects[1].items.splice(i, 1)
+        }
+      }
     } else {
       visitChildren(
         state.navigator.new_private_projects[0].items,
