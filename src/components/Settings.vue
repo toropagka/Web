@@ -19,6 +19,7 @@ import AccKarma from '@/components/AccKarma.vue'
 import AccTarif from '@/components/AccTarif.vue'
 import AccOption from '@/components/AccOption.vue'
 import AccModal from '@/components/AccModal.vue'
+import { AUTH_LOGOUT } from '@/store/actions/auth'
 export default {
   components: {
     AccKarma,
@@ -29,6 +30,19 @@ export default {
   computed: {
     currentSettingsTab () {
       return this.$store.state.navigator.currentSettingsTab
+    },
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch(AUTH_LOGOUT)
+      this.$router.push('/login')
+      if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
+    },
+    changeSettingsTab (tabName) {
+      this.currentSettingsTab = tabName
     }
   }
 }

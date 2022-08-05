@@ -3,12 +3,8 @@ import EventAlert from '@/components/EventAlert.vue'
 import ModalBox from '@/components/ModalBox.vue'
 import { DatePicker } from 'v-calendar'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
-import AccModal from '@/components/AccModal.vue'
-import AccTarif from '@/components/AccTarif.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import AsideMenuSkeleton from './AsideMenuSkeleton.vue'
-import AccOption from '@/components/AccOption.vue'
-import AccKarma from '@/components/AccKarma.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -16,7 +12,6 @@ import warn from '@/icons/warn.js'
 import { mdiMenu } from '@mdi/js'
 
 import * as TASK from '@/store/actions/tasks'
-import { AUTH_LOGOUT } from '@/store/actions/auth'
 import * as CARD from '@/store/actions/cards'
 
 export default {
@@ -25,12 +20,8 @@ export default {
     ModalBox,
     DoitnowLimit,
     DatePicker,
-    AccModal,
-    AccTarif,
     AsideMenuSkeleton,
-    AsideMenuList,
-    AccOption,
-    AccKarma
+    AsideMenuList
   },
   props: {
     menu: {
@@ -103,11 +94,6 @@ export default {
     }
   },
   methods: {
-    logout () {
-      this.$store.dispatch(AUTH_LOGOUT)
-      this.$router.push('/login')
-      if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
-    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
@@ -313,20 +299,6 @@ export default {
     <DoitnowLimit
       v-if="showFreeModal"
       @cancel="showFreeModal = false"
-    />
-    <acc-modal
-      v-if="currentSettingsTab === 'account'"
-      @currentSettingsTab="changeSettingsTab ('tarif')"
-      @AccLogout="logout()"
-    />
-    <acc-tarif
-      v-if="currentSettingsTab === 'tarif'"
-    />
-    <acc-option
-      v-if="currentSettingsTab === 'main'"
-    />
-    <acc-karma
-      v-if="currentSettingsTab === 'karma'"
     />
   </modal-box>
   <!-- /Profile modal -->
