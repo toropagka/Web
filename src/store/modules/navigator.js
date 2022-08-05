@@ -37,7 +37,7 @@ import { visitChildren } from '../helpers/functions'
 const getDefaultState = () => {
   return {
     navigator: false,
-    lastTab: localStorage.getItem('lastTab') ?? 1,
+    lastTab: localStorage.getItem('lastTab') ?? 2,
     currentSettingsTab: 'account',
     status: '',
     computedNavigator: false,
@@ -210,8 +210,9 @@ const mutations = {
     state.status = 'success'
     state.hasLoadedOnce = true
     console.log('navigator ', resp)
+    console.log(nowTab)
     state.menu = []
-    if (nowTab === '2') {
+    if (nowTab === '2' || nowTab === 2) {
       state.menu.push([
         {
           label: 'Сегодня',
@@ -339,7 +340,7 @@ const mutations = {
         }
       ]
       )
-    } else if (nowTab === '3') {
+    } else if (nowTab === '3' || nowTab === 3) {
       state.menu.push([
         {
           label: 'Регламенты',
@@ -368,7 +369,7 @@ const mutations = {
           iconBackgroundClass: ''
         }
       ])
-    } else if (nowTab === '4') {
+    } else if (nowTab === '4' || nowTab === 4) {
       state.menu.push([
         {
           label: 'Аккаунт',
