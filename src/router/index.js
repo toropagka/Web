@@ -15,6 +15,14 @@ const ifNotAuthenticated = (to, from, next) => {
   }
 }
 
+const shouldRedirectToLogin = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next()
+  } else {
+    next('/login')
+  }
+}
+
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
     next('/tasks')
@@ -99,31 +107,36 @@ const routes = [
     meta: {},
     path: '/doitnow',
     name: 'doitnow',
-    component: Doitnow
+    component: Doitnow,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
     path: '/tasks',
     name: 'tasks',
-    component: Home
+    component: Home,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
     path: '/directory',
     name: 'directory',
-    component: Home
+    component: Home,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
     path: '/settings',
     name: 'settings',
-    component: Settings
+    component: Settings,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
     path: '/clients',
     name: 'clients',
-    component: Empty
+    component: Empty,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
