@@ -36,6 +36,7 @@
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import { UID_TO_ACTION } from '@/store/helpers/functions'
 export default {
   components: {
     InspectorModalBox
@@ -334,6 +335,7 @@ export default {
           break
         case 2:
           this.$router.push('/tasks')
+          this.$store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
           // asidemenu logic
           this.$store.commit('updateStackWithInitValue', {
             name: 'Сегодня',
