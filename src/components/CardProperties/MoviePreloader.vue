@@ -28,7 +28,7 @@ export default {
   <div class="flex space-x-[11px]">
     <a
       class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-      :href="currentLocation + 'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
+      :href="'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
       target="_blank"
     >
       <svg
@@ -51,7 +51,7 @@ export default {
     <div class="flex flex-col space-y-[2px]">
       <a
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-        :href="currentLocation + 'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
+        :href="'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
         target="_blank"
       >
         {{ fileName }}

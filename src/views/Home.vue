@@ -151,6 +151,10 @@ import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
 import * as TASK from '@/store/actions/tasks'
 import { USER_REQUEST } from '@/store/actions/user'
 
+import initWebSync from '@/websync/index.js'
+import initInspectorSocket from '@/inspector/index.js'
+import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
+
 export default {
   components: {
     ModalBoxNotificationInstruction,
@@ -218,40 +222,46 @@ export default {
     if (this.$store.state.auth.token) {
       this.$store.dispatch(USER_REQUEST)
     }
-  },
-  methods: {
-    setShouldShowModalValue (value) {
-      setLocalStorageItem('shouldShowModal', value)
-      Notification.requestPermission().then(function (permission) {
-        if (permission === 'granted') {
-          setLocalStorageItem('shouldShowModal', '0')
-        } else if (permission === 'denied') {
-          setLocalStorageItem('shouldShowModal', '0')
+    if (this.$store.state.auth.token) {
+      this.$store.dispatch(USER_REQUEST).then(resp => {
+        this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
+        this.getNavigator()
+        if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
+          this.getTask(this.$router.currentRoute.value.params.id)
+        } else {
+          if (localStorage.getItem('lastTab') === 'tasks') {
+            this.getTasks()
+          }
         }
       })
-    },
-    requestNotificationPermissionOrShowModalBox () {
-      if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {
-        return
+    }
+  },
+  methods: {
+    getNavigator () {
+      if (this.$store.state.auth.token) {
+        const data = {
+          organization: this.$store?.state?.user?.user?.owner_email,
+          user_uid: this.$store?.state?.user?.user?.current_user_uid
+        }
+        let reglaments = []
+        this.$store.commit(NAVIGATOR_REQUEST)
+        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
+          reglaments = resp.data
+        }).finally(() => {
+          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
+            console.log(resp.data)
+            this.storeNavigator.reglaments = {
+              uid: 'fake-uid',
+              items: reglaments
+            }
+            this.initNavStackGreedView()
+            try {
+              initWebSync()
+              initInspectorSocket()
+            } catch (e) {}
+          })
+        })
       }
-
-      if (!('Notification' in window)) {
-        alert('This browser does not support desktop notification')
-        setLocalStorageItem('shouldShowModal', '0')
-      } else if (Notification.permission === 'granted') {
-        setLocalStorageItem('shouldShowModal', '0')
-      } else if (Notification.permission === 'default') {
-        setLocalStorageItem('shouldShowModal', '1')
-      } else if (Notification.permission === 'denied') { // handle denied case
-        setLocalStorageItem('shouldShowModal', '1')
-      }
-
-      if (parseInt(localStorage.getItem('shouldShowModal')) === 1) {
-        this.shouldShowModalBox = true
-      }
-    },
-    overlayClick () {
-      this.$store.dispatch('asideLgToggle', false)
     },
     getTask (uid) {
       if (this.$store.state.auth.token) {
@@ -336,6 +346,39 @@ export default {
             .catch((err) => console.log(err))
         }
       }
+    },
+    setShouldShowModalValue (value) {
+      setLocalStorageItem('shouldShowModal', value)
+      Notification.requestPermission().then(function (permission) {
+        if (permission === 'granted') {
+          setLocalStorageItem('shouldShowModal', '0')
+        } else if (permission === 'denied') {
+          setLocalStorageItem('shouldShowModal', '0')
+        }
+      })
+    },
+    requestNotificationPermissionOrShowModalBox () {
+      if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {
+        return
+      }
+
+      if (!('Notification' in window)) {
+        alert('This browser does not support desktop notification')
+        setLocalStorageItem('shouldShowModal', '0')
+      } else if (Notification.permission === 'granted') {
+        setLocalStorageItem('shouldShowModal', '0')
+      } else if (Notification.permission === 'default') {
+        setLocalStorageItem('shouldShowModal', '1')
+      } else if (Notification.permission === 'denied') { // handle denied case
+        setLocalStorageItem('shouldShowModal', '1')
+      }
+
+      if (parseInt(localStorage.getItem('shouldShowModal')) === 1) {
+        this.shouldShowModalBox = true
+      }
+    },
+    overlayClick () {
+      this.$store.dispatch('asideLgToggle', false)
     },
     initNavStackWithFoundProjects (projectUid) {
       let project
