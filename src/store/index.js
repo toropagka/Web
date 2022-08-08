@@ -6,6 +6,7 @@ import navigator from './modules/navigator'
 import calendar from './modules/calendar'
 import navbar from './modules/navbar'
 import user from './modules/user'
+import slides from '@/store/modules/slides.js'
 import tasks from './modules/tasks'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import taskfilesandmessages from './modules/taskfilesandmessages'
@@ -143,6 +144,7 @@ export default createStore({
     calendar,
     user,
     tasks,
+    slides,
     navbar,
     taskfilesandmessages,
     cardfilesandmessages,

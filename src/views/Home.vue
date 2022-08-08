@@ -34,10 +34,6 @@
       class="text-blue-400"
     >Firefox</a>
   </modal-box-notification-instruction>
-  <ModalBoxOnboarding
-    v-if="isDisplayOnboarding"
-    @cancel="setSettings"
-  />
   <main-section class="h-full">
     <aside-menu
       v-if="!isFileRedirect"
@@ -129,7 +125,6 @@ import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import Overlay from '@/components/modals/Overlay.vue'
-import ModalBoxOnboarding from '@/components/modals/ModalBoxOnBoarding.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
@@ -172,7 +167,6 @@ export default {
     Boards,
     Doitnow,
     Dashboard,
-    ModalBoxOnboarding,
     Other,
     Tags,
     TagWithChildren,
@@ -191,9 +185,6 @@ export default {
   computed: {
     mainSectionState () {
       return this.$store.state.mainSectionState
-    },
-    isDisplayOnboarding () {
-      return this.$store.state.user.justRegistered
     },
     greedPath () {
       return this.$store.state.greedPath
@@ -243,12 +234,6 @@ export default {
           setLocalStorageItem('shouldShowModal', '0')
         }
       })
-    },
-    setSettings (val) {
-      this.$store.state.user.newUserTasks = true
-      this.$store.state.user.showOnboarding = val
-      this.$store.state.user.showModals = val
-      this.$store.state.user.justRegistered = false
     },
     requestNotificationPermissionOrShowModalBox () {
       if (parseInt(localStorage.getItem('shouldShowModal')) === 0) {
