@@ -75,6 +75,7 @@
             v-for="board in commonBoards"
             :key="board.uid"
             class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
+            :style="{ 'margin-left': `${board.pad * 16}px` }"
             @click="selectBoard(board.uid)"
           >
             {{ board.name }}
@@ -203,15 +204,29 @@ export default {
       })
       const result = []
       this.buildTree(result, arrMyBoards, '00000000-0000-0000-0000-000000000000', 0)
+      // сортируем остатки - чтобы без родителя были сверху
+      arrMyBoards.sort((board1, board2) => {
+        const board1HasParent = arrMyBoards.findIndex(board => board.uid === board1.uid_parent) === -1 ? 0 : 1
+        const board2HasParent = arrMyBoards.findIndex(board => board.uid === board2.uid_parent) === -1 ? 0 : 1
+        return board1HasParent - board2HasParent
+      })
       this.buildTree(result, arrMyBoards, null, 0)
       return result
     },
     commonBoards () {
       const currentUserEmail = this.user.current_user_email.toLowerCase()
       const arrCommonBoards = this.boardsCanEdit.filter(board => board.email_creator.toLowerCase() !== currentUserEmail)
-      arrCommonBoards.sort((board1, board2) => board1.name.localeCompare(board2.name))
+      arrCommonBoards.sort((board1, board2) => {
+        return board1.name.localeCompare(board2.name)
+      })
       const result = []
       this.buildTree(result, arrCommonBoards, '00000000-0000-0000-0000-000000000000', 0)
+      // сортируем остатки - чтобы без родителя были сверху
+      arrCommonBoards.sort((board1, board2) => {
+        const board1HasParent = arrCommonBoards.findIndex(board => board.uid === board1.uid_parent) === -1 ? 0 : 1
+        const board2HasParent = arrCommonBoards.findIndex(board => board.uid === board2.uid_parent) === -1 ? 0 : 1
+        return board1HasParent - board2HasParent
+      })
       this.buildTree(result, arrCommonBoards, null, 0)
       return result
     },
