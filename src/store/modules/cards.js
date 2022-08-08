@@ -215,25 +215,14 @@ const actions = {
   [CARD.BOARD_CARDS_CHANGE_ORDER_STAGE]: ({ commit }, board) => {
     commit('ChangeStagesOrder', board)
   },
-  [CARD.MOVE_CARD_TO_ANOTHER_BOARD]: ({ commit }, data) => {
-    return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/cards'
-      axios({ url, method: 'PATCH', data })
-        .then((resp) => {
-          commit(CARD.DELETE_CARD, data.uid)
-          resolve(resp)
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    })
-  },
   [CARD.MOVE_ALL_CARDS]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url =
-        `${process.env.VUE_APP_LEADERTASK_API}/api/v1/cards/move?uid_board=${data.boardTo}&uid_stage=${data.stageTo}`
+      const url = `${process.env.VUE_APP_LEADERTASK_API}/api/v1/cards/move?uid_board=${data.boardTo}&uid_stage=${data.stageTo}`
       axios({ url, method: 'PATCH', data: { cards: data.cards } })
         .then((resp) => {
+          resp.data.forEach((card) => {
+            commit(CARD.CHANGE_CARD, card)
+          })
           resolve(resp)
         })
         .catch((err) => {
