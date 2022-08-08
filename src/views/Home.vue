@@ -216,7 +216,7 @@ export default {
       return this.$store.state.navbar.navStack
     },
     storeNavigator () {
-      return this.$store.state.navigator.navigator
+      return this.$store.getters.sortedNavigator
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
