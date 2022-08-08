@@ -1,7 +1,6 @@
 import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
-import Settings from '@/components/Settings.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
@@ -112,12 +111,6 @@ const routes = [
     path: '/directory',
     name: 'directory',
     component: Home
-  },
-  {
-    meta: {},
-    path: '/settings',
-    name: 'settings',
-    component: Settings
   },
   {
     meta: {},
