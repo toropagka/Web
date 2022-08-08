@@ -1,68 +1,70 @@
 <template>
-  <!-- Profile modal -->
-  <modal-box
-    v-model="modalOneActive"
-    :title="TitleName()"
-    @currentSettingsTab="changeSettingsTab"
-  >
-    <DoitnowLimit
-      v-if="showFreeModal"
-      @cancel="showFreeModal = false"
-    />
-    <acc-modal
-      v-if="currentSettingsTab === 'account'"
-      @currentSettingsTab="changeSettingsTab ('tarif')"
-      @AccLogout="logout()"
-    />
-    <acc-tarif
-      v-if="currentSettingsTab === 'tarif'"
-    />
-    <acc-option
-      v-if="currentSettingsTab === 'main'"
-    />
-    <acc-karma
-      v-if="currentSettingsTab === 'karma'"
-    />
-  </modal-box>
-  <!-- /Profile modal -->
   <div
-    class="flex left-0 right-0 flex-row items-center h-[50px] bg-[#f4f5f7]"
+    class="flex justify-between left-0 right-0 flex-row items-center h-[50px] bg-[#f4f5f7]"
     :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
   >
-    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
-      <li
-        v-for="tab in tabs"
-        :key="tab.name"
-        class="mr-2 cursor-pointer"
-        @click="switchTab(tab)"
-      >
-        <p
-          href="#"
-          class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[200px] active border-t-orange-400"
-          :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
-        >
-          {{ tab.name }}
-        </p>
-      </li>
-      <inspector-modal-box
-        v-model="showInspector"
-        button="warning"
-        has-button
-        has-cancel
-        button-label="Delete"
-      />
-    </ul>
-    <button
-      class="bg-[#FF912380] py-2 px-5 h-[38px] rounded-[8px] text-black text-sm mr-[7px] mt-1 hover:bg-[#F5DEB3]"
-      @click="shouldShowInspector"
+    <!-- Profile modal -->
+    <modal-box
+      v-model="modalOneActive"
+      :title="TitleName()"
+      @currentSettingsTab="changeSettingsTab"
     >
-      Добавить задачу
-    </button>
+      <DoitnowLimit
+        v-if="showFreeModal"
+        @cancel="showFreeModal = false"
+      />
+      <acc-modal
+        v-if="currentSettingsTab === 'account'"
+        @currentSettingsTab="changeSettingsTab ('tarif')"
+        @AccLogout="logout()"
+      />
+      <acc-tarif
+        v-if="currentSettingsTab === 'tarif'"
+      />
+      <acc-option
+        v-if="currentSettingsTab === 'main'"
+      />
+      <acc-karma
+        v-if="currentSettingsTab === 'karma'"
+      />
+    </modal-box>
+    <!-- /Profile modal -->
+    <div>
+      <ul class="flex items-center flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-200 mt-1">
+        <li
+          v-for="tab in tabs"
+          :key="tab.name"
+          class="mr-2 cursor-pointer"
+          @click="switchTab(tab)"
+        >
+          <p
+            href="#"
+            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[200px] active border-t-orange-400"
+            :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
+          >
+            {{ tab.name }}
+          </p>
+        </li>
+        <button
+          class="bg-[#FF912380] px-5 h-[34px] rounded-[8px] text-black text-sm mr-[7px] hover:bg-[#F5DEB3]"
+          @click="shouldShowInspector"
+        >
+          Добавить задачу
+        </button>
+        <inspector-modal-box
+          v-model="showInspector"
+          button="warning"
+          has-button
+          has-cancel
+          button-label="Delete"
+        />
+      </ul>
+    </div>
     <div
       v-if="status == 'success'"
       class="flex"
     >
-      <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
+      <div class="flex flex-row w-full text-dark px-[16px] mt-[5px] h-[32px] items-center">
         <div
           class="group w-full cursor-pointer"
           @click="modalOneActive = true"
