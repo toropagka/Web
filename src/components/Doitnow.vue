@@ -130,6 +130,7 @@ export default {
     readyTasksReaded: [],
     readyTasksUnreaded: [],
     openedTasks: [],
+    slidesCopy: [],
     projectTasks: [],
     unsortedTasks: [],
     overdueReaded: [],
@@ -139,7 +140,7 @@ export default {
   computed: {
     tasksCount () {
       return (
-        this.slides.length +
+        this.slidesCopy.length +
         this.unreadTasks.length +
         this.overdueTasks.length +
         this.readyTasks.length +
@@ -147,8 +148,8 @@ export default {
       )
     },
     firstTask () {
-      if (this.slides.length) {
-        return this.slides[0]
+      if (this.slidesCopy.length) {
+        return this.slidesCopy[0]
       }
       if (this.unreadTasks.length) {
         return this.unreadTasks[0]
@@ -224,6 +225,7 @@ export default {
     if (this.displayModal) {
       return
     }
+    this.slidesCopy = [...this.slides]
     this.loadAllTasks()
   },
   methods: {
@@ -311,8 +313,8 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
-      if (this.slides.length) {
-        this.slides.shift()
+      if (this.slidesCopy.length) {
+        this.slidesCopy.shift()
         return
       }
       this.readTask()
