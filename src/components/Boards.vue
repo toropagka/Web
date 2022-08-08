@@ -151,13 +151,16 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
     }
   },
   mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('boards')) {
+    if (this.$store.state.user.visitedModals.includes('boards') || this.onboadingFromLocalStorage?.visitedModals.includes('boards')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     print (val) {
@@ -252,6 +255,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('boards')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'boards']
+      }))
     }
   }
 }

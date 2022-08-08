@@ -10,7 +10,7 @@ import {
 const state = {
   user: null,
   status: '',
-  justRegistered: false,
+  justRegistered: localStorage.getItem('justRegistered'),
   hasLoadedOnce: false,
   visitedModals: [],
   newUserTasks: false,

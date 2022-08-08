@@ -363,6 +363,9 @@ export default {
     },
     depNames () {
       return this.allDepartments.map(dep => dep.name)
+    },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
     }
   },
   watch: {
@@ -376,10 +379,10 @@ export default {
     }
   },
   mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('employee')) {
+    if (this.$store.state.user.visitedModals.includes('employee') || this.onboadingFromLocalStorage?.visitedModals.includes('employee')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     print (msg, val) {
@@ -548,6 +551,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('employee')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'employee']
+      }))
     }
   }
 }

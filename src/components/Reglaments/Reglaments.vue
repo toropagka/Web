@@ -182,16 +182,19 @@ export default {
         })
       }
       return reglaments
+    },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
     }
   },
   created () {
     setLocalStorageItem('isGridView', true)
   },
   mounted () {
-    if (this.$store.state.user.visitedModals.includes('reglaments')) {
+    if (this.$store.state.user.visitedModals.includes('reglaments') || this.onboadingFromLocalStorage?.visitedModals.includes('reglaments')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     updateGridView (value) {
@@ -258,6 +261,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('reglaments')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'reglaments']
+      }))
     }
   }
 }

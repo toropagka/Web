@@ -278,6 +278,7 @@
 import Icon from '@/components/Icon.vue'
 import ready from '@/icons/ready.js'
 import * as TASK from '@/store/actions/tasks.js'
+import { setLocalStorageItem } from '@/store/helpers/functions'
 
 export default {
   components: {
@@ -306,13 +307,16 @@ export default {
     },
     isTags () { return this.navStackLastPath === 'tags' || this.navStackLastPath === 'tags_children' },
     isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
-    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID }
+    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
+    }
   },
   mounted () {
-    if (this.$store.state.user.visitedModals.includes('tasks')) {
+    if (this.$store.state.user.visitedModals.includes('tasks') || this.onboadingFromLocalStorage?.visitedModals.includes('tasks')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     dateToLabelFormat (calendarDate) {
@@ -347,6 +351,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('tasks')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'tasks']
+      }))
     }
   }
 }

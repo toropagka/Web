@@ -5,6 +5,7 @@ import Icon from '@/components/Icon.vue'
 import AccKarmaLimit from '@/components/AccKarmaLimit'
 import * as TASK from '@/store/actions/tasks.js'
 import { useStore } from 'vuex'
+import { setLocalStorageItem } from '@/store/helpers/functions'
 
 const props = defineProps({
   title: {
@@ -79,6 +80,10 @@ const startOnBoarding = () => {
   store.state.user.justRegistered = true
   store.state.user.showModals = true
   store.state.user.showOnboarding = true
+  setLocalStorageItem('onboarding', JSON.stringify({
+    showModals: true,
+    visitedModals: []
+  }))
   store.dispatch(TASK.TASKS_REQUEST)
   const navElem = {
     name: 'Сегодня',

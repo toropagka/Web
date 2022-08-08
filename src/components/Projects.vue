@@ -162,13 +162,16 @@ export default {
     },
     isEmpty () {
       return !this.items[0].items.length && !this.items[1].items.length
+    },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
     }
   },
   mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('project')) {
+    if (this.$store.state.user.visitedModals.includes('project') || this.onboadingFromLocalStorage?.visitedModals.includes('project')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   created () {
     setLocalStorageItem('isGridView', true)
@@ -262,6 +265,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('project')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'project']
+      }))
     }
   }
 }
