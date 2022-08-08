@@ -1,7 +1,6 @@
 import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
-import Settings from '@/components/Settings.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
@@ -25,7 +24,7 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next('/tasks')
+    next('/doitnow')
   } else {
     next('/login')
   }
@@ -122,13 +121,6 @@ const routes = [
     path: '/directory',
     name: 'directory',
     component: Home,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
-    path: '/settings',
-    name: 'settings',
-    component: Settings,
     beforeEnter: shouldRedirectToLogin
   },
   {
