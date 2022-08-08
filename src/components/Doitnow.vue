@@ -64,6 +64,8 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
+import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
+import { USER_REQUEST } from '@/store/actions/user'
 
 export default {
   components: {
@@ -172,7 +174,13 @@ export default {
     }
   },
   mounted: function () {
-    this.loadAllTasks()
+    this.$store.dispatch(NAVIGATOR_REQUEST)
+      .then(() => {
+        this.$store.dispatch(USER_REQUEST)
+          .then(() => {
+            this.loadAllTasks()
+          })
+      })
     this.$store.dispatch('fullScreenToggle', 'add')
   },
   methods: {

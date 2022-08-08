@@ -79,6 +79,7 @@ import AccOption from '@/components/AccOption.vue'
 import AccKarma from '@/components/AccKarma.vue'
 import ModalBox from '@/components/ModalBox.vue'
 import { AUTH_LOGOUT } from '@/store/actions/auth'
+import { UID_TO_ACTION } from '@/store/helpers/functions'
 export default {
   components: {
     InspectorModalBox,
@@ -98,12 +99,12 @@ export default {
       lastSelectedTabsCode: '',
       tabs: [
         {
-          code: 1,
+          code: 'doitnow',
           name: 'Очередь',
           items: [{}]
         },
         {
-          code: 2,
+          code: 'tasks',
           name: 'Задачи',
           items: [
             [
@@ -241,7 +242,7 @@ export default {
           ]
         },
         {
-          code: 3,
+          code: 'directory',
           name: 'Справочники',
           items: [
             [
@@ -301,7 +302,7 @@ export default {
           ]
         },
         {
-          code: 4,
+          code: 'clients',
           name: 'Клиенты'
         }
       ]
@@ -326,6 +327,9 @@ export default {
   },
   methods: {
     switchTab (tab) {
+      if (tab.code === this.lastSelectedTabsCode) {
+        return
+      }
       console.log(tab.code)
       this.lastSelectedTabsCode = tab.code
       localStorage.setItem('lastTab', tab.code)
@@ -333,11 +337,12 @@ export default {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
       switch (tab.code) {
-        case 1:
+        case 'doitnow':
           this.$router.push('/doitnow')
           break
-        case 2:
+        case 'tasks':
           this.$router.push('/tasks')
+          this.$store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
           // asidemenu logic
           this.$store.commit('updateStackWithInitValue', {
             name: 'Сегодня',
@@ -349,7 +354,7 @@ export default {
           this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
           this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
           break
-        case 3:
+        case 'directory':
           this.$router.push('/directory')
           // asidemenu logic
           this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
@@ -362,7 +367,7 @@ export default {
           })
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
           break
-        case 4:
+        case 'clients':
           this.$router.push('/clients')
           break
       }
