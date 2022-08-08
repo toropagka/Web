@@ -65,7 +65,7 @@
             :style="{ 'margin-left': `${board.pad * 16}px` }"
             @click="selectBoard(board.uid)"
           >
-            {{ board.name }}
+            {{ board.name }} {{ board.uid === boardUid ? '(текущая)' : '' }}
           </div>
           <div
             v-if="myBoards.length"
