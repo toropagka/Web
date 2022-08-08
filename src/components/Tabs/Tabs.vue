@@ -1,4 +1,30 @@
 <template>
+  <!-- Profile modal -->
+  <modal-box
+    v-model="modalOneActive"
+    :title="TitleName()"
+    @currentSettingsTab="changeSettingsTab"
+  >
+    <DoitnowLimit
+      v-if="showFreeModal"
+      @cancel="showFreeModal = false"
+    />
+    <acc-modal
+      v-if="currentSettingsTab === 'account'"
+      @currentSettingsTab="changeSettingsTab ('tarif')"
+      @AccLogout="logout()"
+    />
+    <acc-tarif
+      v-if="currentSettingsTab === 'tarif'"
+    />
+    <acc-option
+      v-if="currentSettingsTab === 'main'"
+    />
+    <acc-karma
+      v-if="currentSettingsTab === 'karma'"
+    />
+  </modal-box>
+  <!-- /Profile modal -->
   <div
     class="flex left-0 right-0 flex-row items-center h-[50px] bg-[#f4f5f7]"
     :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
@@ -32,7 +58,10 @@
     >
       Добавить задачу
     </button>
-    <div class="flex ">
+    <div
+      v-if="status == 'success'"
+      class="flex"
+    >
       <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
         <div
           class="group w-full cursor-pointer"
@@ -85,7 +114,6 @@ export default {
     InspectorModalBox,
     AccModal,
     AccTarif,
-    AsideMenuList,
     AccOption,
     AccKarma,
     ModalBox
@@ -323,6 +351,9 @@ export default {
     },
     storeNavigator () {
       return this.$store.state.navigator.navigator
+    },
+    status () {
+      return this.$store.state.navigator.status
     }
   },
   methods: {
