@@ -24,7 +24,7 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next('/tasks')
+    next('/doitnow')
   } else {
     next('/login')
   }
