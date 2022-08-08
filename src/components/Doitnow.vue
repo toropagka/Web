@@ -149,7 +149,7 @@ export default {
       )
     },
     firstTask () {
-      if (this.slidesCopy.length) {
+      if (this.slidesCopy.length && this.justRegistered) {
         return this.slidesCopy[0]
       }
       if (this.unreadTasks.length) {
@@ -200,14 +200,14 @@ export default {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
     },
     displayModal () {
-      if (this.$store.state.user.visitedModals.includes('doitnow') || this.onboadingFromLocalStorage?.visitedModals.includes('doitnow')) {
-        return false
-      } else {
-        return this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
-      }
+      return (!this.$store.state.user.visitedModals.includes('doitnow') || !this.onboadingFromLocalStorage?.visitedModals.includes('doitnow')) &&
+      (this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals)
     },
     onboadingFromLocalStorage () {
       return JSON.parse(localStorage.getItem('onboarding'))
+    },
+    justRegistered () {
+      return this.$store.state.user.justRegistered
     }
   },
   watch: {
@@ -325,7 +325,7 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
-      if (this.slidesCopy.length) {
+      if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return
       }
