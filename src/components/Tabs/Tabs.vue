@@ -390,8 +390,6 @@ export default {
         case 'directory':
           this.$router.push('/directory')
           // asidemenu logic
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-          this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
           this.$store.commit('updateStackWithInitValue', {
             name: 'Регламенты',
             key: 'greedSource',
@@ -399,6 +397,8 @@ export default {
             value: this.storeNavigator.reglaments?.items
           })
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
+          this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+          this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
           break
         case 'clients':
           this.$router.push('/clients')

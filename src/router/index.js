@@ -24,7 +24,12 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next('/doitnow')
+    const lastTab = localStorage.getItem('lastTab')
+    if (lastTab === null) {
+      next('/tasks')
+      return
+    }
+    next(`/${lastTab}`)
   } else {
     next('/login')
   }
