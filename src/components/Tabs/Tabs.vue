@@ -273,6 +273,9 @@ export default {
   },
   methods: {
     switchTab (tab) {
+      if (tab.code === this.lastSelectedTabsCode) {
+        return
+      }
       console.log(tab.code)
       this.lastSelectedTabsCode = tab.code
       localStorage.setItem('lastTab', tab.code)
