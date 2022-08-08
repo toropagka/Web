@@ -330,11 +330,11 @@ export default {
               }
             ]
           ]
-        },
-        {
-          code: 'clients',
-          name: 'Клиенты'
         }
+        // {
+        //   code: 'clients',
+        //   name: 'Клиенты'
+        // }
       ]
     }
   },
