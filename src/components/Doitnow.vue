@@ -40,7 +40,7 @@
   <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
     <DoitnowTask
-      v-if="tasksCount && !isLoading || firstTask.mode === 'task'"
+      v-if="tasksCount && !isLoading || firstTask?.mode === 'task'"
       :key="firstTask.uid"
       :task="firstTask"
       :sub-tasks="subTasks"
