@@ -434,7 +434,7 @@ const mutations = {
           iconBackgroundClass: ''
         }
       ])
-    } else return
+    }
     const newAssignments = []
     newAssignments.push({
       dep: 'Поручено мной',
