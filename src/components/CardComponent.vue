@@ -6,6 +6,8 @@ import AccKarmaLimit from '@/components/AccKarmaLimit'
 import * as TASK from '@/store/actions/tasks.js'
 import { useStore } from 'vuex'
 
+import { setLocalStorageItem } from '@/store/helpers/functions'
+
 const props = defineProps({
   title: {
     type: String,
@@ -76,7 +78,7 @@ const submit = e => {
 const startOnBoarding = () => {
   emit('header-icon-click')
   store.state.user.visitedModals = []
-  store.state.user.justRegistered = true
+  setLocalStorageItem('justRegistered', '1')
   store.state.user.showModals = true
   store.state.user.showOnboarding = true
   store.dispatch(TASK.TASKS_REQUEST)

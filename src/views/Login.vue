@@ -10,6 +10,8 @@ import JbButton from '@/components/JbButton.vue'
 
 import { AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
 
+import { setLocalStorageItem } from '@/store/helpers/functions'
+
 export default {
   components: {
     FullScreenSection,
@@ -78,7 +80,7 @@ export default {
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/')
-          this.$store.state.user.justRegistered = true
+          setLocalStorageItem('justRegistered', '1')
         })
         .catch(() => {
           this.form.showError = true
