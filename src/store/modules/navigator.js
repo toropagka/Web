@@ -210,7 +210,7 @@ const mutations = {
     state.hasLoadedOnce = true
     console.log('navigator ', resp)
     state.menu = []
-    if (localStorage.getItem('lastTab') === 'tasks') {
+    if (state.lastTab === 'tasks') {
       state.menu.push([
         {
           label: 'Сегодня',
@@ -338,7 +338,7 @@ const mutations = {
         }
       ]
       )
-    } else if (localStorage.getItem('lastTab') === 'directory') {
+    } else if (state.lastTab === 'directory') {
       state.menu.push([
         {
           label: 'Регламенты',
@@ -387,7 +387,7 @@ const mutations = {
           path: 'colors'
         }
       ])
-    } else if (localStorage.getItem('lastTab') === 'clients') {
+    } else if (state.lastTab === 'clients') {
       state.menu.push([
         {
           label: 'Аккаунт',
