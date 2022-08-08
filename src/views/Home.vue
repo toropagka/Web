@@ -254,6 +254,7 @@ export default {
               uid: 'fake-uid',
               items: reglaments
             }
+            this.initNavStackGreedView()
             try {
               initWebSync()
               initInspectorSocket()
