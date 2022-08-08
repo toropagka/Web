@@ -250,6 +250,8 @@
                   @moveSuccess="moveSuccessCard(element)"
                   @moveReject="moveRejectCard(element)"
                   @moveColumn="onClickMoveCard(element)"
+                  @moveCardToTop="moveCardToTop(element)"
+                  @moveCardToBottom="moveCardToBottom(element)"
                 />
               </template>
             </draggable>
@@ -685,6 +687,14 @@ export default {
     onClickMoveCard (card) {
       this.showMoveCard = true
       this.currentCard = card
+    },
+    moveCardToTop (card) {
+      const column = card.uid_stage
+      this.moveCard(card.uid, column, this.getNewMinCardsOrderAtColumn(column))
+    },
+    moveCardToBottom (card) {
+      const column = card.uid_stage
+      this.moveCard(card.uid, column, this.getNewMaxCardsOrderAtColumn(column))
     },
     clickMoveAllColumnCards (column) {
       this.showMoveAllCards = true
