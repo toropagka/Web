@@ -137,7 +137,7 @@ export default {
       return null
     },
     slides () {
-      return this.$store.state.tasks.slides
+      return this.$store.state.slides.slides
     },
     taskMessages () {
       return this.$store.state.taskfilesandmessages.messages
