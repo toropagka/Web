@@ -325,6 +325,9 @@ export default {
       console.log(tab.code)
       this.lastSelectedTabsCode = tab.code
       localStorage.setItem('lastTab', tab.code)
+      if (this.$store.state.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
       switch (tab.code) {
         case 1:
           this.$router.push('/doitnow')
