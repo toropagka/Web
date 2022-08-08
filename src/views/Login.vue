@@ -79,6 +79,7 @@ export default {
         .then(() => {
           this.$router.push('/')
           this.$store.state.user.justRegistered = true
+          this.$store.state.user.showModals = true
         })
         .catch(() => {
           this.form.showError = true

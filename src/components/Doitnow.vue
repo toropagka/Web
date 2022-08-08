@@ -7,7 +7,38 @@
     button-label="Delete"
   />
   <div
-    v-if="tasksCount && !isLoading"
+    v-if="displayModal"
+    class="max-w-xl mx-auto"
+  >
+    <div
+      class="flex flex-col"
+    >
+      <img
+        class="mx-auto mt-10"
+        width="320"
+        height="314"
+        src="@/assets/images/emptydoitnow.png"
+        alt="Empty task image"
+      >
+      <p class="font-bold p-3">
+        Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+      </p>
+      <p class="text-sm p-3">
+        Очередь позволит вам работать и в конце концов выполнить конкретную задачу или поручение. Вы не знаете, какая задача будет следующей, а следовательно не думаете о ней, и выполняете только ту, которая сейчас у вас перед глазами.
+      </p>
+      <p class="text-sm p-3">
+        Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
+      </p>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+        @click="okToModal"
+      >
+        Понятно
+      </button>
+    </div>
+  </div>
+  <div
+    v-else-if="tasksCount && !isLoading"
     class="flex items-center mb-5 justify-between"
   >
     <!-- header -->
@@ -40,7 +71,7 @@
   <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
     <DoitnowTask
-      v-if="tasksCount && !isLoading || firstTask?.mode === 'task'"
+      v-if="!displayModal && tasksCount && !isLoading"
       :key="firstTask.uid"
       :task="firstTask"
       :sub-tasks="subTasks"
@@ -103,9 +134,7 @@ export default {
     unsortedTasks: [],
     overdueReaded: [],
     showInspector: false,
-    tasksLoaded: false,
-    showModal: false,
-    isDisplayOnboarding: true
+    tasksLoaded: false
   }),
   computed: {
     tasksCount () {
@@ -167,6 +196,9 @@ export default {
     },
     taskTransition () {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
+    },
+    displayModal () {
+      return !this.$store.state.user.visitedModals.includes('doitnow') && this.$store.state.user.showModals
     }
   },
   watch: {
@@ -189,6 +221,9 @@ export default {
     }
   },
   mounted: function () {
+    if (this.displayModal) {
+      return
+    }
     this.loadAllTasks()
   },
   methods: {
@@ -261,6 +296,9 @@ export default {
           this.tasksLoaded = true
         })
     },
+    okToModal () {
+      this.$store.state.user.visitedModals.push('doitnow')
+    },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
@@ -326,10 +364,6 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
-    },
-    closeOnboadringModal () {
-      this.isDisplayOnboarding = false
-      return this.isDisplayOnboarding
     }
   }
 }
