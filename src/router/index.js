@@ -105,7 +105,7 @@ const routes = [
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
-    beforeEnter: ifAuthenticated
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
