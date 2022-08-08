@@ -137,13 +137,16 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    onboadingFromLocalStorage () {
+      return JSON.parse(localStorage.getItem('onboarding'))
     }
   },
   mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('assignment')) {
+    if (this.$store.state.user.visitedModals.includes('assignment') || this.onboadingFromLocalStorage?.visitedModals.includes('assignment')) {
       return
     }
-    this.displayModal = this.$store.state.user.showModals
+    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     updateGridView (value) {
@@ -170,6 +173,10 @@ export default {
     okToModal () {
       this.displayModal = false
       this.$store.state.user.visitedModals.push('assignment')
+      setLocalStorageItem('onboarding', JSON.stringify({
+        ...this.onboadingFromLocalStorage,
+        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'assignment']
+      }))
     }
   }
 }
