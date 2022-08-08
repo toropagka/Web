@@ -47,12 +47,12 @@ export default {
       lastSelectedTabsCode: '',
       tabs: [
         {
-          code: 1,
+          code: 'doitnow',
           name: 'Очередь',
           items: [{}]
         },
         {
-          code: 2,
+          code: 'tasks',
           name: 'Задачи',
           items: [
             [
@@ -190,7 +190,7 @@ export default {
           ]
         },
         {
-          code: 3,
+          code: 'directory',
           name: 'Справочники',
           items: [
             [
@@ -250,7 +250,7 @@ export default {
           ]
         },
         {
-          code: 4,
+          code: 'clients',
           name: 'Клиенты'
         }
       ]
@@ -279,10 +279,10 @@ export default {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
       switch (tab.code) {
-        case 1:
+        case 'doitnow':
           this.$router.push('/doitnow')
           break
-        case 2:
+        case 'tasks':
           this.$router.push('/tasks')
           // asidemenu logic
           this.$store.commit('updateStackWithInitValue', {
@@ -295,7 +295,7 @@ export default {
           this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
           this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
           break
-        case 3:
+        case 'directory':
           this.$router.push('/directory')
           // asidemenu logic
           this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
@@ -308,7 +308,7 @@ export default {
           })
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
           break
-        case 4:
+        case 'clients':
           this.$router.push('/clients')
           break
       }
