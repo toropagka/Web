@@ -7,7 +7,7 @@ import Field from '@/components/Field.vue'
 import Icon from '@/components/Icon.vue'
 import Control from '@/components/Control.vue'
 import JbButton from '@/components/JbButton.vue'
-
+import { USER_START_ONBOARDING } from '@/store/actions/user'
 import { AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
 
 export default {
@@ -78,7 +78,7 @@ export default {
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/')
-          this.$store.state.user.justRegistered = true
+          this.$store.dispatch(USER_START_ONBOARDING)
         })
         .catch(() => {
           this.form.showError = true
