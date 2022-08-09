@@ -124,19 +124,16 @@ export default {
       // пытаемся достать текст из едита браузера
       // в котором сейчас идет ввод через Selection
       if (typeof window.getSelection !== 'undefined') {
-        const sel = document.getElementById('taskPropsCommentEditor')
-        // condition for removing console errors
-        if (sel && sel.rangeCount > 0) {
-          const tempRange = sel.getRangeAt(0)
-          sel.removeAllRanges()
-          const range = document.createRange()
-          range.selectNodeContents(el)
-          sel.addRange(range)
-          const text = sel.toString()
-          sel.removeAllRanges()
-          sel.addRange(tempRange)
-          return text.trim()
-        }
+        const sel = window.getSelection()
+        const tempRange = sel.getRangeAt(0)
+        sel.removeAllRanges()
+        const range = document.createRange()
+        range.selectNodeContents(el)
+        sel.addRange(range)
+        const text = sel.toString()
+        sel.removeAllRanges()
+        sel.addRange(tempRange)
+        return text.trim()
       }
       return el.innerText.trim()
     },
