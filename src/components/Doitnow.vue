@@ -106,7 +106,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
-import { USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/user'
 
 export default {
   components: {
@@ -229,7 +229,9 @@ export default {
     if (this.displayModal) {
       return
     }
-    this.slidesCopy = [...this.slides]
+    if (this.justRegistered) {
+      this.slidesCopy = [...this.slides]
+    }
     this.loadAllTasks()
   },
   methods: {
@@ -304,6 +306,8 @@ export default {
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
+      this.slidesCopy = [...this.slides]
+      this.loadAllTasks()
     },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
@@ -319,6 +323,9 @@ export default {
     nextTask: function () {
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
+        if (this.slidesCopy.length === 0) {
+          this.$store.commit(USER_JUST_REGISTERED_TOGGLE, false)
+        }
         return
       }
       this.readTask()
