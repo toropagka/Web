@@ -153,7 +153,7 @@ export default {
       return this.$store.state.isPropertiesMobileExpanded
     },
     displayModal () {
-      return !this.$store.state.onboarding.visitedModals?.includes('boards') && this.$store.state.onboarding.showModals
+      return !this.$store.state.onboarding?.visitedModals?.includes('boards') && this.$store.state?.onboarding?.showModals
     }
   },
   methods: {
