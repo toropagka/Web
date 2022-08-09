@@ -337,6 +337,13 @@ export default {
     sendSearchRequest () {
       if (this.lastGreedPath !== 'boards_children') {
         if (this.searchText.length > 3) {
+          // поиск задачи по ссылке из лидертаска настольного
+          if (this.searchText.startsWith('lt://planning?{')) {
+            const taskUid = this.searchText.slice(15, -1).toLowerCase()
+            const link = `${window.location.origin}/task/${taskUid}`
+            window.location = link
+            return
+          }
           const navElem = {
             name: 'Поиск: ' + this.searchText,
             key: 'taskListSource',

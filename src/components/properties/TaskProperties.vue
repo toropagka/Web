@@ -203,7 +203,6 @@
         v-if="canEditComment || selectedTask.comment.length > 0"
         :comment="selectedTask.comment ?? ''"
         :can-edit="canEditComment"
-        @scrollToEnd="scrollToEnd"
         @changeComment="onChangeComment"
       />
       <!-- Show all -->
@@ -446,9 +445,6 @@ export default {
   methods: {
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)
-    },
-    scrollToEnd () {
-      document.getElementById('aside-right').scrollTo(0, document.getElementById('taskPropsCommentEditor').scrollHeight)
     },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
@@ -780,19 +776,17 @@ export default {
         this.selectedTask.date_end = end
 
         if (!shouldAddTaskIntoList(this.selectedTask)) {
-          this.$store.dispatch(TASK.REMOVE_TASK, taskUid)
+          this.$store.commit(TASK.REMOVE_TASK, taskUid)
+          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
             .then(() => {
-              this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-                .then(() => {
-                  const calendarDates = computed(() => this.$store.state.calendar[1].dates)
-                  const daysWithTasks = computed(() => this.$store.state.tasks.daysWithTasks)
-                  for (let i = 0; i < calendarDates.value.length; i++) {
-                    const date = calendarDates.value[i].getDate() + '-' + (calendarDates.value[i].getMonth() + 1) + '-' + calendarDates.value[i].getFullYear()
-                    if (!daysWithTasks.value.includes(date)) {
-                      this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(calendarDates.value[i]), 1)
-                    }
-                  }
-                })
+              const calendarDates = computed(() => this.$store.state.calendar[1].dates)
+              const daysWithTasks = computed(() => this.$store.state.tasks.daysWithTasks)
+              for (let i = 0; i < calendarDates.value.length; i++) {
+                const date = calendarDates.value[i].getDate() + '-' + (calendarDates.value[i].getMonth() + 1) + '-' + calendarDates.value[i].getFullYear()
+                if (!daysWithTasks.value.includes(date)) {
+                  this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(calendarDates.value[i]), 1)
+                }
+              }
             })
           this.$store.dispatch('asidePropertiesToggle', false)
         }

@@ -19,9 +19,6 @@ export default {
     }
   },
   computed: {
-    test () {
-      return 1
-    },
     showQuestion () {
       // правильные ответы
       const creatorAnswers = []
@@ -37,6 +34,10 @@ export default {
         }
       }
       // проверяем совпадают ли элементы в массивах
+      if (userAnswers.length === 0) {
+        shouldShow = true
+        return shouldShow
+      }
       for (let i = 0; i < userAnswers.length; i++) {
         if (userAnswers[i]?.uid === creatorAnswers[i]?.uid) {
           shouldShow = false
@@ -50,5 +51,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>

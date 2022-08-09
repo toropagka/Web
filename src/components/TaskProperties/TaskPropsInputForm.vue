@@ -3,7 +3,7 @@
     v-if="isloading"
     src="/ajaxloader.gif"
   >
-  <div class="w-full mt-[40px]">
+  <div class="w-full mt-[20px]">
     <card-message-input
       v-model="taskMsg"
       :can-add-files="true"
@@ -14,7 +14,6 @@
 </template>
 <script>
 import * as INSPECTOR from '@/store/actions/inspector.js'
-import * as TASK from '@/store/actions/tasks.js'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput'
@@ -25,9 +24,13 @@ export default {
     task: {
       type: Object,
       default: () => ({})
+    },
+    answer: {
+      type: String,
+      default: ''
     }
   },
-  emits: ['readTask'],
+  emits: ['readTask', 'removeAnswerHint'],
   data: () => ({
     isloading: false,
     files: [],
@@ -92,7 +95,7 @@ export default {
         }
       }
     },
-    sendTaskMsg: function (msg) {
+    sendTaskMsg (msg) {
       let msgtask = msg || this.taskMsg
       console.log('msgtask', msgtask, msg, this.taskMsg)
       msgtask = this.taskMsg.trim()
@@ -107,7 +110,7 @@ export default {
         uid_msg: uid,
         date_create: new Date().toISOString(),
         deleted: 0,
-        uid_quote: this.currentAnswerMessageUid,
+        uid_quote: this.answer,
         text: msgtask,
         msg: msgtask
       }
@@ -131,43 +134,9 @@ export default {
           }
           this.selectedTask.msg = decodeURIComponent(this.taskMsg)
         })
-      this.currentAnswerMessageUid = ''
+      this.$emit('removeAnswerHint')
       this.taskMsg = ''
       this.readTask()
-    },
-    createTaskMsg: function () {
-      const date = new Date()
-      const month = this.pad2(date.getUTCMonth() + 1)
-      const day = this.pad2(date.getUTCDate())
-      const year = this.pad2(date.getUTCFullYear())
-      const hours = this.pad2(date.getUTCHours())
-      const minutes = this.pad2(date.getUTCMinutes())
-      const seconds = this.pad2(date.getUTCSeconds())
-      const dateCreate = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds
-      const uid = this.uuidv4()
-
-      const data = {
-        uid_task: this.task.uid,
-        uid_creator: this.user.current_user_uid,
-        uid: uid,
-        uid_msg: uid,
-        date_create: dateCreate,
-        text: this.taskMsg,
-        msg: this.taskMsg
-      }
-
-      this.$store.dispatch(MSG.CREATE_MESSAGE_REQUEST, data)
-        .then((resp) => {
-          this.$store.commit(TASK.HAS_MSGS, this.task.uid, true)
-          if (this.task.type === 2 || this.task.type === 3) {
-            if ([1, 5, 7, 8].includes(this.task.status)) {
-              this.selectedTask.status = 9
-            }
-          }
-          this.$store.commit(TASK.MSG_EQUAL, this.task, decodeURIComponent(this.taskMsg))
-          this.infoComplete = true
-        })
-      this.taskMsg = ''
     },
     createTaskFile (event) {
       this.files = event.target.files ? event.target.files : event.dataTransfer.files

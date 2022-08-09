@@ -1,6 +1,6 @@
-import { computed } from 'vue'
 import store from '@/store/index.js'
 import * as TYPES from '@/websync/types.js'
+import { computed } from 'vue'
 
 import processCreate from '@/websync/create.js'
 import processRemove from '@/websync/remove.js'
@@ -68,6 +68,7 @@ export default function initWebSync () {
         // никак не получить доступ к полю obj.obj.type
         // возвращает не то что там записано
         const obj = { ...JSON.parse(str) }
+        // console.log('websync obj', obj)
 
         parseObject(obj)
       } catch (e) {

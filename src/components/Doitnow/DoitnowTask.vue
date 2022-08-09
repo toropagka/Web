@@ -205,10 +205,53 @@
         :class="task.uid_marker !== '00000000-0000-0000-0000-000000000000' ? 'bg-white p-1 mt-1 rounded-lg' : ''"
       >
         <div class="mx-auto max-w-[540px]">
+          <div
+            v-if="currentAnswerMessageUid !== ''"
+            class="quote-request border-l-2 border-[#7E7E80] mt-[8px] h-[40px]"
+          >
+            <div class="flex flex-row items-center">
+              <div class="grow w-[calc(100%-20px)]">
+                <div
+                  class="mx-[4px]"
+                >
+                  <p class="text-[11px] leading-[16px] overflow-hidden text-black text-ellipsis whitespace-nowrap">
+                    <!-- Кому отвечают -->
+                    {{ messageQuoteUser }}
+                  </p>
+                  <p class="text-[12px] leading-[16px] overflow-hidden text-[#9a9fa6] text-ellipsis whitespace-nowrap">
+                    <!-- Сообщение на которое отвечают -->
+                    {{ messageQuoteString }}
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex-none"
+                @click="onAnswerMessage('')"
+              >
+                <svg
+                  class="m-[2px]"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.28481 4.30107C4.67082 3.90608 5.30395 3.8988 5.69893 4.28481L9.25 7.75517L12.8011 4.28481C13.1961 3.8988 13.8292 3.90608 14.2152 4.30107C14.6012 4.69605 14.5939 5.32918 14.1989 5.71519L10.6808 9.15341L14.1989 12.5916C14.5939 12.9776 14.6012 13.6108 14.2152 14.0058C13.8292 14.4007 13.1961 14.408 12.8011 14.022L9.25 10.5516L5.69893 14.022C5.30395 14.408 4.67082 14.4007 4.28481 14.0058C3.8988 13.6108 3.90608 12.9776 4.30107 12.5916L7.81925 9.15341L4.30107 5.71519C3.90608 5.32918 3.8988 4.69605 4.28481 4.30107Z"
+                    fill="#999999"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
           <!-- input -->
           <TaskPropsInputForm
             :task="task"
+            :answer="currentAnswerMessageUid"
             @readTask="readTask"
+            @removeAnswerHint="removeAnswerHint"
           />
           <!-- chat -->
           <TaskPropsChatMessages
@@ -220,7 +263,7 @@
             :current-user-uid="user.current_user_uid"
             :show-all-messages="true"
             :show-only-files="showOnlyFiles"
-            @answerMessage="answerMessage"
+            @answerMessage="onAnswerMessage"
             @sendTaskMsg="sendTaskMsg"
             @onPasteEvent="onPasteEvent"
             @deleteFiles="deleteFiles"
@@ -345,8 +388,8 @@ import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.v
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 
-import * as TASK from '@/store/actions/tasks'
 import * as INSPECTOR from '@/store/actions/inspector.js'
+import * as TASK from '@/store/actions/tasks'
 import * as MSG from '@/store/actions/taskmessages'
 import * as FILES from '@/store/actions/taskfiles.js'
 
@@ -618,6 +661,22 @@ export default {
       } else {
         return date + ' ' + dayName
       }
+    },
+    messageQuoteUser () {
+      if (!this.currentAnswerMessageUid) return ''
+      const quotedMessage = this.taskMessages.find(message => message.uid === this.currentAnswerMessageUid)
+      if (!quotedMessage) return ''
+      return this.employees[quotedMessage.uid_creator]?.name ?? '???'
+    },
+    messageQuoteString () {
+      if (!this.currentAnswerMessageUid) return ''
+      const quotedMessage = this.taskMessages.find(message => message.uid === this.currentAnswerMessageUid)
+      if (!quotedMessage) return ''
+      let msg = quotedMessage.msg.trim()
+      msg = msg.replaceAll('&amp;', '&')
+      msg = msg.replaceAll('&lt;', '<')
+      msg = msg.replaceAll('&gt;', '>')
+      return msg
     }
   },
   watch: {
@@ -628,6 +687,55 @@ export default {
     }
   },
   methods: {
+    sendTaskMsg (msg) {
+      const date = new Date()
+      const month = this.pad2(date.getUTCMonth() + 1)
+      const day = this.pad2(date.getUTCDate())
+      const year = this.pad2(date.getUTCFullYear())
+      const hours = this.pad2(date.getUTCHours())
+      const minutes = this.pad2(date.getUTCMinutes())
+      const seconds = this.pad2(date.getUTCSeconds())
+      const dateCreate = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds
+      const msgtask = this._linkify(msg)
+      const uid = this.uuidv4()
+
+      const data = {
+        uid_task: this.task.uid,
+        uid_creator: this.user.current_user_uid,
+        uid: uid,
+        uid_msg: uid,
+        uid_quote: this.currentAnswerMessageUid,
+        date_create: dateCreate,
+        deleted: 0,
+        text: msg,
+        msg: msgtask
+      }
+
+      this.$store.dispatch(MSG.CREATE_MESSAGE_REQUEST, data)
+        .then((resp) => {
+          const lastInspectorMessage = this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2].uid_creator === 'inspector' ? this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2] : false
+          console.log('lastInspectorMessage: ', lastInspectorMessage)
+          if (lastInspectorMessage) {
+            this.$store.dispatch(INSPECTOR.ANSWER_INSPECTOR_TASK, {
+              id: lastInspectorMessage.id,
+              answer: 1
+            }).then(() => {
+              lastInspectorMessage.performer_answer = 1
+            })
+          }
+
+          if (this.task.type === 2 || this.task.type === 3) {
+            if ([1, 5, 7, 8].includes(this.task.status)) {
+              this.$emit('changeValue', { status: 9 })
+            }
+          }
+        })
+      this.$emit('changeValue', { has_msgs: true })
+      this.taskMsg = ''
+    },
+    removeAnswerHint () {
+      this.currentAnswerMessageUid = ''
+    },
     readTask () {
       this.$emit('readTask')
     },
@@ -1008,52 +1116,7 @@ export default {
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       )
     },
-    sendTaskMsg (msg) {
-      const date = new Date()
-      const month = this.pad2(date.getUTCMonth() + 1)
-      const day = this.pad2(date.getUTCDate())
-      const year = this.pad2(date.getUTCFullYear())
-      const hours = this.pad2(date.getUTCHours())
-      const minutes = this.pad2(date.getUTCMinutes())
-      const seconds = this.pad2(date.getUTCSeconds())
-      const dateCreate = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds
-      const msgtask = this._linkify(msg)
-      const uid = this.uuidv4()
-
-      const data = {
-        uid_task: this.task.uid,
-        uid_creator: this.user.current_user_uid,
-        uid: uid,
-        uid_msg: uid,
-        date_create: dateCreate,
-        deleted: 0,
-        text: msg,
-        msg: msgtask
-      }
-
-      this.$store.dispatch(MSG.CREATE_MESSAGE_REQUEST, data)
-        .then((resp) => {
-          const lastInspectorMessage = this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2].uid_creator === 'inspector' ? this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2] : false
-          console.log('lastInspectorMessage: ', lastInspectorMessage)
-          if (lastInspectorMessage) {
-            this.$store.dispatch(INSPECTOR.ANSWER_INSPECTOR_TASK, {
-              id: lastInspectorMessage.id,
-              answer: 1
-            }).then(() => {
-              lastInspectorMessage.performer_answer = 1
-            })
-          }
-
-          if (this.task.type === 2 || this.task.type === 3) {
-            if ([1, 5, 7, 8].includes(this.task.status)) {
-              this.$emit('changeValue', { status: 9 })
-            }
-          }
-        })
-      this.$emit('changeValue', { has_msgs: true })
-      this.taskMsg = ''
-    },
-    onAnswerMessage: function (uid) {
+    onAnswerMessage (uid) {
       this.currentAnswerMessageUid = uid
     },
     onChangeDates: function (begin, end) {

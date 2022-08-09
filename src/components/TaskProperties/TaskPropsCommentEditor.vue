@@ -9,11 +9,10 @@
       class="font-[400] text-[14px] leading-[21px] text-[#4C4C4D]"
       :contenteditable="isEditable"
       :data-placeholder="placeholderComment"
-      @keydown="$emit('scrollToEnd')"
       @blur="changeComment($event)"
-      @keydown.esc="changeComment($event)"
+      @keydown.esc="$event.target.blur()"
       @paste="onPasteComment($event)"
-      v-html="commentHtmlText"
+      v-html="currHtmlText"
     />
   </div>
 </template>
@@ -35,16 +34,13 @@ export default {
       default: ''
     }
   },
-  emits: ['changeComment', 'scrollToEnd'],
+  emits: ['changeComment'],
   data: () => ({
     isEditable: false,
-    currText: '',
+    currHtmlText: '',
     onPaste_StripFormatting_IEPaste: false
   }),
   computed: {
-    commentHtmlText () {
-      return this.comment.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>')
-    },
     placeholderComment () {
       if (this.canEdit) return 'Добавить заметку...'
       return ''
@@ -55,7 +51,7 @@ export default {
     comment: {
       immediate: true,
       handler: function (val) {
-        this.currText = val
+        this.currHtmlText = val.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>')
       }
     }
   },
@@ -87,8 +83,34 @@ export default {
       if (!this.canEdit) return
       if (this.isEditable) return
       this.isEditable = true
+      // этот код ставит фокус в taskPropsCommentEditor
+      // и перемещает курсор в конец текста (или туда куда нажали)
       this.$nextTick(function () {
-        document.getElementById('taskPropsCommentEditor').focus()
+        const commentEditor = document.getElementById('taskPropsCommentEditor')
+        // ставим фокус
+        commentEditor.focus({ preventScroll: false })
+        // ставим курсор в конец
+        const range = document.createRange()
+        if (document.caretRangeFromPoint) {
+          // если браузер позволяет - берем позицию
+          // из положения курсора
+          const caretPos = document.caretRangeFromPoint(e.clientX, e.clientY)
+          range.setStart(caretPos.startContainer, caretPos.startOffset)
+          range.setEnd(caretPos.startContainer, caretPos.startOffset)
+        } else if (document.caretPositionFromPoint) {
+          // если браузер позволяет - берем позицию
+          // из положения курсора
+          const caretPos = document.caretPositionFromPoint(e.clientX, e.clientY)
+          range.setStart(caretPos.offsetNode, caretPos.offset)
+          range.setEnd(caretPos.offsetNode, caretPos.offset)
+        } else {
+          // если нет - то ставим курсор в конец текста
+          range.selectNodeContents(commentEditor)
+          range.collapse(false)
+        }
+        const sel = document.getSelection()
+        sel.removeAllRanges()
+        sel.addRange(range)
       })
     },
     /**
@@ -99,31 +121,28 @@ export default {
       // пытаемся достать текст из едита браузера
       // в котором сейчас идет ввод через Selection
       if (typeof window.getSelection !== 'undefined') {
-        const sel = document.getElementById('taskPropsCommentEditor')
-        // condition for removing console errors
-        if (sel && sel.rangeCount > 0) {
-          const tempRange = sel.getRangeAt(0)
-          sel.removeAllRanges()
-          const range = document.createRange()
-          range.selectNodeContents(el)
-          sel.addRange(range)
-          const text = sel.toString()
-          sel.removeAllRanges()
-          sel.addRange(tempRange)
-          return text.trim()
-        }
+        const sel = window.getSelection()
+        let tempRange = null
+        if (sel.rangeCount) tempRange = sel.getRangeAt(0)
+        sel.removeAllRanges()
+        const range = document.createRange()
+        range.selectNodeContents(el)
+        sel.addRange(range)
+        const text = sel.toString()
+        sel.removeAllRanges()
+        if (tempRange) sel.addRange(tempRange)
+        return text.trim()
       }
       return el.innerText.trim()
     },
     changeComment (e) {
       if (!this.canEdit) return
+      // не следить за его изменениями - если он не редактируемый
+      // (может ошибочно сюда попасть)
+      if (!this.isEditable) return
       const text = this.getElementText(e.target)
       this.isEditable = false
       if (text === this.comment) return
-      if (e?.key) {
-        document.getElementById('taskPropsCommentEditor').blur()
-      }
-      //
       this.$emit('changeComment', text)
     }
   }
@@ -131,10 +150,6 @@ export default {
 </script>
 
 <style scoped>
-h2{
-  font-size: 10px;
-}
-
 .description-content {
   width: 100%;
   font-size: 14px;

@@ -1,3 +1,140 @@
+<template>
+  <full-screen-section
+    v-slot="{ cardClass, cardRounded }"
+    bg="leadertask"
+  >
+    <img
+      src="https://www.leadertask.ru/templates/default/img/logo.svg"
+      class="mb-10"
+    >
+    <card-component
+      :class="cardClass"
+      :rounded="cardRounded"
+      form
+      @submit.prevent="submit"
+    >
+      <icon
+        v-if="form.showBackButton"
+        :path="mdiChevronLeft"
+        class="cursor-pointer"
+        size="24"
+        :box="'0 0 24 24'"
+        @click="getBack"
+      />
+      <p class="pb-4 pt-5 text-center text-2xl font-bold dark:text-white">
+        {{ form.startScreenText }}
+      </p>
+      <field>
+        <control
+          v-model="form.email"
+          :icon="form.emailMdi"
+          name="email"
+          :icon-class="form.emailIconClass"
+          placeholder="Email"
+          autocomplete="email"
+          type="email"
+          required
+          :disabled="form.emailControlDisabled"
+          @blur="checkEmailExistense"
+          @keyup.enter="checkEmailExistense"
+        />
+      </field>
+      <jb-button
+        v-if="form.showCheckButton"
+        class="w-full rounded-lg text-sm"
+        color="login"
+        :icon="mdiArrowRight"
+        label="Продолжить с Email"
+        @click="checkEmailExistense"
+      />
+
+      <transition-group name="slide-fade">
+        <div v-if="showValues.showLoginInputsValue">
+          <field>
+            <control
+              v-model="form.password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Пароль"
+              icon-class="cursor-pointer"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
+              :valid="form.password.length > 7"
+              @icon-click="togglePasswordVisibility"
+            />
+          </field>
+          <p
+            v-if="form.showError"
+            class="text-red-500 text-xs pb-3"
+          >
+            {{ form.errorMessage }}
+          </p>
+          <jb-button
+            type="submit"
+            class="w-full rounded-lg text-sm"
+            color="login"
+            :icon="mdiArrowRight"
+            label="Войти"
+          />
+          <a
+            href="https://www.leadertask.ru/user?t=passrecovery"
+            class="text-xs mt-5 text-blue-500 underline decoration-1"
+            target="_blank"
+          >
+            Забыли пароль?
+          </a>
+        </div>
+      </transition-group>
+
+      <transition-group name="slide-fade">
+        <div v-if="showValues.showRegisterInputsValue">
+          <field
+            help="Пароль (не менее 8 символов)"
+            :max-count="8"
+            :actual-count="form.password.length"
+          >
+            <control
+              v-model="form.password"
+              name="password"
+              placeholder="Пароль"
+              autocomplete="current-password"
+              icon-class="cursor-pointer"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
+              :valid="validatePassword"
+              @icon-click="togglePasswordVisibility"
+            />
+          </field>
+
+          <field
+            help="Введите ваше имя"
+            :max-count="3"
+            :actual-count="form.username.length"
+          >
+            <control
+              v-model="form.username"
+              type="text"
+              :icon="mdiAccountOutline"
+              name="username"
+              autocomplete="username"
+              placeholder="Имя пользователя"
+              :valid="form.username.length > 2"
+            />
+          </field>
+          <jb-button
+            type="submit"
+            color="login"
+            class="w-full rounded-lg text-sm"
+            :icon="mdiArrowRight"
+            label="Создать аккаунт"
+            :disabled="validatePassword"
+          />
+        </div>
+      </transition-group>
+    </card-component>
+  </full-screen-section>
+</template>
+
 <script>
 import axios from 'axios'
 import { mdiEmailOutline, mdiEyeOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
@@ -34,6 +171,7 @@ export default {
         showError: false,
         errorMessage: '',
         isEmailValid: false,
+        isPasswordInvalid: false,
         emailMdi: mdiEmailOutline,
         emailIconClass: '',
         emailControlDisabled: false,
@@ -46,6 +184,14 @@ export default {
         showRegisterInputsValue: false,
         showLoginInputsValue: false
       }
+    }
+  },
+  computed: {
+    validatePassword () {
+      if (this.form.password.length <= 7) {
+        return !this.isPasswordInvalid
+      }
+      return this.isPasswordInvalid
     }
   },
   methods: {
@@ -175,143 +321,6 @@ export default {
   }
 }
 </script>
-
-<template>
-  <full-screen-section
-    v-slot="{ cardClass, cardRounded }"
-    bg="leadertask"
-  >
-    <img
-      src="https://www.leadertask.ru/templates/default/img/logo.svg"
-      class="mb-10"
-    >
-    <card-component
-      :class="cardClass"
-      :rounded="cardRounded"
-      form
-      @submit.prevent="submit"
-    >
-      <icon
-        v-if="form.showBackButton"
-        :path="mdiChevronLeft"
-        class="cursor-pointer"
-        size="24"
-        :box="'0 0 24 24'"
-        @click="getBack"
-      />
-      <p class="pb-4 pt-5 text-center text-2xl font-bold dark:text-white">
-        {{ form.startScreenText }}
-      </p>
-      <field>
-        <control
-          v-model="form.email"
-          :icon="form.emailMdi"
-          name="email"
-          :icon-class="form.emailIconClass"
-          placeholder="Email"
-          autocomplete="email"
-          type="email"
-          required
-          :disabled="form.emailControlDisabled"
-          @blur="checkEmailExistense"
-          @keyup.enter="checkEmailExistense"
-        />
-      </field>
-      <jb-button
-        v-if="form.showCheckButton"
-        class="w-full rounded-lg text-sm"
-        color="login"
-        :icon="mdiArrowRight"
-        label="Продолжить с Email"
-        @click="checkEmailExistense"
-      />
-
-      <transition-group name="slide-fade">
-        <div v-if="showValues.showLoginInputsValue">
-          <field>
-            <control
-              v-model="form.password"
-              name="password"
-              autocomplete="current-password"
-              placeholder="Пароль"
-              icon-class="cursor-pointer"
-              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-              :type="form.showPassword ? 'text' : 'password'"
-              :valid="form.password.length > 7"
-              @icon-click="togglePasswordVisibility"
-            />
-          </field>
-          <p
-            v-if="form.showError"
-            class="text-red-500 text-xs pb-3"
-          >
-            {{ form.errorMessage }}
-          </p>
-          <jb-button
-            type="submit"
-            class="w-full rounded-lg text-sm"
-            color="login"
-            :icon="mdiArrowRight"
-            label="Войти"
-          />
-          <a
-            href="https://www.leadertask.ru/user?t=passrecovery"
-            class="text-xs mt-5 text-blue-500 underline decoration-1"
-            target="_blank"
-          >
-            Забыли пароль?
-          </a>
-        </div>
-      </transition-group>
-
-      <transition-group name="slide-fade">
-        <div v-if="showValues.showRegisterInputsValue">
-          <field
-            help="Пароль (не менее 8 символов)"
-            :max-count="8"
-            :actual-count="form.password.length"
-          >
-            <control
-              v-model="form.password"
-              name="password"
-              placeholder="Пароль"
-              autocomplete="current-password"
-              icon-class="cursor-pointer"
-              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-              :type="form.showPassword ? 'text' : 'password'"
-              :valid="form.password.length > 7"
-              @icon-click="togglePasswordVisibility"
-            />
-          </field>
-
-          <field
-            help="Введите ваше имя"
-            :max-count="3"
-            :actual-count="form.username.length"
-          >
-            <control
-              v-model="form.username"
-              type="text"
-              :icon="mdiAccountOutline"
-              name="username"
-              autocomplete="username"
-              placeholder="Имя пользователя"
-              :valid="form.username.length > 2"
-            />
-          </field>
-
-          <jb-button
-            type="submit"
-            color="login"
-            class="w-full rounded-lg text-sm"
-            :icon="mdiArrowRight"
-            label="Создать аккаунт"
-          />
-        </div>
-      </transition-group>
-    </card-component>
-  </full-screen-section>
-</template>
 
 <style>
 .error-message {

@@ -1,17 +1,18 @@
-import * as TYPES from '@/websync/types.js'
-import { updateTask } from '@/websync/task.js'
+import { updateBoard } from '@/websync/board'
 import { updateCard } from '@/websync/card.js'
+import { removeCardMessage } from '@/websync/card_message'
+import { updateColor } from '@/websync/colors_dop'
+import { updateDepartment } from '@/websync/departments'
 import { updateEmployee } from '@/websync/employee.js'
 import { updateProject } from '@/websync/project.js'
-import { removeCardMessage } from '@/websync/card_message'
-import { removeTaskMessage } from '@/websync/task_message'
-import { updateColor } from '@/websync/colors_dop'
-import { updateTag } from '@/websync/tag'
-import { updateDepartment } from '@/websync/departments'
 import { updateReglament } from '@/websync/reglaments.js'
-import { updateReglamentQuestion } from '@/websync/reglament_question'
 import { updateReglamentAnswer } from '@/websync/reglament_answer'
-import { updateBoard } from '@/websync/board'
+import { updateReglamentQuestion } from '@/websync/reglament_question'
+import { updateTag } from '@/websync/tag'
+import { updateTask } from '@/websync/task.js'
+import { removeTaskMessage } from '@/websync/task_message'
+import * as TYPES from '@/websync/types.js'
+import { updateCurrentUser } from '@/websync/user.js'
 
 export default function processUpdate (obj) {
   switch (obj.type) {
@@ -95,6 +96,9 @@ export default function processUpdate (obj) {
     case TYPES.TYPE_OBJECT_LOCALIZE:
       break
     case TYPES.TYPE_OBJECT_OPTIONS:
+      break
+    case TYPES.TYPE_OBJECT_CURRENT_USER:
+      updateCurrentUser(obj)
       break
   }
 }

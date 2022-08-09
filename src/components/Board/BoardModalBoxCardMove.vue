@@ -1,20 +1,23 @@
 <template>
   <ModalBox
-    title="Переместить карточку в колонку"
+    :title="title"
     ok="Переместить"
     @ok="onSave"
     @cancel="onCancel"
   >
-    <div class="w-full">
+    <div class="w-full overflow-y-auto max-h-[440px]">
+      <div class="ml-[4px] mb-[8px]">
+        Доска:
+      </div>
       <div
         class="grow flex flex-col mb-3"
-        @click="boardOpenedToggle"
+        @click="boardsOpenedToggle"
       >
         <div
           class="flex items-center w-full rounded-[6px] bg-[#f4f5f7] border border-black/12 px-[14px] py-[11px]"
         >
           <div class="flex-1 text-[#4c4c4d] text-[14px] leading-[16px] font-medium font-roboto">
-            {{ selectedBoard?.name || currentBoard.name }}
+            {{ selectedBoardName }}
           </div>
           <div
             class="flex-none"
@@ -56,25 +59,42 @@
           class="flex flex-col w-full gap-[9px] -mt-px bg-white border rounded-[6px] border-black/12 px-[16px] py-[14px]"
         >
           <div
-            v-for="board in anotherBoards"
+            v-for="board in myBoards"
             :key="board.uid"
             class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
-            @click="selectBoard(board)"
+            :style="{ 'margin-left': `${board.pad * 16}px` }"
+            @click="selectBoard(board.uid)"
           >
-            {{ board.name }} {{ board.email_creator === user.current_user_email ? '(Моя)' : '' }}
+            {{ board.name }} {{ board.uid === boardUid ? '(текущая)' : '' }}
+          </div>
+          <div
+            v-if="myBoards.length"
+            class="h-[16px]"
+          />
+          <div
+            v-for="board in commonBoards"
+            :key="board.uid"
+            class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
+            :style="{ 'margin-left': `${board.pad * 16}px` }"
+            @click="selectBoard(board.uid)"
+          >
+            {{ board.name }}
           </div>
         </div>
       </div>
 
+      <div class="ml-[4px] mb-[8px]">
+        Колонка:
+      </div>
       <div
         class="grow flex flex-col"
-        @click="stagesOpened = !stagesOpened"
+        @click="stagesOpenedToggle"
       >
         <div
           class="flex items-center w-full rounded-[6px] bg-[#f4f5f7] border border-black/12 px-[14px] py-[11px]"
         >
           <div class="flex-1 text-[#4c4c4d] text-[14px] leading-[16px] font-medium font-roboto">
-            {{ selectedStage?.Name ?? currentStageName ?? 'Выберете колонку' }}
+            {{ selectedStageName }}
           </div>
           <div
             class="flex-none"
@@ -116,12 +136,12 @@
           class="flex flex-col w-full gap-[9px] -mt-px bg-white border rounded-[6px] border-black/12 px-[16px] py-[14px]"
         >
           <div
-            v-for="(stage, index) in selectedBoard.stages"
+            v-for="(stage, index) in selectedBoardStages"
             :key="stage.UID"
             class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
-            @click="selectStage(stage, index)"
+            @click="selectStage(stage.UID)"
           >
-            {{ index + 1 }} - {{ stage.Name }} {{ checkIfCardInCurrentStage(stage) ? '(текущая)' : '' }}
+            {{ index + 1 }} - {{ stage.Name }} {{ stage.UID === stageUid ? '(текущая)' : '' }}
           </div>
         </div>
       </div>
@@ -141,27 +161,23 @@ export default {
       type: Boolean,
       default: false
     },
-    anotherBoards: {
-      type: Array || Object,
-      default: () => [],
-      require: true
+    title: {
+      type: String,
+      default: 'Переместить карточку'
     },
-    currentBoard: {
-      type: Object,
-      default: () => {},
-      require: true
+    boardUid: {
+      type: String,
+      default: ''
     },
-    currentCard: {
-      type: Object || Array,
-      default: () => {},
-      require: true
+    stageUid: {
+      type: String,
+      default: ''
     }
   },
   emits: ['changePosition', 'cancel'],
   data: () => ({
-    selectedPosition: 0,
-    selectedStage: null,
-    selectedBoard: null,
+    selectedStageUid: '',
+    selectedBoardUid: '',
     boardsOpened: false,
     stagesOpened: false
   }),
@@ -169,18 +185,68 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    currentStageName () {
-      let current
-      if (Array.isArray(this.currentCard)) {
-        // if we move several cards
-        current = this.selectedBoard?.stages.filter(stage => stage.UID === this.currentCard[0].uid_stage)[0]?.Name
-      } else {
-        current = this.selectedBoard?.stages.filter(stage => stage.UID === this.currentCard.uid_stage)[0]?.Name
+    boards () {
+      return this.$store.state.boards.boards
+    },
+    boardsCanEdit () {
+      const currentUserUid = this.user.current_user_uid
+      return Object.values(this.$store.state.boards.boards).filter(
+        item => item.members[currentUserUid] === 1 || item.members[currentUserUid] === 2
+      )
+    },
+    myBoards () {
+      const currentUserEmail = this.user.current_user_email.toLowerCase()
+      const arrMyBoards = this.boardsCanEdit.filter(board => board.email_creator.toLowerCase() === currentUserEmail)
+      arrMyBoards.sort((board1, board2) => {
+        let compare = board1.order - board2.order
+        if (compare === 0) compare = board1.name.localeCompare(board2.name)
+        return compare
+      })
+      const result = []
+      this.buildTree(result, arrMyBoards, '00000000-0000-0000-0000-000000000000', 0)
+      // сортируем остатки - чтобы без родителя были сверху
+      arrMyBoards.sort((board1, board2) => {
+        const board1HasParent = arrMyBoards.findIndex(board => board.uid === board1.uid_parent) === -1 ? 0 : 1
+        const board2HasParent = arrMyBoards.findIndex(board => board.uid === board2.uid_parent) === -1 ? 0 : 1
+        return board1HasParent - board2HasParent
+      })
+      this.buildTree(result, arrMyBoards, null, 0)
+      return result
+    },
+    commonBoards () {
+      const currentUserEmail = this.user.current_user_email.toLowerCase()
+      const arrCommonBoards = this.boardsCanEdit.filter(board => board.email_creator.toLowerCase() !== currentUserEmail)
+      arrCommonBoards.sort((board1, board2) => {
+        return board1.name.localeCompare(board2.name)
+      })
+      const result = []
+      this.buildTree(result, arrCommonBoards, '00000000-0000-0000-0000-000000000000', 0)
+      // сортируем остатки - чтобы без родителя были сверху
+      arrCommonBoards.sort((board1, board2) => {
+        const board1HasParent = arrCommonBoards.findIndex(board => board.uid === board1.uid_parent) === -1 ? 0 : 1
+        const board2HasParent = arrCommonBoards.findIndex(board => board.uid === board2.uid_parent) === -1 ? 0 : 1
+        return board1HasParent - board2HasParent
+      })
+      this.buildTree(result, arrCommonBoards, null, 0)
+      return result
+    },
+    selectedBoardName () {
+      const selectedBoard = this.boards[this.selectedBoardUid]
+      if (selectedBoard) return selectedBoard.name
+      return 'Выберете доску'
+    },
+    selectedStageName () {
+      const selectedBoard = this.boards[this.selectedBoardUid]
+      if (selectedBoard) {
+        const selectedStage = selectedBoard.stages.find(stage => stage.UID === this.selectedStageUid)
+        if (selectedStage) return selectedStage.Name
       }
-      if (current) {
-        return current + ' (текущая)'
-      }
-      return null
+      return 'Выберете колонку'
+    },
+    selectedBoardStages () {
+      const selectedBoard = this.boards[this.selectedBoardUid]
+      if (selectedBoard) return selectedBoard.stages
+      return []
     }
   },
   watch: {
@@ -189,48 +255,57 @@ export default {
       handler: function (val) {
         if (val) {
           this.stagesOpened = false
+          this.boardsOpened = false
+          this.selectedStageUid = this.stageUid
+          this.selectedBoardUid = this.boardUid
         }
       }
     }
-  },
-  mounted () {
-    this.selectedBoard = this.currentBoard
   },
   methods: {
     onCancel () {
       this.$emit('cancel')
     },
     onSave () {
-      if (
-        !this.selectedStage ||
-        this.selectedStage?.UID === this.currentCard.uid_stage ||
-        this.selectedStage?.UID === this.currentCard[0]?.uid_stage
-      ) {
+      if (this.selectedStageUid === this.stageUid &&
+          this.selectedBoardUid === this.boardUid) {
+        // ничего не поменялось - выходим
         this.onCancel()
         return
       }
-      if (this.selectedBoard === this.currentBoard && this.selectedStage.UID !== this.currentCard.uid_stage && !Array.isArray(this.currentCard)) {
-        this.$emit('changePosition', this.selectedPosition)
+      if (!this.selectedBoardUid || !this.selectedStageUid) {
+        // не выбрали доску или колонку - выходим
+        this.onCancel()
         return
       }
-      this.$emit('changePosition', { boardUid: this.selectedBoard.uid, stageUid: this.selectedStage.UID })
+      this.$emit('changePosition', { boardUid: this.selectedBoardUid, stageUid: this.selectedStageUid })
     },
-    boardOpenedToggle () {
+    stagesOpenedToggle () {
+      this.stagesOpened = !this.stagesOpened
+    },
+    boardsOpenedToggle () {
       this.boardsOpened = !this.boardsOpened
-      if (this.stagesOpened) {
-        this.stagesOpened = false
+    },
+    selectBoard (boardUid) {
+      if (this.selectedBoardUid === boardUid) return
+      this.selectedBoardUid = boardUid
+      this.selectedStageUid = this.selectedBoardStages[0]?.UID ?? ''
+      this.stagesOpened = false
+    },
+    selectStage (stageUid) {
+      if (this.selectedStageUid === stageUid) return
+      this.selectedStageUid = stageUid
+    },
+    buildTree (arrOut, arrIn, uidParent, treePos) {
+      let index = uidParent ? arrIn.findIndex(board => board.uid_parent === uidParent) : arrIn.findIndex(board => true)
+      while (index !== -1) {
+        const board = arrIn[index]
+        const sortedBoard = { uid: board.uid, name: board.name, pad: treePos }
+        arrOut.push(sortedBoard)
+        arrIn.splice(index, 1)
+        this.buildTree(arrOut, arrIn, sortedBoard.uid, treePos + 1)
+        index = uidParent ? arrIn.findIndex(board => board.uid_parent === uidParent) : arrIn.findIndex(board => true)
       }
-    },
-    selectBoard (board) {
-      this.selectedStage = null
-      this.selectedBoard = board
-    },
-    selectStage (stage, index) {
-      this.selectedStage = stage
-      this.selectedPosition = index
-    },
-    checkIfCardInCurrentStage (stage) {
-      return stage.UID === this.currentCard.uid_stage
     }
   }
 }
