@@ -112,7 +112,7 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
-      console.log('item', item.path)
+      console.log('item', item)
 
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
@@ -159,14 +159,14 @@ export default {
         return
       }
 
-      // colors
+      // colors & tags
       if (item.uid === 'ed8039ae-f3de-4369-8f32-829d401056e9' || item.uid === '00a5b3de-9474-404d-b3ba-83f488ac6d30') {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: item.path })
         const navElem = {
           name: item.label,
           key: 'greedSource',
-          greedPath: 'colors',
+          greedPath: item.path,
           value: this.storeNavigator[item.path]?.items
         }
         this.$store.commit('updateStackWithInitValue', navElem)

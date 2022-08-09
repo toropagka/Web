@@ -15,6 +15,7 @@ import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
+import { SELECT_TAG } from '@/store/actions/tasks'
 
 export default {
   components: {
@@ -78,6 +79,13 @@ export default {
     updateGridView (value) {
       this.$store.commit('basic', { key: 'isGridView', value: value })
       setLocalStorageItem('isGridView', value)
+    },
+    openProperties (tag) {
+      if (!this.$store.state.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', true)
+      }
+      this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
+      this.$store.commit(SELECT_TAG, tag)
     },
     gotoChildren (value) {
       this.$store.dispatch(TASK.TAG_TASKS_REQUEST, value.uid)
@@ -143,51 +151,6 @@ export default {
     }
   }
 }
-
-// const openProperties = (tag, parentTagUid = '') => {
-//   if (!isPropertiesMobileExpanded.value) {
-//     store.dispatch('asidePropertiesToggle', true)
-//   }
-
-//   focusedTag.value = tag.uid
-
-//   // add uid_parent if adding subtag in parent's children
-//   if (props.tags[0].uid_parent && props.tags[0].uid_parent !== '00000000-0000-0000-0000-000000000000' && !parentTagUid) {
-//     parentTagUid = props.tags[0].uid_parent
-//   }
-//   store.commit('basic', { key: 'propertiesState', value: 'tag' })
-//   if (!tag) {
-//     tag = {
-//       uid_parent: parentTagUid,
-//       back_color: '',
-//       comment: '',
-//       collapsed: 0,
-//       order: 0,
-//       group: 0,
-//       show: 0,
-//       children: [],
-//       favorite: 0,
-//       uid: '',
-//       name: '',
-//       bold: 0
-//     }
-//   }
-//   store.commit(TASK.SELECT_TAG, tag)
-// }
-
-// const goToChildren = (value) => {
-//   if (value.children && value.children.length) {
-//     const navElem = {
-//       name: value.name,
-//       key: 'greedSource',
-//       greedPath: 'tags_children',
-//       uid: value.uid,
-//       value: value.children
-//     }
-//     store.commit('pushIntoNavStack', navElem)
-//     store.commit('basic', { key: 'greedSource', value: value.children })
-//   }
-// }
 </script>
 
 <template>
@@ -247,7 +210,7 @@ export default {
         :count="tag.children?.length ?? 0"
         :color="tag.back_color"
         :title="tag.name"
-        @click="gotoChildren(tag)"
+        @click="openProperties(tag)"
       >
         <TagIcon />
       </ListBlocItem>
