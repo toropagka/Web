@@ -165,6 +165,8 @@ export default {
         this.$store.commit('updateStackWithInitValue', navElem)
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'other' })
+        // отображаем навбар в прочее
+        this.$store.state.onboarding.hideNavBar = false
         return
       }
 
