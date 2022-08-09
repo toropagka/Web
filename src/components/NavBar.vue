@@ -161,7 +161,10 @@ export default {
         />
       </nav-bar-item>
     </div>
-    <div class="nav-scroll">
+    <div
+      v-if="$store.state.onboarding.hideNavBar === false"
+      class="nav-scroll"
+    >
       <nav-bar-item
         v-for="(navItem, index) in navStack"
         :key="index"
@@ -189,6 +192,7 @@ export default {
     </div>
     <div>
       <NavButtonsRight
+        v-if="$store.state.onboarding.hideNavBar === false"
         @popNavBar="popNavBar"
       />
     </div>

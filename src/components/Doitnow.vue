@@ -106,7 +106,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
-import { setLocalStorageItem } from '@/store/helpers/functions'
+import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -200,14 +200,10 @@ export default {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
     },
     displayModal () {
-      return (!this.$store.state.user.visitedModals.includes('doitnow') || !this.onboadingFromLocalStorage?.visitedModals.includes('doitnow')) &&
-      (this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals)
-    },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+      return !this.$store.state.onboarding.visitedModals?.includes('doitnow') && this.$store.state.onboarding.showModals
     },
     justRegistered () {
-      return this.$store.state.user.justRegistered
+      return this.$store.state.onboarding.justRegistered
     }
   },
   watch: {
@@ -230,11 +226,12 @@ export default {
     }
   },
   mounted: function () {
-    if (this.displayModal) {
-      return
+    if (this.justRegistered) {
+      this.slidesCopy = [...this.slides]
     }
-    this.slidesCopy = [...this.slides]
-    this.loadAllTasks()
+    if (!this.displayModal) {
+      this.loadAllTasks()
+    }
   },
   methods: {
     loadAllTasks: function () {
@@ -307,11 +304,9 @@ export default {
         })
     },
     okToModal () {
-      this.$store.state.user.visitedModals.push('doitnow')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'doitnow']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
+      this.slidesCopy = [...this.slides]
+      this.loadAllTasks()
     },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
@@ -327,6 +322,9 @@ export default {
     nextTask: function () {
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
+        if (this.slidesCopy.length === 0) {
+          this.$store.commit(USER_JUST_REGISTERED_TOGGLE, false)
+        }
         return
       }
       this.readTask()

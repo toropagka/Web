@@ -75,7 +75,7 @@
     </div>
     <div
       v-if="displayModal"
-      class="flex flex-col items-center "
+      class="flex flex-col items-center"
     >
       <img
         class="mx-auto mt-10"
@@ -112,6 +112,7 @@ import * as TASK from '@/store/actions/tasks'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -126,7 +127,6 @@ export default {
   },
   data () {
     return {
-      displayModal: false,
       gridView,
       listView
     }
@@ -138,15 +138,9 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('assignment') && this.$store.state.onboarding.showModals
     }
-  },
-  mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('assignment') || this.onboadingFromLocalStorage?.visitedModals.includes('assignment')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     updateGridView (value) {
@@ -171,12 +165,7 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     okToModal () {
-      this.displayModal = false
-      this.$store.state.user.visitedModals.push('assignment')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'assignment']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'assignment')
     }
   }
 }

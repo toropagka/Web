@@ -128,6 +128,7 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 export default {
   components: {
     Icon,
@@ -147,7 +148,6 @@ export default {
     return {
       showProjectsLimit: false,
       showAddProject: false,
-      displayModal: false,
       gridView,
       listView
     }
@@ -163,15 +163,9 @@ export default {
     isEmpty () {
       return !this.items[0].items.length && !this.items[1].items.length
     },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
     }
-  },
-  mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('project') || this.onboadingFromLocalStorage?.visitedModals.includes('project')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   created () {
     setLocalStorageItem('isGridView', true)
@@ -263,12 +257,7 @@ export default {
       }
     },
     okToModal () {
-      this.displayModal = false
-      this.$store.state.user.visitedModals.push('project')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'project']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'project')
     }
   }
 }

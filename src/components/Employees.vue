@@ -264,6 +264,7 @@ import * as DEPARTMENT from '@/store/actions/departments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -299,8 +300,7 @@ export default {
       showMoveDep: false,
       showUsersLimit: false,
       showOtherOrg: false,
-      alreadyExist: false,
-      displayModal: false
+      alreadyExist: false
     }
   },
   computed: {
@@ -364,8 +364,8 @@ export default {
     depNames () {
       return this.allDepartments.map(dep => dep.name)
     },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('employee') && this.$store.state.onboarding.showModals
     }
   },
   watch: {
@@ -377,12 +377,6 @@ export default {
         }
       }
     }
-  },
-  mounted: function () {
-    if (this.$store.state.user.visitedModals.includes('employee') || this.onboadingFromLocalStorage?.visitedModals.includes('employee')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     print (msg, val) {
@@ -549,12 +543,7 @@ export default {
       }
     },
     okToModal () {
-      this.displayModal = false
-      this.$store.state.user.visitedModals.push('employee')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'employee']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'employee')
     }
   }
 }

@@ -278,7 +278,7 @@
 import Icon from '@/components/Icon.vue'
 import ready from '@/icons/ready.js'
 import * as TASK from '@/store/actions/tasks.js'
-import { setLocalStorageItem } from '@/store/helpers/functions'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -286,8 +286,6 @@ export default {
   },
   data () {
     return {
-      displayModal: false,
-
       ready,
 
       DATE_UID: '901841d9-0016-491d-ad66-8ee42d2b496b',
@@ -308,15 +306,9 @@ export default {
     isTags () { return this.navStackLastPath === 'tags' || this.navStackLastPath === 'tags_children' },
     isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
     isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
-  },
-  mounted () {
-    if (this.$store.state.user.visitedModals.includes('tasks') || this.onboadingFromLocalStorage?.visitedModals.includes('tasks')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals
   },
   methods: {
     dateToLabelFormat (calendarDate) {
@@ -349,12 +341,7 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     okToModal () {
-      this.displayModal = false
-      this.$store.state.user.visitedModals.push('tasks')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'tasks']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'tasks')
     }
   }
 }

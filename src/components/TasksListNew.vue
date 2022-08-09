@@ -24,6 +24,33 @@
     @cancel="showFreeModal = false"
   />
   <div
+    v-if="displayModal"
+    class="flex flex-col items-center"
+  >
+    <img
+      class="mx-auto mt-10"
+
+      width="320"
+      height="314"
+
+      src="/img/emptytask2.a127e727.png"
+      alt="Empty task image"
+    >
+    <p class="font-bold p-3">
+      Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+    </p>
+    <p class="text-sm p-3">
+      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
+    </p>
+    <button
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+      @click="okToModal"
+    >
+      Понятно
+    </button>
+  </div>
+  <div
+    v-if="!displayModal"
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
   >
@@ -321,6 +348,7 @@ import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHover
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -471,7 +499,7 @@ export default {
       return this.$store.state.tasks.loadedTasks
     },
     showOnboarding () {
-      return this.$store.state.user.showOnboarding
+      return this.$store.state.onboarding.showOnboarding
     },
     employees () {
       return this.$store.state.employees.employees
@@ -542,6 +570,9 @@ export default {
     },
     date () {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
+    },
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
   },
   watch: {
@@ -579,12 +610,6 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
-
-    if (this.$store.state.user.visitedModals.includes('today')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals
-    this.showOnboarding = this.$store.state.user.showOnboarding
   },
   methods: {
     scroll (step) {
@@ -839,6 +864,9 @@ export default {
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
         }
       })
+    },
+    okToModal () {
+      this.$store.commit(USER_VIEWED_MODAL, 'tasks')
     },
     copyTaskName (task) {
       navigator.clipboard.writeText(task.name)

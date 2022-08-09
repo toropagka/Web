@@ -9,13 +9,7 @@ import {
 
 const state = {
   user: null,
-  status: '',
-  justRegistered: localStorage.getItem('justRegistered'),
-  hasLoadedOnce: false,
-  visitedModals: [],
-  newUserTasks: false,
-  showOnboarding: false,
-  showModals: false
+  status: ''
 }
 
 const getters = {}
