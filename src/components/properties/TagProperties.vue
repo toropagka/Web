@@ -1,5 +1,12 @@
 <template>
   <div>
+    <BoardModalBoxRename
+      v-if="showModal"
+      :show="showModal"
+      title="Добавить подметку"
+      @cancel="showModal = false"
+      @save="createTag"
+    />
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить метку"
@@ -51,6 +58,40 @@
         />
       </div>
     </div>
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Подметки
+    </div>
+    <ListBlocAdd
+      class="mt-2"
+      @click="showModal = true"
+    />
+    <div>
+      <ListBlocItem
+        v-for="(child, idx) in selectedTag.children"
+        :key="idx"
+        class="mt-1"
+        :color="child.back_color"
+        :title="child.name"
+        @click="selectTag(child)"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12.1053 6.19143C12.2299 6.06141 12.4022 5.9879 12.5822 5.9879L17.3518 5.9879C17.7166 5.9879 18.0124 6.28367 18.0124 6.64852V11.4181C18.0124 11.5982 17.9389 11.7704 17.8089 11.895L11.8928 17.5646C11.6333 17.8133 11.2227 17.8089 10.9686 17.5548L6.44553 13.0317C6.19141 12.7776 6.18705 12.367 6.4357 12.1075L12.1053 6.19143ZM11.3464 5.07372L5.03431 11.6603C4.53701 12.1792 4.54574 13.0005 5.05398 13.5087L10.4916 18.9463C10.9998 19.4546 11.8211 19.4633 12.3401 18.966L18.9266 12.6539C19.1866 12.4047 19.3337 12.0601 19.3337 11.7V5.9879C19.3337 5.2582 18.7421 4.66666 18.0124 4.66666H12.3003C11.9402 4.66666 11.5956 4.81369 11.3464 5.07372ZM13.643 8.84632C13.8449 8.64439 14.1127 8.53321 14.3985 8.53321C14.6844 8.53321 14.9521 8.64439 15.1541 8.84632C15.356 9.04825 15.4672 9.31598 15.4672 9.60186C15.4672 9.88774 15.356 10.1555 15.1541 10.3574C14.9521 10.5593 14.6844 10.6705 14.3985 10.6705C14.1127 10.6705 13.8449 10.5593 13.643 10.3574C13.4411 10.1555 13.3299 9.88774 13.3299 9.60186C13.3299 9.31598 13.4411 9.04825 13.643 8.84632Z"
+            :fill="child.back_color"
+          />
+        </svg>
+      </ListBlocItem>
+    </div>
   </div>
 </template>
 
@@ -59,25 +100,33 @@ import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import PropsColorBoxItem from '@/components/Common/PropsColorBoxItem.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
+import ListBlocItem from '@/components/Common/ListBlocItem.vue'
+import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 
-import { UPDATE_TAG_REQUEST, REMOVE_TAG_REQUEST, CREATE_TAG_REQUEST } from '@/store/actions/tasks'
-import { NAVIGATOR_REMOVE_TAG } from '@/store/actions/navigator'
+import { UPDATE_TAG_REQUEST, REMOVE_TAG_REQUEST, CREATE_TAG_REQUEST, SELECT_TAG } from '@/store/actions/tasks'
+
+import { NAVIGATOR_REMOVE_TAG, NAVIGATOR_PUSH_TAG } from '@/store/actions/navigator'
 
 export default {
   components: {
     ModalBoxDelete,
     PropsColorBoxItem,
+    BoardModalBoxRename,
     PopMenu,
     PopMenuItem,
     PropsButtonMenu,
+    ListBlocAdd,
+    ListBlocItem,
     PropsButtonClose
   },
   data () {
     return {
       showConfirm: false,
-      currName: ''
+      currName: '',
+      showModal: false
     }
   },
   computed: {
@@ -117,6 +166,9 @@ export default {
     selectedTag () {
       return this.$store.state.tasks.selectedTag
     },
+    user () {
+      return this.$store.state.user.user
+    },
     selectedTagUid () {
       return this.selectedTag?.uid || ''
     },
@@ -144,7 +196,42 @@ export default {
       }
     }
   },
+  mounted () {
+    this.childrens = this.selectedTag.children
+  },
   methods: {
+    selectTag (tag) {
+      if (!this.$store.state.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', true)
+      }
+      this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
+      this.$store.commit(SELECT_TAG, tag)
+    },
+    createTag (name) {
+      this.showModal = false
+      const title = name.trim()
+      const tag = {
+        uid_parent: this.selectedTag.uid,
+        back_color: this.defaultColors[1][Math.floor(Math.random() * this.defaultColors[1].length - 1)].color,
+        comment: '',
+        collapsed: 0,
+        children: [],
+        order: 1,
+        group: 0,
+        show: 0,
+        favorite: 0,
+        uid: this.uuidv4(),
+        name: title,
+        email_creator: this.user.current_user_email,
+        bold: 0
+      }
+      this.$store.dispatch(CREATE_TAG_REQUEST, tag)
+        .then(() => {
+          tag.global_property_uid = '00a5b3de-9474-404d-b3ba-83f488ac6d30'
+          this.$store.commit(NAVIGATOR_PUSH_TAG, [tag])
+          this.$store.commit(SELECT_TAG, tag)
+        })
+    },
     uuidv4 () {
       return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
         (

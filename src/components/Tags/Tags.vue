@@ -86,6 +86,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
       this.$store.commit(SELECT_TAG, tag)
+      console.log(tag)
     },
     gotoChildren (value) {
       this.$store.dispatch(TASK.TAG_TASKS_REQUEST, value.uid)
