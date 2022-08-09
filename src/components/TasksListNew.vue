@@ -580,11 +580,11 @@ export default {
       }
     })
 
-    if (this.$store.state.user.visitedModals.includes('today')) {
-      return
-    }
-    this.displayModal = this.$store.state.user.showModals
-    this.showOnboarding = this.$store.state.user.showOnboarding
+    // if (this.$store.state.user.showModal && this.$store.state.user.visitedModals.includes('today')) {
+    //   return
+    // }
+    // this.displayModal = this.$store.state.user.showModals
+    // this.showOnboarding = this.$store.state.user.showOnboarding
   },
   methods: {
     scroll (step) {

@@ -106,7 +106,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
-import { setLocalStorageItem } from '@/store/helpers/functions'
+import { USER_VIEWED_MODAL } from '@/store/actions/user'
 
 export default {
   components: {
@@ -200,11 +200,7 @@ export default {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
     },
     displayModal () {
-      return (!this.$store.state.user.visitedModals.includes('doitnow') || !this.onboadingFromLocalStorage?.visitedModals.includes('doitnow')) &&
-      (this.$store.state.user.showModals || this.onboadingFromLocalStorage?.showModals)
-    },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
+      return !this.$store.state.user.visitedModals?.includes('doitnow') && this.$store.state.user.showModals
     },
     justRegistered () {
       return this.$store.state.user.justRegistered
@@ -307,11 +303,7 @@ export default {
         })
     },
     okToModal () {
-      this.$store.state.user.visitedModals.push('doitnow')
-      setLocalStorageItem('onboarding', JSON.stringify({
-        ...this.onboadingFromLocalStorage,
-        visitedModals: [...this.onboadingFromLocalStorage.visitedModals, 'doitnow']
-      }))
+      this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
     },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)

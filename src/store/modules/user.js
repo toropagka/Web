@@ -4,18 +4,22 @@ import {
   USER_CHANGE_PHOTO,
   USER_ERROR,
   USER_REQUEST,
-  USER_SUCCESS
+  USER_START_ONBOARDING,
+  USER_SUCCESS,
+  USER_VIEWED_MODAL
 } from '../actions/user'
+import { setLocalStorageItem } from '@/store/helpers/functions'
+import * as TASK from '@/store/actions/tasks'
 
 const state = {
   user: null,
   status: '',
   justRegistered: localStorage.getItem('justRegistered'),
   hasLoadedOnce: false,
-  visitedModals: [],
+  visitedModals: localStorage.getItem('visitedModals') ? JSON.parse(localStorage.getItem('visitedModals')) : null,
   newUserTasks: false,
   showOnboarding: false,
-  showModals: false
+  showModals: localStorage.getItem('visitedModals')
 }
 
 const getters = {}
@@ -71,6 +75,21 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [USER_START_ONBOARDING]: ({ commit, dispatch }, data) => {
+    commit(USER_START_ONBOARDING)
+
+    dispatch(TASK.TASKS_REQUEST)
+    const navElem = {
+      name: 'Сегодня',
+      key: 'taskListSource',
+      value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date() },
+      typeVal: new Date(),
+      type: 'date'
+    }
+    commit('updateStackWithInitValue', navElem)
+    commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
+    commit('basic', { key: 'mainSectionState', value: 'tasks' })
   }
 }
 
@@ -95,6 +114,20 @@ const mutations = {
     if (state.user) {
       state.user.current_user_name = name
     }
+  },
+  [USER_START_ONBOARDING]: (state) => {
+    setLocalStorageItem('visitedModals', JSON.stringify([]))
+    state.visitedModals = []
+    state.showModals = true
+
+    state.user.justRegistered = true
+    state.user.showModals = true
+    state.user.showOnboarding = true
+  },
+  [USER_VIEWED_MODAL]: (state, data) => {
+    const newData = state.visitedModals ? [...state.visitedModals, data] : [data]
+    setLocalStorageItem('visitedModals', JSON.stringify(newData))
+    state.visitedModals = newData
   }
 }
 
