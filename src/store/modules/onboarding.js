@@ -49,9 +49,9 @@ const mutations = {
     state.showModals = true
     state.hideNavBar = true
 
-    state.user.justRegistered = true
-    state.user.showModals = true
-    state.user.showOnboarding = true
+    state.justRegistered = true
+    state.showModals = true
+    state.showOnboarding = true
   },
   [USER_VIEWED_MODAL]: (state, data) => {
     const newData = state.visitedModals ? [...state.visitedModals, data] : [data]
