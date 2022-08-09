@@ -3,6 +3,7 @@ import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
 import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
+import Settings from '@/components/Settings.vue'
 import TaskFile from '@/views/TaskFile'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -133,6 +134,13 @@ const routes = [
     path: '/clients',
     name: 'clients',
     component: Empty,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
     beforeEnter: shouldRedirectToLogin
   },
   {

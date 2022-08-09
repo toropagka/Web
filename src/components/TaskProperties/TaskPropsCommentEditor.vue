@@ -120,6 +120,7 @@ export default {
       const text = this.getElementText(e.target)
       this.isEditable = false
       if (text === this.comment) return
+      console.log(e)
       if (e?.key) {
         document.getElementById('taskPropsCommentEditor').blur()
       }

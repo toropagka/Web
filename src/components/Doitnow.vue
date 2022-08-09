@@ -174,13 +174,21 @@ export default {
     }
   },
   mounted: function () {
-    this.$store.dispatch(NAVIGATOR_REQUEST)
-      .then(() => {
-        this.$store.dispatch(USER_REQUEST)
-          .then(() => {
-            this.loadAllTasks()
-          })
-      })
+    const navLoaded = this.$store.state.navigator.hasLoadedOnce
+    const userLoaded = this.$store.state.user.hasLoadedOnce
+    if (!navLoaded) {
+      this.$store.dispatch(NAVIGATOR_REQUEST)
+        .then(() => {
+          if (!userLoaded) {
+            this.$store.dispatch(USER_REQUEST)
+              .then(() => {
+                this.loadAllTasks()
+              })
+          }
+        })
+    } else {
+      this.loadAllTasks()
+    }
     this.$store.dispatch('fullScreenToggle', 'add')
   },
   methods: {

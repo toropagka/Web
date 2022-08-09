@@ -1,5 +1,4 @@
 <script>
-import EventAlert from '@/components/EventAlert.vue'
 import { DatePicker } from 'v-calendar'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
@@ -15,7 +14,6 @@ import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
-    EventAlert,
     DoitnowLimit,
     DatePicker,
     AsideMenuSkeleton,
@@ -38,6 +36,9 @@ export default {
   computed: {
     status () {
       return this.$store.state.navigator.status
+    },
+    lastTab () {
+      return this.$store.state.navigator.lastTab
     },
     isFullScreen () {
       return this.$store.state.isFullScreen
@@ -109,10 +110,17 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
-      console.log('item', item.path)
+      console.log('item', item)
 
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
+        const navElem = {
+          name: item.label,
+          key: 'greedSource',
+          value: { uid: item.uid, param: null },
+          greedPath: item.type
+        }
+        this.$store.commit('updateStackWithInitValue', navElem)
         return
       }
 
@@ -149,14 +157,14 @@ export default {
         return
       }
 
-      // colors
+      // colors & tags
       if (item.uid === 'ed8039ae-f3de-4369-8f32-829d401056e9' || item.uid === '00a5b3de-9474-404d-b3ba-83f488ac6d30') {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: item.path })
         const navElem = {
           name: item.label,
           key: 'greedSource',
-          greedPath: 'colors',
+          greedPath: item.path,
           value: this.storeNavigator[item.path]?.items
         }
         this.$store.commit('updateStackWithInitValue', navElem)
@@ -311,14 +319,14 @@ export default {
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-8 z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', $store.state.navigator.lastTab === 'directory' ? 'mt-[45px]' : '' ]"
+    class="w-[292px] fixed top-0 pt-[60px] z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <div class="mt-[10px]">
         <DatePicker
-          v-if="$store.state.navigator.lastTab === 'tasks'"
+          v-if="lastTab === 'tasks'"
           id="Maincalendar"
           ref="calendarclass"
           dot="true"
@@ -341,14 +349,6 @@ export default {
           @dayclick="onDayClick"
         />
       </div>
-      <EventAlert
-        v-if="user?.tarif === 'free' || user?.tarif === 'trial'"
-        :bg-color="'#FF912380'"
-        :text-color="'white'"
-        :user-icon="warn"
-        :link="'https://www.leadertask.ru/alpha'"
-        :message-text="user?.tarif === 'trial' ? 'Пробный тариф.' : 'Закончилась лицензия.'"
-      />
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">
           <div
@@ -370,7 +370,7 @@ export default {
           />
         </template>
         <ul
-          v-if="(favoriteBoards || favoriteProjects) && $store.state.navigator.lastTab === 'tasks'"
+          v-if="(favoriteBoards || favoriteProjects) && lastTab === 'tasks'"
           class="mt-[20px] mb-10"
         >
           <li

@@ -219,10 +219,10 @@ export default {
   },
   mounted () {
     this.requestNotificationPermissionOrShowModalBox()
-    if (this.$store.state.auth.token) {
-      this.$store.dispatch(USER_REQUEST)
-    }
-    if (this.$store.state.auth.token) {
+    const token = this.$store.state.auth.token
+    const userLoaded = this.$store.state.user.hasLoadedOnce
+    const navLoaded = this.$store.state.navigator.hasLoadedOnce
+    if (token && !userLoaded && !navLoaded) {
       this.$store.dispatch(USER_REQUEST).then(resp => {
         this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
         this.getNavigator()
