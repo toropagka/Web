@@ -1,5 +1,4 @@
 <script>
-import AsideMenu from '@/components/AsideMenu.vue'
 import Tabs from '@/components/Tabs/Tabs.vue'
 
 import { LOCALIZATION_REQUEST } from '@/store/actions/localization'
@@ -9,7 +8,6 @@ import { LOCALIZATION_REQUEST } from '@/store/actions/localization'
 // по этому консоль очищаем
 export default {
   components: {
-    AsideMenu,
     Tabs
   },
   computed: {
@@ -48,10 +46,6 @@ export default {
   <Tabs
     v-if="$store.state.auth.token"
     class="fixed left-0 top-0 z-[50] ml-3"
-  />
-  <AsideMenu
-    v-if="lastTab != '1' && lastTab != '5'"
-    :menu="menu"
   />
   <router-view />
 </template>

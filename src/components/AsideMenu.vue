@@ -1,5 +1,4 @@
 <script>
-import EventAlert from '@/components/EventAlert.vue'
 import { DatePicker } from 'v-calendar'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
@@ -15,7 +14,6 @@ import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
-    EventAlert,
     DoitnowLimit,
     DatePicker,
     AsideMenuSkeleton,
@@ -321,7 +319,7 @@ export default {
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-[60px] z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 pt-[60px] z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
     :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
@@ -351,14 +349,6 @@ export default {
           @dayclick="onDayClick"
         />
       </div>
-      <EventAlert
-        v-if="user?.tarif === 'free' || user?.tarif === 'trial'"
-        :bg-color="'#FF912380'"
-        :text-color="'white'"
-        :user-icon="warn"
-        :link="'https://www.leadertask.ru/alpha'"
-        :message-text="user?.tarif === 'trial' ? 'Пробный тариф.' : 'Закончилась лицензия.'"
-      />
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">
           <div
