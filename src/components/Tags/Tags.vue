@@ -65,6 +65,9 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
+    user () {
+      return this.$store.state.user.user
+    },
     storeTasks () {
       return this.$store.state.tasks.newtasks
     },
@@ -119,9 +122,8 @@ export default {
       )
     },
     clickAddTag () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
-      if (Object.keys(this.$store.state.tasks.tags).length >= 3 && user.days_left <= 0) {
+      if (Object.keys(this.$store.state.tasks.tags).length >= 3 && this.user.days_left <= 0) {
         this.showTagsLimit = true
         return
       }
@@ -142,12 +144,14 @@ export default {
         favorite: 0,
         uid: this.uuidv4(),
         name: title,
+        email_creator: this.user.current_user_email,
         bold: 0
       }
       this.$store.dispatch(TASK.CREATE_TAG_REQUEST, tag)
         .then(() => {
           tag.global_property_uid = '00a5b3de-9474-404d-b3ba-83f488ac6d30'
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_TAG, [tag])
+          this.openProperties(tag)
         })
     }
   }
