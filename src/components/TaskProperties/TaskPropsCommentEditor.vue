@@ -10,9 +10,9 @@
       :contenteditable="isEditable"
       :data-placeholder="placeholderComment"
       @blur="changeComment($event)"
-      @keydown.esc="changeComment($event)"
+      @keydown.esc="$event.target.blur()"
       @paste="onPasteComment($event)"
-      v-html="commentHtmlText"
+      v-html="currHtmlText"
     />
   </div>
 </template>
@@ -37,13 +37,10 @@ export default {
   emits: ['changeComment'],
   data: () => ({
     isEditable: false,
-    currText: '',
+    currHtmlText: '',
     onPaste_StripFormatting_IEPaste: false
   }),
   computed: {
-    commentHtmlText () {
-      return this.comment.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>')
-    },
     placeholderComment () {
       if (this.canEdit) return 'Добавить заметку...'
       return ''
@@ -54,7 +51,7 @@ export default {
     comment: {
       immediate: true,
       handler: function (val) {
-        this.currText = val
+        this.currHtmlText = val.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>')
       }
     }
   },
@@ -140,13 +137,12 @@ export default {
     },
     changeComment (e) {
       if (!this.canEdit) return
+      // не следить за его изменениями - если он не редактируемый
+      // (может ошибочно сюда попасть)
+      if (!this.isEditable) return
       const text = this.getElementText(e.target)
       this.isEditable = false
       if (text === this.comment) return
-      if (e?.key) {
-        document.getElementById('taskPropsCommentEditor').blur()
-      }
-      //
       this.$emit('changeComment', text)
     }
   }
@@ -154,10 +150,6 @@ export default {
 </script>
 
 <style scoped>
-h2{
-  font-size: 10px;
-}
-
 .description-content {
   width: 100%;
   font-size: 14px;
