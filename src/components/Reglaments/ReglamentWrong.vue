@@ -36,7 +36,10 @@ export default {
           userAnswers.push(this.question.answers[i])
         }
       }
-      // проверяем совпадают ли элементы в массивах
+      if (userAnswers.length === 0) {
+        shouldShow = true
+        return shouldShow
+      }
       for (let i = 0; i < userAnswers.length; i++) {
         if (userAnswers[i]?.uid === creatorAnswers[i]?.uid) {
           shouldShow = false
