@@ -17,6 +17,7 @@ const state = {
   justRegistered: localStorage.getItem('justRegistered'),
   hasLoadedOnce: false,
   visitedModals: localStorage.getItem('visitedModals') ? JSON.parse(localStorage.getItem('visitedModals')) : null,
+  hideNavBar: false,
   newUserTasks: false,
   showOnboarding: false,
   showModals: localStorage.getItem('visitedModals')
@@ -119,6 +120,7 @@ const mutations = {
     setLocalStorageItem('visitedModals', JSON.stringify([]))
     state.visitedModals = []
     state.showModals = true
+    state.hideNavBar = true
 
     state.user.justRegistered = true
     state.user.showModals = true
@@ -128,6 +130,7 @@ const mutations = {
     const newData = state.visitedModals ? [...state.visitedModals, data] : [data]
     setLocalStorageItem('visitedModals', JSON.stringify(newData))
     state.visitedModals = newData
+    state.hideNavBar = false
   }
 }
 

@@ -124,7 +124,17 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
-      console.log(item)
+      // скрывать навбар при онбординге
+      if ((!this.$store.state.user.visitedModals?.includes('assignment') ||
+      !this.$store.state.user.visitedModals?.includes('project') ||
+      !this.$store.state.user.visitedModals?.includes('tasks') ||
+      !this.$store.state.user.visitedModals?.includes('doitnow') ||
+      !this.$store.state.user.visitedModals?.includes('reglaments') ||
+      !this.$store.state.user.visitedModals?.includes('employee') ||
+      !this.$store.state.user.visitedModals?.includes('boards')) && this.$store.state.user.showModals) {
+        this.$store.state.user.hideNavBar = true
+      }
+      console.log(this.$store.state.user.visitedModals)
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
