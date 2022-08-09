@@ -3,6 +3,7 @@ import {
   USER_CHANGE_PHONE,
   USER_CHANGE_PHOTO,
   USER_ERROR,
+  USER_JUST_REGISTERED_TOGGLE,
   USER_REQUEST,
   USER_START_ONBOARDING,
   USER_SUCCESS,
@@ -79,6 +80,7 @@ const actions = {
   },
   [USER_START_ONBOARDING]: ({ commit, dispatch }, data) => {
     commit(USER_START_ONBOARDING)
+    commit(USER_JUST_REGISTERED_TOGGLE, true)
 
     dispatch(TASK.TASKS_REQUEST)
     const navElem = {
@@ -131,6 +133,13 @@ const mutations = {
     setLocalStorageItem('visitedModals', JSON.stringify(newData))
     state.visitedModals = newData
     state.hideNavBar = false
+  },
+  [USER_JUST_REGISTERED_TOGGLE]: (state, data) => {
+    state.justRegistered = data
+    setLocalStorageItem('justRegistered', data)
+    if (data === false) {
+      localStorage.removeItem('justRegistered')
+    }
   }
 }
 
