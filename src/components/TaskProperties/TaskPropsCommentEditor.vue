@@ -93,9 +93,14 @@ export default {
         // ставим фокус
         commentEditor.focus({ preventScroll: false })
         // ставим курсор в конец
-        console.log('editComment', e)
         const range = document.createRange()
-        if (document.caretPositionFromPoint) {
+        if (document.caretRangeFromPoint) {
+          // если браузер позволяет - берем позицию
+          // из положения курсора
+          const caretPos = document.caretRangeFromPoint(e.clientX, e.clientY)
+          range.setStart(caretPos.startContainer, caretPos.startOffset)
+          range.setEnd(caretPos.startContainer, caretPos.startOffset)
+        } else if (document.caretPositionFromPoint) {
           // если браузер позволяет - берем позицию
           // из положения курсора
           const caretPos = document.caretPositionFromPoint(e.clientX, e.clientY)
@@ -120,10 +125,8 @@ export default {
       // в котором сейчас идет ввод через Selection
       if (typeof window.getSelection !== 'undefined') {
         const sel = document.getElementById('taskPropsCommentEditor')
-        console.log('getElementText by sel pre')
         // condition for removing console errors
         if (sel && sel.rangeCount > 0) {
-          console.log('getElementText by sel')
           const tempRange = sel.getRangeAt(0)
           sel.removeAllRanges()
           const range = document.createRange()
@@ -135,7 +138,6 @@ export default {
           return text.trim()
         }
       }
-      console.log('getElementText by innerText')
       return el.innerText.trim()
     },
     changeComment (e) {
