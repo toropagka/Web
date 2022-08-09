@@ -20,7 +20,8 @@
           </p>
         </li>
         <button
-          class="bg-[#FF912380] px-5 h-[34px] rounded-[8px] text-black text-sm mr-[7px] hover:bg-[#F5DEB3]"
+          class="bg-[#424242] px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989]"
+
           @click="shouldShowInspector"
         >
           Добавить задачу
