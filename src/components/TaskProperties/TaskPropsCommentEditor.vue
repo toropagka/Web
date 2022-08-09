@@ -9,7 +9,6 @@
       class="font-[400] text-[14px] leading-[21px] text-[#4C4C4D]"
       :contenteditable="isEditable"
       :data-placeholder="placeholderComment"
-      @keydown="$emit('scrollToEnd')"
       @blur="changeComment($event)"
       @keydown.esc="changeComment($event)"
       @paste="onPasteComment($event)"
@@ -35,7 +34,7 @@ export default {
       default: ''
     }
   },
-  emits: ['changeComment', 'scrollToEnd'],
+  emits: ['changeComment'],
   data: () => ({
     isEditable: false,
     currText: '',
