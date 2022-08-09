@@ -127,7 +127,7 @@ import * as REGLAMENTS from '@/store/actions/reglaments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
-import { USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -184,7 +184,7 @@ export default {
       return reglaments
     },
     displayModal () {
-      return !this.$store.state.user.onboarding?.includes('reglaments') && this.$store.state.onboarding.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('reglaments') && this.$store.state.onboarding.showModals
     }
   },
   created () {

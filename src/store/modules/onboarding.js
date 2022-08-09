@@ -2,7 +2,7 @@ import {
   USER_JUST_REGISTERED_TOGGLE,
   USER_START_ONBOARDING,
   USER_VIEWED_MODAL
-} from '../actions/user'
+} from '../actions/onboarding.js'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import * as TASK from '@/store/actions/tasks'
 
@@ -57,6 +57,7 @@ const mutations = {
     const newData = state.visitedModals ? [...state.visitedModals, data] : [data]
     setLocalStorageItem('visitedModals', JSON.stringify(newData))
     state.visitedModals = newData
+    console.log(state.visitedModals)
     state.hideNavBar = false
   },
   [USER_JUST_REGISTERED_TOGGLE]: (state, data) => {

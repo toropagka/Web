@@ -278,7 +278,7 @@
 import Icon from '@/components/Icon.vue'
 import ready from '@/icons/ready.js'
 import * as TASK from '@/store/actions/tasks.js'
-import { USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {

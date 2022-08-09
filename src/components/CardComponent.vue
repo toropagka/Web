@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import Icon from '@/components/Icon.vue'
 import AccKarmaLimit from '@/components/AccKarmaLimit'
 import { useStore } from 'vuex'
-import { USER_START_ONBOARDING } from '@/store/actions/user'
+import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 
 const props = defineProps({
   title: {

@@ -264,7 +264,7 @@ import * as DEPARTMENT from '@/store/actions/departments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
-import { USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {

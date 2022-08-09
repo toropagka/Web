@@ -7,7 +7,7 @@ import Field from '@/components/Field.vue'
 import Icon from '@/components/Icon.vue'
 import Control from '@/components/Control.vue'
 import JbButton from '@/components/JbButton.vue'
-import { USER_START_ONBOARDING } from '@/store/actions/user'
+import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import { AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
 
 export default {

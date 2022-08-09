@@ -106,7 +106,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
-import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {

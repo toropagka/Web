@@ -348,7 +348,7 @@ import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHover
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
-import { USER_VIEWED_MODAL } from '@/store/actions/user'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -572,7 +572,7 @@ export default {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
     },
     displayModal () {
-      return !this.$store.state.user.onboarding?.includes('tasks') && this.$store.state.onboarding.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
   },
   watch: {
