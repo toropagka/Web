@@ -204,9 +204,11 @@ export default {
     @ok="showTagsLimit = false"
   />
   <div
-    class="w-full flex items-center justify-between mt-3 order-1"
+    class="w-full flex items-center justify-between order-1"
   >
-    <p class="text-2xl text-gray-800 font-bold second dark:text-gray-100 font-['Roboto']">
+    <p
+      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
+    >
       Метки
     </p>
     <div
@@ -233,7 +235,7 @@ export default {
     </div>
   </div>
   <div
-    class="grid gap-4 mt-3 order-2"
+    class="grid gap-2 mt-3 order-2"
     :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'grid-cols-1': !isGridView, 'grid-cols-1': isPropertiesMobileExpanded && !isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
   >
     <AddTag @click="clickAddTag" />
