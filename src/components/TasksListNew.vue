@@ -940,9 +940,6 @@ export default {
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
-            .then(() => {
-              console.log(document.getElementById('4830f40e-dae3-4bab-9112-b26e2a06ac38'))
-            })
         })
       }
     },
