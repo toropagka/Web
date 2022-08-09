@@ -36,6 +36,7 @@ export default {
           userAnswers.push(this.question.answers[i])
         }
       }
+      // проверяем совпадают ли элементы в массивах
       if (userAnswers.length === 0) {
         shouldShow = true
         return shouldShow
