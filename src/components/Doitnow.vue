@@ -226,13 +226,12 @@ export default {
     }
   },
   mounted: function () {
-    if (this.displayModal) {
-      return
-    }
     if (this.justRegistered) {
       this.slidesCopy = [...this.slides]
     }
-    this.loadAllTasks()
+    if (!this.displayModal) {
+      this.loadAllTasks()
+    }
   },
   methods: {
     loadAllTasks: function () {
