@@ -365,7 +365,7 @@ export default {
       return this.allDepartments.map(dep => dep.name)
     },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('employee') && this.$store.state.user.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('employee') && this.$store.state.onboarding.showModals
     }
   },
   watch: {

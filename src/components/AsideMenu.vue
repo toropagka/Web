@@ -125,9 +125,9 @@ export default {
     // TODO: clean up messy logic
     menuClick (event, item) {
       // скрывать навбар при онбординге
-      this.$store.state.user.hideNavBar = true
-      if (this.$store.state.user.visitedModals.includes(this.$store.state.user.hintUid[item.uid])) {
-        this.$store.state.user.hideNavBar = false
+      this.$store.state.onboarding.hideNavBar = true
+      if (this.$store.state.onboarding.visitedModals.includes(this.$store.state.onboarding.hintUid[item.uid])) {
+        this.$store.state.onboarding.hideNavBar = false
       }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)

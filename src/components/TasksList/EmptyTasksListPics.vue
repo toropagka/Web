@@ -307,7 +307,7 @@ export default {
     isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
     isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('tasks') && this.$store.state.user.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
   },
   methods: {

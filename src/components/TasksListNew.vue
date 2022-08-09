@@ -499,7 +499,7 @@ export default {
       return this.$store.state.tasks.loadedTasks
     },
     showOnboarding () {
-      return this.$store.state.user.showOnboarding
+      return this.$store.state.onboarding.showOnboarding
     },
     employees () {
       return this.$store.state.employees.employees
@@ -572,7 +572,7 @@ export default {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
     },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('tasks') && this.$store.state.user.showModals
+      return !this.$store.state.user.onboarding?.includes('tasks') && this.$store.state.onboarding.showModals
     }
   },
   watch: {
@@ -610,12 +610,6 @@ export default {
         store.dispatch('asidePropertiesToggle', false)
       }
     })
-
-    // if (this.$store.state.user.showModal && this.$store.state.user.visitedModals.includes('today')) {
-    //   return
-    // }
-    // this.displayModal = this.$store.state.user.showModals
-    // this.showOnboarding = this.$store.state.user.showOnboarding
   },
   methods: {
     scroll (step) {

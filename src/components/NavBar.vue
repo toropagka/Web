@@ -162,7 +162,7 @@ export default {
       </nav-bar-item>
     </div>
     <div
-      v-if="$store.state.user.hideNavBar === false"
+      v-if="$store.state.onboarding.hideNavBar === false"
       class="nav-scroll"
     >
       <nav-bar-item
@@ -192,7 +192,7 @@ export default {
     </div>
     <div>
       <NavButtonsRight
-        v-if="$store.state.user.hideNavBar === false"
+        v-if="$store.state.onboarding.hideNavBar === false"
         @popNavBar="popNavBar"
       />
     </div>

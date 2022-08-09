@@ -200,10 +200,10 @@ export default {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
     },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('doitnow') && this.$store.state.user.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('doitnow') && this.$store.state.onboarding.showModals
     },
     justRegistered () {
-      return this.$store.state.user.justRegistered
+      return this.$store.state.onboarding.justRegistered
     }
   },
   watch: {

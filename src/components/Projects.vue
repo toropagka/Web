@@ -164,7 +164,7 @@ export default {
       return !this.items[0].items.length && !this.items[1].items.length
     },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('project') && this.$store.state.user.showModals
+      return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
     }
   },
   created () {

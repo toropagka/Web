@@ -184,7 +184,7 @@ export default {
       return reglaments
     },
     displayModal () {
-      return !this.$store.state.user.visitedModals?.includes('reglaments') && this.$store.state.user.showModals
+      return !this.$store.state.user.onboarding?.includes('reglaments') && this.$store.state.onboarding.showModals
     }
   },
   created () {
