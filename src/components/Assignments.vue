@@ -138,9 +138,6 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    onboadingFromLocalStorage () {
-      return JSON.parse(localStorage.getItem('onboarding'))
-    },
     displayModal () {
       return !this.$store.state.user.visitedModals?.includes('assignment') && this.$store.state.user.showModals
     }
