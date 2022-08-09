@@ -125,14 +125,15 @@ export default {
       // в котором сейчас идет ввод через Selection
       if (typeof window.getSelection !== 'undefined') {
         const sel = window.getSelection()
-        const tempRange = sel.getRangeAt(0)
+        let tempRange = null
+        if (sel.rangeCount) tempRange = sel.getRangeAt(0)
         sel.removeAllRanges()
         const range = document.createRange()
         range.selectNodeContents(el)
         sel.addRange(range)
         const text = sel.toString()
         sel.removeAllRanges()
-        sel.addRange(tempRange)
+        if (tempRange) sel.addRange(tempRange)
         return text.trim()
       }
       return el.innerText.trim()
