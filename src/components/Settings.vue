@@ -1,18 +1,20 @@
 <template>
-  <acc-modal
-    v-if="currentSettingsTab === 'account'"
-    @currentSettingsTab="changeSettingsTab ('tarif')"
-    @AccLogout="logout()"
-  />
-  <acc-tarif
-    v-if="currentSettingsTab === 'tarif'"
-  />
-  <acc-option
-    v-if="currentSettingsTab === 'option'"
-  />
-  <acc-karma
-    v-if="currentSettingsTab === 'karma'"
-  />
+  <div class="mt-[30px]">
+    <acc-modal
+      v-if="currentSettingsTab === 'account'"
+      @currentSettingsTab="changeSettingsTab ('tarif')"
+      @AccLogout="logout()"
+    />
+    <acc-tarif
+      v-if="currentSettingsTab === 'tarif'"
+    />
+    <acc-option
+      v-if="currentSettingsTab === 'option'"
+    />
+    <acc-karma
+      v-if="currentSettingsTab === 'karma'"
+    />
+  </div>
 </template>
 <script>
 import AccKarma from '@/components/AccKarma.vue'

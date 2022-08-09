@@ -321,8 +321,8 @@ export default {
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-8 z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', lastTab === 'directory' ? 'mt-[45px]' : '' ]"
+    class="w-[292px] fixed top-[60px] z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
