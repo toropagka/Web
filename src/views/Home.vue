@@ -515,6 +515,15 @@ export default {
               key: 'greedPath',
               value: 'other'
             })
+          } else if (navStackUid === 'asfctmui-u70g-z7qr-1l1j-6zvud6yc255l') {
+            this.$store.commit('basic', {
+              key: 'mainSectionState',
+              value: 'greed'
+            })
+            this.$store.commit('basic', {
+              key: 'greedPath',
+              value: 'notifications'
+            })
           } else {
             this.$store.commit('basic', {
               key: 'greedPath',
