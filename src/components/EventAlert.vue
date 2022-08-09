@@ -1,19 +1,11 @@
 <template>
   <div
     :style="{ backgroundColor: bgColor, borderColor: borderColor, color: textColor }"
-    class="p-4 max-w-sm rounded-xl flex items-center space-x-4 mx-3.5 my-5 cursor-pointer"
+    class="p-2 rounded-[8px] border-2 flex text-sm items-center h-[36px] w-[185px] mt-1 cursor-pointer text-center"
     @click="redirect"
   >
-    <Icon
-      :path="userIcon.path"
-      class="flex-none h-7 w-7"
-      :style="{ color: textColor }"
-      :box="userIcon.viewBox"
-      :width="userIcon.width"
-      :height="userIcon.height"
-    />
     <p
-      class="w-full mx-3.5 font-semibold"
+      class="w-full mx-3.5"
       :style="{ color: textColor }"
     >
       {{ messageText }}
@@ -22,14 +14,7 @@
 </template>
 
 <script>
-import Icon from '@/components/Icon.vue'
-import DefaultIcon from '@/icons/msgs.js'
-import CloseIcon from '@/icons/close.js'
-
 export default {
-  components: {
-    Icon
-  },
   props: {
     bgColor: {
       type: String,
@@ -41,7 +26,7 @@ export default {
     },
     borderColor: {
       type: String,
-      default: 'white'
+      default: '#FF912380'
     },
     messageText: {
       type: String,
@@ -50,16 +35,6 @@ export default {
     link: {
       type: String,
       default: ''
-    },
-    userIcon: {
-      type: Object,
-      default: DefaultIcon
-    }
-  },
-  data () {
-    return {
-      DefaultIcon,
-      CloseIcon
     }
   },
   methods: {

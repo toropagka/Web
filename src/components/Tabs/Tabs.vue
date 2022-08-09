@@ -41,8 +41,17 @@
       class="flex"
     >
       <div class="flex flex-row w-full text-dark px-[16px] mt-[5px] h-[32px] items-center">
+        <div class="mr-[10px]">
+          <EventAlert
+            v-if="user?.tarif === 'free' || user?.tarif === 'trial'"
+            :border-color="'#FF912380'"
+            :text-color="'black'"
+            :link="'https://www.leadertask.ru/alpha'"
+            :message-text="'Продлить лицензию'"
+          />
+        </div>
         <div
-          class="group w-full cursor-pointer"
+          class="group w-full cursor-pointer mt-1"
           @click="gotoSettings"
         >
           <div class="flex items-center">
@@ -66,10 +75,12 @@
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import EventAlert from '@/components/EventAlert.vue'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 export default {
   components: {
-    InspectorModalBox
+    InspectorModalBox,
+    EventAlert
   },
   data () {
     return {
