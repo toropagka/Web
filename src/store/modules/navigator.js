@@ -387,7 +387,7 @@ const mutations = {
           path: 'colors'
         }
       ])
-    } else if (state.lastTab === 'clients') {
+    } else if (state.lastTab === 'settings') {
       state.menu.push([
         {
           label: 'Аккаунт',

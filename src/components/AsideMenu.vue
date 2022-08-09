@@ -39,6 +39,9 @@ export default {
     status () {
       return this.$store.state.navigator.status
     },
+    lastTab () {
+      return this.$store.state.navigator.lastTab
+    },
     isFullScreen () {
       return this.$store.state.isFullScreen
     },
@@ -113,6 +116,13 @@ export default {
 
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
+        const navElem = {
+          name: item.label,
+          key: 'greedSource',
+          value: { uid: item.uid, param: null },
+          greedPath: item.type
+        }
+        this.$store.commit('updateStackWithInitValue', navElem)
         return
       }
 
@@ -312,13 +322,13 @@ export default {
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
     class="w-[292px] fixed top-8 z-30 mt-2 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', $store.state.navigator.lastTab === 'directory' ? 'mt-[45px]' : '' ]"
+    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]', lastTab === 'directory' ? 'mt-[45px]' : '' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <div class="mt-[10px]">
         <DatePicker
-          v-if="$store.state.navigator.lastTab === 'tasks'"
+          v-if="lastTab === 'tasks'"
           id="Maincalendar"
           ref="calendarclass"
           dot="true"
@@ -370,7 +380,7 @@ export default {
           />
         </template>
         <ul
-          v-if="(favoriteBoards || favoriteProjects) && $store.state.navigator.lastTab === 'tasks'"
+          v-if="(favoriteBoards || favoriteProjects) && lastTab === 'tasks'"
           class="mt-[20px] mb-10"
         >
           <li
