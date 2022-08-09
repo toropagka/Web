@@ -261,9 +261,6 @@ export default {
       if (!messagePrev || !messageCurr) return false
       return messagePrev.uid_creator !== messageCurr.uid_creator
     },
-    sendTaskMsg (msg) {
-      this.$emit('sendTaskMsg', msg)
-    },
     answerInspectorMessage (message, answerType, answer) {
       if (message.performer_answer === null) {
         this.$store

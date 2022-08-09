@@ -9,9 +9,8 @@
   <BoardModalBoxCardMove
     v-if="showMoveCard"
     :show="showMoveCard"
-    :another-boards="anotherBoards"
-    :current-board="currentBoard"
-    :current-card="currentCard"
+    :stage-uid="selectedCard?.uid_stage"
+    :board-uid="selectedCard?.uid_board"
     @cancel="showMoveCard = false"
     @changePosition="onChangeCardPosition"
   />
@@ -205,23 +204,7 @@ export default {
       }
       return true
     },
-    usersColumnsCount () {
-      return this.usersColumns.length
-    },
-    canEdit () { return this.boards[this.selectedCard?.uid_board]?.type_access !== 0 },
-    currentBoard () {
-      const boards = this.$store.state.boards.boards
-      const navStack = this.$store.state.navbar.navStack
-      const currBoardUid = navStack[navStack.length - 1].uid
-      const board = boards[currBoardUid]
-      return board
-    },
-    anotherBoards () {
-      const currentUserUid = this.$store.state.user.user.current_user_uid
-      return Object.values(this.$store.state.boards.boards).filter(
-        item => item.members[currentUserUid] === 1 || item.members[currentUserUid] === 2
-      )
-    }
+    canEdit () { return this.boards[this.selectedCard?.uid_board]?.type_access !== 0 }
   },
   watch: {
     selectedCard (oldValue, newValue) {
@@ -251,17 +234,14 @@ export default {
         }
       }
     },
-
     scrollDown () {
       const asideRight = document.getElementById('aside-right')
       asideRight.scroll({ top: asideRight.scrollHeight + 100000 })
     },
-
     focusMessageInput () {
       const messageInput = document.getElementById('card-message-textarea')
       messageInput.focus()
     },
-
     changeResponsible (userEmail) {
       this.$store
         .dispatch(CHANGE_CARD_RESPONSIBLE_USER, {
@@ -272,7 +252,6 @@ export default {
           if (this.selectedCard) this.selectedCard.user = userEmail
         })
     },
-
     changeName (arg) {
       const data = { cardUid: this.selectedCard?.uid, name: arg.target.innerText.trim() }
       if (data.name === '') {
@@ -280,7 +259,6 @@ export default {
       }
       this.$store.dispatch(CHANGE_CARD_NAME, data)
     },
-
     changeCardBudget (budget) {
       const data = { cardUid: this.selectedCard?.uid, budget: budget * 100 }
       this.$store.dispatch(CHANGE_CARD_BUDGET, data).then((resp) => {
@@ -288,11 +266,9 @@ export default {
         this.showChangeCardBudget = false
       })
     },
-
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)
     },
-
     uuidv4 () {
       return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
         (
@@ -301,14 +277,12 @@ export default {
         ).toString(16)
       )
     },
-
     changeComment (text) {
       if (!this.selectedCard) return
       const data = { cardUid: this.selectedCard.uid, comment: text }
       this.$store.dispatch(CHANGE_CARD_COMMENT, data)
       this.selectedCard.comment = text
     },
-
     createCardFile (event) {
       if (event === false) {
         this.showMessagesLimit = true
@@ -329,20 +303,16 @@ export default {
         this.scrollDown()
       })
     },
-
     setCurrentQuote (quote) {
       this.currentQuote = quote
       this.focusMessageInput()
     },
-
     deleteCardMessage (uid) {
       this.$store.dispatch(DELETE_MESSAGE_REQUEST, uid)
     },
-
     deleteCardFileMessage (uid) {
       this.$store.dispatch(DELETE_FILE_REQUEST, uid)
     },
-
     createCardMessage () {
       // если лицензия истекла
       if (this.user.days_left <= 0) {
@@ -377,7 +347,6 @@ export default {
         this.scrollDown()
       })
     },
-
     changeCardClearCover () {
       this.$store
         .dispatch(CHANGE_CARD_CLEAR_COVER, { cardUid: this.selectedCard?.uid })
@@ -390,7 +359,8 @@ export default {
           for (const message of resp.data.deletefiles) {
             this.$store.commit(REMOVE_MESSAGE_LOCALLY, message)
           }
-          // Here I use nextTick because if we instantly start adding new files, then onMounted hook won't be triggered, MAGIC but works
+          // Here I use nextTick because if we instantly start adding new files,
+          // then onMounted hook won't be triggered, MAGIC but works
           this.$nextTick(() => {
             for (const message of resp.data.newfiles) {
               this.$store.commit(ADD_MESSAGE_LOCALLY, message)
@@ -398,7 +368,6 @@ export default {
           })
         })
     },
-
     changeCardColor (color) {
       if (color) {
         this.$store
@@ -415,7 +384,8 @@ export default {
             for (const message of resp.data.deletefiles) {
               this.$store.commit(REMOVE_MESSAGE_LOCALLY, message)
             }
-            // Here I use nextTick because if we instantly start adding new files, then onMounted hook won't be triggered, MAGIC but works
+            // Here I use nextTick because if we instantly start adding new files,
+            // then onMounted hook won't be triggered, MAGIC but works
             this.$nextTick(() => {
               for (const message of resp.data.newfiles) {
                 this.$store.commit(ADD_MESSAGE_LOCALLY, message)
@@ -426,7 +396,6 @@ export default {
         this.changeCardClearCover()
       }
     },
-
     changeCardCover (event) {
       const files = event.target.files
       const formData = new FormData()
@@ -447,7 +416,8 @@ export default {
         for (const message of resp.data.deletefiles) {
           this.$store.commit(REMOVE_MESSAGE_LOCALLY, message)
         }
-        // Here I use nextTick because if we instantly start adding new files, then onMounted hook won't be triggered, MAGIC but works
+        // Here I use nextTick because if we instantly start adding new files,
+        // then onMounted hook won't be triggered, MAGIC but works
         this.$nextTick(() => {
           for (const message of resp.data.newfiles) {
             this.$store.commit(ADD_MESSAGE_LOCALLY, message)
@@ -455,7 +425,6 @@ export default {
         })
       })
     },
-
     removeCard () {
       this.$store.dispatch(DELETE_CARD, { uid: this.selectedCard?.uid })
         .then(() => {
@@ -464,7 +433,6 @@ export default {
         })
     },
     moveCard (cardUid, stageUid, newOrder) {
-      console.log(cardUid, stageUid, newOrder)
       this.closeProperties()
       this.$store
         .dispatch(CARD.MOVE_CARD, { uid: cardUid, stageUid, newOrder })
@@ -481,6 +449,15 @@ export default {
       )
       return Math.floor(minOrder) - 1
     },
+    getNewMaxCardsOrderAtColumn (columnUid) {
+      const column = this.storeCards.find((stage) => stage.UID === columnUid)
+      if (!column || !column.cards.length) return 1.0
+      const maxOrder = column.cards.reduce(
+        (maxOrder, card) => (card.order > maxOrder ? card.order : maxOrder),
+        Number.MIN_VALUE
+      )
+      return Math.floor(maxOrder) + 1
+    },
     moveSuccessCard () {
       const successStage = 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67'
       this.moveCard(this.selectedCard.uid, successStage, this.getNewMinCardsOrderAtColumn(successStage))
@@ -490,23 +467,18 @@ export default {
       this.moveCard(this.selectedCard.uid, rejectStage, this.getNewMinCardsOrderAtColumn(rejectStage))
     },
     onChangeCardPosition (position) {
-      this.currentCard = this.$store.state.cards.selectedCard
-      if (typeof position !== 'object' && typeof position === 'number') {
-        const column = this.usersColumns[position]
-        if (this.currentCard && column) {
-          this.moveCard(this.currentCard.uid, column.UID)
-        }
-      } else {
-        this.$store.dispatch('asidePropertiesToggle', false)
-        const newCard = { ...this.currentCard, uid_board: position.boardUid, uid_stage: position.stageUid }
-        this.$store.dispatch(CARD.MOVE_CARD_TO_ANOTHER_BOARD, newCard)
-      }
       this.showMoveCard = false
+      //
+      this.closeProperties()
+      const data = {
+        cards: [{ uid: this.selectedCard.uid, order: this.getNewMaxCardsOrderAtColumn(position.stageUid) }],
+        boardTo: position.boardUid,
+        stageTo: position.stageUid
+      }
+      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
     },
-    moveColumnCard (card) {
-      this.currentCard = this.$store.state.cards.selectedCard
+    moveColumnCard () {
       this.showMoveCard = true
-      card = this.currentCard
     }
   }
 }

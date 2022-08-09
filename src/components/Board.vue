@@ -61,11 +61,19 @@
     <BoardModalBoxCardMove
       v-if="showMoveCard"
       :show="showMoveCard"
-      :another-boards="anotherBoards"
-      :current-board="board"
-      :current-card="currentCard"
+      :stage-uid="currentCard.uid_stage"
+      :board-uid="currentCard.uid_board"
       @cancel="showMoveCard = false"
       @changePosition="onChangeCardPosition"
+    />
+    <BoardModalBoxCardMove
+      v-if="showMoveAllCards"
+      :show="showMoveAllCards"
+      title="Переместить все карточки колонки"
+      :stage-uid=" selectedColumn.UID"
+      :board-uid="board.uid"
+      @cancel="showMoveAllCards = false"
+      @changePosition="onChangeAllCardsPosition"
     />
     <div class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style">
       <template
@@ -141,7 +149,7 @@
                   <PopMenuItem
                     v-if="column.AddCard"
                     icon="move"
-                    @click="moveColumnCard('', column)"
+                    @click="clickMoveAllColumnCards(column)"
                   >
                     Переместить все карточки
                   </PopMenuItem>
@@ -241,7 +249,9 @@
                   @delete="deleteCard(element)"
                   @moveSuccess="moveSuccessCard(element)"
                   @moveReject="moveRejectCard(element)"
-                  @moveColumn="moveColumnCard(element)"
+                  @moveColumn="onClickMoveCard(element)"
+                  @moveCardToTop="moveCardToTop(element)"
+                  @moveCardToBottom="moveCardToBottom(element)"
                 />
               </template>
             </draggable>
@@ -361,6 +371,7 @@ export default {
       currentCard: null,
       dragCardParam: null,
       showMoveCard: false,
+      showMoveAllCards: false,
       selectedCardUid: ''
     }
   },
@@ -382,12 +393,6 @@ export default {
     },
     columnsNames () {
       return this.usersColumns.map((column) => column.Name)
-    },
-    currentCardColumnOrder () {
-      if (!this.currentCard) return -1
-      return this.usersColumns.findIndex(
-        (column) => column.UID === this.currentCard.uid_stage
-      )
     },
     status () {
       return this.$store.state.cards.status
@@ -415,12 +420,6 @@ export default {
     },
     isFiltered () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWithNoResponsible || this.showOnlyCardsWhereIAmResponsible || this.showOnlySearchText
-    },
-    anotherBoards () {
-      const currentUserUid = this.$store.state.user.user.current_user_uid
-      return Object.values(this.$store.state.boards.boards).filter(
-        item => item.members[currentUserUid] === 1 || item.members[currentUserUid] === 2
-      )
     }
   },
   watch: {
@@ -489,6 +488,8 @@ export default {
       return ''
     },
     getColumnCards (column) {
+      if (!column?.cards?.length) return []
+      //
       if (this.showOnlyCardsWhereIAmResponsible && this.showOnlyMyCreatedCards) {
         const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
         return column.cards.filter(card => card.user.toLowerCase() === currentUserEmail && card.email_creator.toLowerCase() === currentUserEmail)
@@ -666,6 +667,15 @@ export default {
       )
       return Math.floor(minOrder) - 1
     },
+    getNewMaxCardsOrderAtColumn (columnUid) {
+      const column = this.storeCards.find((stage) => stage.UID === columnUid)
+      if (!column || !column.cards.length) return 1.0
+      const maxOrder = column.cards.reduce(
+        (maxOrder, card) => (card.order > maxOrder ? card.order : maxOrder),
+        Number.MIN_VALUE
+      )
+      return Math.floor(maxOrder) + 1
+    },
     moveSuccessCard (card) {
       const successStage = 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67'
       this.moveCard(card.uid, successStage, this.getNewMinCardsOrderAtColumn(successStage))
@@ -674,45 +684,51 @@ export default {
       const rejectStage = 'e70af5e2-6108-4c02-9a7d-f4efee78d28c'
       this.moveCard(card.uid, rejectStage, this.getNewMinCardsOrderAtColumn(rejectStage))
     },
-    moveColumnCard (card, column) {
+    onClickMoveCard (card) {
       this.showMoveCard = true
-      if (card === '' && column) {
-        this.currentCard = column.cards
-        return
-      }
       this.currentCard = card
+    },
+    moveCardToTop (card) {
+      const column = card.uid_stage
+      this.moveCard(card.uid, column, this.getNewMinCardsOrderAtColumn(column))
+    },
+    moveCardToBottom (card) {
+      const column = card.uid_stage
+      this.moveCard(card.uid, column, this.getNewMaxCardsOrderAtColumn(column))
+    },
+    clickMoveAllColumnCards (column) {
+      this.showMoveAllCards = true
+      this.selectedColumn = column
     },
     onChangeCardPosition (position) {
       this.showMoveCard = false
-
-      if (Array.isArray(this.currentCard) && typeof position === 'object') {
-        const cards = this.currentCard.map(item => {
-          return {
-            uid: item.uid,
-            order: item.order
-          }
-        })
-        const data = {
-          cards,
-          boardFrom: this.board,
-          boardTo: position.boardUid,
-          stageTo: position.stageUid
-        }
-        this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
-          .then(res => {
-            res.data.forEach(card => {
-              this.$store.commit(CARD.CHANGE_CARD, card)
-            })
-          })
-      } else if (typeof position === 'number') {
-        const column = this.usersColumns[position]
-        if (this.currentCard && column) {
-          this.moveCard(this.currentCard.uid, column.UID)
-        }
-      } else if (typeof position === 'object' && this.board.uid !== position.boardUid) {
-        const newCard = { ...this.currentCard, uid_board: position.boardUid, uid_stage: position.stageUid }
-        this.$store.dispatch(CARD.MOVE_CARD_TO_ANOTHER_BOARD, newCard)
+      const data = {
+        cards: [{ uid: this.currentCard.uid, order: this.getNewMaxCardsOrderAtColumn(position.stageUid) }],
+        boardTo: position.boardUid,
+        stageTo: position.stageUid
       }
+      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
+    },
+    onChangeAllCardsPosition (position) {
+      this.showMoveAllCards = false
+      // расчет порядка должен по идее происходить на сервере
+      // а не на нашей стороне
+      let newOrder = this.getNewMaxCardsOrderAtColumn(position.stageUid) - 1
+      const cards = this.getColumnCards(this.selectedColumn).map(card => {
+        newOrder += 1
+        return {
+          uid: card.uid,
+          order: newOrder
+        }
+      })
+      if (!cards.length) return
+      //
+      const data = {
+        cards,
+        boardTo: position.boardUid,
+        stageTo: position.stageUid
+      }
+      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
     },
     onDeleteCard () {
       this.$store.dispatch('asidePropertiesToggle', false)

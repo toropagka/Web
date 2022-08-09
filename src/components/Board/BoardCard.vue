@@ -73,6 +73,16 @@
             >
               Переместить
             </PopMenuItem>
+            <PopMenuItem
+              @click="clickMoveToTop"
+            >
+              Переместить в самый верх
+            </PopMenuItem>
+            <PopMenuItem
+              @click="clickMoveToBottom"
+            >
+              Переместить в самый низ
+            </PopMenuItem>
             <PopMenuDivider v-if="!isArchive" />
             <PopMenuItem
               v-if="!isArchive"
@@ -266,7 +276,7 @@ export default {
       default: false
     }
   },
-  emits: ['select', 'moveSuccess', 'moveReject', 'moveColumn', 'delete'],
+  emits: ['select', 'moveSuccess', 'moveReject', 'moveColumn', 'delete', 'moveCardToTop', 'moveCardToBottom'],
   computed: {
     isArchive () {
       return (
@@ -419,6 +429,12 @@ export default {
     },
     clickMove () {
       this.$emit('moveColumn')
+    },
+    clickMoveToTop () {
+      this.$emit('moveCardToTop')
+    },
+    clickMoveToBottom () {
+      this.$emit('moveCardToBottom')
     }
   }
 }

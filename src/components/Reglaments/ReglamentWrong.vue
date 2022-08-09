@@ -19,9 +19,6 @@ export default {
     }
   },
   computed: {
-    test () {
-      return 1
-    },
     showQuestion () {
       // правильные ответы
       const creatorAnswers = []
@@ -50,5 +47,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>
