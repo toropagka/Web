@@ -75,7 +75,7 @@
     </div>
     <div
       v-if="displayModal"
-      class="flex flex-col items-center "
+      class="flex flex-col items-center"
     >
       <img
         class="mx-auto mt-10"
