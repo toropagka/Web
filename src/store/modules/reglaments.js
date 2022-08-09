@@ -5,7 +5,9 @@ const state = {
   reglaments: {},
   showAll: false,
   reglamentQuestions: [], // вопросы по текущему регламенту
-  contributors: [] // сотрудники, прошедшие текущий регламент
+  contributors: [], // сотрудники, прошедшие текущий регламент
+  questionsToDelete: [],
+  answersToDelete: []
 }
 
 const actions = {
@@ -153,7 +155,22 @@ const actions = {
 
 const mutations = {
   [REGLAMENTS.REGLAMENT_SUCCESS]: (state, data) => {
-    state.reglamentQuestions = data
+    state.reglamentQuestions = data.map(reglamentQuestion => {
+      const answers = reglamentQuestion.answers?.map(answer => {
+        return {
+          ...answer,
+          needToCreate: false,
+          needToUpdate: false
+        }
+      })
+
+      return {
+        ...reglamentQuestion,
+        answers,
+        needToCreate: false,
+        needToUpdate: false
+      }
+    })
   },
   [REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS]: (state) => {
     state.contributors = []
@@ -183,6 +200,7 @@ const mutations = {
     for (let i = 0; i < state.reglamentQuestions.length; i++) {
       if (state.reglamentQuestions[i].uid === data.uid) {
         state.reglamentQuestions[i].name = data.name
+        state.reglamentQuestions[i].invalid = data.invalid
         return
       }
     }
@@ -191,6 +209,7 @@ const mutations = {
     for (let i = 0; i < state.reglamentQuestions.length; i++) {
       for (let j = 0; j < state.reglamentQuestions[i].answers.length; j++) {
         if (state.reglamentQuestions[i].answers[j].uid === uid) {
+          state.answersToDelete.push(uid)
           state.reglamentQuestions[i].answers.splice(j, 1)
           return
         }
@@ -292,6 +311,7 @@ const mutations = {
   [REGLAMENTS.REGLAMENT_DELETE_QUESTION]: (state, uid) => {
     for (let i = 0; i < state.reglamentQuestions.length; i++) {
       if (state.reglamentQuestions[i].uid === uid) {
+        state.questionsToDelete.push(uid)
         state.reglamentQuestions.splice(i, 1)
       }
     }

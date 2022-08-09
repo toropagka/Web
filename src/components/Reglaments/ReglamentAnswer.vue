@@ -31,6 +31,12 @@ export default {
     }
   },
   methods: {
+    answerPlaceholder (answer) {
+      if (answer.name === '' && answer.invalid) {
+        return 'Поле ответа не должно быть пустым'
+      }
+      return this.isEditing ? 'Текст ответа' : ''
+    },
     deleteAnswer () {
       this.showDeleteAnswer = false
       this.$emit('deleteAnswer', this.answer.uid)
@@ -77,9 +83,9 @@ export default {
   >
     <div
       :ref="answer.uid + 'input'"
-      placeholder="Текст ответа"
+      :placeholder="answerPlaceholder(answer)"
       class="font-[300] text-[14px] min-w-[10px] min-h-[10px]"
-      :class="{'cursor-editing': isEditing}"
+      :class="{'cursor-editing': isEditing, 'invalid': answer.invalid }"
       :contenteditable="isEditing"
       @blur="false"
       @keyup="false"
@@ -101,5 +107,8 @@ export default {
 [placeholder]:empty::before {
     content: attr(placeholder);
     color: #555;
+}
+.invalid[placeholder]:empty::before {
+    color: rgb(239 68 68);
 }
 </style>
