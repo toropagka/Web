@@ -31,7 +31,7 @@
     <!-- Add task input -->
     <div
       v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid]"
-      class="fixed-create z-[2] flex bg-[#f4f5f7] px-px pt-px relative lg:static top-0"
+      class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <button
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
@@ -86,12 +86,13 @@
     <!-- Skeleton -->
     <TasksSkeleton
       v-if="status == 'loading'"
+      class="px-[3px]"
     />
 
     <!-- vue3-treeview -->
     <div
       v-if="status == 'success' && Object.keys(storeTasks).length"
-      class="overflow-y-auto pt-[4px] px-px min-h-[600px] w-full"
+      class="overflow-y-auto pt-[4px] px-[3px] min-h-[600px] w-full"
     >
       <tree
         :nodes="storeTasks"

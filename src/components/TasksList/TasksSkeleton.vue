@@ -1,136 +1,136 @@
 <template>
-  <div class="animate-pulse flex  mt-0.5">
+  <div class="animate-pulse flex">
     <div class="flex-col w-full">
-      <div :class="['h-22', classes, classesDark]" >
+      <div :class="['h-22', classes, classesDark]">
         <div class="flex items-center">
-            <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class=text />
-            <hr :class="[text,'w-[60%]']" />
+            <hr :class="text">
+            <hr :class="[text,'w-[60%]']">
           </div>
         </div>
         <div class="flex">
-        <hr :class="[tags,'bg-gray-100']"/>
-        <hr :class="[tags,'bg-gray-100']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-gray-100']">
         </div>
       </div>
-      <div :class="['h-15', classes, classesDark]" >
+      <div :class="['h-15', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class="[text,'w-[70%]']" />
+            <hr :class="[text,'w-[70%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-red-300']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div :class="['h-15', classes, classesDark]" >
+      <div :class="['h-15', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class="[text,'w-[45%]']" />
+            <hr :class="[text,'w-[45%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
+          <hr :class="[tags,'bg-gray-100']">
         </div>
       </div>
-      <div :class="['h-32', classes, classesDark]" >
+      <div :class="['h-32', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class="[text,'w-full']" />
-            <hr :class="[text,'w-full']" />
-            <hr :class="[text,'w-full']" />
-            <hr :class="[text,'w-[60%]']" />
+            <hr :class="[text,'w-full']">
+            <hr :class="[text,'w-full']">
+            <hr :class="[text,'w-full']">
+            <hr :class="[text,'w-[60%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-red-300']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div :class="['h-22', classes, classesDark]" >
+      <div :class="['h-22', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class=text />
-            <hr :class="[text,'w-[90%]']" />
+            <hr :class="text">
+            <hr :class="[text,'w-[90%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-red-300']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div :class="['h-15', classes, classesDark]" >
-      <div class="flex items-center">
-        <div :class=checkbox />
-        <div class="w-full">
-          <hr :class="[text,'w-[50%]']" />
-        </div>
-      </div>
-      <div class="flex">
-        <hr :class="[tags,'bg-gray-100']"/>
-        <hr :class="[tags,'bg-gray-100']"/>
-        <hr :class="[tags,'bg-red-300']"/>
-      </div>
-      </div>
-      <div :class="['h-28', classes, classesDark]" >
+      <div :class="['h-15', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class="[text,'w-full']" />
-            <hr :class="[text,'w-full']" />
-            <hr :class="[text,'w-[50%]']" />
+            <hr :class="[text,'w-[50%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div :class="['h-22', classes, classesDark]" >
+      <div :class="['h-28', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class=text />
-            <hr :class="[text,'w-[20%]']" />
+            <hr :class="[text,'w-full']">
+            <hr :class="[text,'w-full']">
+            <hr :class="[text,'w-[50%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-red-300']"/>
+          <hr :class="[tags,'bg-gray-100']">
         </div>
       </div>
-      <div :class="['h-15', classes, classesDark]" >
+      <div :class="['h-22', classes, classesDark]">
         <div class="flex items-center">
-          <div :class=checkbox />
+          <div :class="checkbox" />
           <div class="w-full">
-            <hr :class="[text,'w-[60%]']" />
+            <hr :class="text">
+            <hr :class="[text,'w-[20%]']">
           </div>
         </div>
         <div class="flex">
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-gray-100']"/>
-          <hr :class="[tags,'bg-red-300']"/>
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div :class="['h-22', classes, classesDark]" >
-      <div class="flex items-center">
-        <div :class=checkbox />
-        <div class="w-full">
-          <hr :class=text />
-          <hr :class="[text,'w-[10%]']" />
+      <div :class="['h-15', classes, classesDark]">
+        <div class="flex items-center">
+          <div :class="checkbox" />
+          <div class="w-full">
+            <hr :class="[text,'w-[60%]']">
+          </div>
+        </div>
+        <div class="flex">
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
         </div>
       </div>
-      <div class="flex">
-        <hr :class="[tags,'bg-gray-100']"/>
-        <hr :class="[tags,'bg-red-300']"/>
+      <div :class="['h-22', classes, classesDark]">
+        <div class="flex items-center">
+          <div :class="checkbox" />
+          <div class="w-full">
+            <hr :class="text">
+            <hr :class="[text,'w-[10%]']">
+          </div>
+        </div>
+        <div class="flex">
+          <hr :class="[tags,'bg-gray-100']">
+          <hr :class="[tags,'bg-red-300']">
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
