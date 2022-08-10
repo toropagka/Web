@@ -59,7 +59,7 @@
               icon-class="cursor-pointer"
               :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
               :type="form.showPassword ? 'text' : 'password'"
-              :valid="form.password.length > 7"
+              :valid="form.password.trim().length > 7"
               @icon-click="togglePasswordVisibility"
             />
           </field>
@@ -104,7 +104,7 @@
               :valid="validatePassword"
               @icon-click="togglePasswordVisibility"
               @click="form.passwordTouched = true"
-              @blur="ifEmptyFiled"
+              @blur="validateAndShowMessage"
             />
           </field>
           <field
@@ -121,7 +121,7 @@
               placeholder="Имя пользователя"
               :valid="form.username.length > 2"
               @click="form.usernameTouched = true"
-              @blur="ifEmptyFiled"
+              @blur="validateAndShowMessage"
             />
           </field>
           <p
@@ -136,7 +136,7 @@
             class="w-full rounded-lg text-sm"
             :icon="mdiArrowRight"
             label="Создать аккаунт"
-            :disabled="validatePassword"
+            :disabled="!allFieldsAreValid"
           />
         </div>
       </transition-group>
@@ -199,10 +199,16 @@ export default {
   },
   computed: {
     validatePassword () {
-      if (this.form.password.length <= 7) {
-        return !this.isPasswordInvalid
-      }
-      return this.isPasswordInvalid
+      return this.form.password.trim().length > 7
+    },
+    ifSpaceInPassword () {
+      return this.form.password[0] === ' ' || this.form.password[this.form.password.length - 1] === ' '
+    },
+    ifEmptyFields () {
+      return (!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)
+    },
+    allFieldsAreValid () {
+      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.form.username.length > 2
     }
   },
   methods: {
@@ -329,13 +335,14 @@ export default {
     togglePasswordVisibility () {
       this.form.showPassword = !this.form.showPassword
     },
-    ifEmptyFiled () {
-      if (this.form.password.length < 8) {
+    validateAndShowMessage () {
+      if (this.ifSpaceInPassword) {
+        this.form.showError = true
+        this.form.errorMessage = 'Символ пробела в начале и в конце пароля недопустим'
+      } else if (!this.validatePassword) {
         this.form.showError = true
         this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
-        return
-      }
-      if ((!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)) {
+      } else if (this.ifEmptyFields) {
         this.form.showError = true
         this.form.errorMessage = 'Для успешной регистрации заполните все поля'
       } else if (this.form.showError) {
