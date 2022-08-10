@@ -15,10 +15,6 @@
 
 export default {
   props: {
-    title: {
-      type: String,
-      default: ''
-    },
     value: {
       type: String,
       default: ''
