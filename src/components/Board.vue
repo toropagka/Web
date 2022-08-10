@@ -224,7 +224,7 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="!board || board.type_access === 0 || isFiltered"
+              :disabled="!board || board.type_access === 0 || isFiltered || showArchive"
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
@@ -433,7 +433,10 @@ export default {
       return this.$store.state.boards.showOnlyMyCreatedCards
     },
     showOnlySearchText () {
-      return this.$store.state.boards.showOnlySearchText
+      return !!this.$store.state.boards.searchText
+    },
+    searchText () {
+      return this.$store.state.boards.searchText?.toLowerCase() || ''
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
@@ -463,8 +466,8 @@ export default {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
   },
   methods: {
-    print (val) {
-      console.log(val)
+    print (msg, val) {
+      console.log(msg, val)
     },
     getContrastYIQ (hexcolor) {
       if (!hexcolor) return null
@@ -526,7 +529,7 @@ export default {
         return column.cards.filter(card => card.email_creator.toLowerCase() === currentUserEmail)
       } else if (this.showOnlySearchText) {
         return column.cards.filter(
-          card => (card.comment + card.name + this.employeesByEmail[card.user]?.name ?? card.user).toLowerCase().includes(this.showOnlySearchText.toLowerCase())
+          card => (card.comment + card.name + this.employeesByEmail[card.user]?.name ?? card.user).toLowerCase().includes(this.searchText)
         )
       }
       return column.cards
