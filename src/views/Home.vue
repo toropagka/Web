@@ -315,7 +315,7 @@ export default {
           if (this.navStack[this.navStack.length - 1].key === 'taskListSource') {
             const action = UID_TO_ACTION[this.navStack[this.navStack.length - 1].value.uid]
             if (!action) {
-              console.error('UID_TO_ACTION in undefined', this.navStack[this.navStack.length - 1].uid)
+              console.error('UID_TO_ACTION in undefined', this.navStack[this.navStack.length - 1].value.uid)
               return
             }
             this.$store.dispatch(action, this.navStack[this.navStack.length - 1].value.param)
@@ -332,19 +332,18 @@ export default {
           this.$store.commit('basic', {
             key: 'taskListSource',
             value: {
-              uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
               param: null
             }
           })
           this.$store.commit(
             'updateStackWithInitValue',
             {
-              name: 'Сегодня',
-              key: 'taskListSource',
+              name: 'Очередь',
               type: 'date',
               typeVal: new Date(),
               value: {
-                uid: '901841d9-0016-491d-ad66-8ee42d2b496b',
+                uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
                 param: new Date()
               }
             }

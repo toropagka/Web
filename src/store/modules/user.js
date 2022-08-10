@@ -8,8 +8,7 @@ import {
 
 const state = {
   user: null,
-  status: '',
-  hasLoadedOnce: false
+  status: ''
 }
 
 const getters = {}

@@ -1,82 +1,115 @@
 <template>
   <div class="w-full">
-    <BoardModalBoxRename
-      v-if="showAddProject"
-      :show="showAddProject"
-      title="Добавить проект"
-      @cancel="showAddProject = false"
-      @save="onAddNewProject"
-    />
-    <ProjectModalBoxProjectsLimit
-      v-if="showProjectsLimit"
-      @cancel="showProjectsLimit = false"
-      @ok="showProjectsLimit = false"
-    />
     <div
-      v-for="(value, index) in items"
-      :key="index"
+      v-if="!displayModal"
     >
+      <BoardModalBoxRename
+        v-if="showAddProject"
+        :show="showAddProject"
+        title="Добавить проект"
+        @cancel="showAddProject = false"
+        @save="onAddNewProject"
+      />
+      <ProjectModalBoxProjectsLimit
+        v-if="showProjectsLimit"
+        @cancel="showProjectsLimit = false"
+        @ok="showProjectsLimit = false"
+      />
       <div
-        class="flex items-center w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+        v-for="(value, index) in items"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ value.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex items-center w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ value.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
+          >
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="project in value.items"
+            :key="project.uid"
+          >
+            <ProjectBlocItem
+              :project="project"
+              @click.stop="gotoChildren(project)"
+            />
+          </template>
+          <ListBlocAdd
+            v-if="index == 0"
+            @click.stop="clickAddProject"
           />
         </div>
       </div>
-      <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <template
-          v-for="project in value.items"
-          :key="project.uid"
-        >
-          <ProjectBlocItem
-            :project="project"
-            @click.stop="gotoChildren(project)"
-          />
-        </template>
-        <ListBlocAdd
-          v-if="index == 0"
-          @click.stop="clickAddProject"
-        />
-      </div>
-    </div>
 
-    <EmptyTasksListPics v-if="isEmpty" />
+      <EmptyTasksListPics v-if="isEmpty" />
+    </div>
+    <div
+      v-if="displayModal"
+      class="flex flex-col justify-center items-center "
+    >
+      <img
+        class="mx-auto mt-10"
+        width="320"
+        height="314"
+        src="@/assets/images/emptyproject.png"
+        alt="Empty task image"
+      >
+      <div class="w-[600px]">
+        <p class="font-bold p-3">
+          Структурируйте задачи и поручения с помощью проектов
+        </p>
+        <p class="text-sm p-3 ">
+          Записывайте цели и планы на будущее, работайте над задачами в команде. Организуйте проекты по определенному направлению, теме или сфере в вашем бизнесе
+        </p>
+        <p class="text-sm p-3 ">
+          Создайте проект, добавьте к нему ваших коллег и приступайте к совместной работе над задачами
+        </p>
+      </div>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+        @click="okToModal"
+      >
+        Понятно
+      </button>
+    </div>
   </div>
 </template>
 
@@ -95,6 +128,7 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 export default {
   components: {
     Icon,
@@ -128,6 +162,9 @@ export default {
     },
     isEmpty () {
       return !this.items[0].items.length && !this.items[1].items.length
+    },
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
     }
   },
   created () {
@@ -218,6 +255,9 @@ export default {
           this.gotoChildren(project)
         })
       }
+    },
+    okToModal () {
+      this.$store.commit(USER_VIEWED_MODAL, 'project')
     }
   }
 }

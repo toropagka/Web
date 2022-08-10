@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import Icon from '@/components/Icon.vue'
 import AccKarmaLimit from '@/components/AccKarmaLimit'
 import { useStore } from 'vuex'
+import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 
 const props = defineProps({
   title: {
@@ -71,6 +72,10 @@ const headerIconClick = () => {
 }
 const submit = e => {
   emit('submit', e)
+}
+const startOnBoarding = () => {
+  emit('header-icon-click')
+  store.dispatch(USER_START_ONBOARDING)
 }
 </script>
 
@@ -264,6 +269,13 @@ const submit = e => {
             </ul>
           </div>
         </div>
+        <button
+          type="button"
+          class="mt-[30px] bg-[#d9d9d9] text-black p-2 rounded-md"
+          @click="startOnBoarding"
+        >
+          Режим тестирования
+        </button>
       </form>
       <div class="w-full flex-wrap">
         <header

@@ -15,9 +15,16 @@
         task.uid_marker !== '00000000-0000-0000-0000-000000000000'
     }"
   >
-    <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
+    <div class="w-5/6">
+      <SlideBody
+        v-if="task.mode === 'slide'"
+        :title="task.title"
+        :text="task.text"
+        :video="task.video"
+      />
       <div
-        class="flex justify-between items-center mb-6 rounded-[8px]"
+        v-else
+        class="flex justify-between items-center mb-6 p-2 rounded-[8px]"
         :style="{ backgroundColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : '', color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
       >
         <!-- task info/status -->
@@ -91,13 +98,14 @@
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
           <div
-            v-if="task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
+            v-if="task.uid && task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
           >
             Задача в доступе
           </div>
           <!-- customer -->
           <div
+            v-if="task.uid"
             v-show="task.type !== 1"
             class="flex mb-2"
           >
@@ -118,6 +126,7 @@
           </div>
           <!-- performer -->
           <div
+            v-if="task.uid"
             v-show="(task.type !== 1) && (task.uid_performer !== task.uid_customer)"
             class="flex mb-2"
           >
@@ -138,6 +147,7 @@
           </div>
           <!-- days -->
           <div
+            v-if="task.uid"
             v-show="dateClearWords"
             class="flex mb-2"
           >
@@ -155,6 +165,7 @@
           </div>
           <!-- overdue -->
           <div
+            v-if="task.uid"
             v-show="plural"
             class="flex mb-2"
           >
@@ -169,7 +180,7 @@
           </div>
           <!-- project -->
           <div
-            v-if="projects[task.uid_project]"
+            v-if="task.uid && projects[task.uid_project]"
             class="flex mb-2"
           >
             <span
@@ -186,6 +197,7 @@
         </div>
       </div>
       <TaskPropsCommentEditor
+        v-if="task.uid"
         v-show="task.comment.length || task.uid_customer === user.current_user_uid"
         class="mt-3"
         :comment="task.comment"
@@ -193,6 +205,7 @@
         @changeComment="onChangeComment"
       />
       <Checklist
+        v-if="task.uid"
         class="mt-3 checklist-custom font-medium"
         :task-uid="task.uid"
         :checklist="task.checklist"
@@ -201,7 +214,8 @@
         :task="task"
       />
       <div
-        class="max-w-1/2 border-t mt-2 pt-2"
+        v-if="task.uid"
+        class="flex flex-col max-w-1/2 border-t mt-2 pt-2"
         :class="task.uid_marker !== '00000000-0000-0000-0000-000000000000' ? 'bg-white p-1 mt-1 rounded-lg' : ''"
       >
         <div class="mx-auto max-w-[540px]">
@@ -281,15 +295,13 @@
       >
         <!-- accept -->
         <button
-          v-if="task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.mode === 'slide' || task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm hover:bg-white bg-green-100 hover:bg-opacity-90 font-medium border-green-400 min-h-[40px] w-[181px] rounded-lg border hover:text-green-500 mb-2 hover:animate-fadeIn"
           @click="accept"
         >
           <span
             class="ml-8 w-[70px]"
-          >
-            {{ task.uid_customer === user.current_user_uid ? (task.uid_performer === user.current_user_uid ? 'Завершить' : 'Принять и завершить') : 'Готово к сдаче' }}
-          </span>
+          >{{ acceptBtnText }}</span>
           <Icon
             :path="check.path"
             :width="check.width"
@@ -342,8 +354,8 @@
         />
         <!-- Change access -->
         <button
-          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user.current_user_email)) && task.uid_customer !== user.current_user_uid && task.uid_performer !== user.current_user_uid"
-          class="flex py-0.5 items-center justify-center text-sm bg-white w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
+          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user.current_user_email)) && task.uid_customer !== user.current_user_uid && task.uid_performer !== user.current_user_uid && task.mode !== 'slide'"
+          class="flex py-0.5 items-center justify-center text-sm bg-gray-100 w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
           @click="() => onChangeAccess(task.emails)"
         >
           <span
@@ -387,6 +399,7 @@ import TaskPropsChatMessages from '@/components/TaskProperties/TaskPropsChatMess
 import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
+import SlideBody from '@/components/Doitnow/SlideBody.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -433,7 +446,8 @@ export default {
     DoitnowStatusModal,
     contenteditable,
     Popper,
-    TaskStatus
+    TaskStatus,
+    SlideBody
   },
   directives: {
     linkify
@@ -574,6 +588,17 @@ export default {
         return '(' + hours + ':' + minutes + ')'
       } else {
         return ''
+      }
+    },
+    acceptBtnText () {
+      if (this.task.mode === 'slide') {
+        return 'Понятно'
+      } else if (this.task.uid_customer === this.user.current_user_uid && this.task.uid_performer === this.user.current_user_uid) {
+        return 'Завершить'
+      } else if (this.task.uid_customer === this.user.current_user_uid && this.task.uid_performer !== this.user.current_user_uid) {
+        return 'Принять и завершить'
+      } else {
+        return 'Готово к сдаче'
       }
     },
     dateClearWords () {
@@ -1037,6 +1062,10 @@ export default {
       this.nextTask()
     },
     accept () {
+      if (this.task.mode === 'slide') {
+        this.nextTask()
+        return
+      }
       if (this.childrens?.length) {
         this.showStatusModal = true
         if ((this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) ||

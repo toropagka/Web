@@ -1,94 +1,127 @@
 <template>
   <div class="w-full">
-    <ReglamentAddLimit
-      v-if="showAddLimit"
-      @cancel="showAddLimit = false"
-      @ok="showAddLimit = false"
-    />
-    <BoardModalBoxRename
-      v-if="showAddReglament"
-      :show="showAddReglament"
-      title="Создать регламент"
-      @cancel="showAddReglament = false"
-      @save="onAddNewReglament"
-    />
     <div
-      v-for="(reg, index) in reglaments"
-      :key="index"
+      v-if="!displayModal"
     >
+      <ReglamentAddLimit
+        v-if="showAddLimit"
+        @cancel="showAddLimit = false"
+        @ok="showAddLimit = false"
+      />
+      <BoardModalBoxRename
+        v-if="showAddReglament"
+        :show="showAddReglament"
+        title="Создать регламент"
+        @cancel="showAddReglament = false"
+        @save="onAddNewReglament"
+      />
       <div
-        class="flex w-full"
-        :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
+        v-for="(reg, index) in reglaments"
+        :key="index"
       >
-        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-          {{ reg.dep }}
-        </p>
         <div
-          v-if="index == 0"
-          class="flex"
+          class="flex w-full"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
         >
-          <icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
+          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+            {{ reg.dep }}
+          </p>
+          <div
+            v-if="index == 0"
+            class="flex"
+          >
+            <icon
+              :path="listView.path"
+              :width="listView.width"
+              :height="listView.height"
+              :box="listView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': !isGridView,
+                'text-gray-400': isGridView
+              }"
+              @click="updateGridView(false)"
+            />
+            <icon
+              :path="gridView.path"
+              :width="gridView.width"
+              :height="gridView.height"
+              :box="gridView.viewBox"
+              class="cursor-pointer hover:text-gray-800 mr-2"
+              :class="{
+                'text-gray-800': isGridView,
+                'text-gray-400': !isGridView
+              }"
+              @click="updateGridView(true)"
+            />
+          </div>
+        </div>
+        <div
+          class="grid gap-2 mt-3 grid-cols-1"
+          :class="{
+            'md:grid-cols-2 lg:grid-cols-4': isGridView,
+            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+          }"
+        >
+          <template
+            v-for="reglament in reg.items"
+            :key="reglament.uid"
+          >
+            <ReglamentBlocItem
+              :reglament="reglament"
+              @click.stop="gotoReglamentContent(reglament)"
+            />
+          </template>
+          <ReglamentBlocEmpty
+            v-if="!reg.is_my_dep && reg.items.length === 0"
           />
-          <icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
+          <ListBlocAdd
+            v-if="reg.is_my_dep"
+            @click.stop="clickAddReglament(reg.uid)"
           />
         </div>
       </div>
       <div
-        class="grid gap-2 mt-3 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
+        v-if="currentUserIsAdmin"
+        class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
+        @click.stop="clickShowAll"
       >
-        <template
-          v-for="reglament in reg.items"
-          :key="reglament.uid"
-        >
-          <ReglamentBlocItem
-            :reglament="reglament"
-            @click.stop="gotoReglamentContent(reglament)"
-          />
-        </template>
-        <ReglamentBlocEmpty
-          v-if="!reg.is_my_dep && reg.items.length === 0"
-        />
-        <ListBlocAdd
-          v-if="reg.is_my_dep"
-          @click.stop="clickAddReglament(reg.uid)"
-        />
+        <p class="font-roboto text-[17px] leading-[22px]">
+          {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+        </p>
       </div>
     </div>
-    <div
-      v-if="currentUserIsAdmin"
-      class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
-      @click.stop="clickShowAll"
+    <EmptyTasksListPics v-if="isEmpty" />
+  </div>
+  <div
+    v-if="displayModal"
+    class="flex flex-col justify-center items-center"
+  >
+    <img
+      class="mx-auto mt-10"
+      width="320"
+      height="314"
+      src="@/assets/images/regl.svg"
+      alt="Empty task image"
     >
-      <p class="font-roboto text-[17px] leading-[22px]">
-        {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+    <div class="w-[600px]">
+      <p class="font-bold p-3 text-left">
+        Автоматизируйте процесс внедрения новых сотрудников или аттестуйте текущих с помощью регламентов
+      </p>
+      <p class="text-sm p-3">
+        Один раз создайте новые или перенесите текущие бумажные инструкции вашего бизнеса в Регламенты ЛидерТаск, добавьте к ним тесты и забудьте о проблеме обучения новых сотрудников или проверке знаний текущей команды.
+      </p>
+      <p class="text-sm p-3">
+        Быстро вносите изменения или добавляйте новое в правила компании, описание бизнес-процессов и рабочих руководств. Добавьте гибкости вашей команде онлайн!
       </p>
     </div>
+    <button
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+      @click="okToModal"
+    >
+      Понятно
+    </button>
   </div>
-  <EmptyTasksListPics v-if="isEmpty" />
 </template>
 
 <script>
@@ -107,6 +140,8 @@ import * as REGLAMENTS from '@/store/actions/reglaments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+
 export default {
   components: {
     Icon,
@@ -214,6 +249,9 @@ export default {
     },
     showAllReglaments () {
       return this.$store.state.reglaments.showAll
+    },
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('reglaments') && this.$store.state.onboarding.showModals
     }
   },
   created () {
@@ -287,6 +325,9 @@ export default {
           this.gotoReglamentContent(reglament)
         })
       }
+    },
+    okToModal () {
+      this.$store.commit(USER_VIEWED_MODAL, 'reglaments')
     }
   }
 }

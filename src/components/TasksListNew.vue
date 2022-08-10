@@ -23,8 +23,34 @@
     v-if="showFreeModal"
     @cancel="showFreeModal = false"
   />
-
   <div
+    v-if="displayModal"
+    class="flex flex-col items-center max-w-[600px] mx-auto"
+  >
+    <img
+      class="mx-auto mt-10"
+
+      width="320"
+      height="314"
+
+      src="/img/emptytask2.a127e727.png"
+      alt="Empty task image"
+    >
+    <p class="font-bold p-3">
+      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
+    </p>
+    <p class="text-sm p-3">
+      Запишите сюда все ваши рабочие дела и встречи, а также выполняйте поручения от коллег, которые ждут от вас результатов сегодня
+    </p>
+    <button
+      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+      @click="okToModal"
+    >
+      Понятно
+    </button>
+  </div>
+  <div
+    v-if="!displayModal"
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
   >
@@ -34,12 +60,14 @@
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <button
+        id="step2"
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
         @click="shouldShowInspector"
       >
         Поручить
       </button>
       <div
+        id="step1"
         class="flex items-center bg-[#FAFAFB] border dark:bg-gray-700 rounded-[8px] w-full"
       >
         <div
@@ -82,7 +110,6 @@
         />
       </div>
     </div>
-
     <!-- Skeleton -->
     <TasksSkeleton
       v-if="status == 'loading'"
@@ -296,6 +323,14 @@
     <EmptyTasksListPics
       v-if="!Object.keys(storeTasks).length && status === 'success'"
     />
+    <!--
+      Скрыто на первую версию!!
+
+      <onBoarding
+    v-if="showOnboarding"
+    :steps="steps"
+    @shouldShowOnboarding="shouldShowOnboarding"
+    /> -->
   </div>
 </template>
 
@@ -304,6 +339,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
+// import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics.vue'
 import ModalBoxDelete from './Common/ModalBoxDelete.vue'
@@ -315,6 +351,7 @@ import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHover
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -340,7 +377,6 @@ import cut from '@/icons/cut.js'
 import bin from '@/icons/bin.js'
 import linkify from 'vue-linkify'
 /* /Icons */
-
 export default {
   components: {
     tree: treeview,
@@ -356,6 +392,7 @@ export default {
     contenteditable,
     TaskListActionHoverPanel,
     TaskListModalBoxLicenseLimit
+    // onBoarding
   },
   directives: {
     linkify
@@ -365,6 +402,53 @@ export default {
       createTaskText: '',
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
+      /* steps: [
+        {
+          attachTo: { element: '#step1' },
+          content: { title: 'Область для создания задачи', description: 'Чтобы создать задачу, напишите ее название тут и нажмите Ввод на клавиатуре' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step2' },
+          content: { title: 'Поручайте задачи через инспектора', description: 'Наш бот поможет вам правильно сформулировать поручение и проконтролирует его выполнение' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step3' },
+          content: { title: 'Меню аккаунта', description: 'Нажмите сюда, чтобы посмотреть информацию об аккаунте, перейти на другой тариф или изменить настройки системы' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step4' },
+          content: { title: 'Календарь', description: 'Используйте календарь, чтобы запланировать любой день. Точки у даты означают, что у вас есть на этот день задачи или поручения' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        },
+        {
+          attachTo: { element: '#step5' },
+          content: { title: 'Прочее - задачи по категориям', description: 'Работайте только с определенными категориями задач, собранными в одном месте. Разбирайте Готово к сдаче или Просрочено, сконцентрируйтесь на задачах В Фокусе и т.д.' },
+          options: {
+            overlay: {
+              borderRadius: 8
+            }
+          }
+        }
+      ], */
       showConfirm: false,
       showTasksLimit: false,
       showFreeModal: false,
@@ -417,6 +501,9 @@ export default {
   computed: {
     loadedTasks () {
       return this.$store.state.tasks.loadedTasks
+    },
+    showOnboarding () {
+      return this.$store.state.onboarding.showOnboarding
     },
     employees () {
       return this.$store.state.employees.employees
@@ -487,6 +574,9 @@ export default {
     },
     date () {
       return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
+    },
+    displayModal () {
+      return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
   },
   watch: {
@@ -655,6 +745,9 @@ export default {
       if (!this.stop) {
         setTimeout(() => { scroll(step) }, 20)
       }
+    },
+    shouldShowOnboarding (val) {
+      this.$store.state.user.showOnboarding = val
     },
     toggleTaskHoverPopper (visible, uid) {
       const el = document.getElementById(`hover-panel-${uid}`)
@@ -899,6 +992,9 @@ export default {
         }
       })
     },
+    okToModal () {
+      this.$store.commit(USER_VIEWED_MODAL, 'tasks')
+    },
     copyTaskName (task) {
       navigator.clipboard.writeText(task.name)
     },
@@ -1119,6 +1215,10 @@ export default {
 </script>
 
 <style>
+:root{
+   --v-onboarding-overlay-z: 40;
+   --v-onboarding-step-z: 40;
+}
 .tree-level {
   flex: 1;
   margin-left: 0 !important;
