@@ -103,9 +103,9 @@
               :type="form.showPassword ? 'text' : 'password'"
               :valid="validatePassword"
               @icon-click="togglePasswordVisibility"
+              @blur="ifEmptyFiled"
             />
           </field>
-
           <field
             help="Введите ваше имя"
             :max-count="3"
@@ -119,8 +119,15 @@
               autocomplete="username"
               placeholder="Имя пользователя"
               :valid="form.username.length > 2"
+              @blur="ifEmptyFiled"
             />
           </field>
+          <p
+            v-if="form.showError"
+            class="text-red-500 text-xs pb-3"
+          >
+            {{ form.errorMessage }}
+          </p>
           <jb-button
             type="submit"
             color="login"
@@ -317,6 +324,15 @@ export default {
     },
     togglePasswordVisibility () {
       this.form.showPassword = !this.form.showPassword
+    },
+    ifEmptyFiled () {
+      if (!this.form.username || !this.form.password) {
+        this.form.showError = true
+        this.form.errorMessage = 'Для успешной регистрации заполните все поля'
+      } else if (this.form.showError) {
+        this.form.showError = false
+        this.form.errorMessage = ''
+      }
     }
   }
 }
