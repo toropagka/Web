@@ -107,6 +107,7 @@
               @blur="validateAndShowMessage"
             />
           </field>
+
           <field
             help="Введите ваше имя"
             :max-count="3"
@@ -124,12 +125,27 @@
               @blur="validateAndShowMessage"
             />
           </field>
+
+          <field
+            help="Введите ваш номер телефона"
+          >
+            <control
+              v-model="form.phone"
+              type="text"
+              :icon="mdiPhoneOutline"
+              name="phone"
+              autocomplete="phone"
+              placeholder="Номер телефона"
+            />
+          </field>
+
           <p
             v-if="form.showError"
             class="text-red-500 text-xs pb-3"
           >
             {{ form.errorMessage }}
           </p>
+
           <jb-button
             type="submit"
             color="login"
@@ -146,14 +162,14 @@
 
 <script>
 import axios from 'axios'
-import { mdiEmailOutline, mdiEyeOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft } from '@mdi/js'
+import { mdiEmailOutline, mdiEyeOutline, mdiEyeOffOutline, mdiAccountOutline, mdiArrowRight, mdiCheckBold, mdiChevronLeft, mdiPhoneOutline } from '@mdi/js'
 import FullScreenSection from '@/components/FullScreenSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
 import Icon from '@/components/Icon.vue'
 import Control from '@/components/Control.vue'
 import JbButton from '@/components/JbButton.vue'
-
+import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import { AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
 
 export default {
@@ -173,10 +189,12 @@ export default {
       mdiArrowRight,
       mdiChevronLeft,
       mdiEyeOutline,
+      mdiPhoneOutline,
       form: {
         email: '',
         password: '',
         username: '',
+        phone: '',
         showError: false,
         errorMessage: '',
         isEmailValid: false,
@@ -225,17 +243,23 @@ export default {
     },
     register () {
       if (!this.form.password || !this.form.username) { return }
+      const date = new Date()
+      const timezone = date.getTimezoneOffset() / 60 * (-1)
       const data = {
         email: this.form.email,
         password: this.form.password,
         name: this.form.username,
+        phone: this.form.phone,
+        timezone: timezone,
         system: 'web',
+        cid: 'webnew',
         language: 'russian',
         type_device: 'mobile'
       }
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/')
+          this.$store.dispatch(USER_START_ONBOARDING)
         })
         .catch(() => {
           this.form.showError = true
@@ -291,6 +315,7 @@ export default {
       this.form.email = ''
       this.form.password = ''
       this.form.username = ''
+      this.form.phone = ''
       this.form.startScreenText = 'ЛидерТаск'
       this.form.emailMdi = mdiEmailOutline
       this.form.emailIconClass = ''

@@ -9,7 +9,7 @@ html
 {
   width: 100%;
   height: 100%;
-  font-family: 'Roboto'
+  font-family: 'Roboto', sans-serif
 }
 #app {
   @apply w-screen h-full transition-position xl:w-auto;
@@ -1230,7 +1230,7 @@ label
 {
   color:#2E9CE5;
   font-size: 13px;
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 500;
 

@@ -1,141 +1,3 @@
-<script>
-import { USER_CHANGE_PHOTO, USER_CHANGE_PHONE } from '@/store/actions/user.js'
-import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
-import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
-
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
-import ModalBox from '@/components/modals/ModalBox.vue'
-
-export default {
-  components: {
-    ModalBox,
-    BoardModalBoxRename
-  },
-  emits: ['AccLogout', 'currentSettingsTab'],
-  data () {
-    return {
-      oldPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
-      invalidOldPassword: '',
-      showEditname: false,
-      newPassError: false,
-      emptyOldPass: false,
-      emptyNewPasses: false,
-      showEditphone: false,
-      showEditpassword: false
-    }
-  },
-  computed: {
-    tarifText () {
-      switch (this.$store.state.user.user?.tarif) {
-        case 'trial':
-          return 'Пробная версия'
-        case 'free':
-          return 'Закончилась лицензия, Истек триал, Превышен лимит рабочих мест'
-        case 'expert':
-          return 'Действительная лицензия с одним рабочим местом'
-        case 'business':
-          return 'Действительная лицензия с несколькими рабочими местами'
-        default:
-          return this.$store.state.user.user?.tarif
-      }
-    }
-  },
-  methods: {
-    changeCurrentTab (tabName) {
-      this.$emit('currentSettingsTab', tabName)
-    },
-    logout () {
-      this.$emit('AccLogout')
-    },
-
-    changeUserPhoto (event) {
-      const files = event.target.files
-      const formData = new FormData()
-      const file = files[0]
-      formData.append('files[0]', file)
-      const data = {
-        file: formData
-      }
-      this.$store.dispatch(USER_CHANGE_PHOTO, data)
-    },
-    showPasswordModalBox () {
-      this.emptyNewPasses = false
-      this.emptyOldPass = false
-      this.invalidOldPassword = false
-      this.newPassError = false
-
-      this.showEditpassword = true
-    },
-    changeUserPassword () {
-      const oldPassword = this.oldPassword
-      const newPassword = this.newPassword
-      const isFieldNotEmptyAndRight = oldPassword && this.newPassword && this.confirmNewPassword && this.newPassword === this.confirmNewPassword
-      const data = {
-        old_password: oldPassword,
-        new_password: newPassword
-      }
-      if (isFieldNotEmptyAndRight) {
-        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).then(() => {
-          this.showEditpassword = false
-          this.oldPassword = ''
-          this.newPassword = ''
-          this.confirmNewPassword = ''
-        })
-
-        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).catch(err => {
-          this.invalidOldPassword = err.error
-          this.oldPassword = ''
-          this.confirmNewPassword = ''
-          this.showEditpassword = true
-          this.emptyOldPass = false
-        })
-      } else if (this.newPassword !== this.confirmNewPassword) {
-        this.newPassError = true
-      }
-      // проверяем пустое поле старого пароля
-      oldPassword ? this.emptyOldPass = false : this.emptyOldPass = true
-      // проверяем пустые поля нового пароля
-      this.newPassword && this.confirmNewPassword ? this.emptyNewPasses = false : this.emptyNewPasses = true
-    },
-
-    changeUserPhone (phone) {
-      this.showEditphone = false
-      const date = new Date()
-      const timezone = date.getTimezoneOffset() / 60 * (-1)
-      const data = {
-        phone: phone,
-        timezone: timezone
-      }
-      this.$store.dispatch(USER_CHANGE_PHONE, data)
-    },
-
-    changeUserName (name) {
-      this.showEditname = false
-      const data = {
-        name: name,
-        email: this.$store.state.user.user.current_user_email
-      }
-      this.$store.dispatch(CHANGE_EMPLOYEE_NAME, data)
-    },
-
-    userName () {
-      const name = this.$store.state.user.user.current_user_name ?? ''
-      return name
-    },
-
-    userPhone () {
-      const phone = this.$store.state.user.user?.current_user_phone ?? ''
-      const index = phone.lastIndexOf(' ("')
-      if (index !== -1) {
-        return phone.slice(0, index)
-      }
-      return phone
-    }
-  }
-}
-</script>
 
 <template>
   <BoardModalBoxRename
@@ -355,6 +217,146 @@ export default {
     </div>
   </form>
 </template>
+
+<script>
+import { USER_CHANGE_PHOTO, USER_CHANGE_PHONE } from '@/store/actions/user.js'
+import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
+import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
+
+import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
+import ModalBox from '@/components/modals/ModalBox.vue'
+
+export default {
+  components: {
+    ModalBox,
+    BoardModalBoxRename
+  },
+  emits: ['AccLogout', 'currentSettingsTab'],
+  data () {
+    return {
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+      invalidOldPassword: '',
+      showEditname: false,
+      newPassError: false,
+      emptyOldPass: false,
+      emptyNewPasses: false,
+      showEditphone: false,
+      showEditpassword: false
+    }
+  },
+  computed: {
+    tarifText () {
+      switch (this.$store.state.user.user?.tarif) {
+        case 'trial':
+          return 'Пробная версия'
+        case 'free':
+          return 'Закончилась лицензия, Истек триал, Превышен лимит рабочих мест'
+        case 'expert':
+          return 'Действительная лицензия с одним рабочим местом'
+        case 'business':
+          return 'Действительная лицензия с несколькими рабочими местами'
+        default:
+          return this.$store.state.user.user?.tarif
+      }
+    }
+  },
+  methods: {
+    changeCurrentTab (tabName) {
+      this.$emit('currentSettingsTab', tabName)
+    },
+    logout () {
+      this.$emit('AccLogout')
+    },
+
+    changeUserPhoto (event) {
+      const files = event.target.files
+      const formData = new FormData()
+      const file = files[0]
+      formData.append('files[0]', file)
+      const data = {
+        file: formData
+      }
+      this.$store.dispatch(USER_CHANGE_PHOTO, data)
+    },
+    showPasswordModalBox () {
+      this.emptyNewPasses = false
+      this.emptyOldPass = false
+      this.invalidOldPassword = false
+      this.newPassError = false
+
+      this.showEditpassword = true
+    },
+    changeUserPassword () {
+      const oldPassword = this.oldPassword
+      const newPassword = this.newPassword
+      const isFieldNotEmptyAndRight = oldPassword && this.newPassword && this.confirmNewPassword && this.newPassword === this.confirmNewPassword
+      const data = {
+        old_password: oldPassword,
+        new_password: newPassword
+      }
+      if (isFieldNotEmptyAndRight) {
+        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).then(() => {
+          this.showEditpassword = false
+          this.oldPassword = ''
+          this.newPassword = ''
+          this.confirmNewPassword = ''
+        })
+
+        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).catch(err => {
+          this.invalidOldPassword = err.error
+          this.oldPassword = ''
+          this.confirmNewPassword = ''
+          this.showEditpassword = true
+          this.emptyOldPass = false
+        })
+      } else if (this.newPassword !== this.confirmNewPassword) {
+        this.newPassError = true
+      }
+      // проверяем пустое поле старого пароля
+      oldPassword ? this.emptyOldPass = false : this.emptyOldPass = true
+      // проверяем пустые поля нового пароля
+      this.newPassword && this.confirmNewPassword ? this.emptyNewPasses = false : this.emptyNewPasses = true
+    },
+
+    changeUserPhone (phone) {
+      this.showEditphone = false
+      const date = new Date()
+      const timezone = date.getTimezoneOffset() / 60 * (-1)
+      const data = {
+        phone: phone,
+        timezone: timezone
+      }
+      this.$store.dispatch(USER_CHANGE_PHONE, data)
+    },
+
+    changeUserName (name) {
+      this.showEditname = false
+      const data = {
+        name: name,
+        email: this.$store.state.user.user.current_user_email
+      }
+      this.$store.dispatch(CHANGE_EMPLOYEE_NAME, data)
+    },
+
+    userName () {
+      const name = this.$store.state.user.user.current_user_name ?? ''
+      return name
+    },
+
+    userPhone () {
+      const phone = this.$store.state.user.user?.current_user_phone ?? ''
+      const index = phone.lastIndexOf(' ("')
+      if (index !== -1) {
+        return phone.slice(0, index)
+      }
+      return phone
+    }
+  }
+}
+</script>
+
 <style scoped>
 
 .circle-image{

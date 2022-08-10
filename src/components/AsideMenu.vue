@@ -34,7 +34,10 @@
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center">
+      <div
+        id="step3"
+        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
+      >
         <div
           class="group w-full cursor-pointer"
           @click="modalOneActive = true"
@@ -71,7 +74,7 @@
       </div>
       <div class="mt-[10px]">
         <DatePicker
-          id="Maincalendar"
+          id="step4"
           ref="calendarclass"
           v-model="dateToday"
           dot="true"
@@ -372,6 +375,13 @@ export default {
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
       }
+      // скрывать навбар при онбординге
+      if (this.$store.state.onboarding.visitedModals) {
+        this.$store.state.onboarding.hideNavBar = false
+        if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
+          this.$store.state.onboarding.hideNavBar = true
+        }
+      }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -409,6 +419,8 @@ export default {
         this.$store.commit('updateStackWithInitValue', navElem)
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'other' })
+        // отображаем навбар в прочее
+        this.$store.state.onboarding.hideNavBar = false
         return
       }
 

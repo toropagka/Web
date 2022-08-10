@@ -7,7 +7,38 @@
     button-label="Delete"
   />
   <div
-    v-if="tasksCount && !isLoading"
+    v-if="displayModal"
+    class="max-w-xl mx-auto"
+  >
+    <div
+      class="flex flex-col"
+    >
+      <img
+        class="mx-auto mt-10"
+        width="320"
+        height="314"
+        src="@/assets/images/emptydoitnow.png"
+        alt="Empty task image"
+      >
+      <p class="font-bold p-3">
+        Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+      </p>
+      <p class="text-sm p-3">
+        Очередь позволит вам работать и в конце концов выполнить конкретную задачу или поручение. Вы не знаете, какая задача будет следующей, а следовательно не думаете о ней, и выполняете только ту, которая сейчас у вас перед глазами.
+      </p>
+      <p class="text-sm p-3">
+        Вам больше не нужно постоянно переключаться между разделами, чтобы разобрать новые сообщения от команды, решать, что делать с просроченными задачами и не забыть про задачи на сегодня.
+      </p>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+        @click="okToModal"
+      >
+        Понятно
+      </button>
+    </div>
+  </div>
+  <div
+    v-else-if="tasksCount && !isLoading"
     class="flex items-center mb-5 justify-between"
   >
     <!-- header -->
@@ -39,7 +70,7 @@
   </div>
   <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
-    <div v-if="!(tasksCount === 0 && !isLoading)">
+    <div v-if="!(tasksCount === 0 && !isLoading) && !displayModal">
       <a
         class="dark:bg-gray-700 cursor-pointer dark:text-gray-100 rounded-lg text-[14px] breadcrumbs text-[#7E7E80] font-medium"
         target="_blank"
@@ -51,7 +82,7 @@
   </transition>
   <transition :name="taskTransition">
     <DoitnowTask
-      v-if="tasksCount && !isLoading"
+      v-if="!displayModal && tasksCount && !isLoading"
       :key="firstTask.uid"
       :task="firstTask"
       :childrens="childrens"
@@ -88,6 +119,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
+import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -112,6 +144,7 @@ export default {
     readyTasksReaded: [],
     readyTasksUnreaded: [],
     openedTasks: [],
+    slidesCopy: [],
     projectTasks: [],
     unsortedTasks: [],
     overdueReaded: [],
@@ -122,6 +155,7 @@ export default {
   computed: {
     tasksCount () {
       return (
+        this.slidesCopy.length +
         this.unreadTasks.length +
         this.overdueTasks.length +
         this.readyTasks.length +
@@ -132,6 +166,9 @@ export default {
       return window.location.origin
     },
     firstTask () {
+      if (this.slidesCopy.length && this.justRegistered) {
+        return this.slidesCopy[0]
+      }
       if (this.unreadTasks.length) {
         return this.unreadTasks[0]
       }
@@ -145,6 +182,9 @@ export default {
         return this.todayTasks[0]
       }
       return null
+    },
+    slides () {
+      return this.$store.state.slides.slides
     },
     taskMessages () {
       return this.$store.state.taskfilesandmessages.messages
@@ -175,11 +215,17 @@ export default {
     },
     taskTransition () {
       return this.tasksLoaded ? 'slide-in-fade-out' : ''
+    },
+    displayModal () {
+      return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
+    },
+    justRegistered () {
+      return this.$store.state.onboarding.justRegistered
     }
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask) {
+      if (newtask && newtask.uid) {
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -201,7 +247,12 @@ export default {
     }
   },
   mounted: function () {
-    this.loadAllTasks()
+    if (this.justRegistered) {
+      this.slidesCopy = [...this.slides]
+    }
+    if (!this.displayModal) {
+      this.loadAllTasks()
+    }
   },
   methods: {
     loadAllTasks: function () {
@@ -279,6 +330,11 @@ export default {
         }
       })
     },
+    okToModal () {
+      this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
+      this.slidesCopy = [...this.slides]
+      this.loadAllTasks()
+    },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
@@ -291,6 +347,13 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
+      if (this.slidesCopy.length && this.justRegistered) {
+        this.slidesCopy.shift()
+        if (this.slidesCopy.length === 0) {
+          this.$store.commit(USER_JUST_REGISTERED_TOGGLE, false)
+        }
+        return
+      }
       this.readTask()
       if (this.unreadTasks.length) {
         this.unreadTasks.shift()
