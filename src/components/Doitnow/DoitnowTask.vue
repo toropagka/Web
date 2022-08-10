@@ -91,14 +91,14 @@
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
           <div
-            v-if="task.mode === 'task' && task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
+            v-if="task.uid && task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
           >
             Задача в доступе
           </div>
           <!-- customer -->
           <div
-            v-if="task.mode === 'task'"
+            v-if="task.uid"
             v-show="task.type !== 1"
             class="flex mb-2"
           >
@@ -119,7 +119,7 @@
           </div>
           <!-- performer -->
           <div
-            v-if="task.mode === 'task'"
+            v-if="task.uid"
             v-show="(task.type !== 1) && (task.uid_performer !== task.uid_customer)"
             class="flex mb-2"
           >
@@ -140,7 +140,7 @@
           </div>
           <!-- days -->
           <div
-            v-if="task.mode === 'task'"
+            v-if="task.uid"
             v-show="dateClearWords"
             class="flex mb-2"
           >
@@ -158,7 +158,7 @@
           </div>
           <!-- overdue -->
           <div
-            v-if="task.mode === 'task'"
+            v-if="task.uid"
             v-show="plural"
             class="flex mb-2"
           >
@@ -173,7 +173,7 @@
           </div>
           <!-- project -->
           <div
-            v-if="task.mode === 'task' && projects[task.uid_project]"
+            v-if="task.uid && projects[task.uid_project]"
             class="flex mb-2"
           >
             <span
@@ -190,7 +190,7 @@
         </div>
       </div>
       <TaskPropsCommentEditor
-        v-if="task.mode === 'task'"
+        v-if="task.uid"
         v-show="task.comment.length || task.uid_customer === user.current_user_uid"
         class="mt-3"
         :comment="task.comment"
@@ -198,7 +198,7 @@
         @changeComment="onChangeComment"
       />
       <Checklist
-        v-if="task.mode === 'task'"
+        v-if="task.uid"
         class="mt-3 checklist-custom font-medium"
         :task-uid="task.uid"
         :checklist="task.checklist"
@@ -207,7 +207,7 @@
         :task="task"
       />
       <div
-        v-if="task.mode === 'task'"
+        v-if="task.uid"
         class="flex flex-col max-w-1/2 border-t mt-2 pt-2"
         :class="task.uid_marker !== '00000000-0000-0000-0000-000000000000' ? 'bg-white p-1 mt-1 rounded-lg' : ''"
       >
