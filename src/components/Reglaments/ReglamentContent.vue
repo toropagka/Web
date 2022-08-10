@@ -399,7 +399,7 @@ export default {
           try {
             const toolBar = document.querySelector('div.ql-toolbar')
             toolBar.style.position = 'sticky'
-            toolBar.style.top = '56px'
+            toolBar.style.top = '95px'
             toolBar.style.zIndex = '5'
             toolBar.style.background = '#f4f5f7'
           } catch (e) {}
