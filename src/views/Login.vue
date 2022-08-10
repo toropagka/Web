@@ -51,7 +51,7 @@ export default {
       const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/auth?login=' + this.form.email + '&password=' + encodeURIComponent(this.form.password) + '&system=' + this.getOSName() + '&type_device=' + this.getSysType()
       this.$store.dispatch(AUTH_REQUEST, uri)
         .then(() => {
-          this.$router.push('/')
+          this.$router.push('/doitnow')
         })
         .catch(() => {
           this.form.showError = true
@@ -70,7 +70,7 @@ export default {
       }
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
-          this.$router.push('/')
+          this.$router.push('/doitnow')
         })
         .catch(() => {
           this.form.showError = true

@@ -2,7 +2,7 @@
 export default {
   computed: {
     user () {
-      return this.$store.state.user.user
+      return this.$store.state.user?.user
     }
   }
 }
@@ -32,7 +32,7 @@ export default {
           </svg>
         </span>
         <span class="text-sm">
-          {{ user.owner_title }}
+          {{ user?.owner_title }}
         </span>
       </div>
     </div>
@@ -56,7 +56,7 @@ export default {
           </svg>
         </span>
         <span class="text-sm">
-          {{ user.owner_email }}
+          {{ user?.owner_email }}
         </span>
       </div>
     </div>
@@ -87,7 +87,7 @@ export default {
             />
           </svg>
         </span>
-        <span class="text-sm">{{ user.count_workplaces }}</span>
+        <span class="text-sm">{{ user?.count_workplaces }}</span>
       </div>
     </div>
     <div class="mt-[36px]">
@@ -112,7 +112,7 @@ export default {
           </svg>
 
         </span>
-        <span class="text-sm">{{ user.total_mb }} MB ({{ user.percent_mb }}%)</span>
+        <span class="text-sm">{{ user?.total_mb }} MB ({{ user?.percent_mb }}%)</span>
       </div>
     </div>
     <div class="mt-[36px]">

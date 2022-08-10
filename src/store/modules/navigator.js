@@ -37,8 +37,8 @@ import { visitChildren } from '../helpers/functions'
 const getDefaultState = () => {
   return {
     navigator: false,
-    lastTab: localStorage.getItem('lastTab') ?? 'tasks',
-    currentSettingsTab: 'account',
+    lastTab: localStorage.getItem('lastTab') ?? 'doitnow',
+    currentSettingsTab: localStorage.getItem('currentSettingsTab') ?? localStorage.setItem('currentSettingsTab', 'account'),
     status: '',
     computedNavigator: false,
     hasLoadedOnce: false,
