@@ -532,13 +532,14 @@ export default {
         for (let i = 0; i < this.storeTasks[task.parent].children.length; i++) {
           sortedChildrens.push(this.storeTasks[this.storeTasks[task.parent].children[i]])
         }
-      }
-      sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
-      console.log(sortedChildrens, 'childs')
+        sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
+        console.log(sortedChildrens, 'childs')
 
-      this.$store.state.tasks.newtasks[task.parent].children = []
-      for (let i = 0; i < sortedChildrens.length; i++) {
-        this.$store.state.tasks.newtasks[task.parent].children.push(sortedChildrens[i].id)
+        console.log(this.$store.state.tasks.newtasks[task.parent])
+        this.$store.state.tasks.newtasks[task.parent].children = []
+        for (let i = 0; i < sortedChildrens.length; i++) {
+          this.$store.state.tasks.newtasks[task.parent].children.push(sortedChildrens[i].id)
+        }
       }
     },
     changeTaskPosition (position) {
