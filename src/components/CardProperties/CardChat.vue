@@ -119,34 +119,34 @@ export default {
         {{ employees[message.uid_creator].name }}
       </div>
 
-      <card-chat-quote-message
+      <CardChatQuoteMessage
         v-if="message.hasQuote"
         class="mb-[14px] mt-[19px]"
         :quote-message="message.quoteMessage"
         :employee="employees[message.quoteMessage.uid_creator]"
       />
 
-      <card-chat-interlocutor-message
+      <CardChatInterlocutorMessage
         v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
       />
-      <card-chat-interlocutor-file-message
+      <CardChatInterlocutorFileMessage
         v-if="!message.isMyMessage && message.isFile"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
       />
 
-      <card-chat-self-message
+      <CardChatSelfMessage
         v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
         @onDeleteMessage="deleteMessage"
       />
-      <card-chat-self-file-message
+      <CardChatSelfFileMessage
         v-if="message.isMyMessage && message.isFile"
         :message="message"
         :employee="employees[message.uid_creator]"
