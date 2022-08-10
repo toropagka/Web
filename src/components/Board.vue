@@ -225,7 +225,7 @@
             </div>
           </div>
           <!--карточки -->
-          <div class="min-h-0 overflow-y-auto scroll-style pr-2">
+          <div class="min-h-0 overflow-y-auto scroll-style">
             <draggable
               :data-column-id="column.element.UID"
               :list="getColumnCards(column.element)"
@@ -262,18 +262,18 @@
             </draggable>
           </div>
           <!--кнопка добавить карточку -->
-          <BoardInputValue
-            v-if="showAddCard && column.element.UID === selectedColumn.UID"
-            :show="showAddCard && column.element.UID === selectedColumn.UID"
-            class="h-[40px]"
-            @save="onAddNewCard"
-            @cancel="showAddCard = false"
-          />
           <div
-            v-if="column.element.AddCard && !isFiltered && !showAddCard"
+            v-if="column.element.AddCard && !isFiltered"
             class="mt-2 h-[40px]"
           >
+            <BoardInputValue
+              v-if="showAddCard && column.element.UID === selectedColumn.UID"
+              :show="showAddCard && column.element.UID === selectedColumn.UID"
+              @save="onAddNewCard"
+              @cancel="showAddCard = false"
+            />
             <button
+              v-else
               class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.element.Color) }"
               @click="addCard(column.element)"
@@ -300,18 +300,19 @@
       </template>
       <template #footer>
         <!-- кнопка Добавить колонку -->
-        <BoardInputValue
-          v-if="showAddColumn"
-          :show="showAddColumn"
-          class="w-[280px]"
-          @cancel="showAddColumn = false"
-          @save="onAddNewColumn"
-        />
         <div
-          v-if="board.type_access === 1 && !showArchive && !showAddColumn"
-          class="flex-none bg-white rounded-xl w-[280px] h-[48px] mr-[10px]"
+          v-if="board.type_access === 1 && !showArchive"
+          class="flex-none bg-white rounded-xl w-[280px] h-[48px] mr-[10px] px-[12px]"
         >
+          <BoardInputValue
+            v-if="showAddColumn"
+            :show="showAddColumn"
+            class="mt-[4px] h-[40px]"
+            @cancel="showAddColumn = false"
+            @save="onAddNewColumn"
+          />
           <div
+            v-else
             class="flex justify-center items-center h-full w-full cursor-pointer font-['Roboto'] text-[#7e7e80]"
             @click="clickAddColumn"
           >
@@ -636,12 +637,12 @@ export default {
         })
     },
     lockVisibility (stageUid) {
-      const icon = this.$refs[`stage-icon-${stageUid}`][0]
+      const icon = this.$refs[`stage-icon-${stageUid}`]
       icon.style.visibility = 'visible'
     },
     unlockVisibility (stageUid) {
-      const icon = this.$refs[`stage-icon-${stageUid}`][0]
-      icon.style.visibility = null
+      const icon = this.$refs[`stage-icon-${stageUid}`]
+      if (icon) icon.style.visibility = null
     },
     onAddNewCard (name) {
       console.log(this.selectedColumn.UID)

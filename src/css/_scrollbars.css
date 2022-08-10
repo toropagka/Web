@@ -7,12 +7,23 @@ html::-webkit-scrollbar, #aside::-webkit-scrollbar, #aside-right::-webkit-scroll
   height: 6px;
 }
 
+.scroll-style::-webkit-scrollbar {
+  width: 14px;
+  height: 6px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+}
+
 html::-webkit-scrollbar, #aside::-webkit-scrollbar, #aside-right::-webkit-scrollbar {
   scrollbar-color: #9ca3af #e5e7eb;
 }
 
-html::-webkit-scrollbar-thumb, #aside::-webkit-scrollbar-thumb, #aside-right::-webkit-scrollbar-thumb, .scroll-style::-webkit-scrollbar-thumb {
-  @apply rounded;
+html::-webkit-scrollbar-thumb, #aside::-webkit-scrollbar-thumb, #aside-right::-webkit-scrollbar-thumb {
+  border-radius: 4px;
 }
 
 html, .scroll-style {
