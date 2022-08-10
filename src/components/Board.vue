@@ -21,20 +21,15 @@
       @cancel="showDeleteColumn = false"
       @yes="onDeleteColumn"
     />
-    <BoardModalBoxRename
+    <!-- Добавление карточки -->
+    <!-- <BoardModalBoxRename
       v-if="showAddCard"
       :show="showAddCard"
       title="Добавить карточку"
       @cancel="showAddCard = false"
       @save="onAddNewCard"
-    />
-    <BoardModalBoxRename
-      v-if="showAddColumn"
-      :show="showAddColumn"
-      title="Добавить колонку"
-      @cancel="showAddColumn = false"
-      @save="onAddNewColumn"
-    />
+    /> -->
+    <!-- Изменения названия колонка -->
     <BoardModalBoxRename
       v-if="showRenameColumn"
       :show="showRenameColumn"
@@ -75,258 +70,274 @@
       @cancel="showMoveAllCards = false"
       @changePosition="onChangeAllCardsPosition"
     />
-    <div class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style">
-      <draggable
-        class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
-        :list="visibleColumns"
-        ghost-class="ghost-board"
-        item-key="UID"
-        group="columns"
-        :fallback-tolerance="1"
-        :force-fallback="true"
-        :animation="180"
-        :scroll-sensitivity="250"
-        @end="endDragColumn"
-      >
-        <template #item="column">
-          <div
-            class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
-            :style="{ background: column.element.Color }"
-            :data-column-uid="column.element.UID"
-          >
-            <!--заголовок -->
-            <div class="px-1 flex justify-between items-start">
-              <p
-                class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
-                :style="{ color: getContrastYIQ(column.element.Color) }"
-              >
-                {{ column.element.Name }}
-              </p>
-              <!-- Три точки -->
-              <div
-                v-if="column.element.CanEditStage || column.element.AddCard"
-                :ref="`stage-icon-${column.element.UID}`"
-                class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
-              >
-                <PopMenu
-                  @openMenu="lockVisibility(column.element.UID)"
-                  @closeMenu="unlockVisibility(column.element.UID)"
-                >
-                  <div
-                    class="hover:-m-px hover:border hover:rounded-sm"
-                    :style="{
-                      'border-color': getContrastYIQ(column.element.Color) ?? '#7e7e80'
-                    }"
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9.35524 16.6055C8.37421 16.6055 7.57892 15.8102 7.57892 14.8291C7.57892 13.8481 8.37421 13.0528 9.35524 13.0528C10.3363 13.0528 11.1316 13.8481 11.1316 14.8291C11.1316 15.8102 10.3363 16.6055 9.35524 16.6055ZM9.35524 11.2765C8.37421 11.2765 7.57892 10.4812 7.57892 9.50016C7.57892 8.51912 8.37421 7.72383 9.35524 7.72383C10.3363 7.72383 11.1316 8.51912 11.1316 9.50016C11.1316 10.4812 10.3363 11.2765 9.35524 11.2765ZM7.57892 4.17118C7.57892 5.15222 8.37421 5.9475 9.35524 5.9475C10.3363 5.9475 11.1316 5.15222 11.1316 4.17118C11.1316 3.19015 10.3363 2.39486 9.35524 2.39486C8.37421 2.39486 7.57892 3.19015 7.57892 4.17118Z"
-                        :fill="getContrastYIQ(column.element.Color) ?? '#7e7e80'"
-                      />
-                    </svg>
-                  </div>
-                  <template #menu>
-                    <PopMenuItem
-                      v-if="column.element.CanEditStage"
-                      icon="edit"
-                      @click="clickRenameColumn(column.element, $event)"
-                    >
-                      Переименовать
-                    </PopMenuItem>
-                    <PopMenuItem
-                      v-if="column.element.CanEditStage"
-                      icon="color"
-                      @click="clickColorColumn(column.element, $event)"
-                    >
-                      Выбрать цвет
-                    </PopMenuItem>
-                    <PopMenuItem
-                      v-if="column.element.CanEditStage"
-                      icon="move"
-                      @click="clickMoveColumn(column.element, $event)"
-                    >
-                      Переместить
-                    </PopMenuItem>
-                    <PopMenuItem
-                      v-if="column.element.AddCard"
-                      icon="move"
-                      @click="clickMoveAllColumnCards(column.element)"
-                    >
-                      Переместить все карточки
-                    </PopMenuItem>
-                    <PopMenuItem
-                      v-if="column.element.CanEditStage"
-                      icon="delete"
-                      @click="clickDeleteColumn(column.element, $event)"
-                    >
-                      Удалить
-                    </PopMenuItem>
-                  </template>
-                </PopMenu>
-              </div>
-            </div>
-            <!--под заголовок стат-колонки -->
-            <div
-              class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
+    <draggable
+      class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
+      :list="storeCards"
+      ghost-class="ghost-board"
+      item-key="UID"
+      group="columns"
+      :fallback-tolerance="1"
+      :force-fallback="true"
+      :animation="180"
+      :scroll-sensitivity="100"
+      @end="endDragColumn"
+    >
+      <template #item="column">
+        <div
+          v-if="isColumnVisible(column.element)"
+          class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
+          :style="{ background: column.element.Color }"
+          :data-column-uid="column.element.UID"
+        >
+          <!--заголовок -->
+          <div class="px-1 flex justify-between items-start">
+            <p
+              class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
               :style="{ color: getContrastYIQ(column.element.Color) }"
             >
-              <div
-                v-if="getColumnCards(column.element).length"
-                class="flex items-center justify-between h-[16px]"
+              {{ column.element.Name }}
+            </p>
+            <!-- Три точки -->
+            <div
+              v-if="column.element.CanEditStage || column.element.AddCard"
+              :ref="`stage-icon-${column.element.UID}`"
+              class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
+            >
+              <PopMenu
+                @openMenu="lockVisibility(column.element.UID)"
+                @closeMenu="unlockVisibility(column.element.UID)"
               >
-                <p class="text-[12px] leading-[14px]">
-                  Карточек: {{ getColumnCards(column.element).length }}
-                </p>
                 <div
-                  v-if="totalItem(getColumnCards(column.element))"
-                  class="flex items-center"
+                  class="hover:-m-px hover:border hover:rounded-sm"
+                  :style="{
+                    'border-color': getContrastYIQ(column.element.Color) ?? '#7e7e80'
+                  }"
                 >
                   <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       fill-rule="evenodd"
                       clip-rule="evenodd"
-                      d="M3.25924 4.44448C3.10208 4.44448 2.95135 4.50691 2.84021 4.61805C2.72908 4.72918 2.66665 4.87991 2.66665 5.03707V10.963C2.66665 11.1202 2.72908 11.2709 2.84021 11.382C2.95135 11.4932 3.10208 11.5556 3.25924 11.5556H12.7407C12.8979 11.5556 13.0486 11.4932 13.1597 11.382C13.2709 11.2709 13.3333 11.1202 13.3333 10.963V5.03707C13.3333 4.87991 13.2709 4.72918 13.1597 4.61805C13.0486 4.50691 12.8979 4.44448 12.7407 4.44448H3.25924ZM2.00216 3.77999C2.33556 3.4466 2.78774 3.25929 3.25924 3.25929H12.7407C13.2122 3.25929 13.6644 3.4466 13.9978 3.77999C14.3312 4.11339 14.5185 4.56558 14.5185 5.03707V10.963C14.5185 11.4345 14.3312 11.8867 13.9978 12.2201C13.6644 12.5535 13.2122 12.7408 12.7407 12.7408H3.25924C2.78774 12.7408 2.33556 12.5535 2.00216 12.2201C1.66876 11.8867 1.48146 11.4345 1.48146 10.963V5.03707C1.48146 4.56558 1.66876 4.11339 2.00216 3.77999Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M7.99998 6.81485C7.34542 6.81485 6.8148 7.34548 6.8148 8.00004C6.8148 8.6546 7.34542 9.18522 7.99998 9.18522C8.65454 9.18522 9.18517 8.6546 9.18517 8.00004C9.18517 7.34548 8.65454 6.81485 7.99998 6.81485ZM5.62961 8.00004C5.62961 6.69092 6.69086 5.62967 7.99998 5.62967C9.3091 5.62967 10.3704 6.69092 10.3704 8.00004C10.3704 9.30916 9.3091 10.3704 7.99998 10.3704C6.69086 10.3704 5.62961 9.30916 5.62961 8.00004Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M4.6712 3.3044C4.89264 3.39613 5.03702 3.61221 5.03702 3.85189C5.03702 4.63771 4.72485 5.39136 4.16919 5.94702C3.61352 6.50268 2.85988 6.81485 2.07406 6.81485C1.83437 6.81485 1.61829 6.67047 1.52657 6.44903C1.43485 6.2276 1.48555 5.97271 1.65503 5.80323L4.0254 3.43286C4.19488 3.26338 4.44976 3.21268 4.6712 3.3044ZM13.9259 10.3704C13.4544 10.3704 13.0022 10.5577 12.6688 10.8911C12.3354 11.2245 12.1481 11.6767 12.1481 12.1482C12.1481 12.4755 11.8828 12.7408 11.5555 12.7408C11.2283 12.7408 10.9629 12.4755 10.9629 12.1482C10.9629 11.3624 11.2751 10.6087 11.8308 10.0531C12.3864 9.49739 13.1401 9.18522 13.9259 9.18522C14.2532 9.18522 14.5185 9.45053 14.5185 9.77781C14.5185 10.1051 14.2532 10.3704 13.9259 10.3704Z"
-                      fill="currentColor"
+                      d="M9.35524 16.6055C8.37421 16.6055 7.57892 15.8102 7.57892 14.8291C7.57892 13.8481 8.37421 13.0528 9.35524 13.0528C10.3363 13.0528 11.1316 13.8481 11.1316 14.8291C11.1316 15.8102 10.3363 16.6055 9.35524 16.6055ZM9.35524 11.2765C8.37421 11.2765 7.57892 10.4812 7.57892 9.50016C7.57892 8.51912 8.37421 7.72383 9.35524 7.72383C10.3363 7.72383 11.1316 8.51912 11.1316 9.50016C11.1316 10.4812 10.3363 11.2765 9.35524 11.2765ZM7.57892 4.17118C7.57892 5.15222 8.37421 5.9475 9.35524 5.9475C10.3363 5.9475 11.1316 5.15222 11.1316 4.17118C11.1316 3.19015 10.3363 2.39486 9.35524 2.39486C8.37421 2.39486 7.57892 3.19015 7.57892 4.17118Z"
+                      :fill="getContrastYIQ(column.element.Color) ?? '#7e7e80'"
                     />
                   </svg>
-                  <p class="ml-1 text-[10px] leading-[12px]">
-                    {{ totalItem(getColumnCards(column.element)) }}
-                  </p>
                 </div>
-              </div>
-              <div
-                v-else
-                class="h-[16px]"
-              >
-              <!--делаем неразрывный пробел - чтобы не скрыло и остался правильный отступ -->
-              &nbsp;
-              </div>
-            </div>
-            <!--карточки -->
-            <div class="min-h-0 overflow-y-auto scroll-style pr-2">
-              <draggable
-                :data-column-id="column.element.UID"
-                :list="getColumnCards(column.element)"
-                ghost-class="ghost-card"
-                item-key="uid"
-                group="cards"
-                :disabled="!board || board.type_access === 0 || isFiltered"
-                :move="checkMoveDragCard"
-                :fallback-tolerance="1"
-                :force-fallback="true"
-                :animation="180"
-                :scroll-sensitivity="250"
-                @start="startDragCard"
-                @end="endDragCard"
-                @change="changeDragCard"
-              >
-                <template #item="{ element }">
-                  <BoardCard
-                    :data-card-id="element.uid"
-                    :card="element"
-                    :show-date="board?.show_date !== 0 ?? false"
-                    :read-only="!board || board.type_access === 0"
-                    :selected="selectedCardUid === element.uid"
-                    class="mt-2"
-                    @select="selectCard(element)"
-                    @delete="deleteCard(element)"
-                    @moveSuccess="moveSuccessCard(element)"
-                    @moveReject="moveRejectCard(element)"
-                    @moveColumn="onClickMoveCard(element)"
-                    @moveCardToTop="moveCardToTop(element)"
-                    @moveCardToBottom="moveCardToBottom(element)"
-                  />
+                <template #menu>
+                  <PopMenuItem
+                    v-if="column.element.CanEditStage"
+                    icon="edit"
+                    @click="clickRenameColumn(column.element, $event)"
+                  >
+                    Переименовать
+                  </PopMenuItem>
+                  <PopMenuItem
+                    v-if="column.element.CanEditStage"
+                    icon="color"
+                    @click="clickColorColumn(column.element, $event)"
+                  >
+                    Выбрать цвет
+                  </PopMenuItem>
+                  <PopMenuItem
+                    v-if="column.element.CanEditStage"
+                    icon="move"
+                    @click="clickMoveColumn(column.element, $event)"
+                  >
+                    Переместить
+                  </PopMenuItem>
+                  <PopMenuItem
+                    v-if="column.element.AddCard"
+                    icon="move"
+                    @click="clickMoveAllColumnCards(column.element)"
+                  >
+                    Переместить все карточки
+                  </PopMenuItem>
+                  <PopMenuItem
+                    v-if="column.element.CanEditStage"
+                    icon="delete"
+                    @click="clickDeleteColumn(column.element, $event)"
+                  >
+                    Удалить
+                  </PopMenuItem>
                 </template>
-              </draggable>
+              </PopMenu>
             </div>
-            <!--кнопка добавить карточку -->
+          </div>
+          <!--под заголовок стат-колонки -->
+          <div
+            class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
+            :style="{ color: getContrastYIQ(column.element.Color) }"
+          >
             <div
-              v-if="column.element.AddCard && !isFiltered"
-              class="mt-2 h-[40px]"
+              v-if="getColumnCards(column.element).length"
+              class="flex items-center justify-between h-[16px]"
             >
-              <button
-                class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
-                :style="{ color: getContrastYIQ(column.element.Color) }"
-                @click="addCard(column.element)"
+              <p class="text-[12px] leading-[14px]">
+                Карточек: {{ getColumnCards(column.element).length }}
+              </p>
+              <div
+                v-if="totalItem(getColumnCards(column.element))"
+                class="flex items-center"
               >
-                <p class="text-sm">
-                  Добавить карточку
-                </p>
                 <svg
-                  class="ml-[5px]"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M9.935 5.00389L10 5C10.1361 5.00002 10.2674 5.04998 10.3691 5.1404C10.4708 5.23082 10.5357 5.35542 10.5517 5.49056L10.5556 5.55556V9.44444H14.4444C14.5805 9.44446 14.7119 9.49442 14.8135 9.58484C14.9152 9.67526 14.9802 9.79986 14.9961 9.935L15 10C15 10.1361 14.95 10.2674 14.8596 10.3691C14.7692 10.4708 14.6446 10.5357 14.5094 10.5517L14.4444 10.5556H10.5556V14.4444C10.5555 14.5805 10.5056 14.7119 10.4152 14.8135C10.3247 14.9152 10.2001 14.9802 10.065 14.9961L10 15C9.86393 15 9.73259 14.95 9.6309 14.8596C9.52922 14.7692 9.46425 14.6446 9.44833 14.5094L9.44444 14.4444V10.5556H5.55556C5.41948 10.5555 5.28815 10.5056 5.18646 10.4152C5.08477 10.3247 5.01981 10.2001 5.00389 10.065L5 10C5.00002 9.86393 5.04998 9.73259 5.1404 9.6309C5.23082 9.52922 5.35542 9.46425 5.49056 9.44833L5.55556 9.44444H9.44444V5.55556C9.44446 5.41948 9.49442 5.28815 9.58484 5.18646C9.67526 5.08477 9.79986 5.01981 9.935 5.00389L10 5L9.935 5.00389Z"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M3.25924 4.44448C3.10208 4.44448 2.95135 4.50691 2.84021 4.61805C2.72908 4.72918 2.66665 4.87991 2.66665 5.03707V10.963C2.66665 11.1202 2.72908 11.2709 2.84021 11.382C2.95135 11.4932 3.10208 11.5556 3.25924 11.5556H12.7407C12.8979 11.5556 13.0486 11.4932 13.1597 11.382C13.2709 11.2709 13.3333 11.1202 13.3333 10.963V5.03707C13.3333 4.87991 13.2709 4.72918 13.1597 4.61805C13.0486 4.50691 12.8979 4.44448 12.7407 4.44448H3.25924ZM2.00216 3.77999C2.33556 3.4466 2.78774 3.25929 3.25924 3.25929H12.7407C13.2122 3.25929 13.6644 3.4466 13.9978 3.77999C14.3312 4.11339 14.5185 4.56558 14.5185 5.03707V10.963C14.5185 11.4345 14.3312 11.8867 13.9978 12.2201C13.6644 12.5535 13.2122 12.7408 12.7407 12.7408H3.25924C2.78774 12.7408 2.33556 12.5535 2.00216 12.2201C1.66876 11.8867 1.48146 11.4345 1.48146 10.963V5.03707C1.48146 4.56558 1.66876 4.11339 2.00216 3.77999Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.99998 6.81485C7.34542 6.81485 6.8148 7.34548 6.8148 8.00004C6.8148 8.6546 7.34542 9.18522 7.99998 9.18522C8.65454 9.18522 9.18517 8.6546 9.18517 8.00004C9.18517 7.34548 8.65454 6.81485 7.99998 6.81485ZM5.62961 8.00004C5.62961 6.69092 6.69086 5.62967 7.99998 5.62967C9.3091 5.62967 10.3704 6.69092 10.3704 8.00004C10.3704 9.30916 9.3091 10.3704 7.99998 10.3704C6.69086 10.3704 5.62961 9.30916 5.62961 8.00004Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.6712 3.3044C4.89264 3.39613 5.03702 3.61221 5.03702 3.85189C5.03702 4.63771 4.72485 5.39136 4.16919 5.94702C3.61352 6.50268 2.85988 6.81485 2.07406 6.81485C1.83437 6.81485 1.61829 6.67047 1.52657 6.44903C1.43485 6.2276 1.48555 5.97271 1.65503 5.80323L4.0254 3.43286C4.19488 3.26338 4.44976 3.21268 4.6712 3.3044ZM13.9259 10.3704C13.4544 10.3704 13.0022 10.5577 12.6688 10.8911C12.3354 11.2245 12.1481 11.6767 12.1481 12.1482C12.1481 12.4755 11.8828 12.7408 11.5555 12.7408C11.2283 12.7408 10.9629 12.4755 10.9629 12.1482C10.9629 11.3624 11.2751 10.6087 11.8308 10.0531C12.3864 9.49739 13.1401 9.18522 13.9259 9.18522C14.2532 9.18522 14.5185 9.45053 14.5185 9.77781C14.5185 10.1051 14.2532 10.3704 13.9259 10.3704Z"
                     fill="currentColor"
                   />
                 </svg>
-              </button>
+                <p class="ml-1 text-[10px] leading-[12px]">
+                  {{ totalItem(getColumnCards(column.element)) }}
+                </p>
+              </div>
+            </div>
+            <div
+              v-else
+              class="h-[16px]"
+            >
+              <!--делаем неразрывный пробел - чтобы не скрыло и остался правильный отступ -->
+              &nbsp;
             </div>
           </div>
-        </template>
-      </draggable>
-      <!-- кнопка Добавить колонку -->
-      <div
-        v-if="board.type_access === 1 && !showArchive"
-        class="flex-none bg-white rounded-xl w-[246px] h-[48px] mr-[10px]"
-      >
-        <div
-          class="flex justify-center items-center h-full w-full cursor-pointer font-['Roboto'] text-[#7e7e80]"
-          @click="clickAddColumn"
-        >
-          <p class="text-sm">
-            Добавить колонку
-          </p>
-          <svg
-            class="ml-[5px]"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <!--карточки -->
+          <div class="min-h-0 overflow-y-auto scroll-style pr-2">
+            <draggable
+              :data-column-id="column.element.UID"
+              :list="getColumnCards(column.element)"
+              ghost-class="ghost-card"
+              item-key="uid"
+              group="cards"
+              :disabled="!board || board.type_access === 0 || isFiltered"
+              :move="checkMoveDragCard"
+              :fallback-tolerance="1"
+              :force-fallback="true"
+              :animation="180"
+              :scroll-sensitivity="250"
+              @start="startDragCard"
+              @end="endDragCard"
+              @change="changeDragCard"
+            >
+              <template #item="{ element }">
+                <BoardCard
+                  :data-card-id="element.uid"
+                  :card="element"
+                  :show-date="board?.show_date !== 0 ?? false"
+                  :read-only="!board || board.type_access === 0"
+                  :selected="selectedCardUid === element.uid"
+                  class="mt-2"
+                  @select="selectCard(element)"
+                  @delete="deleteCard(element)"
+                  @moveSuccess="moveSuccessCard(element)"
+                  @moveReject="moveRejectCard(element)"
+                  @moveColumn="onClickMoveCard(element)"
+                  @moveCardToTop="moveCardToTop(element)"
+                  @moveCardToBottom="moveCardToBottom(element)"
+                />
+              </template>
+            </draggable>
+          </div>
+          <!--кнопка добавить карточку -->
+          <BoardAddItem
+            v-if="showAddCard && column.element.UID === selectedColumn.UID"
+            :show="showAddCard"
+            title="Добавить карточку"
+            class="h-[40px]"
+            @save="onAddNewCard"
+          />
+          <div
+            v-if="column.element.AddCard && !isFiltered && !showAddCard"
+            class="mt-2 h-[40px]"
           >
-            <path
-              d="M9.935 5.00389L10 5C10.1361 5.00002 10.2674 5.04998 10.3691 5.1404C10.4708 5.23082 10.5357 5.35542 10.5517 5.49056L10.5556 5.55556V9.44444H14.4444C14.5805 9.44446 14.7119 9.49442 14.8135 9.58484C14.9152 9.67526 14.9802 9.79986 14.9961 9.935L15 10C15 10.1361 14.95 10.2674 14.8596 10.3691C14.7692 10.4708 14.6446 10.5357 14.5094 10.5517L14.4444 10.5556H10.5556V14.4444C10.5555 14.5805 10.5056 14.7119 10.4152 14.8135C10.3247 14.9152 10.2001 14.9802 10.065 14.9961L10 15C9.86393 15 9.73259 14.95 9.6309 14.8596C9.52922 14.7692 9.46425 14.6446 9.44833 14.5094L9.44444 14.4444V10.5556H5.55556C5.41948 10.5555 5.28815 10.5056 5.18646 10.4152C5.08477 10.3247 5.01981 10.2001 5.00389 10.065L5 10C5.00002 9.86393 5.04998 9.73259 5.1404 9.6309C5.23082 9.52922 5.35542 9.46425 5.49056 9.44833L5.55556 9.44444H9.44444V5.55556C9.44446 5.41948 9.49442 5.28815 9.58484 5.18646C9.67526 5.08477 9.79986 5.01981 9.935 5.00389L10 5L9.935 5.00389Z"
-              fill="currentColor"
-            />
-          </svg>
+            <button
+              class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
+              :style="{ color: getContrastYIQ(column.element.Color) }"
+              @click="addCard(column.element)"
+            >
+              <p class="text-sm">
+                Добавить карточку
+              </p>
+              <svg
+                class="ml-[5px]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.935 5.00389L10 5C10.1361 5.00002 10.2674 5.04998 10.3691 5.1404C10.4708 5.23082 10.5357 5.35542 10.5517 5.49056L10.5556 5.55556V9.44444H14.4444C14.5805 9.44446 14.7119 9.49442 14.8135 9.58484C14.9152 9.67526 14.9802 9.79986 14.9961 9.935L15 10C15 10.1361 14.95 10.2674 14.8596 10.3691C14.7692 10.4708 14.6446 10.5357 14.5094 10.5517L14.4444 10.5556H10.5556V14.4444C10.5555 14.5805 10.5056 14.7119 10.4152 14.8135C10.3247 14.9152 10.2001 14.9802 10.065 14.9961L10 15C9.86393 15 9.73259 14.95 9.6309 14.8596C9.52922 14.7692 9.46425 14.6446 9.44833 14.5094L9.44444 14.4444V10.5556H5.55556C5.41948 10.5555 5.28815 10.5056 5.18646 10.4152C5.08477 10.3247 5.01981 10.2001 5.00389 10.065L5 10C5.00002 9.86393 5.04998 9.73259 5.1404 9.6309C5.23082 9.52922 5.35542 9.46425 5.49056 9.44833L5.55556 9.44444H9.44444V5.55556C9.44446 5.41948 9.49442 5.28815 9.58484 5.18646C9.67526 5.08477 9.79986 5.01981 9.935 5.00389L10 5L9.935 5.00389Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="flex-none w-[1px]">
-        &nbsp;
-      </div>
-    </div>
+      </template>
+      <template #footer>
+        <!-- кнопка Добавить колонку -->
+        <BoardAddItem
+          v-if="showAddColumn"
+          :show="showAddColumn"
+          title="Добавить колонку"
+          class="w-[280px]"
+          @cancel="showAddColumn = false"
+          @save="onAddNewColumn"
+        />
+        <div
+          v-if="board.type_access === 1 && !showArchive && !showAddColumn"
+          class="flex-none bg-white rounded-xl w-[280px] h-[48px] mr-[10px]"
+        >
+          <div
+            class="flex justify-center items-center h-full w-full cursor-pointer font-['Roboto'] text-[#7e7e80]"
+            @click="clickAddColumn"
+          >
+            <p class="text-sm">
+              Добавить колонку
+            </p>
+            <svg
+              class="ml-[5px]"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.935 5.00389L10 5C10.1361 5.00002 10.2674 5.04998 10.3691 5.1404C10.4708 5.23082 10.5357 5.35542 10.5517 5.49056L10.5556 5.55556V9.44444H14.4444C14.5805 9.44446 14.7119 9.49442 14.8135 9.58484C14.9152 9.67526 14.9802 9.79986 14.9961 9.935L15 10C15 10.1361 14.95 10.2674 14.8596 10.3691C14.7692 10.4708 14.6446 10.5357 14.5094 10.5517L14.4444 10.5556H10.5556V14.4444C10.5555 14.5805 10.5056 14.7119 10.4152 14.8135C10.3247 14.9152 10.2001 14.9802 10.065 14.9961L10 15C9.86393 15 9.73259 14.95 9.6309 14.8596C9.52922 14.7692 9.46425 14.6446 9.44833 14.5094L9.44444 14.4444V10.5556H5.55556C5.41948 10.5555 5.28815 10.5056 5.18646 10.4152C5.08477 10.3247 5.01981 10.2001 5.00389 10.065L5 10C5.00002 9.86393 5.04998 9.73259 5.1404 9.6309C5.23082 9.52922 5.35542 9.46425 5.49056 9.44833L5.55556 9.44444H9.44444V5.55556C9.44446 5.41948 9.49442 5.28815 9.58484 5.18646C9.67526 5.08477 9.79986 5.01981 9.935 5.00389L10 5L9.935 5.00389Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="flex-none w-[1px]">
+            &nbsp;
+        </div>
+      </template>
+    </draggable>
   </div>
 </template>
 
@@ -344,6 +355,7 @@ import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
+import BoardAddItem from './Board/BoardAddItem.vue'
 
 export default {
   components: {
@@ -356,7 +368,8 @@ export default {
     BoardModalBoxCardMove,
     BoardSkeleton,
     BoardCard,
-    draggable
+    draggable,
+    BoardAddItem
   },
   props: {
     storeCards: {
@@ -382,7 +395,8 @@ export default {
       dragCardParam: null,
       showMoveCard: false,
       showMoveAllCards: false,
-      selectedCardUid: ''
+      selectedCardUid: '',
+      columnUid: ''
     }
   },
   computed: {
@@ -630,6 +644,7 @@ export default {
       icon.style.visibility = null
     },
     onAddNewCard (name) {
+      console.log(this.selectedColumn.UID)
       this.showAddCard = false
       const title = name.trim()
       if (title) {
@@ -759,11 +774,11 @@ export default {
     },
     endDragColumn (end) {
       console.log(end)
-      if (end.oldIndex !== end.newIndex) {
-        // Возможное решение долгой смены колонок: менять Order в стейте перед запросом на сервер
-        // this.storeCards.find(col => col.UID === end.item.dataset.columnUid).Order = end.newIndex
-        this.changeColumnOrder(end.item.dataset.columnUid, end.newIndex)
-      }
+      // if (end.oldIndex !== end.newIndex) {
+      //   // Возможное решение долгой смены колонок: менять Order в стейте перед запросом на сервер
+      //   // this.storeCards.find(col => col.UID === end.item.dataset.columnUid).Order = end.newIndex
+      //   this.changeColumnOrder(end.item.dataset.columnUid, end.newIndex)
+      // }
     },
     startDragCard (start) {
       this.dragCardParam = {
