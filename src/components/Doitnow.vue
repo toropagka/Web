@@ -208,7 +208,7 @@ export default {
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask && newtask.mode === 'task') {
+      if (newtask && newtask.uid) {
         this.$store.commit(TASK.SELECT_TASK, newtask)
         this.$store.dispatch(MSG.MESSAGES_REQUEST, newtask.uid)
           .then(() => {
@@ -239,7 +239,6 @@ export default {
         .then((result) => {
           // сортировка непрочитанных
           for (let i = 0; i < result[0].length; i++) {
-            result[0][i].mode = 'task'
             // Поручено мной
             if (result[0][i].uid_customer === this.user.current_user_uid) {
               this.unreadDelegateByMe.unshift(result[0][i])
@@ -262,7 +261,6 @@ export default {
           }
           // Сортировка просроченных
           for (let i = 0; i < result[1].length; i++) {
-            result[1][i].mode = 'task'
             if (result[1][i].readed) {
               this.overdueReaded.push(result[1][i])
             }
@@ -277,7 +275,6 @@ export default {
                 this.$store.commit(TASK.ADD_TASK_TAGS, resp.data.anothers_tags)
               }
               for (let i = 0; i < resp.data.tasks; i++) {
-                resp.data.tasks[i].mode = 'task'
                 if (resp.data.tasks[i].readed) {
                   this.readyTasksReaded.push(resp.data.tasks[i])
                 }
