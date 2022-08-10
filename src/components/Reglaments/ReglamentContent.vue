@@ -12,68 +12,77 @@
   <div
     v-if="isEditing"
   >
-    <div
-      class="flex justify-end gap-[8px] mb-2"
-    >
-      <PopMenu v-if="!editorsCanEdit">
-        <ReglamentSmallButton>
-          Добавить редактора
-        </ReglamentSmallButton>
-        <template #menu>
-          <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-            <BoardPropsMenuItemUser
-              v-for="editor in usersCanAddToAccess"
-              :key="editor.email"
-              :show-check-mark="checkEditor(editor.email)"
-              :user-email="editor.email"
-              @click="addReglamentEditor(editor.email)"
-            />
-          </div>
-        </template>
-      </PopMenu>
-      <PopMenu>
-        <ReglamentSmallButton>
-          {{ currDepTitle }}
-        </ReglamentSmallButton>
-        <template #menu>
-          <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-            <PopMenuItem
-              @click="currDep = ''"
-            >
-              Общий для всех отделов
-            </PopMenuItem>
-            <PopMenuItem
-              v-for="dep in allDepartments"
-              :key="dep.uid"
-              @click="currDep = dep.uid"
-            >
-              {{ dep.name }}
-            </PopMenuItem>
-          </div>
-        </template>
-      </PopMenu>
-      <ReglamentSmallButton
-        :icon="shouldClear ? 'check' : 'uncheck'"
-        @click="shouldClear = !shouldClear"
-      >
-        Очистить сотрудников, прошедших регламент
-      </ReglamentSmallButton>
-      <ReglamentSmallButton
-        class="w-[224px]"
-        icon="edit"
-        @click="saveReglament"
-      >
-        {{ saveButtonText }}
-      </ReglamentSmallButton>
-      <ReglamentSmallButton
-        class="w-[224px]"
-        icon="edit"
-        @click="setEdit"
-      >
-        {{ editButtonText }}
-      </ReglamentSmallButton>
+    <div class="w-full">
+      <div class="fixed bg-[#f4f5f7] right-0 left-0 mt-[-8px] z-[6]">
+        <div
+          class="flex justify-end gap-[8px] mb-2 mr-3"
+        >
+          <PopMenu v-if="!editorsCanEdit">
+            <ReglamentSmallButton>
+              Добавить редактора
+            </ReglamentSmallButton>
+            <template #menu>
+              <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
+                <BoardPropsMenuItemUser
+                  v-for="editor in usersCanAddToAccess"
+                  :key="editor.email"
+                  :show-check-mark="checkEditor(editor.email)"
+                  :user-email="editor.email"
+                  @click="addReglamentEditor(editor.email)"
+                />
+              </div>
+            </template>
+          </PopMenu>
+          <PopMenu>
+            <ReglamentSmallButton>
+              {{ currDepTitle }}
+            </ReglamentSmallButton>
+            <template #menu>
+              <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
+                <PopMenuItem
+                  @click="currDep = ''"
+                >
+                  Общий для всех отделов
+                </PopMenuItem>
+                <PopMenuItem
+                  v-for="dep in allDepartments"
+                  :key="dep.uid"
+                  @click="currDep = dep.uid"
+                >
+                  {{ dep.name }}
+                </PopMenuItem>
+              </div>
+            </template>
+          </PopMenu>
+          <ReglamentSmallButton
+            :icon="shouldClear ? 'check' : 'uncheck'"
+            @click="shouldClear = !shouldClear"
+          >
+            Очистить сотрудников, прошедших регламент
+          </ReglamentSmallButton>
+          <ReglamentSmallButton
+            class="w-[224px]"
+            icon="edit"
+            @click="saveReglament"
+          >
+            {{ saveButtonText }}
+          </ReglamentSmallButton>
+          <ReglamentSmallButton
+            class="w-[224px]"
+            icon="edit"
+            @click="setEdit"
+          >
+            {{ editButtonText }}
+          </ReglamentSmallButton>
+        </div>
+      </div>
     </div>
-    <div class="bg-white p-3 rounded mb-3">
+    <div
+      class="h-[35px]"
+    />
+    <div
+      class="bg-white p-3 rounded mb-3"
+    >
       <input
         v-model="currName"
         type="text"
