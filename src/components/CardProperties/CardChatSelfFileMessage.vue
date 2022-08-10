@@ -29,7 +29,7 @@ export default {
       return splittedValue[splittedValue.length - 1].toLowerCase()
     },
     FileIsImage () { return ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].includes(this.fileExtension) },
-    FileIsMovie () { return ['mov', 'mp4', 'wmv', 'avi', 'avchd', 'mkv', 'webm', 'mpeg-2'].includes(this.fileExtension) },
+    FileIsMovie () { return ['mov', 'mp4'].includes(this.fileExtension) },
     FileIsDoc () { return ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'].includes(this.fileExtension) },
     FileIsAudio () { return ['mp3', 'wav', 'm4a'].includes(this.fileExtension) }
   },
