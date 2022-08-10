@@ -25,7 +25,7 @@
   />
   <div
     v-if="displayModal"
-    class="flex flex-col items-center"
+    class="flex flex-col items-center max-w-[600px] mx-auto"
   >
     <img
       class="mx-auto mt-10"
@@ -37,10 +37,10 @@
       alt="Empty task image"
     >
     <p class="font-bold p-3">
-      Не отвлекайтесь на другие задачи, а работайте только с одной конкретной задачей
+      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
     </p>
     <p class="text-sm p-3">
-      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
+      Запишите сюда все ваши рабочие дела и встречи, а также выполняйте поручения от коллег, которые ждут от вас результатов сегодня
     </p>
     <button
       class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
