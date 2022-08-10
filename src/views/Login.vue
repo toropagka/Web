@@ -103,6 +103,7 @@
               :type="form.showPassword ? 'text' : 'password'"
               :valid="validatePassword"
               @icon-click="togglePasswordVisibility"
+              @click="form.passwordTouched = true"
               @blur="ifEmptyFiled"
             />
           </field>
@@ -119,6 +120,7 @@
               autocomplete="username"
               placeholder="Имя пользователя"
               :valid="form.username.length > 2"
+              @click="form.usernameTouched = true"
               @blur="ifEmptyFiled"
             />
           </field>
@@ -185,7 +187,9 @@ export default {
         startScreenText: 'ЛидерТаск',
         showCheckButton: true,
         showBackButton: false,
-        showPassword: false
+        showPassword: false,
+        passwordTouched: false,
+        usernameTouched: false
       },
       showValues: {
         showRegisterInputsValue: false,
@@ -326,7 +330,7 @@ export default {
       this.form.showPassword = !this.form.showPassword
     },
     ifEmptyFiled () {
-      if (!this.form.username || !this.form.password) {
+      if ((!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)) {
         this.form.showError = true
         this.form.errorMessage = 'Для успешной регистрации заполните все поля'
       } else if (this.form.showError) {
