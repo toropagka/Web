@@ -27,7 +27,8 @@ export default {
   },
   emits: ['cancel', 'save'],
   data: () => ({
-    currentValue: ''
+    currentValue: '',
+    emittedOnce: false
   }),
   watch: {
     show: {
@@ -35,6 +36,7 @@ export default {
       handler: function (val) {
         if (val) {
           this.currentValue = this.value
+          this.emittedOnce = false
           this.$nextTick(function () {
             this.$refs.inputValue.focus({ preventScroll: false })
           })
@@ -44,12 +46,18 @@ export default {
   },
   methods: {
     onCancel () {
-      if (this.show) this.$emit('cancel')
+      if (this.show && !this.emittedOnce) {
+        this.emittedOnce = true
+        this.$emit('cancel')
+      }
     },
     onSave () {
       const text = this.currentValue.trim()
       if (!text) return this.onCancel()
-      if (this.show) this.$emit('save', text)
+      if (this.show && !this.emittedOnce) {
+        this.emittedOnce = true
+        this.$emit('save', text)
+      }
     }
   }
 }
