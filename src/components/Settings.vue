@@ -1,4 +1,5 @@
 <template>
+  <AsideMenu :menu="menu" />
   <div class="mt-[30px]">
     <acc-modal
       v-if="currentSettingsTab === 'account'"
@@ -21,14 +22,19 @@ import AccKarma from '@/components/AccKarma.vue'
 import AccTarif from '@/components/AccTarif.vue'
 import AccOption from '@/components/AccOption.vue'
 import AccModal from '@/components/AccModal.vue'
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import initWebSync from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
+import AsideMenu from '@/components/AsideMenu.vue'
+
 import { USER_REQUEST } from '@/store/actions/user'
 import { AUTH_LOGOUT } from '@/store/actions/auth'
+import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
+
+import initWebSync from '@/websync/index.js'
+import initInspectorSocket from '@/inspector/index.js'
+
 export default {
   components: {
     AccKarma,
+    AsideMenu,
     AccTarif,
     AccOption,
     AccModal
@@ -39,6 +45,9 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    menu () {
+      return this.$store.state.navigator.menu
     }
   },
   mounted () {
@@ -75,12 +84,13 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        localStorage.setItem('currentSettingsTab', 'account')
         this.$router.push('/login')
       })
       if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
     },
     changeSettingsTab (tabName) {
-      this.$store.state.navigator.currentSettingsTab = tabName
+      localStorage.setItem('currentSettingsTab', tabName)
     }
   }
 }

@@ -120,6 +120,7 @@ export default {
           value: { uid: item.uid, param: null },
           greedPath: item.type
         }
+        localStorage.setItem('currentSettingsTab', item.type)
         this.$store.commit('updateStackWithInitValue', navElem)
         return
       }

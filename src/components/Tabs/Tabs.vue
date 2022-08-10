@@ -86,7 +86,6 @@ export default {
     return {
       showInspector: false,
       showFreeModal: false,
-      currentSettingsTab: 'account',
       lastSelectedTabsCode: '',
       tabs: [
         {
@@ -364,6 +363,9 @@ export default {
         case 'clients':
           this.$router.push('/clients')
           break
+        case 'settings':
+          this.$router.push('/settings')
+          break
       }
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.state.navigator.menu = []
@@ -441,8 +443,6 @@ export default {
         ]
       }
 
-      this.$router.push('/settings')
-      this.$store.state.navigator.lastTab = 'settings'
       this.switchTab(elemToPush)
     }
   }
