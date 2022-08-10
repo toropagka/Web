@@ -21,20 +21,15 @@
       @cancel="showDeleteColumn = false"
       @yes="onDeleteColumn"
     />
-    <BoardModalBoxRename
+    <!-- Добавление карточки -->
+    <!-- <BoardModalBoxRename
       v-if="showAddCard"
       :show="showAddCard"
       title="Добавить карточку"
       @cancel="showAddCard = false"
       @save="onAddNewCard"
-    />
-    <BoardModalBoxRename
-      v-if="showAddColumn"
-      :show="showAddColumn"
-      title="Добавить колонку"
-      @cancel="showAddColumn = false"
-      @save="onAddNewColumn"
-    />
+    /> -->
+    <!-- Изменения названия колонка -->
     <BoardModalBoxRename
       v-if="showRenameColumn"
       :show="showRenameColumn"
@@ -266,8 +261,15 @@
               </draggable>
             </div>
             <!--кнопка добавить карточку -->
+            <BoardAddItem
+              v-if="showAddCard && column.element.UID === selectedColumn.UID"
+              :show="showAddCard"
+              title="Добавить карточку"
+              class="h-[40px]"
+              @save="onAddNewCard"
+            />
             <div
-              v-if="column.element.AddCard && !isFiltered"
+              v-if="column.element.AddCard && !isFiltered && !showAddCard"
               class="mt-2 h-[40px]"
             >
               <button
@@ -297,9 +299,17 @@
         </template>
       </draggable>
       <!-- кнопка Добавить колонку -->
+      <BoardAddItem
+        v-if="showAddColumn"
+        :show="showAddColumn"
+        title="Добавить колонку"
+        class="w-[280px]"
+        @cancel="showAddColumn = false"
+        @save="onAddNewColumn"
+      />
       <div
-        v-if="board.type_access === 1 && !showArchive"
-        class="flex-none bg-white rounded-xl w-[246px] h-[48px] mr-[10px]"
+        v-if="board.type_access === 1 && !showArchive && !showAddColumn"
+        class="flex-none bg-white rounded-xl w-[280px] h-[48px] mr-[10px]"
       >
         <div
           class="flex justify-center items-center h-full w-full cursor-pointer font-['Roboto'] text-[#7e7e80]"
@@ -344,6 +354,7 @@ import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
+import BoardAddItem from './Board/BoardAddItem.vue'
 
 export default {
   components: {
@@ -356,7 +367,8 @@ export default {
     BoardModalBoxCardMove,
     BoardSkeleton,
     BoardCard,
-    draggable
+    draggable,
+    BoardAddItem
   },
   props: {
     storeCards: {
@@ -382,7 +394,8 @@ export default {
       dragCardParam: null,
       showMoveCard: false,
       showMoveAllCards: false,
-      selectedCardUid: ''
+      selectedCardUid: '',
+      columnUid: ''
     }
   },
   computed: {
@@ -630,6 +643,7 @@ export default {
       icon.style.visibility = null
     },
     onAddNewCard (name) {
+      console.log(this.selectedColumn.UID)
       this.showAddCard = false
       const title = name.trim()
       if (title) {
