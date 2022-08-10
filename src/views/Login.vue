@@ -330,6 +330,11 @@ export default {
       this.form.showPassword = !this.form.showPassword
     },
     ifEmptyFiled () {
+      if (this.form.password.length < 8) {
+        this.form.showError = true
+        this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
+        return
+      }
       if ((!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)) {
         this.form.showError = true
         this.form.errorMessage = 'Для успешной регистрации заполните все поля'
