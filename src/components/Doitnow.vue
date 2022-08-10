@@ -70,7 +70,7 @@
   </div>
   <DoitnowSkeleton v-if="isLoading" />
   <transition :name="taskTransition">
-    <div v-if="!(tasksCount === 0 && !isLoading)">
+    <div v-if="!(tasksCount === 0 && !isLoading) && !displayModal">
       <a
         class="dark:bg-gray-700 cursor-pointer dark:text-gray-100 rounded-lg text-[14px] breadcrumbs text-[#7E7E80] font-medium"
         target="_blank"
@@ -225,7 +225,7 @@ export default {
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask) {
+      if (newtask && newtask.uid) {
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
