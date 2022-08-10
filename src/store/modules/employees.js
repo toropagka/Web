@@ -94,6 +94,9 @@ const mutations = {
   [EMPLOYEE.PUSH_EMPLOYEE]: (state, employee) => {
     state.employees[employee.uid] = employee
   },
+  [EMPLOYEE.REMOVE_EMPLOYEE_REQUEST]: (state, employee) => {
+    delete state.employees[employee.uid]
+  },
   [EMPLOYEE.PUSH_EMPLOYEE_BY_EMAIL]: (state, employee) => {
     state.employeesByEmail[employee.email.toLowerCase()] = employee
   },

@@ -287,6 +287,7 @@ export default {
       this.showConfirm = false
       this.$store.dispatch(EMPLOYEE.REMOVE_EMPLOYEE_REQUEST, this.selectedEmployee)
         .then(() => {
+          this.$store.commit(EMPLOYEE.REMOVE_EMPLOYEE_REQUEST, this.selectedEmployee)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_EMPLOYEE, this.selectedEmployee)
         })
