@@ -63,6 +63,8 @@ import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
+import initWebSync from '@/websync/index.js'
+import initInspectorSocket from '@/inspector/index.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
@@ -176,19 +178,34 @@ export default {
   mounted: function () {
     const navLoaded = this.$store.state.navigator.hasLoadedOnce
     const userLoaded = this.$store.state.user.hasLoadedOnce
-    if (!navLoaded) {
-      this.$store.dispatch(NAVIGATOR_REQUEST)
-        .then(() => {
-          if (!userLoaded) {
-            this.$store.dispatch(USER_REQUEST)
-              .then(() => {
-                this.loadAllTasks()
-              })
-          }
+
+    // сначала запрашиваем пользователя, потом регламенты, потом навигатор
+    if (!userLoaded || !navLoaded) {
+      this.$store.dispatch(USER_REQUEST).then(() => {
+        // запрос регламентов
+        const data = {
+          organization: this.$store?.state?.user?.user?.owner_email,
+          user_uid: this.$store?.state?.user?.user?.current_user_uid
+        }
+        let reglaments = []
+        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
+          reglaments = resp.data
+        }).finally(() => {
+          // запрос навигатора
+          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
+            this.$store.state.navigator.navigator.reglaments = {
+              uid: 'fake-uid',
+              items: reglaments
+            }
+            try {
+              initWebSync()
+              initInspectorSocket()
+            } catch (e) {}
+          })
         })
-    } else {
-      this.loadAllTasks()
+      })
     }
+    this.loadAllTasks()
     this.$store.dispatch('fullScreenToggle', 'add')
   },
   methods: {
