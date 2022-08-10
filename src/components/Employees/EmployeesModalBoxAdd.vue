@@ -28,6 +28,18 @@
         @keyup.enter="onSave"
         @keyup.esc="onCancel"
       >
+      <p
+        v-if="showEmailError"
+        class="text-red-500"
+      >
+        Неверный формат электронной почты
+      </p>
+      <p
+        v-if="showError"
+        class="text-red-500"
+      >
+        Для добавления сотрудника заполните все поля
+      </p>
     </div>
   </ModalBox>
 </template>
@@ -48,7 +60,9 @@ export default {
   emits: ['cancel', 'save'],
   data: () => ({
     currentValueName: '',
-    currentValueEmail: ''
+    currentValueEmail: '',
+    showError: false,
+    showEmailError: false
   }),
   watch: {
     show: {
@@ -65,11 +79,28 @@ export default {
     }
   },
   methods: {
+    validateEmail () {
+      if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(this.currentValueEmail)) {
+        return true
+      }
+      return false
+    },
     onCancel () {
       if (this.show) this.$emit('cancel')
     },
     onSave () {
-      if (this.show) this.$emit('save', this.currentValueName, this.currentValueEmail)
+      if (this.currentValueName.length === 0 || this.currentValueEmail.length === 0) {
+        this.showError = true
+        this.showEmailError = false
+        return
+      }
+      this.showError = false
+      if (this.validateEmail() && this.show) {
+        this.$emit('save', this.currentValueName, this.currentValueEmail)
+      } else {
+        this.showError = false
+        this.showEmailError = true
+      }
     },
     onNext () {
       if (this.show) {

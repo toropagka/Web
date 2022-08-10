@@ -18,7 +18,7 @@ const state = {
   showOnlyCardsWhereIAmResponsible: false,
   showOnlyCardsWithNoResponsible: false,
   showOnlyMyCreatedCards: false,
-  showOnlySearchText: undefined
+  searchText: undefined
 }
 
 const getters = {}
@@ -267,7 +267,7 @@ const mutations = {
     state.showOnlyMyCreatedCards = showMyCreatedCards
   },
   [BOARD.SHOW_SEARCH_CARDS]: (state, searchText) => {
-    state.showOnlySearchText = searchText
+    state.searchText = searchText
   },
   [BOARD.BOARD_CLEAR_FILTER]: (state) => {
     state.showArchive = false
@@ -289,9 +289,7 @@ const mutations = {
   [BOARD.DELETE_STAGE_BOARD]: (state, data) => {
     const board = state.boards[data.boardUid]
     if (!board) console.error(`not find board ${data.boardUid}`)
-    const index = board.stages.findIndex(
-      (stage) => stage.UID === data.stageUid
-    )
+    const index = board.stages.findIndex((stage) => stage.UID === data.stageUid)
     if (index === -1) {
       console.error(`not find stage ${data.stageUid} at board ${data.boardUid}`)
     }
@@ -300,9 +298,7 @@ const mutations = {
   [BOARD.RENAME_STAGE_BOARD]: (state, data) => {
     const board = state.boards[data.boardUid]
     if (!board) console.error(`not find board ${data.boardUid}`)
-    const index = board.stages.findIndex(
-      (stage) => stage.UID === data.stageUid
-    )
+    const index = board.stages.findIndex((stage) => stage.UID === data.stageUid)
 
     const stage = board.stages[index]
     const newStage = { ...stage }
@@ -312,9 +308,7 @@ const mutations = {
   [BOARD.CHANGE_ORDER_STAGE_BOARD]: (state, data) => {
     const board = state.boards[data.boardUid]
     if (!board) console.error(`not find board ${data.boardUid}`)
-    const index = board.stages.findIndex(
-      (stage) => stage.UID === data.stageUid
-    )
+    const index = board.stages.findIndex((stage) => stage.UID === data.stageUid)
     if (index === -1) {
       console.error(`not find stage ${data.stageUid} at board ${data.boardUid}`)
     }

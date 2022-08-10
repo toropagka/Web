@@ -284,7 +284,8 @@ export default {
       showFreeModal: false,
       modalOneActive: false,
       lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
-      currentSettingsTab: 'account'
+      currentSettingsTab: 'account',
+      lastSelectedItem: null
     }
   },
   computed: {
@@ -363,6 +364,11 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
+      // Если уже находимся на этой вкладке игнорировать дальнейший код
+      if (this.checkOnWhichTab(item.uid)) {
+        return
+      }
+
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
       }
@@ -467,6 +473,10 @@ export default {
       else if (this.currentSettingsTab === 'karma') return ('Карма')
     },
     goToBoard (board) {
+      if (this.checkOnWhichTab(board.uid)) {
+        return
+      }
+
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -507,6 +517,10 @@ export default {
       })
     },
     goToProject (project) {
+      if (this.checkOnWhichTab(project.uid)) {
+        return
+      }
+
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -544,6 +558,12 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
+    },
+    checkOnWhichTab (item) {
+      if (this.lastSelectedItem === item) {
+        return true
+      }
+      this.lastSelectedItem = item
     }
   }
 }

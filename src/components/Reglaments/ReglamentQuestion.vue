@@ -21,24 +21,30 @@
         @keydown.enter.exact.prevent="$emit('addQuestion')"
         v-text="question.name"
       />
-      <span
-        v-if="rightAnswersAmount(question) === 1"
-        class="flex whitespace-nowrap font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs font-medium"
-      >
-        В данном вопросе один правильный ответ.
-      </span>
-      <span
-        v-if="rightAnswersAmount(question) > 1"
-        class="flex whitespace-nowrap font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs font-medium"
-      >
-        В данном вопросе более одного правильного ответа.
-      </span>
       <ReglamentQuestionPopMenu
         v-if="isEditing && canEdit"
         :question="question"
         @deleteQuestion="showDeleteQuestion = true"
       />
     </div>
+    <span
+      v-if="rightAnswersAmount(question) === 1"
+      class="flex whitespace-nowrap font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 px-1 mb-2 rounded-lg text-[13px] font-medium"
+    >
+      В данном вопросе один правильный ответ.
+    </span>
+    <span
+      v-if="rightAnswersAmount(question) > 1"
+      class="flex whitespace-nowrap font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 px-1 mb-2 rounded-lg text-[13px] font-medium"
+    >
+      В данном вопросе более одного правильного ответа.
+    </span>
+    <span
+      v-if="rightAnswersAmount(question) === 0"
+      class="flex whitespace-nowrap font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 px-1 mb-2 rounded-lg text-[13px] font-medium"
+    >
+      Добавьте хотя бы один правильный ответ.
+    </span>
     <template
       v-for="(answer) in question.answers"
       :key="answer.uid"
