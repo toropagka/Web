@@ -63,7 +63,7 @@
           <ReglamentSmallButton
             class="w-[224px]"
             icon="edit"
-            @click="saveReglament"
+            @click="onSaveReglamentButtonClick"
           >
             {{ saveButtonText }}
           </ReglamentSmallButton>
@@ -264,7 +264,9 @@ export default {
       showCompleteMessage: false,
       isPassed: 0,
       shouldClear: false,
-      showCheckMark: false
+      showCheckMark: false,
+      isFormInvalid: false,
+      firstInvalidQuestionUid: null
     }
   },
   computed: {
@@ -501,19 +503,24 @@ export default {
         this.gotoNode(questionToPush.uid)
       })
     },
-    saveReglament () {
+    onSaveReglamentButtonClick () {
       if (this.isEditing) {
         const reglament = { ...this.currReglament }
         reglament.content = this.currText
         reglament.name = this.currName.trim()
         reglament.department_uid = this.currDep
         reglament.editors = [...this.currEditors]
-        if (!reglament.name.length) {
-          reglament.name = 'Регламент без названия'
+
+        this.isFormInvalid = false
+        this.firstInvalidQuestionUid = null
+        this.validateReglamentQuestions()
+        if (this.isFormInvalid && this.firstInvalidQuestionUid) {
+          this.gotoNode(this.firstInvalidQuestionUid)
+          return
         }
-        //
+
         this.buttonSaveReglament = 0
-        this.$store.dispatch('UPDATE_REGLAMENT_REQUEST', reglament).then(() => {
+        this.saveReglament(reglament).then(() => {
           if (this.shouldClear) {
             this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, reglament.uid)
             this.shouldClear = false
@@ -539,100 +546,23 @@ export default {
         return
       }
 
-      let isFormInvalid = false
+      const reglament = { ...this.currReglament }
+      reglament.content = this.currText
+      reglament.name = this.currName.trim()
+      reglament.department_uid = this.currDep
+      reglament.editors = [...this.currEditors]
+
       if (this.isEditing) {
-        const reglament = { ...this.currReglament }
-        reglament.content = this.currText
-        reglament.name = this.currName.trim()
-        reglament.department_uid = this.currDep
-        reglament.editors = [...this.currEditors]
-        if (!reglament.name.length) {
-          reglament.name = 'Регламент без названия'
-        }
-
         this.saveContentStatus = 0
-        let firstInvalidQuestionUid
-        for (const question of this.questions) {
-          question.invalid = question.name === ''
-
-          if (!isFormInvalid && question.name === '') {
-            isFormInvalid = true
-            firstInvalidQuestionUid = question.uid
-          }
-
-          for (const answer of question.answers) {
-            answer.invalid = answer.name === ''
-
-            if (!isFormInvalid && answer.name === '') {
-              isFormInvalid = true
-              firstInvalidQuestionUid = question.uid
-            }
-          }
-        }
-
-        if (isFormInvalid) {
-          this.gotoNode(firstInvalidQuestionUid)
-          this.saveContentStatus = 1
+        this.isFormInvalid = false
+        this.firstInvalidQuestionUid = null
+        this.validateReglamentQuestions()
+        if (this.isFormInvalid && this.firstInvalidQuestionUid) {
+          this.gotoNode(this.firstInvalidQuestionUid)
           return
         }
 
-        for (const question of this.questions) {
-          if (question.needToCreate || question.needToUpdate) {
-            const questionData = {
-              name: question.name,
-              uid: question.uid,
-              uid_reglament: question.uid_reglament
-            }
-            Promise.resolve().then(() => {
-              if (question.needToCreate) {
-                return this.$store.dispatch(QUESTIONS.CREATE_REGLAMENT_QUESTION_REQUEST, questionData)
-              } else if (question.needToUpdate) {
-                return this.$store.dispatch(QUESTIONS.UPDATE_REGLAMENT_QUESTION_REQUEST, questionData)
-              }
-            })
-              .then(() => {
-                question.needToCreate = false
-                question.needToUpdate = false
-              })
-          }
-
-          for (const answer of question.answers) {
-            if (answer.needToCreate || answer.needToUpdate) {
-              const answerData = {
-                uid: answer.uid,
-                uid_question: answer.uid_question,
-                name: answer.name,
-                is_right: answer.is_right
-              }
-
-              Promise.resolve().then(() => {
-                if (answer.needToCreate) {
-                  return this.$store.dispatch(ANSWER.CREATE_REGLAMENT_ANSWER_REQUEST, answerData)
-                } else if (answer.needToUpdate) {
-                  return this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, answerData)
-                }
-              })
-                .then(() => {
-                  answer.needToCreate = false
-                  answer.needToUpdate = false
-                })
-            }
-          }
-        }
-
-        this.$store.state.reglaments.answersToDelete.forEach((uid, index) => {
-          this.$store.dispatch(ANSWER.DELETE_REGLAMENT_ANSWER_REQUEST, uid).then(() => {
-            this.$store.state.reglaments.answersToDelete.splice(index, 1)
-          })
-        })
-
-        this.$store.state.reglaments.questionsToDelete.forEach((uid, index) => {
-          this.$store.dispatch(QUESTIONS.DELETE_REGLAMENT_QUESTION_REQUEST, uid).then(() => {
-            this.$store.state.reglaments.questionsToDelete.splice(index, 1)
-          })
-        })
-
-        this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament).then(() => {
+        this.saveReglament(reglament).then(() => {
           if (this.shouldClear) {
             this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, reglament.uid)
             this.shouldClear = false
@@ -654,6 +584,88 @@ export default {
         this.currEditors = [...this.reglamentEditors]
         this.currDep = this.reglamentDep
       }
+    },
+    validateReglamentQuestions () {
+      for (const question of this.questions) {
+        question.invalid = question.name === ''
+
+        if (!this.isFormInvalid && question.name === '') {
+          this.isFormInvalid = true
+          this.firstInvalidQuestionUid = question.uid
+        }
+
+        for (const answer of question.answers) {
+          answer.invalid = answer.name === ''
+
+          if (!this.isFormInvalid && answer.name === '') {
+            this.isFormInvalid = true
+            this.firstInvalidQuestionUid = question.uid
+          }
+        }
+      }
+    },
+    saveReglament (reglament) {
+      if (!reglament.name.length) {
+        reglament.name = 'Регламент без названия'
+      }
+
+      for (const question of this.questions) {
+        if (question.needToCreate || question.needToUpdate) {
+          const questionData = {
+            name: question.name,
+            uid: question.uid,
+            uid_reglament: question.uid_reglament
+          }
+          Promise.resolve().then(() => {
+            if (question.needToCreate) {
+              return this.$store.dispatch(QUESTIONS.CREATE_REGLAMENT_QUESTION_REQUEST, questionData)
+            } else if (question.needToUpdate) {
+              return this.$store.dispatch(QUESTIONS.UPDATE_REGLAMENT_QUESTION_REQUEST, questionData)
+            }
+          })
+            .then(() => {
+              question.needToCreate = false
+              question.needToUpdate = false
+            })
+        }
+
+        for (const answer of question.answers) {
+          if (answer.needToCreate || answer.needToUpdate) {
+            const answerData = {
+              uid: answer.uid,
+              uid_question: answer.uid_question,
+              name: answer.name,
+              is_right: answer.is_right
+            }
+
+            Promise.resolve().then(() => {
+              if (answer.needToCreate) {
+                return this.$store.dispatch(ANSWER.CREATE_REGLAMENT_ANSWER_REQUEST, answerData)
+              } else if (answer.needToUpdate) {
+                return this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, answerData)
+              }
+            })
+              .then(() => {
+                answer.needToCreate = false
+                answer.needToUpdate = false
+              })
+          }
+        }
+      }
+
+      this.$store.state.reglaments.answersToDelete.forEach((uid, index) => {
+        this.$store.dispatch(ANSWER.DELETE_REGLAMENT_ANSWER_REQUEST, uid).then(() => {
+          this.$store.state.reglaments.answersToDelete.splice(index, 1)
+        })
+      })
+
+      this.$store.state.reglaments.questionsToDelete.forEach((uid, index) => {
+        this.$store.dispatch(QUESTIONS.DELETE_REGLAMENT_QUESTION_REQUEST, uid).then(() => {
+          this.$store.state.reglaments.questionsToDelete.splice(index, 1)
+        })
+      })
+
+      return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     },
     clickComplete () {
       const data = {
