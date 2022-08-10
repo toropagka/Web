@@ -261,12 +261,12 @@
             </draggable>
           </div>
           <!--кнопка добавить карточку -->
-          <BoardAddItem
+          <BoardInputValue
             v-if="showAddCard && column.element.UID === selectedColumn.UID"
-            :show="showAddCard"
-            title="Добавить карточку"
+            :show="showAddCard && column.element.UID === selectedColumn.UID"
             class="h-[40px]"
             @save="onAddNewCard"
+            @cancel="showAddCard = false"
           />
           <div
             v-if="column.element.AddCard && !isFiltered && !showAddCard"
@@ -299,10 +299,9 @@
       </template>
       <template #footer>
         <!-- кнопка Добавить колонку -->
-        <BoardAddItem
+        <BoardInputValue
           v-if="showAddColumn"
           :show="showAddColumn"
-          title="Добавить колонку"
           class="w-[280px]"
           @cancel="showAddColumn = false"
           @save="onAddNewColumn"
@@ -355,7 +354,7 @@ import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
-import BoardAddItem from './Board/BoardAddItem.vue'
+import BoardInputValue from './Board/BoardInputValue.vue'
 
 export default {
   components: {
@@ -369,7 +368,7 @@ export default {
     BoardSkeleton,
     BoardCard,
     draggable,
-    BoardAddItem
+    BoardInputValue
   },
   props: {
     storeCards: {
