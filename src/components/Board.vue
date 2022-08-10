@@ -158,7 +158,7 @@
                     <PopMenuItem
                       v-if="column.element.AddCard"
                       icon="move"
-                      @click="clickMoveAllColumnCards(column)"
+                      @click="clickMoveAllColumnCards(column.element)"
                     >
                       Переместить все карточки
                     </PopMenuItem>
