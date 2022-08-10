@@ -21,14 +21,6 @@
       @cancel="showDeleteColumn = false"
       @yes="onDeleteColumn"
     />
-    <!-- Добавление карточки -->
-    <!-- <BoardModalBoxRename
-      v-if="showAddCard"
-      :show="showAddCard"
-      title="Добавить карточку"
-      @cancel="showAddCard = false"
-      @save="onAddNewCard"
-    /> -->
     <!-- Изменения названия колонка -->
     <BoardModalBoxRename
       v-if="showRenameColumn"
@@ -83,35 +75,35 @@
       :scroll-sensitivity="100"
       @end="endDragColumn"
     >
-      <template #item="column">
+      <template #item="{element: column}">
         <div
-          v-if="isColumnVisible(column.element)"
+          v-if="isColumnVisible(column)"
           class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
-          :style="{ background: column.element.Color }"
-          :data-column-uid="column.element.UID"
+          :style="{ background: column.Color }"
+          :data-column-uid="column.UID"
         >
           <!--заголовок -->
           <div class="px-1 flex justify-between items-start">
             <p
               class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
-              :style="{ color: getContrastYIQ(column.element.Color) }"
+              :style="{ color: getContrastYIQ(column.Color) }"
             >
-              {{ column.element.Name }}
+              {{ column.Name }}
             </p>
             <!-- Три точки -->
             <div
-              v-if="column.element.CanEditStage || column.element.AddCard"
-              :ref="`stage-icon-${column.element.UID}`"
+              v-if="column.CanEditStage || column.AddCard"
+              :ref="`stage-icon-${column.UID}`"
               class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
             >
               <PopMenu
-                @openMenu="lockVisibility(column.element.UID)"
-                @closeMenu="unlockVisibility(column.element.UID)"
+                @openMenu="lockVisibility(column.UID)"
+                @closeMenu="unlockVisibility(column.UID)"
               >
                 <div
                   class="hover:-m-px hover:border hover:rounded-sm"
                   :style="{
-                    'border-color': getContrastYIQ(column.element.Color) ?? '#7e7e80'
+                    'border-color': getContrastYIQ(column.Color) ?? '#7e7e80'
                   }"
                 >
                   <svg
@@ -125,43 +117,43 @@
                       fill-rule="evenodd"
                       clip-rule="evenodd"
                       d="M9.35524 16.6055C8.37421 16.6055 7.57892 15.8102 7.57892 14.8291C7.57892 13.8481 8.37421 13.0528 9.35524 13.0528C10.3363 13.0528 11.1316 13.8481 11.1316 14.8291C11.1316 15.8102 10.3363 16.6055 9.35524 16.6055ZM9.35524 11.2765C8.37421 11.2765 7.57892 10.4812 7.57892 9.50016C7.57892 8.51912 8.37421 7.72383 9.35524 7.72383C10.3363 7.72383 11.1316 8.51912 11.1316 9.50016C11.1316 10.4812 10.3363 11.2765 9.35524 11.2765ZM7.57892 4.17118C7.57892 5.15222 8.37421 5.9475 9.35524 5.9475C10.3363 5.9475 11.1316 5.15222 11.1316 4.17118C11.1316 3.19015 10.3363 2.39486 9.35524 2.39486C8.37421 2.39486 7.57892 3.19015 7.57892 4.17118Z"
-                      :fill="getContrastYIQ(column.element.Color) ?? '#7e7e80'"
+                      :fill="getContrastYIQ(column.Color) ?? '#7e7e80'"
                     />
                   </svg>
                 </div>
                 <template #menu>
                   <PopMenuItem
-                    v-if="column.element.CanEditStage"
+                    v-if="column.CanEditStage"
                     icon="edit"
-                    @click="clickRenameColumn(column.element, $event)"
+                    @click="clickRenameColumn(column, $event)"
                   >
                     Переименовать
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.element.CanEditStage"
+                    v-if="column.CanEditStage"
                     icon="color"
-                    @click="clickColorColumn(column.element, $event)"
+                    @click="clickColorColumn(column, $event)"
                   >
                     Выбрать цвет
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.element.CanEditStage"
+                    v-if="column.CanEditStage"
                     icon="move"
-                    @click="clickMoveColumn(column.element, $event)"
+                    @click="clickMoveColumn(column, $event)"
                   >
                     Переместить
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.element.AddCard"
+                    v-if="column.AddCard"
                     icon="move"
-                    @click="clickMoveAllColumnCards(column.element)"
+                    @click="clickMoveAllColumnCards(column)"
                   >
                     Переместить все карточки
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.element.CanEditStage"
+                    v-if="column.CanEditStage"
                     icon="delete"
-                    @click="clickDeleteColumn(column.element, $event)"
+                    @click="clickDeleteColumn(column, $event)"
                   >
                     Удалить
                   </PopMenuItem>
@@ -172,17 +164,17 @@
           <!--под заголовок стат-колонки -->
           <div
             class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
-            :style="{ color: getContrastYIQ(column.element.Color) }"
+            :style="{ color: getContrastYIQ(column.Color) }"
           >
             <div
-              v-if="getColumnCards(column.element).length"
+              v-if="getColumnCards(column).length"
               class="flex items-center justify-between h-[16px]"
             >
               <p class="text-[12px] leading-[14px]">
-                Карточек: {{ getColumnCards(column.element).length }}
+                Карточек: {{ getColumnCards(column).length }}
               </p>
               <div
-                v-if="totalItem(getColumnCards(column.element))"
+                v-if="totalItem(getColumnCards(column))"
                 class="flex items-center"
               >
                 <svg
@@ -212,7 +204,7 @@
                   />
                 </svg>
                 <p class="ml-1 text-[10px] leading-[12px]">
-                  {{ totalItem(getColumnCards(column.element)) }}
+                  {{ totalItem(getColumnCards(column)) }}
                 </p>
               </div>
             </div>
@@ -227,8 +219,8 @@
           <!--карточки -->
           <div class="min-h-0 overflow-y-auto scroll-style">
             <draggable
-              :data-column-id="column.element.UID"
-              :list="getColumnCards(column.element)"
+              :data-column-id="column.UID"
+              :list="getColumnCards(column)"
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
@@ -263,20 +255,20 @@
           </div>
           <!--кнопка добавить карточку -->
           <div
-            v-if="column.element.AddCard && !isFiltered"
+            v-if="column.AddCard && !isFiltered"
             class="mt-2 h-[40px]"
           >
             <BoardInputValue
-              v-if="showAddCard && column.element.UID === selectedColumn.UID"
-              :show="showAddCard && column.element.UID === selectedColumn.UID"
+              v-if="showAddCard && column.UID === selectedColumn.UID"
+              :show="showAddCard && column.UID === selectedColumn.UID"
               @save="onAddNewCard"
               @cancel="showAddCard = false"
             />
             <button
               v-else
               class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
-              :style="{ color: getContrastYIQ(column.element.Color) }"
-              @click="addCard(column.element)"
+              :style="{ color: getContrastYIQ(column.Color) }"
+              @click="addCard(column)"
             >
               <p class="text-sm">
                 Добавить карточку
@@ -645,7 +637,6 @@ export default {
       if (icon) icon.style.visibility = null
     },
     onAddNewCard (name) {
-      console.log(this.selectedColumn.UID)
       this.showAddCard = false
       const title = name.trim()
       if (title) {
