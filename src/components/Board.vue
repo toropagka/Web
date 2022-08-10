@@ -72,6 +72,7 @@
     />
     <draggable
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
+      :disabled="true"
       :list="storeCards"
       ghost-class="ghost-board"
       item-key="UID"
