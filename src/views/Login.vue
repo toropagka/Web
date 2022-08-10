@@ -184,7 +184,7 @@ export default {
   data () {
     return {
       mdiEmailOutline,
-      mdiKey,
+      mdiEyeOffOutline,
       mdiAccountOutline,
       mdiArrowRight,
       mdiChevronLeft,
