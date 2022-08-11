@@ -12,10 +12,7 @@ const state = {
 }
 
 const getters = {
-  attrsCalendar: (state) => {
-    console.log('attrsCalendar', state)
-    return [state.todayAttribute, state.dotsAttribute]
-  }
+  attrsCalendar: (state) => [state.todayAttribute, state.dotsAttribute]
 }
 
 const actions = {
