@@ -1,11 +1,4 @@
 <template>
-  <DoitnowStatusModal
-    v-if="showStatusModal"
-    :title="'Внимание'"
-    :text="'При завершении этой задачи все подзадачи будут завершены. Завершить?'"
-    @cancel="showStatusModal = false"
-    @yes="changeStatus(lastSelectedStatus, true)"
-  />
   <div
     class="flex justify-between"
     :style="{ borderColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : ''}"
@@ -15,6 +8,13 @@
         task.uid_marker !== '00000000-0000-0000-0000-000000000000'
     }"
   >
+    <DoitnowStatusModal
+      v-if="showStatusModal"
+      :title="'Внимание'"
+      :text="'При завершении этой задачи все подзадачи будут завершены. Завершить?'"
+      @cancel="showStatusModal = false"
+      @yes="changeStatus(lastSelectedStatus, true)"
+    />
     <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
       <SlideBody
         v-if="task.mode === 'slide'"
