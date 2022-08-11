@@ -15,6 +15,7 @@ import cardfilesandmessages from './modules/cardfilesandmessages'
 import employees from './modules/employees'
 import departments from './modules/departments'
 import projects from './modules/projects'
+import clients from './modules/clients'
 import reglaments from './modules/reglaments'
 import reglamentAnswers from './modules/reglament_answers'
 import reglamentQuestions from './modules/reglament_questions'
@@ -155,6 +156,7 @@ export default createStore({
     projects,
     onboarding,
     reglaments,
+    clients,
     reglamentQuestions,
     reglamentAnswers,
     boards,

@@ -1,4 +1,3 @@
-
 <template>
   <!-- DATE -->
   <div v-if="shouldShowEmptyPics">

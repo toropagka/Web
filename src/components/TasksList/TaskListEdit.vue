@@ -113,7 +113,7 @@ export default {
     },
     inputElClass () {
       const base = [
-        'px-3 py-2 max-w-full text-sm border-gray-300 border-0 border-l-0 disabled:border-stone-500 disabled:bg-amber-50 disabled:ring-0 focus:ring-0 rounded-lg w-full',
+        'px-3 py-2 max-w-full text-sm border-gray-300 border-0 border-r-0 border-t-0 border-l-0 border-b-0 disabled:border-stone-500 disabled:bg-amber-50 disabled:ring-0 focus:ring-0 rounded-lg w-full',
         // 'focus:border-stone-500 focus:bg-amber-50',
         'focus:border-gray-300',
         'dark:placeholder-gray-500',
