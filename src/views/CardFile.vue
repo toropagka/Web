@@ -23,14 +23,14 @@ export default {
       const fileBlob = new Blob([resp.data], { type: type + '/' + format })
       const urlCreator = window.URL || window.webkitURL
       const fileURL = urlCreator.createObjectURL(fileBlob)
-      if (window.chrome && type === 'video') {
+      if (type === 'video') {
         this.videoBlob = fileURL
       } else {
         this.text = 'Файл был успешно загружен'
         this.dots = '.'
-        clearInterval(this.intervalId)
         window.location.href = fileURL
       }
+      clearInterval(this.intervalId)
     }).catch((err) => {
       this.text = err
       this.dots = '.'
@@ -48,9 +48,9 @@ export default {
     {{ text }} {{ dots }}
   </p>
   <video
-    v-if="$router.currentRoute.value.query.type === 'video' && videoBlob"
+    v-else-if="videoBlob"
     :key="videoBlob"
-    class="max-w-7xl max-h-[720px]"
+    class="w-full h-full"
     :src="videoBlob"
     autoplay
     controls
