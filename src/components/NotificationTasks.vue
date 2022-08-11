@@ -1,6 +1,6 @@
 <template>
   <div>
-    Задачи по регламентам
+    Задачи по регламентам:
     <div
       v-for="item in notificationTasks"
       :key="item.uid"
@@ -12,21 +12,16 @@
 
 <script>
 import { useStore } from 'vuex'
-import { NOTIFICATION_TASKS_REQUEST, NOTIFICATION_TASKS_CLEAR } from '@/store/actions/notification_tasks'
+import { NOTIFICATION_TASKS_GENERATE, NOTIFICATION_TASKS_CLEAR } from '@/store/actions/notification_tasks'
 export default {
-  data () {
-    return {
-      test: 1
-    }
-  },
   computed: {
     notificationTasks () {
-      return this.$store.getters.uncompletedReglaments
+      return this.$store.state.notificationTasks.notificationTasks
     }
   },
   mounted () {
     const store = useStore()
-    store.dispatch(NOTIFICATION_TASKS_REQUEST)
+    store.dispatch(NOTIFICATION_TASKS_GENERATE)
   },
   unmounted () {
     this.$store.commit(NOTIFICATION_TASKS_CLEAR)
