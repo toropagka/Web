@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
 import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
@@ -125,6 +126,7 @@ import Icon from '@/components/Icon.vue'
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { NOTIFICATION_TASKS_GENERATE } from '@/store/actions/notification_tasks'
 
 export default {
   components: {
@@ -164,7 +166,8 @@ export default {
         this.unreadTasks.length +
         this.overdueTasks.length +
         this.readyTasks.length +
-        this.todayTasks.length
+        this.todayTasks.length +
+        this.notificationTasks.length
       )
     },
     currentLocation () {
@@ -224,6 +227,9 @@ export default {
     displayModal () {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
     },
+    notificationTasks () {
+      return this.$store.state.notificationTasks.notificationTasks
+    },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
     }
@@ -256,6 +262,8 @@ export default {
       this.slidesCopy = [...this.slides]
     }
     if (!this.displayModal) {
+      const store = useStore()
+      store.dispatch(NOTIFICATION_TASKS_GENERATE)
       this.loadAllTasks()
     }
   },
