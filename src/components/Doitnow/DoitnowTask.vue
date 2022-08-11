@@ -295,7 +295,7 @@
       >
         <!-- accept -->
         <button
-          v-if="task.mode === 'slide' || task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.mode !== 'slide' || task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm hover:bg-white bg-green-100 hover:bg-opacity-90 font-medium border-green-400 min-h-[40px] w-[181px] rounded-lg border hover:text-green-500 mb-2 hover:animate-fadeIn"
           @click="accept"
         >
