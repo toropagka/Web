@@ -34,6 +34,9 @@ const actions = {
 }
 
 const mutations = {
+  updateCalendarToday (state) {
+    state.todayAttribute.dates = new Date()
+  },
   setDotsDates (state, dates) {
     state.dotsAttribute.dates = dates
   },
