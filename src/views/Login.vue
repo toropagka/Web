@@ -47,9 +47,16 @@
         label="Продолжить с Email"
         @click="checkEmailExistense"
       />
-      <GoogleLogin
-        :callback="googleCallback"
-      />
+      <div
+        v-if="false"
+        class="mt-2 w-full"
+      >
+        <GoogleLogin
+          v-if="form.showCheckButton"
+          class="w-full"
+          :callback="googleCallback"
+        />
+      </div>
       <transition-group name="slide-fade">
         <div v-if="showValues.showLoginInputsValue">
           <field>
