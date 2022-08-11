@@ -1175,9 +1175,11 @@ export default {
             const nextTaskUid = tasksKeyArray[nextTaskIndex]
             const nextTaskData = this.storeTasks[nextTaskUid]
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(nextTaskUid).focus({ preventScroll: false })
-            this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
-            this.lastSelectedTaskUid = nextTaskUid
+            if (nextTaskIndex < tasksKeyArray.length) {
+              document.getElementById(nextTaskUid).focus({ preventScroll: false })
+              this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
+              this.lastSelectedTaskUid = nextTaskUid
+            }
           })
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
           this.$store.dispatch('asidePropertiesToggle', false)
