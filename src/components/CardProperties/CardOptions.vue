@@ -84,25 +84,26 @@ export default {
           </div>
         </PopMenuHeader>
         <PopMenuItem
+          v-if="canEdit"
           icon="move"
           @click="clickMove"
         >
           Переместить
         </PopMenuItem>
-        <PopMenuDivider v-if="!isArchive" />
+        <PopMenuDivider v-if="!isArchive && canEdit" />
         <PopMenuItem
-          v-if="!isArchive"
+          v-if="!isArchive && canEdit"
           @click="clickSuccess"
         >
           Архивировать: Успех
         </PopMenuItem>
         <PopMenuItem
-          v-if="!isArchive"
+          v-if="!isArchive && canEdit"
           @click="clickReject"
         >
           Архивировать: Отказ
         </PopMenuItem>
-        <PopMenuDivider />
+        <PopMenuDivider v-if="!isArchive && canEdit" />
         <PopMenuItem
           v-if="!showFilesOnly"
           @click="$emit('toggleShowOnlyFiles')"
