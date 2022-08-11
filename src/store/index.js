@@ -21,6 +21,7 @@ import cards from './modules/cards'
 import colors from './modules/colors'
 import localization from './modules/localization'
 import inspector from './modules/inspector'
+import notificationTasks from './modules/notification_tasks'
 
 export default createStore({
   state: {
@@ -156,6 +157,7 @@ export default createStore({
     cards,
     colors,
     localization,
-    inspector
+    inspector,
+    notificationTasks
   }
 })

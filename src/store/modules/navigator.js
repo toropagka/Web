@@ -32,7 +32,6 @@ import {
 } from '../actions/navigator'
 import { PUSH_PROJECT } from '../actions/projects'
 import { ADD_TASK_TAGS } from '../actions/tasks'
-import { NOTIFICATION_TASKS_REQUEST } from '../actions/system_tasks'
 import { visitChildren } from '../helpers/functions'
 
 const getDefaultState = () => {
@@ -153,7 +152,6 @@ const actions = {
             })
             commit(ADD_TASK_TAGS, myTags)
           }
-          dispatch(NOTIFICATION_TASKS_REQUEST)
           dispatch('setDots', resp.data.calendar.dates_with_tasks)
           resolve(resp)
         })

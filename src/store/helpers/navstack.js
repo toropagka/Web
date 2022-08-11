@@ -66,6 +66,11 @@ export function checkGreedSource () {
     ) {
       store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       store.commit('basic', { key: 'greedPath', value: 'other' })
+    } else if (
+      lastNavStackElement.value.uid === 'asfctmui-u70g-z7qr-1l1j-6zvud6yc255l'
+    ) {
+      store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      store.commit('basic', { key: 'greedPath', value: 'notifications' })
     } else {
       store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       store.commit('basic', {

@@ -93,6 +93,9 @@
         v-if="greedPath === 'tags'"
         :tags="greedSource"
       />
+      <NotificationTasks
+        v-if="greedPath === 'notifications'"
+      />
       <TagWithChildren
         v-if="greedPath === 'tags_children'"
         :tags="greedSource"
@@ -153,6 +156,7 @@ import Dashboard from '@/components/Dashboard.vue'
 import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
+import NotificationTasks from '@/components/NotificationTasks.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST, USER_INVITE_ME } from '@/store/actions/user'
@@ -186,6 +190,7 @@ export default {
     Employees,
     Colors,
     Assignments,
+    NotificationTasks,
     ModalBox
   },
   data () {
@@ -469,7 +474,6 @@ export default {
       if (this.navStack.length && this.navStack.length > 0) {
         if (this.navStack[this.navStack.length - 1].key === 'greedSource') {
           const navStackUid = this.navStack[this.navStack.length - 1]?.uid
-
           if (navStackUid === '2bad1413-a373-4926-8a3c-58677a680714') {
             this.$store.commit('basic', {
               key: 'mainSectionState',

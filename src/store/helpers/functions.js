@@ -1,7 +1,6 @@
 import * as CARD from '@/store/actions/cards'
 import * as TASK from '@/store/actions/tasks'
 import * as TYPES from '@/websync/types.js'
-import * as SYSTEM_TASK from '@/store/actions/system_tasks'
 import { notify } from 'notiwind'
 
 export function visitChildren (arr, callback) {
@@ -112,6 +111,5 @@ export const UID_TO_ACTION = {
   'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0':
     TASK.READY_FOR_COMPLITION_TASKS_REQUEST,
   '11212e94-cedf-11ec-9d64-0242ac120002': TASK.SEARCH_TASK,
-  '47a38aa5-19c4-40d0-b8c0-56c3a420935d': TASK.ONE_TASK_REQUEST,
-  'asfctmui-u70g-z7qr-1l1j-6zvud6yc255l': SYSTEM_TASK.NOTIFICATION_TASKS_REQUEST
+  '47a38aa5-19c4-40d0-b8c0-56c3a420935d': TASK.ONE_TASK_REQUEST
 }

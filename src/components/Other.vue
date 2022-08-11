@@ -221,6 +221,22 @@ export default {
       setLocalStorageItem('isGridView', value)
     },
     gotoChildren (value) {
+      if (value.link === 'asfctmui-u70g-z7qr-1l1j-6zvud6yc255l') {
+        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+        this.$store.commit('basic', { key: 'greedPath', value: value.path })
+        const navElem = {
+          name: value.name,
+          key: 'greedSource',
+          greedPath: value.path,
+          value: { uid: value.link, param: null }
+        }
+        this.$store.commit('pushIntoNavStack', navElem)
+        this.$store.commit('basic', {
+          key: 'greedSource',
+          value: null
+        })
+        return
+      }
       if (value.path) {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: value.path })
