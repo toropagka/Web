@@ -1183,10 +1183,11 @@ export default {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
+          // получаем массив ключей и переворачиваем, чтобы получить текущий
+          const tasksKeyArray = Object.keys(this?.storeTasks)
+          const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
+
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            // получаем массив ключей и переворачиваем, чтобы получить текущий
-            const tasksKeyArray = Object.keys(this?.storeTasks)
-            const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
             // получаем юид и его дату
             const nextTaskUid = tasksKeyArray[nextTaskIndex]
             const nextTaskData = this.storeTasks[nextTaskUid]
