@@ -178,8 +178,8 @@
     class="flex justify-end"
   >
     <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-      :class="{ 'bg-[#E7E2E1]': disableButton === true }"
+      class="flex min-w-[175px] justify-center items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+      :class="{ 'bg-[#E7E2E1] hover:bg-[#C5C5C5]': disableButton === true }"
       :disabled="disableButton"
       @click="clickComplete"
     >
