@@ -4,6 +4,7 @@ import {
   AUTH_CHANGE_PASSWORD, AUTH_ERROR,
   AUTH_LOGOUT, AUTH_REFRESH_TOKEN, AUTH_REGISTER,
   AUTH_REQUEST,
+  GOOGLE_AUTH_REQUEST,
   AUTH_RESET,
   AUTH_SUCCESS
 } from '../actions/auth'
@@ -45,6 +46,25 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(AUTH_REGISTER)
       const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/new'
+      axios({ url: uri, data: user, method: 'POST' })
+        .then((resp) => {
+          setLocalStorageItem('user-token', resp.data.access_token)
+          setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
+          axios.defaults.headers.common.Authorization = resp.data.access_token
+          commit(AUTH_SUCCESS, resp)
+          resolve(resp)
+        })
+        .catch((err) => {
+          commit(AUTH_ERROR, err)
+          localStorage.removeItem('user-token')
+          reject(err)
+        })
+    })
+  },
+  [GOOGLE_AUTH_REQUEST]: ({ commit }, user) => {
+    return new Promise((resolve, reject) => {
+      commit(GOOGLE_AUTH_REQUEST)
+      const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/tokens/bygoogle'
       axios({ url: uri, data: user, method: 'POST' })
         .then((resp) => {
           setLocalStorageItem('user-token', resp.data.access_token)
@@ -126,6 +146,9 @@ const mutations = {
     state.status = 'loading'
   },
   [AUTH_REGISTER]: (state) => {
+    state.status = 'loading'
+  },
+  [GOOGLE_AUTH_REQUEST]: (state) => {
     state.status = 'loading'
   },
   [AUTH_SUCCESS]: (state, resp) => {

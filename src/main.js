@@ -5,6 +5,7 @@ import linkify from 'vue-linkify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import vue3GoogleLogin from 'vue3-google-login'
 
 import './css/main.css'
 
@@ -145,6 +146,9 @@ window.onerror = function (msg, url, lineNo, columnNo, error) {
 createApp(App)
   .use(store)
   .use(router)
+  .use(vue3GoogleLogin, {
+    clientId: '88157405682-f86b6b3if1ligkbqoh4vqlbu6r3mbi7p.apps.googleusercontent.com'
+  })
   .use(Notifications)
   .directive('linkified', linkify)
   .mount('#app')

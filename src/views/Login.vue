@@ -47,7 +47,9 @@
         label="Продолжить с Email"
         @click="checkEmailExistense"
       />
-
+      <GoogleLogin
+        :callback="googleCallback"
+      />
       <transition-group name="slide-fade">
         <div v-if="showValues.showLoginInputsValue">
           <field>
@@ -170,7 +172,8 @@ import Icon from '@/components/Icon.vue'
 import Control from '@/components/Control.vue'
 import JbButton from '@/components/JbButton.vue'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
-import { AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
+import { AUTH_REQUEST, GOOGLE_AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
+import { decodeCredential } from 'vue3-google-login'
 
 export default {
   components: {
@@ -374,6 +377,29 @@ export default {
         this.form.showError = false
         this.form.errorMessage = ''
       }
+    },
+    googleCallback (response) {
+      // This callback will be triggered when the user selects or login to
+      // his Google account from the popup
+      console.log('Handle the response', response)
+      const userData = decodeCredential(response.credential)
+      console.log('Handle the userData', userData)
+      const data = {
+        token: response.credential,
+        system: 'web',
+        language: 'russian',
+        type_device: 'mobile',
+        cid: 'webnew'
+      }
+      this.$store.dispatch(GOOGLE_AUTH_REQUEST, data)
+        .then(() => {
+          this.$router.push('/')
+          this.$store.dispatch(USER_START_ONBOARDING)
+        })
+        .catch(() => {
+          this.form.showError = true
+          this.form.errorMessage = 'Unknown error'
+        })
     }
   }
 }
