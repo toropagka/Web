@@ -296,12 +296,13 @@
               />
             </div>
             <!-- canmove props.node.id === lastSelectedTaskUid -->
+            <!-- props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id -->
             <TaskListActionHoverPanel
               :id="`hover-panel-${props.node.id}`"
               class="absolute right-[8px] top-[calc(50%-18px)] invisible group-hover:visible"
               :is-my-task="props.node.info.uid_customer == currentUserUid"
               :can-paste="!!Object.keys(copiedTasks).length"
-              :show-move-button="props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id"
+              :show-move-button="false"
               @click.stop
               @addSubtask="addSubtask(props.node.info)"
               @changeFocus="changeFocus(props.node.info)"
