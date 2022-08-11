@@ -314,7 +314,7 @@ export default {
       return this.isDark ? 'rgb(31 41 55)' : '#f4f5f7'
     },
     attrs () {
-      return this.$store.state.calendar.calendar
+      return this.$store.getters.attrsCalendar
     },
     user () {
       return this.$store.state.user.user
