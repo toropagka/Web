@@ -636,7 +636,7 @@ export default {
       let selectedTaskOrder = '' // order выделенной задачи
       const rootTask = {} // order задачи, которая не выделена
       // для задачи родителя
-      if (this.storeTasks[this.lastSelectedTaskUid].children.length) {
+      if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
         for (let i = 0; i < this.newConfig.roots.length; i++) {
           if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
           // проверяем на крайние значения
@@ -712,12 +712,24 @@ export default {
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
+              case 'left':
+                this.newConfig.roots[i] = this.newConfig.roots[i - 1]
+                this.newConfig.roots[i - 1] = this.lastSelectedTaskUid
+                // не выделенная таска
+                rootTask.uid = this.newConfig.roots[i]
+                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+                console.log(this.lastSelectedTask)
+                rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
+                this.lastSelectedTask.uid_parent = this.storeTasks[this.lastSelectedTask.uid_parent].info.uid_parent
+                // ставим order_new
+                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
+                break
             }
           }
         }
       }
       this.$store.state.tasks.newtasks[this.lastSelectedTaskUid].info.order_new = selectedTaskOrder
-      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new
+      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new - 100
       this.sortTaskChildren(this.$store.state.tasks.newtasks[this.lastSelectedTaskUid])
       // сортируем выбранную задачу
       this.$store.dispatch(
@@ -732,8 +744,7 @@ export default {
         this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
           uid: rootTask.uid,
           parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
-          order: rootTask.order_new
-        }).then(() => {
+          order: rootTask.order_new - 100
         })
       })
       console.log(position)
@@ -1093,6 +1104,7 @@ export default {
       }
     },
     nodeDragEnd (node) {
+      console.log(node)
       if (this.storeTasks[node.dragged.node.id]) {
         // change order in children
         if (this.storeTasks[node.dragged.node.id].parent) {
