@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between"
+    class="flex px-5 justify-between"
     :style="{ borderColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : ''}"
     :class="{
       'bg-gray-200 dark:bg-gray-800':
@@ -24,7 +24,7 @@
       />
       <div
         v-else
-        class="flex justify-between items-center mb-6 p-2 rounded-[8px]"
+        class="flex mx-[30px] justify-between items-center mb-6 p-2 rounded-[8px]"
         :style="{ backgroundColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : '', color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
       >
         <!-- task info/status -->

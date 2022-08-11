@@ -37,7 +37,7 @@
   </div>
   <div
     v-else-if="tasksCount && !isLoading"
-    class="flex items-center mb-5 justify-between"
+    class="flex items-center mt-[70px] mb-5 justify-between"
   >
     <!-- header -->
     <div class="flex items-center">
@@ -65,7 +65,10 @@
     class="mt-20"
   />
   <transition :name="taskTransition">
-    <div v-if="!(tasksCount === 0 && !isLoading) && !displayModal">
+    <div
+      v-if="!(tasksCount === 0 && !isLoading) && !displayModal"
+      class="px-5"
+    >
       <a
         class="dark:bg-gray-700 cursor-pointer dark:text-gray-100 rounded-lg text-[14px] breadcrumbs text-[#7E7E80] font-medium"
         target="_blank"
