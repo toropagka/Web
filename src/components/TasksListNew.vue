@@ -12,13 +12,6 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <inspector-modal-box
-    v-model="showInspector"
-    button="warning"
-    has-button
-    has-cancel
-    button-label="Delete"
-  />
   <InspectorLimit
     v-if="showFreeModal"
     @cancel="showFreeModal = false"
@@ -59,13 +52,6 @@
       v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid]"
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
-      <button
-        id="step2"
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-        @click="shouldShowInspector"
-      >
-        Поручить
-      </button>
       <div
         id="step1"
         class="flex items-center bg-[#FAFAFB] border dark:bg-gray-700 rounded-[8px] w-full"
@@ -343,7 +329,6 @@ import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics.vue'
 import ModalBoxDelete from './Common/ModalBoxDelete.vue'
-import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import contenteditable from 'vue-contenteditable'
 import TaskListIconLabel from '@/components/TasksList/TaskListIconLabel.vue'
 import TaskListTagLabel from '@/components/TasksList/TaskListTagLabel.vue'
@@ -386,7 +371,6 @@ export default {
     TasksSkeleton,
     ModalBoxDelete,
     InspectorLimit,
-    InspectorModalBox,
     EmptyTasksListPics,
     TaskStatus,
     contenteditable,
@@ -451,9 +435,7 @@ export default {
       ], */
       showConfirm: false,
       showTasksLimit: false,
-      showFreeModal: false,
       focusedElem: '',
-      showInspector: false,
       stop: true,
       SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
@@ -1147,14 +1129,6 @@ export default {
       ).then(() => {
         this.$store.commit(TASK.REMOVE_TASK_FROM_LEAVES, parentUid)
       })
-    },
-    shouldShowInspector () {
-      window.ym(89796698, 'reachGoal', 'inspector')
-      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
-        this.showFreeModal = true
-        return
-      }
-      this.showInspector = true
     },
     changeFocus (task) {
       const newFocus = task.focus === 1 ? 0 : 1

@@ -15,6 +15,7 @@ import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
+import { SELECT_TAG } from '@/store/actions/tasks'
 
 export default {
   components: {
@@ -64,6 +65,9 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
+    user () {
+      return this.$store.state.user.user
+    },
     storeTasks () {
       return this.$store.state.tasks.newtasks
     },
@@ -78,6 +82,14 @@ export default {
     updateGridView (value) {
       this.$store.commit('basic', { key: 'isGridView', value: value })
       setLocalStorageItem('isGridView', value)
+    },
+    openProperties (tag) {
+      if (!this.$store.state.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', true)
+      }
+      this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
+      this.$store.commit(SELECT_TAG, tag)
+      console.log(tag)
     },
     gotoChildren (value) {
       this.$store.dispatch(TASK.TAG_TASKS_REQUEST, value.uid)
@@ -110,9 +122,8 @@ export default {
       )
     },
     clickAddTag () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
-      if (Object.keys(this.$store.state.tasks.tags).length >= 3 && user.days_left <= 0) {
+      if (Object.keys(this.$store.state.tasks.tags).length >= 3 && this.user.days_left <= 0) {
         this.showTagsLimit = true
         return
       }
@@ -133,61 +144,18 @@ export default {
         favorite: 0,
         uid: this.uuidv4(),
         name: title,
+        email_creator: this.user.current_user_email,
         bold: 0
       }
       this.$store.dispatch(TASK.CREATE_TAG_REQUEST, tag)
         .then(() => {
           tag.global_property_uid = '00a5b3de-9474-404d-b3ba-83f488ac6d30'
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_TAG, [tag])
+          this.openProperties(tag)
         })
     }
   }
 }
-
-// const openProperties = (tag, parentTagUid = '') => {
-//   if (!isPropertiesMobileExpanded.value) {
-//     store.dispatch('asidePropertiesToggle', true)
-//   }
-
-//   focusedTag.value = tag.uid
-
-//   // add uid_parent if adding subtag in parent's children
-//   if (props.tags[0].uid_parent && props.tags[0].uid_parent !== '00000000-0000-0000-0000-000000000000' && !parentTagUid) {
-//     parentTagUid = props.tags[0].uid_parent
-//   }
-//   store.commit('basic', { key: 'propertiesState', value: 'tag' })
-//   if (!tag) {
-//     tag = {
-//       uid_parent: parentTagUid,
-//       back_color: '',
-//       comment: '',
-//       collapsed: 0,
-//       order: 0,
-//       group: 0,
-//       show: 0,
-//       children: [],
-//       favorite: 0,
-//       uid: '',
-//       name: '',
-//       bold: 0
-//     }
-//   }
-//   store.commit(TASK.SELECT_TAG, tag)
-// }
-
-// const goToChildren = (value) => {
-//   if (value.children && value.children.length) {
-//     const navElem = {
-//       name: value.name,
-//       key: 'greedSource',
-//       greedPath: 'tags_children',
-//       uid: value.uid,
-//       value: value.children
-//     }
-//     store.commit('pushIntoNavStack', navElem)
-//     store.commit('basic', { key: 'greedSource', value: value.children })
-//   }
-// }
 </script>
 
 <template>
@@ -204,9 +172,11 @@ export default {
     @ok="showTagsLimit = false"
   />
   <div
-    class="w-full flex items-center justify-between mt-3 order-1"
+    class="w-full flex items-center justify-between order-1"
   >
-    <p class="text-2xl text-gray-800 font-bold second dark:text-gray-100 font-['Roboto']">
+    <p
+      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
+    >
       Метки
     </p>
     <div
@@ -233,7 +203,7 @@ export default {
     </div>
   </div>
   <div
-    class="grid gap-4 mt-3 order-2"
+    class="grid gap-2 mt-3 order-2"
     :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'grid-cols-1': !isGridView, 'grid-cols-1': isPropertiesMobileExpanded && !isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
   >
     <AddTag @click="clickAddTag" />
@@ -245,7 +215,7 @@ export default {
         :count="tag.children?.length ?? 0"
         :color="tag.back_color"
         :title="tag.name"
-        @click="gotoChildren(tag)"
+        @click="openProperties(tag)"
       >
         <TagIcon />
       </ListBlocItem>
