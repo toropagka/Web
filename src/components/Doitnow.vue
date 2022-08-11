@@ -124,7 +124,7 @@ import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
-import { USER_JUST_REGISTERED_TOGGLE, USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
   components: {
@@ -354,9 +354,6 @@ export default {
     nextTask: function () {
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
-        if (this.slidesCopy.length === 0) {
-          this.$store.commit(USER_JUST_REGISTERED_TOGGLE, false)
-        }
         return
       }
       this.readTask()
