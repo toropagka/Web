@@ -281,6 +281,7 @@ export default {
   },
   data () {
     return {
+      newDayTimerID: 0,
       dateToday: '',
       mdiMenu,
       warn,
@@ -314,7 +315,7 @@ export default {
       return this.isDark ? 'rgb(31 41 55)' : '#f4f5f7'
     },
     attrs () {
-      return this.$store.state.calendar.calendar
+      return this.$store.getters.attrsCalendar
     },
     user () {
       return this.$store.state.user.user
@@ -345,6 +346,21 @@ export default {
       })
       return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
     }
+  },
+  mounted () {
+    let currDate = new Date()
+    currDate.setHours(0, 0, 0, 0)
+    this.newDayTimerID = setInterval(() => {
+      const newDate = new Date()
+      newDate.setHours(0, 0, 0, 0)
+      if (currDate.getTime() !== newDate.getTime()) {
+        currDate = newDate
+        this.onNewDay()
+      }
+    }, 1000)
+  },
+  beforeUnmount () {
+    clearInterval(this.newDayTimerID)
   },
   methods: {
     logout () {
@@ -576,6 +592,10 @@ export default {
         return true
       }
       this.lastSelectedItem = item
+    },
+    onNewDay () {
+      this.$store.commit('updateCalendarToday')
+      //
     }
   }
 }

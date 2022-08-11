@@ -50,7 +50,6 @@ const state = {
   selectedTask: undefined,
   copiedTasks: {},
   status: '',
-  daysWithTasks: [],
   selectedColor: null,
   project: '',
   checklist: '',
@@ -136,6 +135,7 @@ const actions = {
         process.env.VUE_APP_LEADERTASK_API + 'api/v1/navigator/calendarinfo'
       axios({ url: url, method: 'GET' })
         .then((resp) => {
+          dispatch('setDots', resp.data.calendar.dates_with_tasks)
           commit(TASK.DAYS_WITH_TASKS, resp)
           resolve(resp)
         })
@@ -1119,11 +1119,10 @@ const mutations = {
       state.selectedTask = task
     }
   },
-  [TASK.DAYS_WITH_TASKS]: (state, resp) => {
-    state.daysWithTasks = resp.data.calendar.dates_with_tasks
-  },
   [TASK.REMOVE_TASK_FROM_LEAVES]: (state, uid) => {
-    state.newConfig.leaves = state.newConfig.leaves.filter(item => item !== uid)
+    state.newConfig.leaves = state.newConfig.leaves.filter(
+      (item) => item !== uid
+    )
   },
   [TASK.ADD_TASK_TO_ROOTS]: (state, taskUid) => {
     if (!state.newConfig.roots.includes(taskUid)) {

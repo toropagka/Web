@@ -335,7 +335,6 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
@@ -529,12 +528,6 @@ export default {
         text = 'Вы действительно хотите удалить задачу с подзадачами в количестве: ' + this.storeTasks[this.lastSelectedTaskUid].children.length + '?'
       }
       return text
-    },
-    calendarDates () {
-      return this.$store.state.calendar[1].dates
-    },
-    daysWithTasks () {
-      return this.$store.state.tasks.daysWithTasks
     },
     taskListSource () {
       return this.$store.state.taskListSource
@@ -1017,16 +1010,6 @@ export default {
         .then(() => {
           this.showConfirm = false
           this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-            .then(() => {
-              const calendarDates = computed(() => this.$store.state.calendar[1].dates)
-              const daysWithTasks = computed(() => this.$store.state.tasks.daysWithTasks)
-              for (let i = 0; i < calendarDates.value.length; i++) {
-                const date = calendarDates.value[i].getDate() + '-' + (calendarDates.value[i].getMonth() + 1) + '-' + calendarDates.value[i].getFullYear()
-                if (!daysWithTasks.value.includes(date)) {
-                  this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(calendarDates.value[i]), 1)
-                }
-              }
-            })
         })
     },
     gotoNode (uid) {
@@ -1195,30 +1178,24 @@ export default {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
+          // получаем массив ключей и переворачиваем, чтобы получить текущий
+          const tasksKeyArray = Object.keys(this?.storeTasks)
+          const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
+
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            // получаем массив ключей и переворачиваем, чтобы получить текущий
-            const tasksKeyArray = Object.keys(this?.storeTasks)
-            const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
             // получаем юид и его дату
             const nextTaskUid = tasksKeyArray[nextTaskIndex]
             const nextTaskData = this.storeTasks[nextTaskUid]
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(nextTaskUid).focus({ preventScroll: false })
-            this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
-            this.lastSelectedTaskUid = nextTaskUid
+            if (nextTaskIndex < tasksKeyArray.length) {
+              document.getElementById(nextTaskUid).focus({ preventScroll: false })
+              this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
+              this.lastSelectedTaskUid = nextTaskUid
+            }
           })
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-            .then(() => {
-              console.log('this.calendarDates.value', this.calendarDates)
-              for (let i = 0; i < this.calendarDates.length; i++) {
-                const date = this.calendarDates[i].getDate() + '-' + (this.calendarDates[i].getMonth() + 1) + '-' + this.calendarDates[i].getFullYear()
-                if (!this.daysWithTasks.includes(date)) {
-                  this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(this.calendarDates.value[i]), 1)
-                }
-              }
-            })
         }
       })
     }

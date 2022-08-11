@@ -21,7 +21,7 @@
       >
         <div
           class="flex w-full"
-          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+          :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
         >
           <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
             {{ reg.dep }}

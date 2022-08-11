@@ -64,7 +64,7 @@ export default {
       return this.$store.state.user?.user
     },
     userType () {
-      return this.$store.state.employees.employees[this.$store.state.user.user.current_user_uid].type
+      return this.$store.state.employees.employees[this.$store.state.user.user.current_user_uid]?.type
     },
     canEdit () {
       return (this.currentReglament?.email_creator?.toLowerCase() === this.user?.current_user_email?.toLowerCase()) || (this.userType === 2 || this.userType === 1)
