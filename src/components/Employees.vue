@@ -4,7 +4,7 @@
   >
     <div
       v-if="displayModal"
-      class="flex flex-col justify-center items-center"
+      class="flex flex-col justify-center items-center "
     >
       <img
         class="mx-auto mt-10"
@@ -13,12 +13,22 @@
         src="@/assets/images/35.svg"
         alt="Empty task image"
       >
-      <p class="font-bold p-3 w-[600px]">
-        Добавьте всех сотрудников в ЛидерТаск, чтобы поручать им задачи, работать над общими проектами и досками и многое другое
-      </p>
-      <p class="text-sm p-3 w-[600px]">
-        Управляйте командой с помощью раздела Сотрудники: создавайте отделы, добавляйте в них сотрудников, устанавливайте права доступа.
-      </p>
+      <div class="text-left">
+        <p class="font-bold p-3 w-[600px]">
+          Управляйте сотрудниками компании с помощью раздела Сотрудники
+        </p>
+        <ul class="list-decimal pl-[30px]">
+          <li class="p-3 text-sm">
+            Добавляйте и удаляйте сотрудников
+          </li>
+          <li class="p-3 text-sm">
+            Создавайте отделы, чтобы сформировать команды
+          </li>
+          <li class="p-3 text-sm">
+            Устанавливайте права администратора руководителям отделов
+          </li>
+        </ul>
+      </div>
       <button
         class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
         @click="okToModal"
