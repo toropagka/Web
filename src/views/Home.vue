@@ -166,11 +166,9 @@ import NotificationTasks from '@/components/NotificationTasks.vue'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST, USER_INVITE_ME } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
-import { USER_REQUEST } from '@/store/actions/user'
 
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 
 export default {
   components: {
