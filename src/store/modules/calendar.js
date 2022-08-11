@@ -1,12 +1,4 @@
 const state = {
-  calendar: [
-    {
-      key: 'today',
-      highlight: { color: 'gray', fillMode: 'outline', class: 'back-hover' },
-      dates: new Date()
-    }
-  ],
-  currentDate: new Date(),
   todayAttribute: {
     key: 'today',
     highlight: { fillMode: 'outline', class: 'today' },
