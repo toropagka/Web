@@ -170,7 +170,6 @@
 
 <script>
 import { DatePicker } from 'v-calendar'
-import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import AsideMenuSkeleton from './AsideMenuSkeleton.vue'
 import 'v-calendar/dist/style.css'
@@ -184,7 +183,6 @@ import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
-    DoitnowLimit,
     DatePicker,
     AsideMenuSkeleton,
     AsideMenuList
