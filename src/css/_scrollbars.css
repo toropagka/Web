@@ -1,21 +1,31 @@
-html,  #aside, #aside-right, .scroll-style {
+.scroll-style {
   scrollbar-width: thin;
-}
-
-html::-webkit-scrollbar, #aside::-webkit-scrollbar, #aside-right::-webkit-scrollbar, .scroll-style::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  scrollbar-color: #9ca3af #e5e7eb;
 }
 
 .scroll-style::-webkit-scrollbar {
   width: 14px;
-  height: 6px;
+  height: 14px;
 }
 
 .scroll-style::-webkit-scrollbar-thumb {
   border: 4px solid transparent;
   border-radius: 9999px;
   background-clip: padding-box;
+  background-color: rgb(156 163 175);
+}
+
+.scroll-style::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}
+
+html,  #aside, #aside-right {
+  scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar, #aside::-webkit-scrollbar, #aside-right::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
 html::-webkit-scrollbar, #aside::-webkit-scrollbar, #aside-right::-webkit-scrollbar {
@@ -26,7 +36,7 @@ html::-webkit-scrollbar-thumb, #aside::-webkit-scrollbar-thumb, #aside-right::-w
   border-radius: 4px;
 }
 
-html, .scroll-style {
+html {
   @apply overflow-auto;
   scrollbar-color: #9ca3af #e5e7eb;
 }
@@ -35,11 +45,11 @@ html::-webkit-scrollbar-track {
   @apply bg-gray-100;
 }
 
-html::-webkit-scrollbar-thumb, .scroll-style::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   @apply bg-gray-400;
 }
 
-html::-webkit-scrollbar-thumb:hover, .scroll-style::-webkit-scrollbar-thub:hover {
+html::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-500;
 }
 

@@ -296,12 +296,13 @@
               />
             </div>
             <!-- canmove props.node.id === lastSelectedTaskUid -->
+            <!-- props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id -->
             <TaskListActionHoverPanel
               :id="`hover-panel-${props.node.id}`"
               class="absolute right-[8px] top-[calc(50%-18px)] invisible group-hover:visible"
               :is-my-task="props.node.info.uid_customer == currentUserUid"
               :can-paste="!!Object.keys(copiedTasks).length"
-              :show-move-button="props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id"
+              :show-move-button="false"
               @click.stop
               @addSubtask="addSubtask(props.node.info)"
               @changeFocus="changeFocus(props.node.info)"
@@ -335,7 +336,6 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
@@ -530,12 +530,6 @@ export default {
       }
       return text
     },
-    calendarDates () {
-      return this.$store.state.calendar[1].dates
-    },
-    daysWithTasks () {
-      return this.$store.state.tasks.daysWithTasks
-    },
     taskListSource () {
       return this.$store.state.taskListSource
     },
@@ -636,7 +630,7 @@ export default {
       let selectedTaskOrder = '' // order выделенной задачи
       const rootTask = {} // order задачи, которая не выделена
       // для задачи родителя
-      if (this.storeTasks[this.lastSelectedTaskUid].children.length) {
+      if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
         for (let i = 0; i < this.newConfig.roots.length; i++) {
           if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
           // проверяем на крайние значения
@@ -712,12 +706,24 @@ export default {
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
+              case 'left':
+                this.newConfig.roots[i] = this.newConfig.roots[i - 1]
+                this.newConfig.roots[i - 1] = this.lastSelectedTaskUid
+                // не выделенная таска
+                rootTask.uid = this.newConfig.roots[i]
+                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+                console.log(this.lastSelectedTask)
+                rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
+                this.lastSelectedTask.uid_parent = this.storeTasks[this.lastSelectedTask.uid_parent].info.uid_parent
+                // ставим order_new
+                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
+                break
             }
           }
         }
       }
       this.$store.state.tasks.newtasks[this.lastSelectedTaskUid].info.order_new = selectedTaskOrder
-      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new
+      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new - 100
       this.sortTaskChildren(this.$store.state.tasks.newtasks[this.lastSelectedTaskUid])
       // сортируем выбранную задачу
       this.$store.dispatch(
@@ -732,8 +738,7 @@ export default {
         this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
           uid: rootTask.uid,
           parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
-          order: rootTask.order_new
-        }).then(() => {
+          order: rootTask.order_new - 100
         })
       })
       console.log(position)
@@ -1006,16 +1011,6 @@ export default {
         .then(() => {
           this.showConfirm = false
           this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-            .then(() => {
-              const calendarDates = computed(() => this.$store.state.calendar[1].dates)
-              const daysWithTasks = computed(() => this.$store.state.tasks.daysWithTasks)
-              for (let i = 0; i < calendarDates.value.length; i++) {
-                const date = calendarDates.value[i].getDate() + '-' + (calendarDates.value[i].getMonth() + 1) + '-' + calendarDates.value[i].getFullYear()
-                if (!daysWithTasks.value.includes(date)) {
-                  this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(calendarDates.value[i]), 1)
-                }
-              }
-            })
         })
     },
     gotoNode (uid) {
@@ -1093,6 +1088,7 @@ export default {
       }
     },
     nodeDragEnd (node) {
+      console.log(node)
       if (this.storeTasks[node.dragged.node.id]) {
         // change order in children
         if (this.storeTasks[node.dragged.node.id].parent) {
@@ -1183,30 +1179,24 @@ export default {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
+          // получаем массив ключей и переворачиваем, чтобы получить текущий
+          const tasksKeyArray = Object.keys(this?.storeTasks)
+          const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
+
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            // получаем массив ключей и переворачиваем, чтобы получить текущий
-            const tasksKeyArray = Object.keys(this?.storeTasks)
-            const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
             // получаем юид и его дату
             const nextTaskUid = tasksKeyArray[nextTaskIndex]
             const nextTaskData = this.storeTasks[nextTaskUid]
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(nextTaskUid).focus({ preventScroll: false })
-            this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
-            this.lastSelectedTaskUid = nextTaskUid
+            if (nextTaskIndex < tasksKeyArray.length) {
+              document.getElementById(nextTaskUid).focus({ preventScroll: false })
+              this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
+              this.lastSelectedTaskUid = nextTaskUid
+            }
           })
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-            .then(() => {
-              console.log('this.calendarDates.value', this.calendarDates)
-              for (let i = 0; i < this.calendarDates.length; i++) {
-                const date = this.calendarDates[i].getDate() + '-' + (this.calendarDates[i].getMonth() + 1) + '-' + this.calendarDates[i].getFullYear()
-                if (!this.daysWithTasks.includes(date)) {
-                  this.$store.state.calendar[1].dates.splice(this.$store.state.calendar[1].dates.indexOf(this.calendarDates.value[i]), 1)
-                }
-              }
-            })
         }
       })
     }

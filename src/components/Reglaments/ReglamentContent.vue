@@ -178,10 +178,12 @@
     class="flex justify-end"
   >
     <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+      class="flex min-w-[175px] justify-center items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+      :class="{ 'bg-[#E7E2E1] hover:bg-[#C5C5C5]': disableButton === true }"
+      :disabled="disableButton"
       @click="clickComplete"
     >
-      Завершить
+      {{ completeText }}
     </button>
   </div>
   <div
@@ -266,6 +268,8 @@ export default {
       shouldClear: false,
       showCheckMark: false,
       isFormInvalid: false,
+      disableButton: false,
+      completeText: 'Завершить',
       firstInvalidQuestionUid: null
     }
   },
@@ -673,13 +677,16 @@ export default {
         uid_reglament: this.currReglament.uid,
         answerJson: JSON.stringify(this.questions)
       }
-      console.log(this.questions)
+      this.disableButton = true
+      this.completeText = 'Завершение...'
       this.$store.dispatch(REGLAMENTS.CRATE_USER_REGLAMENT_ANSWER, data).then((resp) => {
         const reglament = { ...this.currReglament }
         reglament.is_passed = resp.data.is_passed
         this.$store.commit('NAVIGATOR_UPDATE_REGLAMENT', reglament)
         this.showCompleteMessage = true
         this.isPassed = resp.data.is_passed
+        this.disableButton = false
+        this.completeText = 'Завершить'
       })
     },
     addReglamentEditor (email) {

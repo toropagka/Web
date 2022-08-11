@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import store from '@/store/index.js'
 import { shouldAddTaskIntoList } from './utils'
+import { NAVIGATOR_UPDATE_ASSIGNMENTS } from '@/store/actions/navigator'
 
 export function createTask (obj) {
   if (shouldAddTaskIntoList(obj.obj)) {
@@ -14,6 +15,17 @@ export function removeTask (uid) {
 
 export function updateTask (obj) {
   store.dispatch('UPDATE_TASK', obj) // updates task and extracts another tags & colors
+  // Если задача поручена мне - запросить обновленные поручения от сервера,
+  // чтобы отобразить на вкладке 'Поручения'
+  if (obj.obj.email_performer === store.state.user.user.current_user_email) {
+    store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
+      .then(() => {
+        // Если прямо сейчас находимся на вкладке поручений обновить greedSource
+        if (store.state.greedPath === 'new_delegate') {
+          store.commit('basic', { key: 'greedSource', value: store.getters.sortedNavigator.new_delegate })
+        }
+      })
+  }
   if (shouldAddTaskIntoList(obj.obj)) {
     store.commit('ADD_TASK', obj.obj)
   } else { // Если меняется дата

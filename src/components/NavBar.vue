@@ -84,6 +84,9 @@ export default {
       this.$store.dispatch('asideMobileToggle')
     },
     clickOnGridCard (item, index) {
+      if (index === this.navStack.length - 1) {
+        return
+      }
       this.$store.dispatch('gotoNavStackItem', index)
     },
     openProjectProperties (project, parentProjectUid = '') {
