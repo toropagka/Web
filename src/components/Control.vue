@@ -1,3 +1,54 @@
+
+<template>
+  <div class="relative">
+    <select
+      v-if="computedType === 'select'"
+      :id="id"
+      v-model="computedValue"
+      :name="name"
+      :class="inputElClass"
+    >
+      <option
+        v-for="option in options"
+        :key="option.id ?? option"
+        :value="option"
+      >
+        {{ option.label ?? option }}
+      </option>
+    </select>
+    <textarea
+      v-else-if="computedType === 'textarea'"
+      :id="id"
+      v-model="computedValue"
+      :class="inputElClass"
+      :name="name"
+      :placeholder="placeholder"
+      :required="required"
+    />
+    <input
+      v-else
+      :id="id"
+      ref="inputEl"
+      v-model="computedValue"
+      :name="name"
+      :maxlength="maxlength"
+      :autocomplete="autocomplete"
+      :required="required"
+      :placeholder="placeholder"
+      :type="computedType"
+      :class="inputElClass"
+      :disabled="disabled"
+      @blur="blur"
+    >
+    <control-icon
+      v-if="icon"
+      :icon="icon"
+      :class="iconClass"
+      :h="controlIconH"
+      @click="iconClick"
+    />
+  </div>
+</template>
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
@@ -129,54 +180,3 @@ if (props.ctrlKFocus) {
   })
 }
 </script>
-
-<template>
-  <div class="relative">
-    <select
-      v-if="computedType === 'select'"
-      :id="id"
-      v-model="computedValue"
-      :name="name"
-      :class="inputElClass"
-    >
-      <option
-        v-for="option in options"
-        :key="option.id ?? option"
-        :value="option"
-      >
-        {{ option.label ?? option }}
-      </option>
-    </select>
-    <textarea
-      v-else-if="computedType === 'textarea'"
-      :id="id"
-      v-model="computedValue"
-      :class="inputElClass"
-      :name="name"
-      :placeholder="placeholder"
-      :required="required"
-    />
-    <input
-      v-else
-      :id="id"
-      ref="inputEl"
-      v-model="computedValue"
-      :name="name"
-      :maxlength="maxlength"
-      :autocomplete="autocomplete"
-      :required="required"
-      :placeholder="placeholder"
-      :type="computedType"
-      :class="inputElClass"
-      :disabled="disabled"
-      @blur="blur"
-    >
-    <control-icon
-      v-if="icon"
-      :icon="icon"
-      :class="iconClass"
-      :h="controlIconH"
-      @click="iconClick"
-    />
-  </div>
-</template>
