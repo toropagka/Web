@@ -55,7 +55,7 @@
       <Icon
         :height="arrowForw.height"
         :width="arrowForw.width"
-        :view="arrowForw.viewBox"
+        :box="arrowForw.viewBox"
         :path="arrowForw.path"
       />
     </button>
@@ -66,7 +66,7 @@
   />
   <transition :name="taskTransition">
     <div
-      v-if="!(tasksCount === 0 && !isLoading) && !displayModal"
+      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid"
       class="px-5"
     >
       <a

@@ -9,7 +9,10 @@ export default {
 
 </script>
 <template>
-  <form class="px-5 text-lg bg-white p-2 rounded">
+  <form class="px-5 text-lg bg-white p-2 rounded pb-[150px]">
+    <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
+      Тариф
+    </div>
     <div class="mt-[15px]">
       <p class="text-base font-medium">
         Владелец лицензии
@@ -115,37 +118,13 @@ export default {
         <span class="text-sm">{{ user?.total_mb }} MB ({{ user?.percent_mb }}%)</span>
       </div>
     </div>
-    <div class="mt-[36px]">
-      <p class="text-base font-medium">
-        Последняя синхронизация
-      </p>
-      <div class="flex mt-[17px]">
-        <span class="relative mr-1.5">
-          <svg
-            class="hover:animate-spin"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15.1834 6.11063L14.2098 5.10943L16.9938 5.10638L16.9927 4L12.4207 4.00498V8.70213H13.4966V5.94073L14.4226 6.89295C15.1391 7.6298 15.6271 8.56843 15.8252 9.59032C16.0233 10.6122 15.9225 11.6715 15.5355 12.6346C15.1486 13.5976 14.4928 14.4211 13.651 15.0012C12.8093 15.5812 11.8192 15.8918 10.806 15.8936L10.8079 17C12.0338 16.9978 13.2315 16.622 14.2499 15.9203C15.2683 15.2185 16.0617 14.2222 16.5299 13.0571C16.998 11.892 17.12 10.6103 16.8803 9.37401C16.6407 8.13768 16.0502 7.00209 15.1834 6.11063ZM9.19402 5.10638L9.19214 4C7.96624 4.00224 6.76847 4.37796 5.75007 5.07973C4.73167 5.78149 3.9383 6.77783 3.47015 7.94293C3.00199 9.10804 2.88004 10.3897 3.11969 11.626C3.35933 12.8623 3.94984 13.9979 4.81664 14.8894L5.79321 15.8936H3.00672V17H7.57925V12.2979H6.50336V15.0593L5.57739 14.107C4.86094 13.3702 4.37286 12.4316 4.17478 11.4097C3.97671 10.3878 4.07751 9.32845 4.46447 8.36543C4.85143 7.40241 5.50719 6.57888 6.34896 5.99884C7.19073 5.41879 8.18075 5.10824 9.19402 5.10638Z"
-              fill="#606061"
-            />
-          </svg>
-
-        </span>
-        <span class="text-sm">синхронизация</span>
-      </div>
-    </div>
     <form
-      class="text-lg mt-[12px] mb-[12px]"
+      class="mt-[12px] mb-[12px]"
       action="https://www.leadertask.ru/market"
     >
       <button
         type="submit"
-        class="mt-2 border border-orange-400 text-white bg-orange-400 rounded-md px-6 p-2 text-base"
+        class="text-[14px] text-[#606061] py-[12px] px-[16px] rounded-[6px] border-[1px] border-[#FF9123]"
       >
         Продлить лицензию
       </button>

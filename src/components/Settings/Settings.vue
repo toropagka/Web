@@ -1,15 +1,15 @@
 <template>
   <AsideMenu :menu="menu" />
-  <div class="mt-[30px]">
-    <acc-modal
+  <div>
+    <Account
       v-if="currentSettingsTab === 'account'"
       @currentSettingsTab="changeSettingsTab ('tarif')"
       @AccLogout="logout()"
     />
-    <acc-tarif
+    <Tarif
       v-if="currentSettingsTab === 'tarif'"
     />
-    <acc-option
+    <Options
       v-if="currentSettingsTab === 'option'"
     />
     <acc-karma
@@ -19,9 +19,9 @@
 </template>
 <script>
 import AccKarma from '@/components/AccKarma.vue'
-import AccTarif from '@/components/AccTarif.vue'
-import AccOption from '@/components/AccOption.vue'
-import AccModal from '@/components/AccModal.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
+import Options from '@/components/Settings/Options.vue'
+import Account from '@/components/Settings/Account.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 
 import { USER_REQUEST } from '@/store/actions/user'
@@ -35,9 +35,9 @@ export default {
   components: {
     AccKarma,
     AsideMenu,
-    AccTarif,
-    AccOption,
-    AccModal
+    Tarif,
+    Options,
+    Account
   },
   computed: {
     currentSettingsTab () {
@@ -56,6 +56,7 @@ export default {
 
     // сначала запрашиваем пользователя, потом регламенты, потом навигатор
     if (!userLoaded || !navLoaded) {
+      this.$store.commit(NAVIGATOR_REQUEST)
       this.$store.dispatch(USER_REQUEST).then(() => {
         // запрос регламентов
         const data = {

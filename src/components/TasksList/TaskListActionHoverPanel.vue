@@ -74,18 +74,6 @@
         >
           &#8595; Вниз
         </PopMenuItem>
-        <PopMenuItem
-          v-if="showMoveButton"
-          @click="$emit('changeTaskPosition', 'left')"
-        >
-          &#8592; Влево
-        </PopMenuItem>
-        <PopMenuItem
-          v-if="showMoveButton"
-          @click="$emit('changeTaskPosition', 'right')"
-        >
-          &#8594; Вправо
-        </PopMenuItem>
         <PopMenuDivider v-if="showMoveButton" />
         <PopMenuItem
           v-if="isMyTask && showTomorrow"

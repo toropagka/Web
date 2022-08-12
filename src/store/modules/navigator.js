@@ -38,7 +38,7 @@ const getDefaultState = () => {
   return {
     navigator: false,
     lastTab: localStorage.getItem('lastTab') ?? 'doitnow',
-    currentSettingsTab: localStorage.getItem('currentSettingsTab') ?? localStorage.setItem('currentSettingsTab', 'account'),
+    currentSettingsTab: localStorage.getItem('currentSettingsTab') ?? 'account',
     status: '',
     computedNavigator: false,
     hasLoadedOnce: false,
@@ -215,7 +215,7 @@ const mutations = {
     state.hasLoadedOnce = true
     console.log('navigator ', resp)
     state.menu = []
-    if (state.lastTab === 'tasks') {
+    if (state.lastTab === 'tasks' || state.lastTab === 'doitnow') {
       state.menu.push([
         {
           label: 'Сегодня',
@@ -541,8 +541,10 @@ const mutations = {
     state.navigator.reglaments.items.push(reglament)
   },
   [NAVIGATOR_REMOVE_REGLAMENT]: (state, reglament) => {
+    // Проверка для правильной работы вебсинка, т.к он вместо объекта присылает только UID регламента
+    const uid = typeof reglament === 'object' ? reglament.uid : reglament
     for (let i = 0; i < state.navigator.reglaments.items.length; i++) {
-      if (state.navigator.reglaments.items[i].uid === reglament.uid) {
+      if (state.navigator.reglaments.items[i].uid === uid) {
         state.navigator.reglaments.items.splice(i, 1)
         return
       }

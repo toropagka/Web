@@ -300,12 +300,13 @@ export default {
         this.dateToday = new Date()
       }
       // скрывать навбар при онбординге
-      if (this.$store.state.onboarding.visitedModals) {
-        this.$store.state.onboarding.hideNavBar = false
-        if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
-          this.$store.state.onboarding.hideNavBar = true
-        }
-      }
+      // if (this.$store.state.onboarding.visitedModals) {
+      //   this.$store.state.onboarding.hideNavBar = false
+      //   if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
+      //     console.log('hide')
+      //     this.$store.state.onboarding.hideNavBar = true
+      //   }
+      // }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -419,6 +420,7 @@ export default {
       }
     },
     onDayClick (day) {
+      this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
       const navElem = {
@@ -525,6 +527,9 @@ export default {
         return true
       }
       this.lastSelectedItem = item
+    },
+    resetLastTab () {
+      this.lastSelectedItem = null
     },
     onNewDay () {
       this.$store.commit('updateCalendarToday')

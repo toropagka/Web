@@ -29,20 +29,23 @@
 </template>
 
 <script>
-import * as TASK from '@/store/actions/tasks'
+import { UID_TO_ACTION } from '@/store/helpers/functions'
 export default {
   emits: ['clickPlanning'],
   methods: {
     goToday: function () {
-      this.$store.dispatch(TASK.TASKS_REQUEST)
-      const navElem = {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
+      this.$router.push('/tasks')
+      this.$store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
+      // asidemenu logic
+      this.$store.commit('updateStackWithInitValue', {
         name: 'Сегодня',
         key: 'taskListSource',
         value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date() },
         typeVal: new Date(),
         type: 'date'
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
+      })
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     }

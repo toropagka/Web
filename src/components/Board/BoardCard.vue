@@ -74,14 +74,16 @@
               Переместить
             </PopMenuItem>
             <PopMenuItem
+              v-if="!isArchive"
               @click="clickMoveToTop"
             >
-              Переместить в самый верх
+              В начало колонки
             </PopMenuItem>
             <PopMenuItem
+              v-if="!isArchive"
               @click="clickMoveToBottom"
             >
-              Переместить в самый низ
+              В конец колонки
             </PopMenuItem>
             <PopMenuDivider v-if="!isArchive" />
             <PopMenuItem

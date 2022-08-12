@@ -64,15 +64,17 @@
     />
     <draggable
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
-      :disabled="true"
       :list="storeCards"
-      ghost-class="ghost-board"
+      ghost-class="ghost-column"
       item-key="UID"
       group="columns"
+      handle=".draggable-column"
       :fallback-tolerance="1"
       :force-fallback="true"
       :animation="180"
       :scroll-sensitivity="100"
+      :move="checkMoveDragColumn"
+      @start="startDragColumn"
       @end="endDragColumn"
     >
       <template #item="{element: column}">
@@ -83,7 +85,10 @@
           :data-column-uid="column.UID"
         >
           <!--заголовок -->
-          <div class="px-1 flex justify-between items-start">
+          <div
+            class="px-1 flex justify-between items-start"
+            :class="{ 'draggable-column cursor-move': column.CanEditStage }"
+          >
             <p
               class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
               :style="{ color: getContrastYIQ(column.Color) }"
@@ -92,7 +97,7 @@
             </p>
             <!-- Три точки -->
             <div
-              v-if="column.CanEditStage || column.AddCard"
+              v-if="column.CanEditStage"
               :ref="`stage-icon-${column.UID}`"
               class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
             >
@@ -144,13 +149,6 @@
                     Переместить
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.AddCard"
-                    icon="move"
-                    @click="clickMoveAllColumnCards(column)"
-                  >
-                    Переместить все карточки
-                  </PopMenuItem>
-                  <PopMenuItem
                     v-if="column.CanEditStage"
                     icon="delete"
                     @click="clickDeleteColumn(column, $event)"
@@ -170,9 +168,23 @@
               v-if="getColumnCards(column).length"
               class="flex items-center justify-between h-[16px]"
             >
-              <p class="text-[12px] leading-[14px]">
-                Карточек: {{ getColumnCards(column).length }}
-              </p>
+              <PopMenu :disabled="isReadOnlyBoard">
+                <p
+                  class="text-[12px] leading-[14px]"
+                  :class="{ 'hover:underline cursor-pointer': !isReadOnlyBoard}"
+                >
+                  Карточек: {{ getColumnCards(column).length }}
+                </p>
+                <template #menu>
+                  <PopMenuItem
+                    icon="move"
+                    @click="clickMoveAllColumnCards(column)"
+                  >
+                    Переместить
+                  </PopMenuItem>
+                </template>
+              </PopMenu>
+
               <div
                 v-if="totalItem(getColumnCards(column))"
                 class="flex items-center"
@@ -224,7 +236,7 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="!board || board.type_access === 0 || isFiltered || showArchive"
+              :disabled="isReadOnlyBoard || isFiltered || showArchive"
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
@@ -239,7 +251,7 @@
                   :data-card-id="element.uid"
                   :card="element"
                   :show-date="board?.show_date !== 0 ?? false"
-                  :read-only="!board || board.type_access === 0"
+                  :read-only="isReadOnlyBoard"
                   :selected="selectedCardUid === element.uid"
                   class="mt-2"
                   @select="selectCard(element)"
@@ -389,7 +401,8 @@ export default {
       showMoveCard: false,
       showMoveAllCards: false,
       selectedCardUid: '',
-      columnUid: ''
+      columnUid: '',
+      dragColumnParam: null
     }
   },
   computed: {
@@ -443,6 +456,9 @@ export default {
     },
     isFiltered () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWithNoResponsible || this.showOnlyCardsWhereIAmResponsible || this.showOnlySearchText
+    },
+    isReadOnlyBoard () {
+      return !this.board || this.board.type_access === 0
     }
   },
   watch: {
@@ -767,14 +783,6 @@ export default {
           })
       }
     },
-    endDragColumn (end) {
-      console.log(end)
-      // if (end.oldIndex !== end.newIndex) {
-      //   // Возможное решение долгой смены колонок: менять Order в стейте перед запросом на сервер
-      //   // this.storeCards.find(col => col.UID === end.item.dataset.columnUid).Order = end.newIndex
-      //   this.changeColumnOrder(end.item.dataset.columnUid, end.newIndex)
-      // }
-    },
     startDragCard (start) {
       this.dragCardParam = {
         change: [],
@@ -845,6 +853,39 @@ export default {
       this.dragCardParam.move.targetCard = targetCard
       this.dragCardParam.move.willInsertAfter = willInsertAfter
       return true
+    },
+    startDragColumn (start) {
+      this.dragColumnParam = {
+        move: {
+          column: null
+        }
+      }
+      //
+      const columnUid = start.item.dataset.columnUid
+      const column = this.storeCards.find(
+        (stage) => stage.UID === columnUid
+      )
+      //
+      this.dragColumnParam.move.column = column
+    },
+    endDragColumn (end) {
+      if (end.oldIndex !== end.newIndex) {
+        // поменялся порядок
+        const column = this.dragColumnParam.move.column
+        const diff = end.newIndex - end.oldIndex
+        const oldOrder = column.Order
+        const newOrder = oldOrder + diff
+        console.log('endDragColumn', this.storeCards, oldOrder, newOrder)
+        //
+        this.changeColumnOrder(column.UID, newOrder)
+      }
+      this.dragColumnParam = null
+    },
+    checkMoveDragColumn ({ relatedContext }) {
+      // запрещаем перемещать за задисейбленные столбцы
+      const targetColumn = relatedContext.element || null
+      if (!targetColumn?.CanEditStage) return false
+      return true
     }
   }
 }
@@ -858,6 +899,9 @@ export default {
   opacity: 0.5;
   background: #f7fafc;
   border: 1px solid #4299e1;
+}
+.ghost-column {
+  opacity: 0;
 }
 .light {
   --popper-theme-background-color: #ffffff;

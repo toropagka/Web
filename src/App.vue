@@ -22,6 +22,9 @@ export default {
     },
     navStack () {
       return this.$store.state.navbar.navStack
+    },
+    isFileRedirect () {
+      return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
     }
   },
   mounted () {
@@ -44,7 +47,7 @@ export default {
 
 <template>
   <Tabs
-    v-if="$store.state.auth.token"
+    v-if="$store.state.auth.token && !isFileRedirect"
     class="fixed left-0 top-0 z-[50] ml-3"
   />
   <router-view />
