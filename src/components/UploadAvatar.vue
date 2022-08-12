@@ -43,11 +43,16 @@ import 'vue-advanced-cropper/dist/style.css'
 
 export default {
   components: { Overlay, Cropper },
+  props: {
+    img: {
+      type: String,
+      default: null
+    }
+  },
   emits: ['closeWindow'],
   data: function () {
     return {
-      canvas: null,
-      img: 'https://images.unsplash.com/photo-1600984575359-310ae7b6bdf2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'
+      canvas: null
     }
   },
   methods: {
