@@ -56,6 +56,7 @@ export default {
 
     // сначала запрашиваем пользователя, потом регламенты, потом навигатор
     if (!userLoaded || !navLoaded) {
+      this.$store.commit(NAVIGATOR_REQUEST)
       this.$store.dispatch(USER_REQUEST).then(() => {
         // запрос регламентов
         const data = {
