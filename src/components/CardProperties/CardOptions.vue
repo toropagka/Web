@@ -2,13 +2,12 @@
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PopMenuHeader from '@/components/Common/PopMenuHeader.vue'
-import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
+
 export default {
   components: {
     PopMenu,
     PopMenuItem,
-    PopMenuHeader,
-    PopMenuDivider
+    PopMenuHeader
   },
   props: {
     dateCreate: String,
@@ -17,27 +16,10 @@ export default {
     canEdit: Boolean
   },
 
-  emits: ['clickRemoveButton', 'toggleShowOnlyFiles', 'moveColumnCard', 'moveSuccess', 'moveReject'],
+  emits: ['clickRemoveButton', 'toggleShowOnlyFiles'],
   computed: {
     employees () { return this.$store.state.employees.employees },
-    cardDateCreate () { return new Date(this.dateCreate).toLocaleString() },
-    isArchive () {
-      return (
-        this.$store.state.cards.selectedCard.uid_stage === 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67' ||
-        this.$store.state.cards.selectedCard.uid_stage === 'e70af5e2-6108-4c02-9a7d-f4efee78d28c'
-      )
-    }
-  },
-  methods: {
-    clickMove () {
-      this.$emit('moveColumnCard')
-    },
-    clickSuccess () {
-      this.$emit('moveSuccess')
-    },
-    clickReject () {
-      this.$emit('moveReject')
-    }
+    cardDateCreate () { return new Date(this.dateCreate).toLocaleString() }
   }
 }
 </script>
@@ -83,27 +65,6 @@ export default {
             <span class="ml-1">{{ employees[creator]?.name }}</span>
           </div>
         </PopMenuHeader>
-        <PopMenuItem
-          v-if="canEdit"
-          icon="move"
-          @click="clickMove"
-        >
-          Переместить
-        </PopMenuItem>
-        <PopMenuDivider v-if="!isArchive && canEdit" />
-        <PopMenuItem
-          v-if="!isArchive && canEdit"
-          @click="clickSuccess"
-        >
-          Архивировать: Успех
-        </PopMenuItem>
-        <PopMenuItem
-          v-if="!isArchive && canEdit"
-          @click="clickReject"
-        >
-          Архивировать: Отказ
-        </PopMenuItem>
-        <PopMenuDivider v-if="!isArchive && canEdit" />
         <PopMenuItem
           v-if="!showFilesOnly"
           @click="$emit('toggleShowOnlyFiles')"
