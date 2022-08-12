@@ -541,8 +541,10 @@ const mutations = {
     state.navigator.reglaments.items.push(reglament)
   },
   [NAVIGATOR_REMOVE_REGLAMENT]: (state, reglament) => {
+    // Проверка для правильной работы вебсинка, т.к он вместо объекта присылает только UID регламента
+    const uid = typeof reglament === 'object' ? reglament.uid : reglament
     for (let i = 0; i < state.navigator.reglaments.items.length; i++) {
-      if (state.navigator.reglaments.items[i].uid === reglament.uid) {
+      if (state.navigator.reglaments.items[i].uid === uid) {
         state.navigator.reglaments.items.splice(i, 1)
         return
       }
