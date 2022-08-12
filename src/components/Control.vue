@@ -50,7 +50,7 @@
   </div>
 </template>
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import ControlIcon from '@/components/ControlIcon.vue'
 
@@ -79,6 +79,10 @@ const props = defineProps({
     type: String,
     default: null
   },
+  show: {
+    type: Boolean,
+    default: String
+  },
   icon: {
     type: String,
     default: null
@@ -101,6 +105,16 @@ const props = defineProps({
   transparent: Boolean,
   ctrlKFocus: Boolean,
   valid: Boolean
+})
+
+const inputEl = ref(null)
+
+watch(() => {
+  if (props.show) {
+    nextTick(() => {
+      return inputEl.value.focus()
+    })
+  }
 })
 
 const emit = defineEmits(['update:modelValue', 'iconClick', 'blur'])
@@ -144,8 +158,6 @@ const computedType = computed(() => props.options ? 'select' : props.type)
 const controlIconH = computed(() => props.type === 'textarea' ? 'h-full' : 'h-12')
 
 const store = useStore()
-
-const inputEl = ref(null)
 
 if (props.ctrlKFocus) {
   const fieldFocusHook = e => {

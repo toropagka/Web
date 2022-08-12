@@ -66,6 +66,7 @@
               autocomplete="current-password"
               placeholder="Пароль"
               icon-class="cursor-pointer"
+              :show="showValues.showLoginInputsValue"
               :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
               :type="form.showPassword ? 'text' : 'password'"
               :valid="form.password.trim().length > 7"
