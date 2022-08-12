@@ -18,8 +18,7 @@
       >
         <div
           v-if="!pics.includes(fileName.split('.').pop())"
-          :class="{'flex-col': isAudio}"
-          class="mt-2 text-right font-medium mb-2 flex relative"
+          class="mt-2 text-right font-medium mb-2 flex relative flex-col"
         >
           <div class="float-left">
             <FileMessage
@@ -28,7 +27,7 @@
             />
           </div>
           <div
-            :class="{'ml-[11.67px]': !isAudio, 'mt-[11.67px]': isAudio}"
+            :class="{'ml-[11.67px] w-full': !isAudio, 'mt-[11.67px] w-full': isAudio}"
             class="float-right"
           >
             <a
@@ -44,7 +43,7 @@
               :href="!isAudio ? fileUrl : null"
               :src="isAudio ? fileUrl : null"
               :download="fileName"
-              class="table font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
+              class="flex w-full font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
             >
               {{ fileName }}
             </a>
