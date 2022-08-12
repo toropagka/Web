@@ -97,7 +97,7 @@
             </p>
             <!-- Три точки -->
             <div
-              v-if="column.CanEditStage || column.AddCard"
+              v-if="column.CanEditStage"
               :ref="`stage-icon-${column.UID}`"
               class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
             >
