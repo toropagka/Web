@@ -139,16 +139,16 @@ export default {
         <span class="text-sm">синхронизация</span>
       </div>
     </div>
-  </form>
-  <form
-    class="ml-5 text-lg mt-[36px]"
-    action="https://www.leadertask.ru/market"
-  >
-    <button
-      type="submit"
-      class="mt-2 border border-orange-400 text-white bg-orange-400 rounded-md px-6 p-2 text-base"
+    <form
+      class="text-lg mt-[12px] mb-[12px]"
+      action="https://www.leadertask.ru/market"
     >
-      Продлить лицензию
-    </button>
+      <button
+        type="submit"
+        class="mt-2 border border-orange-400 text-white bg-orange-400 rounded-md px-6 p-2 text-base"
+      >
+        Продлить лицензию
+      </button>
+    </form>
   </form>
 </template>
