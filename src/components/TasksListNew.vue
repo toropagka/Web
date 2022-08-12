@@ -101,7 +101,8 @@
       v-if="status == 'loading'"
       class="px-[3px]"
     />
-
+    <pre>roots - {{ newConfig.roots }}</pre>
+    <pre>leaves - {{ newConfig.leaves }}</pre>
     <!-- vue3-treeview -->
     <div
       v-if="status == 'success' && Object.keys(storeTasks).length"
@@ -122,6 +123,8 @@
             :style="{ backgroundColor: getValidBackColor(colors[props.node.info?.uid_marker]?.back_color) }"
             :class="{ 'ring ring-orange-400': props.node.id === lastSelectedTaskUid}"
           >
+            <pre>{{ props.node.info.uid }}</pre>
+            <pre>{{ props.node.info.order_new }}</pre>
             <!-- Name, Status -->
             <div
               class="flex gap-[6px] items-center w-full"
@@ -288,7 +291,7 @@
               class="absolute right-[8px] top-[calc(50%-18px)] invisible group-hover:visible"
               :is-my-task="props.node.info.uid_customer == currentUserUid"
               :can-paste="!!Object.keys(copiedTasks).length"
-              :show-move-button="false"
+              :show-move-button="props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id"
               @click.stop
               @addSubtask="addSubtask(props.node.info)"
               @changeFocus="changeFocus(props.node.info)"
@@ -592,6 +595,32 @@ export default {
     })
   },
   methods: {
+    sortRootsLeaves () {
+      // если у задачи есть дети и нет родителя, то она должна быть только в roots
+      // если у задачи нет детей и нет родителя, то она должна быть в roots и leaves
+      const roots = []
+      const leaves = []
+      for (let i = 0; i < this.newConfig.roots; i++) {
+        if (this.storeTasks[this.newConfig.roots[i]].children.length && !this.storeTasks[this.newConfig.roots[i]].parent) {
+          roots.push(this.newConfig.roots[i])
+        }
+        if (!this.storeTasks[this.newConfig.roots[i]].children.length && !this.storeTasks[this.newConfig.roots[i]].parent) {
+          roots.push(this.newConfig.roots[i])
+        }
+
+        for (let i = 0; i < this.newConfig.leaves; i++) {
+          if (this.storeTasks[this.newConfig.leaves[i]].children.length && !this.storeTasks[this.newConfig.leaves[i]].parent && !roots.includes(this.newConfig.leaves[i])) {
+            roots.push(this.newConfig.leaves[i])
+          }
+          if (!this.storeTasks[this.newConfig.leaves[i]].children.length && !this.storeTasks[this.newConfig.leaves[i]].parent && !leaves.includes(this.newConfig.leaves[i])) {
+            roots.push(this.newConfig.leaves[i])
+          }
+        }
+
+        this.$store.state.tasks.newConfig.roots = roots
+        this.$store.state.tasks.newConfig.leaves = leaves
+      }
+    },
     sortTaskChildren (task) {
       const sortedChildrens = []
       if (task.parent) {
@@ -689,16 +718,15 @@ export default {
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
               case 'left':
-                this.newConfig.roots[i] = this.newConfig.roots[i - 1]
-                this.newConfig.roots[i - 1] = this.lastSelectedTaskUid
                 // не выделенная таска
-                rootTask.uid = this.newConfig.roots[i]
+                rootTask.uid = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
                 rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
-                console.log(this.lastSelectedTask)
+                rootTask.has_seen = true
                 rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
-                this.lastSelectedTask.uid_parent = this.storeTasks[this.lastSelectedTask.uid_parent].info.uid_parent
+                this.lastSelectedTask.uid_parent = rootTask.uid_parent
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
+                this.$store.state.tasks.newConfig.roots.push(this.lastSelectedTaskUid)
                 break
             }
           }
@@ -721,6 +749,8 @@ export default {
           uid: rootTask.uid,
           parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
           order: rootTask.order_new - 100
+        }).then(() => {
+          this.sortRootsLeaves()
         })
       })
       console.log(position)
