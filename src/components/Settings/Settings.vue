@@ -6,7 +6,7 @@
       @currentSettingsTab="changeSettingsTab ('tarif')"
       @AccLogout="logout()"
     />
-    <acc-tarif
+    <Tarif
       v-if="currentSettingsTab === 'tarif'"
     />
     <Options
@@ -19,7 +19,7 @@
 </template>
 <script>
 import AccKarma from '@/components/AccKarma.vue'
-import AccTarif from '@/components/AccTarif.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Account from '@/components/Settings/Account.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
@@ -35,7 +35,7 @@ export default {
   components: {
     AccKarma,
     AsideMenu,
-    AccTarif,
+    Tarif,
     Options,
     Account
   },
