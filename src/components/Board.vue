@@ -64,15 +64,17 @@
     />
     <draggable
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
-      :disabled="true"
       :list="storeCards"
-      ghost-class="ghost-board"
+      ghost-class="ghost-column"
       item-key="UID"
       group="columns"
+      handle=".draggable-column"
       :fallback-tolerance="1"
       :force-fallback="true"
       :animation="180"
       :scroll-sensitivity="100"
+      :move="checkMoveDragColumn"
+      @start="startDragColumn"
       @end="endDragColumn"
     >
       <template #item="{element: column}">
@@ -83,7 +85,10 @@
           :data-column-uid="column.UID"
         >
           <!--заголовок -->
-          <div class="px-1 flex justify-between items-start">
+          <div
+            class="px-1 flex justify-between items-start"
+            :class="{ 'draggable-column cursor-move': column.CanEditStage }"
+          >
             <p
               class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
               :style="{ color: getContrastYIQ(column.Color) }"
@@ -389,7 +394,8 @@ export default {
       showMoveCard: false,
       showMoveAllCards: false,
       selectedCardUid: '',
-      columnUid: ''
+      columnUid: '',
+      dragColumnParam: null
     }
   },
   computed: {
@@ -767,14 +773,6 @@ export default {
           })
       }
     },
-    endDragColumn (end) {
-      console.log(end)
-      // if (end.oldIndex !== end.newIndex) {
-      //   // Возможное решение долгой смены колонок: менять Order в стейте перед запросом на сервер
-      //   // this.storeCards.find(col => col.UID === end.item.dataset.columnUid).Order = end.newIndex
-      //   this.changeColumnOrder(end.item.dataset.columnUid, end.newIndex)
-      // }
-    },
     startDragCard (start) {
       this.dragCardParam = {
         change: [],
@@ -845,6 +843,39 @@ export default {
       this.dragCardParam.move.targetCard = targetCard
       this.dragCardParam.move.willInsertAfter = willInsertAfter
       return true
+    },
+    startDragColumn (start) {
+      this.dragColumnParam = {
+        move: {
+          column: null
+        }
+      }
+      //
+      const columnUid = start.item.dataset.columnUid
+      const column = this.storeCards.find(
+        (stage) => stage.UID === columnUid
+      )
+      //
+      this.dragColumnParam.move.column = column
+    },
+    endDragColumn (end) {
+      if (end.oldIndex !== end.newIndex) {
+        // поменялся порядок
+        const column = this.dragColumnParam.move.column
+        const diff = end.newIndex - end.oldIndex
+        const oldOrder = column.Order
+        const newOrder = oldOrder + diff
+        console.log('endDragColumn', this.storeCards, oldOrder, newOrder)
+        //
+        this.changeColumnOrder(column.UID, newOrder)
+      }
+      this.dragColumnParam = null
+    },
+    checkMoveDragColumn ({ relatedContext }) {
+      // запрещаем перемещать за задисейбленные столбцы
+      const targetColumn = relatedContext.element || null
+      if (!targetColumn?.CanEditStage) return false
+      return true
     }
   }
 }
@@ -858,6 +889,9 @@ export default {
   opacity: 0.5;
   background: #f7fafc;
   border: 1px solid #4299e1;
+}
+.ghost-column {
+  opacity: 0;
 }
 .light {
   --popper-theme-background-color: #ffffff;
