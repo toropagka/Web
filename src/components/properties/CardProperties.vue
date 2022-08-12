@@ -29,7 +29,7 @@
   />
   <div class="relative min-h-full">
     <div class="flex items-center justify-between mb-[10px]">
-      <card-options
+      <CardOptions
         :store-cards="storeCards"
         :date-create="selectedCard?.date_create"
         :can-edit="canEdit"
@@ -45,7 +45,7 @@
         @click="closeProperties"
       />
     </div>
-    <card-cover
+    <CardCover
       :cover-color="
         selectedCard?.cover_color === '#A998B6' ? '' : selectedCard?.cover_color
       "
@@ -56,20 +56,20 @@
       @onChangeCardClearCover="changeCardClearCover"
     />
 
-    <card-name
+    <CardName
       :card-name="selectedCard?.name"
       :can-edit="canEdit"
       @changeName="changeName"
     />
 
     <div class="flex justify-start mb-[25px] space-x-[4px]">
-      <card-responsible-user
+      <CardResponsibleUser
         :responsible="selectedCard?.user"
         :employees-by-email="employeesByEmail"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
-      <card-budget
+      <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
         @click="showChangeCardBudget = true"
@@ -87,7 +87,7 @@
     <!-- Chat skeleton -->
     <MessageSkeleton v-if="status=='loading'" />
     <!-- Card chat -->
-    <card-chat
+    <CardChat
       v-if="status=='success'"
       :messages="cardMessages"
       :current-user-uid="user.current_user_uid"
@@ -100,14 +100,14 @@
 
     <!-- Card chat input -->
     <div class="flex flex-col fixed bottom-[0px] w-[340px] bg-white pt-2 pb-5">
-      <card-message-quote-under-input
+      <CardMessageQuoteUnderInput
         v-if="currentQuote"
         class="mb-[14px] mt-[19px]"
         :quote-message="currentQuote"
         :employee="employees[currentQuote.uid_creator]"
         @onClearQuote="currentQuote = false"
       />
-      <card-message-input
+      <CardMessageInput
         v-model="cardMessageInputValue"
         :can-add-files="canAddFiles"
         @createCardMessage="createCardMessage"
