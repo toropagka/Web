@@ -1,5 +1,9 @@
 
 <template>
+  <UploadAvatar
+    v-if="changeAvatar"
+    @close-window="changeAvatar = false"
+  />
   <BoardModalBoxRename
     v-if="showEditname"
     :show="showEditname"
@@ -104,19 +108,12 @@
             </span>
           </div>
           <div>
-            <input
-              id="iconfile"
-              type="file"
-              class="hidden"
-              accept="image/png, image/jpeg"
-              @change="changeUserPhoto"
-            >
-            <label
-              for="iconfile"
+            <p
               class="text-[13px] mr-3 justify-center cursor-pointer text-[#606061]"
+              @click="changeAvatar = true"
             >
               Изменить фото
-            </label>
+            </p>
             <br>
           </div>
         </div>
@@ -232,9 +229,11 @@ import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
+import UploadAvatar from '@/components/UploadAvatar'
 
 export default {
   components: {
+    UploadAvatar,
     ModalBox,
     BoardModalBoxRename
   },
@@ -250,7 +249,8 @@ export default {
       emptyOldPass: false,
       emptyNewPasses: false,
       showEditphone: false,
-      showEditpassword: false
+      showEditpassword: false,
+      changeAvatar: false
     }
   },
   computed: {
