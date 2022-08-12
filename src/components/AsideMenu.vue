@@ -420,8 +420,8 @@ export default {
       }
     },
     onDayClick (day) {
+      this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
       const navElem = {
         name: this.dateToLabelFormat(day.date),
         key: 'taskListSource',
@@ -526,6 +526,9 @@ export default {
         return true
       }
       this.lastSelectedItem = item
+    },
+    resetLastTab () {
+      this.lastSelectedItem = null
     },
     onNewDay () {
       this.$store.commit('updateCalendarToday')
