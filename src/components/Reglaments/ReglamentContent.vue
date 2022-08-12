@@ -101,17 +101,21 @@
   </div>
   <div v-else>
     <div
-      v-if="canEdit && !showCompleteMessage"
-      class="flex justify-end mb-2"
+      class="flex justify-end mb-2 h-[30px]"
     >
       <ReglamentSmallButton
-        v-if="!isTesting"
+        v-if="canEdit && !showCompleteMessage && !isTesting"
         class="w-[224px]"
         icon="edit"
         @click="setEdit"
       >
         {{ editButtonText }}
       </ReglamentSmallButton>
+      <div class="rounded-[6px] hover:bg-[#f4f5f7] bg-white flex justify-center items-center ml-[8px] px-[5px]">
+        <NavBarButtonsReglament
+          :reglament-uid="reglament.uid"
+        />
+      </div>
     </div>
     <ReglamentInfo
       v-if="!isTesting"
@@ -225,9 +229,11 @@ import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 
 export default {
   components: {
+    NavBarButtonsReglament,
     QuillEditor,
     ListBlocAdd,
     ReglamentQuestion,
