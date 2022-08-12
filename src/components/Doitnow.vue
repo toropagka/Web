@@ -55,7 +55,7 @@
       <Icon
         :height="arrowForw.height"
         :width="arrowForw.width"
-        :view="arrowForw.viewBox"
+        :box="arrowForw.viewBox"
         :path="arrowForw.path"
       />
     </button>
