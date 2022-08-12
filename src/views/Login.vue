@@ -129,7 +129,7 @@
               name="username"
               autocomplete="username"
               placeholder="Имя пользователя"
-              :valid="form.username.length > 2"
+              :valid="validateName"
               @click="form.usernameTouched = true"
               @blur="validateAndShowMessage"
             />
@@ -228,6 +228,9 @@ export default {
   computed: {
     validatePassword () {
       return this.form.password.trim().length > 7
+    },
+    validateName () {
+      return this.form.username.length > 0
     },
     ifSpaceInPassword () {
       return this.form.password[0] === ' ' || this.form.password[this.form.password.length - 1] === ' '
@@ -377,6 +380,9 @@ export default {
       } else if (!this.validatePassword) {
         this.form.showError = true
         this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
+      } else if (!this.validateName) {
+        this.form.showError = true
+        this.form.errorMessage = 'Впишите имя'
       } else if (this.ifEmptyFields) {
         this.form.showError = true
         this.form.errorMessage = 'Для успешной регистрации заполните все поля'

@@ -203,6 +203,13 @@
             </form>
           </div>
           <div class="mb-2 mt-6">
+            <button
+              type="button"
+              class="mb-2 bg-[#d9d9d9] text-black p-2 rounded-md"
+              @click="startOnBoarding"
+            >
+              Режим тестирования
+            </button>
             <form>
               <button
                 class="bg-orange-400 text-white mt-2 text-base p-2 rounded-md"
@@ -222,7 +229,7 @@
 import { USER_CHANGE_PHOTO, USER_CHANGE_PHONE } from '@/store/actions/user.js'
 import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
-
+import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 
@@ -269,7 +276,10 @@ export default {
     logout () {
       this.$emit('AccLogout')
     },
-
+    startOnBoarding () {
+      this.$store.dispatch(USER_START_ONBOARDING)
+      this.$router.push('/doitnow')
+    },
     changeUserPhoto (event) {
       const files = event.target.files
       const formData = new FormData()

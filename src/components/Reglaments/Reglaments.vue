@@ -188,7 +188,7 @@ export default {
     },
     currentUserIsAdmin () {
       const employees = this.$store.state.employees.employees
-      const userType = employees[this.user.current_user_uid]?.type ?? 0
+      const userType = employees[this.user?.current_user_uid]?.type ?? 0
       return userType === 1 || userType === 2
     },
     allDepartments () {
@@ -229,7 +229,7 @@ export default {
         items: []
       }
       reglaments.push(common)
-      const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
+      const currentUserEmail = this.$store.state.user?.user?.current_user_email.toLowerCase()
       const departmentMap = {}
       for (const dep of this.allDepartments) {
         const reglament = {
