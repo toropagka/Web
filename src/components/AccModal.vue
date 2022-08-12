@@ -183,7 +183,7 @@
             </p>
             <div
               contenteditable="false"
-              class="text-[13px] landing-[13px] text-[#007BE5]"
+              class="text-[13px] landing-[13px]"
             >
               {{ $store.state.user.user?.current_user_email }}
             </div>
