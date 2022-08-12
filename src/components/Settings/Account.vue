@@ -1,5 +1,10 @@
 
 <template>
+  <UploadAvatar
+    v-if="changeAvatar"
+    :img="uploadedAvatar"
+    @close-window="changeAvatar = false"
+  />
   <BoardModalBoxRename
     v-if="showEditname"
     :show="showEditname"
@@ -226,15 +231,17 @@
 </template>
 
 <script>
-import { USER_CHANGE_PHOTO, USER_CHANGE_PHONE } from '@/store/actions/user.js'
+import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
 import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
+import UploadAvatar from '@/components/UploadAvatar'
 
 export default {
   components: {
+    UploadAvatar,
     ModalBox,
     BoardModalBoxRename
   },
@@ -250,7 +257,9 @@ export default {
       emptyOldPass: false,
       emptyNewPasses: false,
       showEditphone: false,
-      showEditpassword: false
+      showEditpassword: false,
+      changeAvatar: false,
+      uploadedAvatar: ''
     }
   },
   computed: {
@@ -281,14 +290,15 @@ export default {
       this.$router.push('/doitnow')
     },
     changeUserPhoto (event) {
-      const files = event.target.files
-      const formData = new FormData()
-      const file = files[0]
-      formData.append('files[0]', file)
-      const data = {
-        file: formData
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          this.uploadedAvatar = reader.result
+          this.changeAvatar = true
+        })
+        reader.readAsDataURL(file)
       }
-      this.$store.dispatch(USER_CHANGE_PHOTO, data)
     },
     showPasswordModalBox () {
       this.emptyNewPasses = false
