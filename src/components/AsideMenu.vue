@@ -1,30 +1,4 @@
 <template>
-  <!-- Profile modal -->
-  <modal-box
-    v-model="modalOneActive"
-    :title="TitleName()"
-    @currentSettingsTab="changeSettingsTab"
-  >
-    <DoitnowLimit
-      v-if="showFreeModal"
-      @cancel="showFreeModal = false"
-    />
-    <acc-modal
-      v-if="currentSettingsTab === 'account'"
-      @currentSettingsTab="changeSettingsTab ('tarif')"
-      @AccLogout="logout()"
-    />
-    <acc-tarif
-      v-if="currentSettingsTab === 'tarif'"
-    />
-    <acc-option
-      v-if="currentSettingsTab === 'main'"
-    />
-    <acc-karma
-      v-if="currentSettingsTab === 'karma'"
-    />
-  </modal-box>
-  <!-- /Profile modal -->
   <aside
     v-show="!isFullScreen"
     id="aside"
@@ -34,46 +8,9 @@
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div
-        id="step3"
-        class="flex flex-row w-full text-dark px-[16px] mt-[22px] h-[32px] items-center"
-      >
-        <div
-          class="group w-full cursor-pointer"
-          @click="modalOneActive = true"
-        >
-          <div class="flex items-center">
-            <img
-              v-if="user?.foto_link"
-              :src="user?.foto_link"
-              width="32"
-              height="32"
-              class="rounded-[8px] ml-[5px] mr-[2px] border-2 border-white w-[32px] h-[32px]"
-            >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.7602 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.70104 8.44486C6.47133 8.67154 6.10681 8.68606 5.8598 8.47836L1.46869 4.78606C1.2045 4.56391 1.17041 4.16965 1.39256 3.90546C1.61471 3.64126 2.00897 3.60718 2.27316 3.82933L6.22839 7.15512L9.87636 3.55514C10.1221 3.31269 10.5178 3.31531 10.7602 3.56099Z"
-                fill="#7e7e80"
-              />
-            </svg>
-            <span
-              class="ml-[6px] text-[15px] group-hover:text-[#4c4c4d]/75 text-[#4c4c4d] font-roboto"
-            >
-              {{ user?.current_user_name ?? '' }}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="mt-[10px]">
+      <div class="mt-[50px]">
         <DatePicker
+          v-if="lastTab === 'tasks'"
           id="step4"
           ref="calendarclass"
           v-model="dateToday"
@@ -97,14 +34,6 @@
           @dayclick="onDayClick"
         />
       </div>
-      <EventAlert
-        v-if="user?.tarif === 'free' || user?.tarif === 'trial'"
-        :bg-color="'#FF912380'"
-        :text-color="'white'"
-        :user-icon="warn"
-        :link="'https://www.leadertask.ru/alpha'"
-        :message-text="user?.tarif === 'trial' ? 'Пробный тариф.' : 'Закончилась лицензия.'"
-      />
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">
           <div
@@ -126,8 +55,8 @@
           />
         </template>
         <ul
-          v-if="favoriteBoards || favoriteProjects"
-          class="mt-[20px]"
+          v-if="(favoriteBoards || favoriteProjects) && lastTab === 'tasks'"
+          class="mt-[20px] mb-10"
         >
           <li
             v-for="project in favoriteProjects"
@@ -240,16 +169,9 @@
 </template>
 
 <script>
-import EventAlert from '@/components/EventAlert.vue'
-import ModalBox from '@/components/ModalBox.vue'
 import { DatePicker } from 'v-calendar'
-import DoitnowLimit from '@/components/Doitnow/DoitnowLimit.vue'
-import AccModal from '@/components/AccModal.vue'
-import AccTarif from '@/components/AccTarif.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import AsideMenuSkeleton from './AsideMenuSkeleton.vue'
-import AccOption from '@/components/AccOption.vue'
-import AccKarma from '@/components/AccKarma.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -257,21 +179,13 @@ import warn from '@/icons/warn.js'
 import { mdiMenu } from '@mdi/js'
 
 import * as TASK from '@/store/actions/tasks'
-import { AUTH_LOGOUT } from '@/store/actions/auth'
 import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
-    EventAlert,
-    ModalBox,
-    DoitnowLimit,
     DatePicker,
-    AccModal,
-    AccTarif,
     AsideMenuSkeleton,
-    AsideMenuList,
-    AccOption,
-    AccKarma
+    AsideMenuList
   },
   props: {
     menu: {
@@ -295,6 +209,9 @@ export default {
   computed: {
     status () {
       return this.$store.state.navigator.status
+    },
+    lastTab () {
+      return this.$store.state.navigator.lastTab
     },
     isFullScreen () {
       return this.$store.state.isFullScreen
@@ -363,15 +280,6 @@ export default {
     clearInterval(this.newDayTimerID)
   },
   methods: {
-    logout () {
-      this.modalOneActive = false
-      this.$store.dispatch(AUTH_LOGOUT)
-      this.$router.push('/login')
-      if (this.isPropertiesMobileExpanded) { this.$store.dispatch('asidePropertiesToggle', false) }
-    },
-    changeSettingsTab (tabName) {
-      this.currentSettingsTab = tabName
-    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
@@ -403,6 +311,21 @@ export default {
       }
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
+      }
+
+      console.log('item', item)
+
+      if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
+        this.$store.state.navigator.currentSettingsTab = item.type
+        const navElem = {
+          name: item.label,
+          key: 'greedSource',
+          value: { uid: item.uid, param: null },
+          greedPath: item.type
+        }
+        localStorage.setItem('currentSettingsTab', item.type)
+        this.$store.commit('updateStackWithInitValue', navElem)
+        return
       }
 
       // do it now
@@ -440,6 +363,21 @@ export default {
         return
       }
 
+      // colors & tags
+      if (item.uid === 'ed8039ae-f3de-4369-8f32-829d401056e9' || item.uid === '00a5b3de-9474-404d-b3ba-83f488ac6d30') {
+        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+        this.$store.commit('basic', { key: 'greedPath', value: item.path })
+        const navElem = {
+          name: item.label,
+          key: 'greedSource',
+          greedPath: item.path,
+          value: this.storeNavigator[item.path]?.items
+        }
+        this.$store.commit('updateStackWithInitValue', navElem)
+        this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path]?.items })
+        return
+      }
+
       // Tasks list source
       if (UID_TO_ACTION[item.uid] && item.type === 'uid') {
         this.$store.dispatch(UID_TO_ACTION[item.uid])
@@ -468,14 +406,15 @@ export default {
           this.$store.commit('updateStackWithInitValue', navElem)
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path] })
         } else {
+          console.log(item.uid)
           const navElem = {
             name: item.label,
             key: 'greedSource',
             greedPath: item.path,
-            value: this.storeNavigator[item.path].items
+            value: this.storeNavigator[item.path]?.items
           }
           this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path].items })
+          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path]?.items })
         }
       }
     },
@@ -493,12 +432,6 @@ export default {
       this.lastVisitedDate = new Date() // desktop check
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-    },
-    TitleName () {
-      if (this.currentSettingsTab === 'account') return ('Аккаунт')
-      else if (this.currentSettingsTab === 'tarif') return ('Тариф')
-      else if (this.currentSettingsTab === 'main') return ('Основное')
-      else if (this.currentSettingsTab === 'karma') return ('Карма')
     },
     goToBoard (board) {
       if (this.checkOnWhichTab(board.uid)) {

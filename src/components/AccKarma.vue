@@ -76,7 +76,7 @@ export default {
 </script>
 
 <template>
-  <p class="text-center">
+  <p class="text-center bg-white p-2 rounded">
     <span
       class="text-6xl tracking-tighter"
       :class="{'text-green-500': karmaQuantity, 'text-red-500': !karmaQuantity, 'text-gray-600': karmaQuantity === 0 }"
@@ -85,12 +85,12 @@ export default {
       {{ karmaQuantity }}
     </span>
   </p>
-  <p class="text-center mt-2">
+  <p class="text-center mt-2 bg-white p-2 rounded">
     <span class="text-sm text-gray-600">В срок:</span> <span class="text-xl mr-6 text-green-500"> {{ successQuantity }}</span>
     <span class="text-sm text-gray-600">Просроченныx:</span> <span class="text-xl text-red-500">{{ overdueQuantity }}</span>
   </p>
   <br>
-  <div class="grid grid-cols-1 gap-4 p-5">
+  <div class="grid grid-cols-1 gap-4 p-5 bg-white rounded">
     <div class="grid grid-cols-1 ">
       <p class="text-center text-2xl font-bold">
         Графики

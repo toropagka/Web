@@ -6,7 +6,7 @@ import { UPDATE_SOUND_SETTING } from '@/store/actions/inspector'
 
 const store = useStore()
 const user = computed(() => store.state.user.user)
-const settings = computed(() => store.state.navigator.navigator.settings)
+const settings = computed(() => store.state.navigator?.navigator?.settings)
 
 const isNotificationSoundOn = ref(store.state.inspector.is_notification_sound_on)
 
@@ -35,11 +35,12 @@ const updateSettings = () => {
 }
 </script>
 <template>
-  <form class="px-5">
+  <form class="px-5 bg-white py-2 rounded">
     <div class="my-2">
       <div class="flex mt-[15px]">
         <div class="checkbox">
           <input
+            v-if="settings?.add_task_to_begin"
             id="opt_1"
             v-model="settings.add_task_to_begin"
             type="checkbox"
@@ -58,6 +59,7 @@ const updateSettings = () => {
       <div class="flex mt-2">
         <div class="checkbox">
           <input
+            v-if="settings?.nav_show_overdue"
             id="opt_4"
             v-model="settings.nav_show_overdue"
             type="checkbox"
@@ -94,6 +96,7 @@ const updateSettings = () => {
       </p>
       <div class="flex mt-2">
         <select
+          v-if="settings?.reminders_in_n_minutes"
           v-model="settings.reminders_in_n_minutes"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
           @change="updateSettings()"
@@ -122,6 +125,7 @@ const updateSettings = () => {
       </p>
       <div class="flex mt-2">
         <select
+          v-if="settings?.language"
           v-model="settings.language"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
           @change="updateSettings()"

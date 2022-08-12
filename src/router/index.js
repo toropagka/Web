@@ -1,6 +1,9 @@
 import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
+import Doitnow from '@/components/Doitnow.vue'
+import Empty from '@/components/Empty.vue'
+import Settings from '@/components/Settings.vue'
 import TaskFile from '@/views/TaskFile'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -12,9 +15,22 @@ const ifNotAuthenticated = (to, from, next) => {
   }
 }
 
-const ifAuthenticated = (to, from, next) => {
+const shouldRedirectToLogin = (to, from, next) => {
   if (store.getters.isAuthenticated) {
     next()
+  } else {
+    next('/login')
+  }
+}
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    const lastTab = localStorage.getItem('lastTab')
+    if (lastTab === null) {
+      next('/tasks')
+      return
+    }
+    next(`/${lastTab}`)
   } else {
     next('/login')
   }
@@ -90,7 +106,42 @@ const routes = [
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
-    beforeEnter: ifAuthenticated
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/doitnow',
+    name: 'doitnow',
+    component: Doitnow,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks',
+    name: 'tasks',
+    component: Home,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/directory',
+    name: 'directory',
+    component: Home,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/clients',
+    name: 'clients',
+    component: Empty,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {

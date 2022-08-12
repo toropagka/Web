@@ -64,7 +64,7 @@
               backgroundColor: getValidBackColor(color.back_color),
               color: getValidForeColor(color.fore_color)
             }"
-            @click="clickOnGridCard(color)"
+            @click="openProperties(color)"
           >
             <Icon
               :box="colorIcon.viewBox"
@@ -92,10 +92,8 @@ import Icon from '@/components/Icon.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
-
-import * as TASK from '@/store/actions/tasks'
 import { setLocalStorageItem } from '@/store/helpers/functions'
-import { SELECT_COLOR, CREATE_COLOR_REQUEST } from '@/store/actions/colors'
+import { CREATE_COLOR_REQUEST, SELECT_COLOR } from '@/store/actions/colors'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 
@@ -194,7 +192,7 @@ export default {
       this.$store.dispatch(CREATE_COLOR_REQUEST, color).then(() => {
         this.visibleModal = false
         this.$store.state.greedSource.unshift(color)
-        this.clickOnGridCard(color)
+        this.openProperties(color)
       })
     },
     updateGridView (value) {
@@ -207,23 +205,6 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'color' })
       this.$store.commit(SELECT_COLOR, color)
-    },
-    clickOnGridCard (value) {
-      this.$store.dispatch(TASK.COLOR_TASKS_REQUEST, value.uid)
-      const navElem = {
-        name: value.name,
-        key: 'taskListSource',
-        value: { uid: value.parentID, param: value.uid },
-        typeVal: value.uid,
-        type: 'color'
-      }
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: value.parentID, param: value.uid }
-      })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     getValidForeColor (foreColor) {
       if (foreColor && foreColor !== '#A998B6') return foreColor
