@@ -81,7 +81,7 @@ const props = defineProps({
   },
   show: {
     type: Boolean,
-    default: String
+    default: false
   },
   icon: {
     type: String,

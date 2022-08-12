@@ -109,6 +109,7 @@
               placeholder="Пароль"
               autocomplete="current-password"
               icon-class="cursor-pointer"
+              :show="showValues.showRegisterInputsValue"
               :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
               :type="form.showPassword ? 'text' : 'password'"
               :valid="validatePassword"
@@ -375,13 +376,13 @@ export default {
       this.form.showPassword = !this.form.showPassword
     },
     validateAndShowMessage () {
-      if (this.ifSpaceInPassword) {
+      if (this.ifSpaceInPassword && this.form.passwordTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Символ пробела в начале и в конце пароля недопустим'
-      } else if (!this.validatePassword) {
+      } else if (!this.validatePassword && this.form.passwordTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
-      } else if (!this.validateName) {
+      } else if (!this.validateName && this.form.usernameTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Впишите имя'
       } else if (this.ifEmptyFields) {
