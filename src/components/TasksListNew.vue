@@ -101,8 +101,6 @@
       v-if="status == 'loading'"
       class="px-[3px]"
     />
-    <pre>roots - {{ newConfig.roots }}</pre>
-    <pre>leaves - {{ newConfig.leaves }}</pre>
     <!-- vue3-treeview -->
     <div
       v-if="status == 'success' && Object.keys(storeTasks).length"
@@ -123,8 +121,6 @@
             :style="{ backgroundColor: getValidBackColor(colors[props.node.info?.uid_marker]?.back_color) }"
             :class="{ 'ring ring-orange-400': props.node.id === lastSelectedTaskUid}"
           >
-            <pre>{{ props.node.info.uid }}</pre>
-            <pre>{{ props.node.info.order_new }}</pre>
             <!-- Name, Status -->
             <div
               class="flex gap-[6px] items-center w-full"
@@ -596,30 +592,23 @@ export default {
   },
   methods: {
     sortRootsLeaves () {
+      console.log(this.storeTasks)
       // если у задачи есть дети и нет родителя, то она должна быть только в roots
       // если у задачи нет детей и нет родителя, то она должна быть в roots и leaves
       const roots = []
       const leaves = []
-      for (let i = 0; i < this.newConfig.roots; i++) {
-        if (this.storeTasks[this.newConfig.roots[i]].children.length && !this.storeTasks[this.newConfig.roots[i]].parent) {
-          roots.push(this.newConfig.roots[i])
+      for (const elem in this.storeTasks) {
+        console.log(this.storeTasks[elem])
+        if (this.storeTasks[elem].children.length && this.storeTasks[elem].parent === '00000000-0000-0000-0000-000000000000') {
+          roots.push(elem)
         }
-        if (!this.storeTasks[this.newConfig.roots[i]].children.length && !this.storeTasks[this.newConfig.roots[i]].parent) {
-          roots.push(this.newConfig.roots[i])
+        if (!this.storeTasks[elem].children.length && this.storeTasks[elem].parent === '00000000-0000-0000-0000-000000000000') {
+          roots.push(elem)
+          leaves.push(elem)
         }
-
-        for (let i = 0; i < this.newConfig.leaves; i++) {
-          if (this.storeTasks[this.newConfig.leaves[i]].children.length && !this.storeTasks[this.newConfig.leaves[i]].parent && !roots.includes(this.newConfig.leaves[i])) {
-            roots.push(this.newConfig.leaves[i])
-          }
-          if (!this.storeTasks[this.newConfig.leaves[i]].children.length && !this.storeTasks[this.newConfig.leaves[i]].parent && !leaves.includes(this.newConfig.leaves[i])) {
-            roots.push(this.newConfig.leaves[i])
-          }
-        }
-
-        this.$store.state.tasks.newConfig.roots = roots
-        this.$store.state.tasks.newConfig.leaves = leaves
       }
+      this.$store.state.tasks.newConfig.roots = roots
+      this.$store.state.tasks.newConfig.leaves = leaves
     },
     sortTaskChildren (task) {
       const sortedChildrens = []
@@ -633,7 +622,9 @@ export default {
         console.log(this.$store.state.tasks.newtasks[task.parent])
         this.$store.state.tasks.newtasks[task.parent].children = []
         for (let i = 0; i < sortedChildrens.length; i++) {
-          this.$store.state.tasks.newtasks[task.parent].children.push(sortedChildrens[i].id)
+          if (sortedChildrens[i]) {
+            this.$store.state.tasks.newtasks[task.parent].children.push(sortedChildrens[i].id)
+          }
         }
       }
     },
@@ -674,6 +665,12 @@ export default {
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
+              case 'right':
+                rootTask.uid = this.newConfig.roots[i + 1]
+                rootTask.order_new = this.storeTasks[this.newConfig.roots[i + 1]].info.order_new
+                rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
+                this.lastSelectedTask.uid_parent = this.newConfig.roots[i + 1]
+                selectedTaskOrder = this.lastSelectedTask.order_new
             }
           }
         }
@@ -719,8 +716,8 @@ export default {
                 break
               case 'left':
                 // не выделенная таска
-                rootTask.uid = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
-                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+                rootTask.uid = this.lastSelectedTask.uid_parent
+                rootTask.order_new = this.lastSelectedTask.order_new
                 rootTask.has_seen = true
                 rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
                 this.lastSelectedTask.uid_parent = rootTask.uid_parent
@@ -743,14 +740,28 @@ export default {
           parent: this.lastSelectedTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
           order: selectedTaskOrder ?? 0
         }
-      ).then(() => {
+      ).then((resp) => {
+        this.storeTasks[this.lastSelectedTaskUid].info = resp.data.tasks[0]
+        this.storeTasks[this.lastSelectedTaskUid].parent = resp.data.tasks[0].uid_parent
+        this.$store.dispatch(TASK.GET_TASK_CHILDRENS, this.lastSelectedTaskUid)
+          .then((resp) => {
+            this.storeTasks[this.lastSelectedTaskUid].children = resp.data.tasks
+          })
         // сортируем невыбранную задачу
         this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
           uid: rootTask.uid,
           parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
           order: rootTask.order_new - 100
-        }).then(() => {
-          this.sortRootsLeaves()
+        }).then((resp) => {
+          this.storeTasks[rootTask.uid].info = resp.data.tasks[0]
+          this.storeTasks[rootTask.uid].parent = resp.data.tasks[0].uid_parent
+          this.$store.dispatch(TASK.GET_TASK_CHILDRENS, rootTask.uid)
+            .then((resp) => {
+              this.storeTasks[rootTask.uid].children = resp.data.tasks
+              this.sortRootsLeaves()
+            })
+          console.log('change unselected', resp.data)
+          console.log(this.storeTasks)
         })
       })
       console.log(position)
@@ -1105,7 +1116,7 @@ export default {
         // change order in children
         if (this.storeTasks[node.dragged.node.id].parent) {
           const parent = this.storeTasks[this.storeTasks[node.dragged.node.id].parent]
-          if (parent.children.length >= 1) {
+          if (parent?.children?.length >= 1) {
             for (let i = 0; i < parent.children.length; i++) {
               if (parent.children[i] === node.dragged.node.id) {
                 if (i === 0) {
