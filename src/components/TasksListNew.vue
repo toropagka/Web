@@ -591,43 +591,6 @@ export default {
     })
   },
   methods: {
-    sortRootsLeaves () {
-      console.log(this.storeTasks)
-      // если у задачи есть дети и нет родителя, то она должна быть только в roots
-      // если у задачи нет детей и нет родителя, то она должна быть в roots и leaves
-      const roots = []
-      const leaves = []
-      for (const elem in this.storeTasks) {
-        console.log(this.storeTasks[elem])
-        if (this.storeTasks[elem].children.length && this.storeTasks[elem].parent === '00000000-0000-0000-0000-000000000000') {
-          roots.push(elem)
-        }
-        if (!this.storeTasks[elem].children.length && this.storeTasks[elem].parent === '00000000-0000-0000-0000-000000000000') {
-          roots.push(elem)
-          leaves.push(elem)
-        }
-      }
-      this.$store.state.tasks.newConfig.roots = roots
-      this.$store.state.tasks.newConfig.leaves = leaves
-    },
-    sortTaskChildren (task) {
-      const sortedChildrens = []
-      if (task.parent) {
-        for (let i = 0; i < this.storeTasks[task.parent].children.length; i++) {
-          sortedChildrens.push(this.storeTasks[this.storeTasks[task.parent].children[i]])
-        }
-        sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
-        console.log(sortedChildrens, 'childs')
-
-        console.log(this.$store.state.tasks.newtasks[task.parent])
-        this.$store.state.tasks.newtasks[task.parent].children = []
-        for (let i = 0; i < sortedChildrens.length; i++) {
-          if (sortedChildrens[i]) {
-            this.$store.state.tasks.newtasks[task.parent].children.push(sortedChildrens[i].id)
-          }
-        }
-      }
-    },
     changeTaskPosition (position) {
       let selectedTaskOrder = '' // order выделенной задачи
       const rootTask = {} // order задачи, которая не выделена
@@ -665,12 +628,6 @@ export default {
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
-              case 'right':
-                rootTask.uid = this.newConfig.roots[i + 1]
-                rootTask.order_new = this.storeTasks[this.newConfig.roots[i + 1]].info.order_new
-                rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
-                this.lastSelectedTask.uid_parent = this.newConfig.roots[i + 1]
-                selectedTaskOrder = this.lastSelectedTask.order_new
             }
           }
         }
@@ -714,24 +671,12 @@ export default {
                 // ставим order_new
                 selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
                 break
-              case 'left':
-                // не выделенная таска
-                rootTask.uid = this.lastSelectedTask.uid_parent
-                rootTask.order_new = this.lastSelectedTask.order_new
-                rootTask.has_seen = true
-                rootTask.uid_parent = this.storeTasks[rootTask.uid].info.uid_parent
-                this.lastSelectedTask.uid_parent = rootTask.uid_parent
-                // ставим order_new
-                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
-                this.$store.state.tasks.newConfig.roots.push(this.lastSelectedTaskUid)
-                break
             }
           }
         }
       }
       this.$store.state.tasks.newtasks[this.lastSelectedTaskUid].info.order_new = selectedTaskOrder
       this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new - 100
-      this.sortTaskChildren(this.$store.state.tasks.newtasks[this.lastSelectedTaskUid])
       // сортируем выбранную задачу
       this.$store.dispatch(
         TASK.CHANGE_TASK_PARENT_AND_ORDER,
@@ -741,27 +686,11 @@ export default {
           order: selectedTaskOrder ?? 0
         }
       ).then((resp) => {
-        this.storeTasks[this.lastSelectedTaskUid].info = resp.data.tasks[0]
-        this.storeTasks[this.lastSelectedTaskUid].parent = resp.data.tasks[0].uid_parent
-        this.$store.dispatch(TASK.GET_TASK_CHILDRENS, this.lastSelectedTaskUid)
-          .then((resp) => {
-            this.storeTasks[this.lastSelectedTaskUid].children = resp.data.tasks
-          })
         // сортируем невыбранную задачу
         this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
           uid: rootTask.uid,
           parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
           order: rootTask.order_new - 100
-        }).then((resp) => {
-          this.storeTasks[rootTask.uid].info = resp.data.tasks[0]
-          this.storeTasks[rootTask.uid].parent = resp.data.tasks[0].uid_parent
-          this.$store.dispatch(TASK.GET_TASK_CHILDRENS, rootTask.uid)
-            .then((resp) => {
-              this.storeTasks[rootTask.uid].children = resp.data.tasks
-              this.sortRootsLeaves()
-            })
-          console.log('change unselected', resp.data)
-          console.log(this.storeTasks)
         })
       })
       console.log(position)
