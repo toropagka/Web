@@ -291,7 +291,6 @@ export default {
     },
     changeUserPhoto (event) {
       const file = event.target.files[0]
-      console.log('file -->', file)
       if (file) {
         const reader = new FileReader()
         reader.addEventListener('load', () => {

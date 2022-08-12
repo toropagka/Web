@@ -40,6 +40,7 @@
 import Overlay from '@/components/modals/Overlay'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
+import { USER_CHANGE_PHOTO } from '@/store/actions/user'
 
 export default {
   components: { Overlay, Cropper },
@@ -57,9 +58,15 @@ export default {
   },
   methods: {
     uploadAvatar () {
-      this.$refs.link.download = 'image.jpg'
-      this.$refs.link.href = this.canvas.toDataURL('image/jpeg', 0.9)
-      this.$refs.link.click()
+      this.canvas.toBlob((blob) => {
+        const formData = new FormData()
+        formData.append('files[0]', blob)
+        const data = {
+          file: formData
+        }
+        this.$store.dispatch(USER_CHANGE_PHOTO, data)
+        this.$emit('closeWindow')
+      })
     },
     closeWindow () {
       this.$emit('closeWindow')
@@ -71,10 +78,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.cropper {
-  height: 600px;
-  background: plum;
-}
-</style>
