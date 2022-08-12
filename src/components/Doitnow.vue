@@ -66,7 +66,7 @@
   />
   <transition :name="taskTransition">
     <div
-      v-if="!(tasksCount === 0 && !isLoading) && !displayModal"
+      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid"
       class="px-5"
     >
       <a
