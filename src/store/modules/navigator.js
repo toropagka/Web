@@ -215,7 +215,7 @@ const mutations = {
     state.hasLoadedOnce = true
     console.log('navigator ', resp)
     state.menu = []
-    if (state.lastTab === 'tasks') {
+    if (state.lastTab === 'tasks' || state.lastTab === 'doitnow') {
       state.menu.push([
         {
           label: 'Сегодня',
