@@ -638,7 +638,6 @@ export default {
             if (rootTask.has_seen) {
               break
             }
-            console.log(this.newConfig.leaves[i], `i - ${i}`, this.newConfig.leaves)
             // проверяем на крайние значения
             switch (position) {
               case 'up':
@@ -693,8 +692,6 @@ export default {
           order: rootTask.order_new - 100
         })
       })
-      console.log(position)
-      console.log('roots - ', this.newConfig)
     },
     scroll (step) {
       const scrollY = window.scrollTop()
