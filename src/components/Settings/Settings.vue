@@ -9,7 +9,7 @@
     <acc-tarif
       v-if="currentSettingsTab === 'tarif'"
     />
-    <acc-option
+    <Options
       v-if="currentSettingsTab === 'option'"
     />
     <acc-karma
@@ -20,7 +20,7 @@
 <script>
 import AccKarma from '@/components/AccKarma.vue'
 import AccTarif from '@/components/AccTarif.vue'
-import AccOption from '@/components/AccOption.vue'
+import Options from '@/components/Settings/Options.vue'
 import Account from '@/components/Settings/Account.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 
@@ -36,7 +36,7 @@ export default {
     AccKarma,
     AsideMenu,
     AccTarif,
-    AccOption,
+    Options,
     Account
   },
   computed: {
