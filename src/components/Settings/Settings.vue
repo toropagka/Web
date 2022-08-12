@@ -1,7 +1,7 @@
 <template>
   <AsideMenu :menu="menu" />
-  <div class="mt-[30px]">
-    <acc-modal
+  <div>
+    <Account
       v-if="currentSettingsTab === 'account'"
       @currentSettingsTab="changeSettingsTab ('tarif')"
       @AccLogout="logout()"
@@ -21,7 +21,7 @@
 import AccKarma from '@/components/AccKarma.vue'
 import AccTarif from '@/components/AccTarif.vue'
 import AccOption from '@/components/AccOption.vue'
-import AccModal from '@/components/AccModal.vue'
+import Account from '@/components/Settings/Account.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 
 import { USER_REQUEST } from '@/store/actions/user'
@@ -37,7 +37,7 @@ export default {
     AsideMenu,
     AccTarif,
     AccOption,
-    AccModal
+    Account
   },
   computed: {
     currentSettingsTab () {
