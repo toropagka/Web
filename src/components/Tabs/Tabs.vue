@@ -320,7 +320,6 @@ export default {
   },
   methods: {
     switchTab (tab) {
-      console.log(this.$store.state.greedPath)
       if (tab.code === this.lastSelectedTabsCode) {
         return
       }
