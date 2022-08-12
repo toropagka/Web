@@ -149,13 +149,6 @@
                     Переместить
                   </PopMenuItem>
                   <PopMenuItem
-                    v-if="column.AddCard"
-                    icon="move"
-                    @click="clickMoveAllColumnCards(column)"
-                  >
-                    Переместить все карточки
-                  </PopMenuItem>
-                  <PopMenuItem
                     v-if="column.CanEditStage"
                     icon="delete"
                     @click="clickDeleteColumn(column, $event)"
@@ -175,9 +168,23 @@
               v-if="getColumnCards(column).length"
               class="flex items-center justify-between h-[16px]"
             >
-              <p class="text-[12px] leading-[14px]">
-                Карточек: {{ getColumnCards(column).length }}
-              </p>
+              <PopMenu :disabled="isReadOnlyBoard">
+                <p
+                  class="text-[12px] leading-[14px]"
+                  :class="{ 'hover:underline cursor-pointer': !isReadOnlyBoard}"
+                >
+                  Карточек: {{ getColumnCards(column).length }}
+                </p>
+                <template #menu>
+                  <PopMenuItem
+                    icon="move"
+                    @click="clickMoveAllColumnCards(column)"
+                  >
+                    Переместить
+                  </PopMenuItem>
+                </template>
+              </PopMenu>
+
               <div
                 v-if="totalItem(getColumnCards(column))"
                 class="flex items-center"
@@ -229,7 +236,7 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="!board || board.type_access === 0 || isFiltered || showArchive"
+              :disabled="isReadOnlyBoard || isFiltered || showArchive"
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
@@ -244,7 +251,7 @@
                   :data-card-id="element.uid"
                   :card="element"
                   :show-date="board?.show_date !== 0 ?? false"
-                  :read-only="!board || board.type_access === 0"
+                  :read-only="isReadOnlyBoard"
                   :selected="selectedCardUid === element.uid"
                   class="mt-2"
                   @select="selectCard(element)"
@@ -449,6 +456,9 @@ export default {
     },
     isFiltered () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWithNoResponsible || this.showOnlyCardsWhereIAmResponsible || this.showOnlySearchText
+    },
+    isReadOnlyBoard () {
+      return !this.board || this.board.type_access === 0
     }
   },
   watch: {
