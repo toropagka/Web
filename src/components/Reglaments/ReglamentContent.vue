@@ -12,10 +12,10 @@
   <div
     v-if="isEditing"
   >
-    <div class="w-full">
-      <div class="fixed bg-[#f4f5f7] right-0 left-0 mt-[-8px] z-[6]">
+    <div class="w-full sticky top-[45px] left-0 right-0 z-[6]">
+      <div class="top-0 bg-[#f4f5f7] pt-[5px] pb-[15px]">
         <div
-          class="flex justify-end gap-[8px] mb-2 mr-3"
+          class="flex justify-end gap-[8px] mr-3"
         >
           <PopMenu v-if="!editorsCanEdit">
             <ReglamentSmallButton>
@@ -77,9 +77,6 @@
         </div>
       </div>
     </div>
-    <div
-      class="h-[35px]"
-    />
     <div
       class="bg-white p-3 rounded mb-3"
     >
