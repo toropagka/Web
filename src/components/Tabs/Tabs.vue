@@ -320,6 +320,7 @@ export default {
   },
   methods: {
     switchTab (tab) {
+      console.log(this.$store.state.greedPath)
       if (tab.code === this.lastSelectedTabsCode) {
         return
       }
@@ -365,6 +366,14 @@ export default {
           break
         case 'settings':
           this.$router.push('/settings')
+          this.$store.commit('updateStackWithInitValue', {
+            name: 'Аккаунт',
+            value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
+            typeVal: new Date(),
+            type: 'account'
+          })
+          this.$store.commit('basic', { key: 'mainSectionState', value: 'settings' })
+          this.$store.state.navigator.currentSettingsTab = 'account'
           break
       }
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
