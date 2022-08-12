@@ -12,7 +12,8 @@ export default {
   },
 
   mounted () {
-  // Start dots blinking
+    this.$store.dispatch('fullScreenToggle', 'add')
+    // Start dots blinking
     this.intervalId = setInterval(() => {
       this.dots.length < 3 ? this.dots += '.' : this.dots = '.'
     }, 500)
@@ -43,7 +44,7 @@ export default {
 <template>
   <p
     v-if="!videoBlob"
-    class="text-[40px] font-[700]"
+    class="cardfile-wait text-[40px] font-[700] ml-[27%] mt-5"
   >
     {{ text }} {{ dots }}
   </p>
