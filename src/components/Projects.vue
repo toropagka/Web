@@ -3,13 +3,6 @@
     <div
       v-if="!displayModal"
     >
-      <BoardModalBoxRename
-        v-if="showAddProject"
-        :show="showAddProject"
-        title="Добавить проект"
-        @cancel="showAddProject = false"
-        @save="onAddNewProject"
-      />
       <ProjectModalBoxProjectsLimit
         v-if="showProjectsLimit"
         @cancel="showProjectsLimit = false"
@@ -72,9 +65,14 @@
               @click.stop="gotoChildren(project)"
             />
           </template>
+          <InputValue
+            v-if="showAddProject && index === 0"
+            @save="onAddNewProject"
+            @cancel="showAddProject = false"
+          />
           <ListBlocAdd
-            v-if="index == 0"
-            @click.stop="clickAddProject"
+            v-else-if="index == 0"
+            @click.stop="showAddProject = true"
           />
         </div>
       </div>
@@ -120,7 +118,6 @@
 
 <script>
 import Icon from '@/components/Icon.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
@@ -134,10 +131,12 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import InputValue from '@/components/InputValue'
+
 export default {
   components: {
+    InputValue,
     Icon,
-    BoardModalBoxRename,
     ProjectBlocItem,
     ListBlocAdd,
     ProjectModalBoxProjectsLimit,
