@@ -3,13 +3,6 @@
     <div
       v-if="!displayModal"
     >
-      <BoardModalBoxRename
-        v-if="showAddBoard"
-        :show="showAddBoard"
-        title="Добавить доску"
-        @cancel="showAddBoard = false"
-        @save="onAddNewBoard"
-      />
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
@@ -72,8 +65,15 @@
               @click.stop="gotoChildren(board)"
             />
           </template>
+          <BoardInputValue
+            v-if="showAddBoard && index == 0"
+            :show="showAddBoard"
+            class="h-[48px]"
+            @cancel="showAddBoard = false"
+            @save="onAddNewBoard"
+          />
           <ListBlocAdd
-            v-if="index == 0"
+            v-else-if="index == 0"
             @click.stop="clickAddBoard"
           />
         </div>
@@ -119,7 +119,6 @@
 <script>
 import Icon from '@/components/Icon.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
@@ -130,14 +129,15 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import BoardInputValue from './Board/BoardInputValue.vue'
 
 export default {
   components: {
     Icon,
-    BoardModalBoxRename,
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
-    ListBlocAdd
+    ListBlocAdd,
+    BoardInputValue
   },
   props: {
     boards: {
