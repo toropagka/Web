@@ -241,7 +241,7 @@ export default {
       return (!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)
     },
     allFieldsAreValid () {
-      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.form.username.length > 2
+      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.form.username.length > 0
     }
   },
   methods: {
