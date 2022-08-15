@@ -8,6 +8,20 @@
         {{ question.name }}
       </div>
     </div>
+    <div
+      v-if="correctAnswers.length"
+      class="font-[400] text-[18px] my-3 min-w-[10px] min-h-[10px] px-1"
+    >
+      Правильные ответы:
+      <ul>
+        <li
+          v-for="correctAnswer in correctAnswers"
+          :key="correctAnswer.id"
+        >
+          {{ correctAnswer.name }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -16,6 +30,11 @@ export default {
     question: {
       type: String,
       default: ''
+    }
+  },
+  data () {
+    return {
+      correctAnswers: []
     }
   },
   computed: {
@@ -38,6 +57,11 @@ export default {
         shouldShow = true
         return shouldShow
       }
+      // Если в вопросе больше одного ответа
+      if (creatorAnswers.length > 1) {
+        shouldShow = this.checkMultiQuestion(creatorAnswers, userAnswers)
+        return shouldShow
+      }
       for (let i = 0; i < userAnswers.length; i++) {
         if (userAnswers[i]?.uid === creatorAnswers[i]?.uid) {
           shouldShow = false
@@ -47,6 +71,16 @@ export default {
         }
       }
       return shouldShow
+    }
+  },
+  methods: {
+    checkMultiQuestion (creatorAnswers, userAnswers) {
+      const answersDifference = creatorAnswers.filter((item) => userAnswers.includes(item))
+      if (answersDifference.length !== creatorAnswers.length) {
+        this.correctAnswers = answersDifference.map((answer) => { return { id: answer.id, name: answer.name } })
+        return true
+      }
+      return false
     }
   }
 }

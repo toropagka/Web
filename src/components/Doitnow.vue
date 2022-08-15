@@ -79,23 +79,30 @@
     </div>
   </transition>
   <transition :name="taskTransition">
-    <DoitnowTask
-      v-if="!displayModal && tasksCount && !isLoading"
-      :key="firstTask.uid"
-      :task="firstTask"
-      :childrens="childrens"
-      :sub-tasks="subTasks"
-      :colors="colors"
-      :tags="tags"
-      :user="user"
-      :task-messages="taskMessages.slice().reverse()"
-      :employees="employees"
-      :projects="projects"
-      @clickTask="onClickTask"
-      @nextTask="nextTask"
-      @changeValue="changeValue"
-      @readTask="readTask"
-    />
+    <div>
+      <DoitnowTask
+        v-if="!displayModal && tasksCount && !isLoading && !notify"
+        :key="firstTask.uid"
+        :task="firstTask"
+        :childrens="childrens"
+        :sub-tasks="subTasks"
+        :colors="colors"
+        :tags="tags"
+        :user="user"
+        :task-messages="taskMessages.slice().reverse()"
+        :employees="employees"
+        :projects="projects"
+        @clickTask="onClickTask"
+        @nextTask="nextTask"
+        @changeValue="changeValue"
+        @readTask="readTask"
+      />
+      <DoitnowNotificationTasks
+        v-if="!displayModal && tasksCount && !isLoading && notify"
+        :name="firstTask.name"
+        :uid="firstTask.uid"
+      />
+    </div>
   </transition>
   <DoitnowEmpty
     v-if="(tasksCount === 0 && !isLoading)"
@@ -119,15 +126,18 @@ import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
+import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
 
 export default {
   components: {
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    Icon
+    Icon,
+    DoitnowNotificationTasks
   },
   setup () {
     return {
@@ -158,15 +168,20 @@ export default {
         this.unreadTasks.length +
         this.overdueTasks.length +
         this.readyTasks.length +
-        this.todayTasks.length
+        this.todayTasks.length +
+        this.notifies.length
       )
     },
     currentLocation () {
       return window.location.origin
     },
     firstTask () {
+      console.log('firstTask', this.firstTask)
       if (this.slidesCopy.length && this.justRegistered) {
         return this.slidesCopy[0]
+      }
+      if (this.notifies.length) {
+        return this.notifies[0]
       }
       if (this.unreadTasks.length) {
         return this.unreadTasks[0]
@@ -218,13 +233,19 @@ export default {
     displayModal () {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
     },
+    notifies () {
+      return this.$store.state.notificationTasks.notificationTasks
+    },
+    notify () {
+      return !!this.firstTask.notify
+    },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
     }
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask && newtask.uid) {
+      if (newtask && newtask.uid && !newtask.notify) {
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -248,7 +269,7 @@ export default {
   mounted: function () {
     const navLoaded = this.$store.state.navigator.hasLoadedOnce
     const userLoaded = this.$store.state.user.hasLoadedOnce
-
+    // this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
     // сначала запрашиваем пользователя, потом регламенты, потом навигатор
     if (!userLoaded || !navLoaded) {
       this.$store.dispatch(USER_REQUEST).then(() => {
@@ -271,9 +292,14 @@ export default {
               initWebSync()
               initInspectorSocket()
             } catch (e) {}
+          }).then(() => {
+            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
           })
         })
       })
+    }
+    if (userLoaded && navLoaded) {
+      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
     }
     if (this.justRegistered) {
       this.slidesCopy = [...this.slides]
@@ -282,6 +308,9 @@ export default {
       this.loadAllTasks()
     }
     this.$store.dispatch('fullScreenToggle', 'add')
+  },
+  unmounted: function () {
+    this.$store.commit('NOTIFICATION_TASKS_CLEAR')
   },
   methods: {
     loadAllTasks: function () {
@@ -378,6 +407,10 @@ export default {
     nextTask: function () {
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
+        return
+      }
+      if (this.notifies.length) {
+        this.notifies.shift()
         return
       }
       this.readTask()
