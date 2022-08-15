@@ -51,4 +51,5 @@ export default {
     class="fixed left-0 top-0 z-[50] ml-3"
   />
   <router-view />
+  <div id="vk_community_messages" />
 </template>
