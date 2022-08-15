@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('KARMA_REQUEST', this.user.current_user_uid).then((resp) => {
+    this.$store.dispatch('KARMA_REQUEST', this.user?.current_user_uid).then((resp) => {
       const success = []
       const overdue = []
       for (const karma of resp.data) {

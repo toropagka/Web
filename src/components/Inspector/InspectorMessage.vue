@@ -376,7 +376,7 @@ const getValidBackColor = function (backColor) {
           style="border: 2px solid rgba(0, 0, 0, 0.12); border-radius: 0px 14px 14px 14px;"
         >
           <p
-            class="font-[400] text-[14px] leading-[19px] text-[#4C4C4D]"
+            class="text-left font-[400] text-[14px] leading-[19px] text-[#4C4C4D] clamp"
           >
             {{ props.message }}
           </p>
@@ -757,10 +757,18 @@ const getValidBackColor = function (backColor) {
   </Transition>
 </template>
 
-<style>
+<style scoped>
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }
+
+.clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
 .slide-fade-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }

@@ -43,6 +43,7 @@
     "v-switch-case": "^1.0.3",
     "v-tab": "^3.0.3",
     "vue": "^3.0.0",
+    "vue-advanced-cropper": "^2.8.3",
     "vue-class-component": "^8.0.0-rc.1",
     "vue-contenteditable": "^3.0.4",
     "vue-context": "^6.0.0",

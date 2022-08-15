@@ -1,5 +1,10 @@
 
 <template>
+  <UploadAvatar
+    v-if="changeAvatar"
+    :img="uploadedAvatar"
+    @close-window="changeAvatar = false"
+  />
   <BoardModalBoxRename
     v-if="showEditname"
     :show="showEditname"
@@ -88,6 +93,9 @@
     </div>
   </ModalBox>
   <form class="mx-6 overscroll-auto bg-white p-2 rounded">
+    <div class="pl-[15px] pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
+      Аккаунт
+    </div>
     <div class="flex pb-3">
       <form class="text-left w-40">
         <div class="text-center mb-3 mr-5">
@@ -110,9 +118,9 @@
             >
             <label
               for="iconfile"
-              class="text-[13px] mr-3 justify-center cursor-pointer"
+              class="text-[13px] mr-3 justify-center cursor-pointer text-[#606061]"
             >
-              изменить фото
+              Изменить фото
             </label>
             <br>
           </div>
@@ -135,13 +143,11 @@
         </p>
         <div class="mt-2">
           <button
-            class="font-normal text-sm landing-4"
             type="button"
-            @click="changeCurrentTab ('tarif')"
+            class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+            @click="changeCurrentTab('tarif')"
           >
-            <p class="border border-gray-400 rounded-md p-2.5 text-gray-600 mt-2">
-              Управление тарифом
-            </p>
+            Управление тарифом
           </button>
         </div>
         <div class="mt-6">
@@ -149,7 +155,7 @@
             Имя
           </p>
           <form class="mb-2">
-            <div class="text-sm landing-4 font-normal">
+            <div class="text-sm landing-4 font-normal text-[#606061]">
               {{ $store.state.user.user?.current_user_name ?? '' }}
             </div>
             <button
@@ -165,7 +171,7 @@
               Телефон
             </p>
             <form class="mb-2">
-              <div class="text-sm landing-4 font-normal">
+              <div class="text-sm landing-4 font-normal text-[#606061]">
                 {{ userPhone() }}
               </div>
               <button
@@ -183,7 +189,7 @@
             </p>
             <div
               contenteditable="false"
-              class="text-[13px] landing-[13px]"
+              class="text-[13px] landing-[13px] text-[#606061]"
             >
               {{ $store.state.user.user?.current_user_email }}
             </div>
@@ -212,7 +218,7 @@
             </button>
             <form>
               <button
-                class="bg-orange-400 text-white mt-2 text-base p-2 rounded-md"
+                class="bg-[#F4F5F7] px-[16px] py-[12px] rounded-[6px] text-[14px] text-[#606061]"
                 @click="logout()"
               >
                 Выйти из аккаунта
@@ -226,15 +232,17 @@
 </template>
 
 <script>
-import { USER_CHANGE_PHOTO, USER_CHANGE_PHONE } from '@/store/actions/user.js'
+import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
 import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
+import UploadAvatar from '@/components/UploadAvatar'
 
 export default {
   components: {
+    UploadAvatar,
     ModalBox,
     BoardModalBoxRename
   },
@@ -250,7 +258,9 @@ export default {
       emptyOldPass: false,
       emptyNewPasses: false,
       showEditphone: false,
-      showEditpassword: false
+      showEditpassword: false,
+      changeAvatar: false,
+      uploadedAvatar: ''
     }
   },
   computed: {
@@ -281,14 +291,15 @@ export default {
       this.$router.push('/doitnow')
     },
     changeUserPhoto (event) {
-      const files = event.target.files
-      const formData = new FormData()
-      const file = files[0]
-      formData.append('files[0]', file)
-      const data = {
-        file: formData
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          this.uploadedAvatar = reader.result
+          this.changeAvatar = true
+        })
+        reader.readAsDataURL(file)
       }
-      this.$store.dispatch(USER_CHANGE_PHOTO, data)
     },
     showPasswordModalBox () {
       this.emptyNewPasses = false

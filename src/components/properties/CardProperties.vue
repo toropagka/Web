@@ -6,14 +6,6 @@
     @cancel="showDeleteCard = false"
     @yes="removeCard"
   />
-  <BoardModalBoxCardMove
-    v-if="showMoveCard"
-    :show="showMoveCard"
-    :stage-uid="selectedCard?.uid_stage"
-    :board-uid="selectedCard?.uid_board"
-    @cancel="showMoveCard = false"
-    @changePosition="onChangeCardPosition"
-  />
   <CardMessagesModalBoxLimit
     v-if="showMessagesLimit"
     @cancel="showMessagesLimit = false"
@@ -29,23 +21,20 @@
   />
   <div class="relative min-h-full">
     <div class="flex items-center justify-between mb-[10px]">
-      <card-options
-        :store-cards="storeCards"
+      <CardOptions
         :date-create="selectedCard?.date_create"
         :can-edit="canEdit"
         :creator="selectedCard?.uid_creator"
         :show-files-only="showFilesOnly"
         @clickRemoveButton="showDeleteCard = true"
         @toggleShowOnlyFiles="showFilesOnly = !showFilesOnly"
-        @moveSuccess="moveSuccessCard"
-        @moveReject="moveRejectCard"
-        @moveColumnCard="moveColumnCard"
       />
       <PropsButtonClose
         @click="closeProperties"
       />
     </div>
-    <card-cover
+
+    <CardCover
       :cover-color="
         selectedCard?.cover_color === '#A998B6' ? '' : selectedCard?.cover_color
       "
@@ -56,20 +45,74 @@
       @onChangeCardClearCover="changeCardClearCover"
     />
 
-    <card-name
+    <CardName
       :card-name="selectedCard?.name"
       :can-edit="canEdit"
       @changeName="changeName"
     />
 
+    <div
+      v-if="canEdit"
+      class="mb-[4px] w-full"
+    >
+      <PopMenu
+        class="grow w-[calc(100%+24px)]"
+      >
+        <div
+          class="group w-full flex items-center gap-[12px] px-[12px] h-[34px] border border-black/12 rounded-[6px] cursor-pointer"
+        >
+          <div class="grow font-roboto text-[#575758] text-[12px] font-[500]">
+            {{ selectedColumnName }}
+          </div>
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M10.7603 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.7011 8.44486C6.47139 8.67154 6.10687 8.68606 5.85986 8.47836L1.46875 4.78606C1.20456 4.56391 1.17047 4.16965 1.39262 3.90546C1.61477 3.64126 2.00903 3.60718 2.27322 3.82933L6.22845 7.15512L9.87642 3.55514C10.1221 3.31269 10.5178 3.31531 10.7603 3.56099Z"
+              fill="#7E7E80"
+            />
+          </svg>
+        </div>
+        <template #menu>
+          <div class="max-h-[220px] overflow-y-auto w-[322px] scroll-style">
+            <PopMenuItem
+              v-for="column in columnsUser"
+              :key="column.UID"
+              @click="setColumn(column.UID)"
+            >
+              <span class="truncate">
+                {{ column.Name }}
+              </span>
+            </PopMenuItem>
+            <PopMenuDivider />
+            <PopMenuItem
+              v-for="column in columnsArchive"
+              :key="column.UID"
+              @click="setColumn(column.UID)"
+            >
+              <span class="truncate">
+                {{ column.Name }}
+              </span>
+            </PopMenuItem>
+          </div>
+        </template>
+      </PopMenu>
+    </div>
+
     <div class="flex justify-start mb-[25px] space-x-[4px]">
-      <card-responsible-user
+      <CardResponsibleUser
         :responsible="selectedCard?.user"
         :employees-by-email="employeesByEmail"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
-      <card-budget
+      <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
         @click="showChangeCardBudget = true"
@@ -84,10 +127,11 @@
       :can-edit="canEdit"
       @changeComment="changeComment"
     />
+
     <!-- Chat skeleton -->
     <MessageSkeleton v-if="status=='loading'" />
     <!-- Card chat -->
-    <card-chat
+    <CardChat
       v-if="status=='success'"
       :messages="cardMessages"
       :current-user-uid="user.current_user_uid"
@@ -100,14 +144,14 @@
 
     <!-- Card chat input -->
     <div class="flex flex-col fixed bottom-[0px] w-[340px] bg-white pt-2 pb-5">
-      <card-message-quote-under-input
+      <CardMessageQuoteUnderInput
         v-if="currentQuote"
         class="mb-[14px] mt-[19px]"
         :quote-message="currentQuote"
         :employee="employees[currentQuote.uid_creator]"
         @onClearQuote="currentQuote = false"
       />
-      <card-message-input
+      <CardMessageInput
         v-model="cardMessageInputValue"
         :can-add-files="canAddFiles"
         @createCardMessage="createCardMessage"
@@ -138,6 +182,9 @@ import {
   DELETE_CARD
 } from '@/store/actions/cards'
 
+import PopMenu from '@/components/Common/PopMenu.vue'
+import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
 import CardName from '@/components/CardProperties/CardName.vue'
 import CardCover from '@/components/CardProperties/CardCover.vue'
 import CardChat from '@/components/CardProperties/CardChat.vue'
@@ -152,11 +199,13 @@ import CardMessageQuoteUnderInput from '@/components/CardProperties/CardMessageQ
 import CardMessagesModalBoxLimit from '../CardProperties/CardMessagesModalBoxLimit.vue'
 import MessageSkeleton from '@/components/TaskProperties/MessageSkeleton.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
-import BoardModalBoxCardMove from '@/components/Board/BoardModalBoxCardMove.vue'
 import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
+    PopMenu,
+    PopMenuItem,
+    PopMenuDivider,
     CardName,
     CardCover,
     CardChat,
@@ -170,8 +219,7 @@ export default {
     CardMessageQuoteUnderInput,
     CardMessagesModalBoxLimit,
     MessageSkeleton,
-    PropsButtonClose,
-    BoardModalBoxCardMove
+    PropsButtonClose
   },
   data () {
     return {
@@ -181,29 +229,57 @@ export default {
       currentQuote: false,
       showDeleteCard: false,
       cardMessageInputValue: '',
-      showMoveCard: false,
       currentCard: null
     }
   },
   computed: {
-    usersColumns () {
-      return this.storeCards.filter((stage) => stage.UserStage === true)
-    },
-    storeCards () { return this.$store.state.cards.cards },
     status () { return this.$store.state.cardfilesandmessages.status },
     selectedCard () { return this.$store.state.cards.selectedCard },
     user () { return this.$store.state.user.user },
-    boards () { return this.$store.state.boards.boards },
+    selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
     employeesByEmail () { return this.$store.state.employees.employeesByEmail },
     cardMessages () { return this.$store.state.cardfilesandmessages.messages },
-    canAddFiles () {
-      if (this.user.days_left <= 0) {
-        return false
-      }
-      return true
+    canAddFiles () { return this.user?.days_left > 0 },
+    canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
+    selectedColumnName () {
+      const columnUid = this.selectedCard?.uid_stage
+      const column = this.columns.find(col => col.UID === columnUid)
+      const columnName = column?.Name ?? 'Неразобранное'
+      return columnName
     },
-    canEdit () { return this.boards[this.selectedCard?.uid_board]?.type_access !== 0 }
+    columnsUser () {
+      const columns = [...this.selectedCardBoard?.stages]
+      columns.sort((col1, col2) => {
+      // сначала по порядку
+        if (col1.Order > col2.Order) return 1
+        if (col1.Order < col2.Order) return -1
+        // если одинаковый, то по имени
+        if (col1.Name > col2.Name) return 1
+        if (col1.Name < col2.Name) return -1
+        return 0
+      })
+      return columns
+    },
+    columnsArchive () {
+      const columns = []
+      columns.push({
+        UID: 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67', // успех захардкорено на сервере
+        Name: 'Успех',
+        Order: Number.MAX_SAFE_INTEGER - 1,
+        Color: ''
+      })
+      columns.push({
+        UID: 'e70af5e2-6108-4c02-9a7d-f4efee78d28c', // отказ захардкорено на сервере
+        Name: 'Отказ',
+        Order: Number.MAX_SAFE_INTEGER,
+        Color: ''
+      })
+      return columns
+    },
+    columns () {
+      return [...this.columnsUser, ...this.columnsArchive]
+    }
   },
   watch: {
     selectedCard (oldValue, newValue) {
@@ -428,53 +504,13 @@ export default {
           this.showDeleteCard = false
         })
     },
-    moveCard (cardUid, stageUid, newOrder) {
+    setColumn (stageUid) {
       this.closeProperties()
       this.$store
-        .dispatch(CARD.MOVE_CARD, { uid: cardUid, stageUid, newOrder })
+        .dispatch(CARD.MOVE_CARD, { uid: this.selectedCard?.uid, stageUid })
         .then((resp) => {
           console.log('Card is moved')
         })
-    },
-    getNewMinCardsOrderAtColumn (columnUid) {
-      const column = this.storeCards.find((stage) => stage.UID === columnUid)
-      if (!column || !column.cards.length) return 1.0
-      const minOrder = column.cards.reduce(
-        (minOrder, card) => (card.order < minOrder ? card.order : minOrder),
-        Number.MAX_VALUE
-      )
-      return Math.floor(minOrder) - 1
-    },
-    getNewMaxCardsOrderAtColumn (columnUid) {
-      const column = this.storeCards.find((stage) => stage.UID === columnUid)
-      if (!column || !column.cards.length) return 1.0
-      const maxOrder = column.cards.reduce(
-        (maxOrder, card) => (card.order > maxOrder ? card.order : maxOrder),
-        Number.MIN_VALUE
-      )
-      return Math.floor(maxOrder) + 1
-    },
-    moveSuccessCard () {
-      const successStage = 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67'
-      this.moveCard(this.selectedCard.uid, successStage, this.getNewMinCardsOrderAtColumn(successStage))
-    },
-    moveRejectCard () {
-      const rejectStage = 'e70af5e2-6108-4c02-9a7d-f4efee78d28c'
-      this.moveCard(this.selectedCard.uid, rejectStage, this.getNewMinCardsOrderAtColumn(rejectStage))
-    },
-    onChangeCardPosition (position) {
-      this.showMoveCard = false
-      //
-      this.closeProperties()
-      const data = {
-        cards: [{ uid: this.selectedCard.uid, order: this.getNewMaxCardsOrderAtColumn(position.stageUid) }],
-        boardTo: position.boardUid,
-        stageTo: position.stageUid
-      }
-      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
-    },
-    moveColumnCard () {
-      this.showMoveCard = true
     }
   }
 }

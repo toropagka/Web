@@ -499,6 +499,10 @@ const actionConfirmDelegate = (confirmed) => {
   }, 3000)
 }
 
+const symbolsRemain = computed(() => {
+  return 1000 - inputMessage.value.length
+})
+
 function onSelectItem (item) {
   const selector = `.inspector-option-item${item}`
   const option = document.querySelector(selector)
@@ -536,10 +540,11 @@ function onSelectItem (item) {
         <slot />
       </div>
 
-      <div class="flex items-stretch">
+      <div class="flex items-stretch flex-col">
         <input
           ref="input"
           v-model="inputMessage"
+          maxlength="1000"
           :disabled="currentState === 'end'"
           type="text"
           class="bg-[#F2F4F7] w-full px-[15px] py-[16px] rounded-[10px] font-[400] text-[15px] leading-[18px] focus:ring-0"
@@ -556,6 +561,7 @@ function onSelectItem (item) {
           @keydown.meta.4.prevent="onSelectItem(4)"
           @keydown.ctrl.4.prevent="onSelectItem(4)"
         >
+        <span class="mt-3">Осталось символов: {{ symbolsRemain }}</span>
       </div>
     </card-component>
   </overlay>

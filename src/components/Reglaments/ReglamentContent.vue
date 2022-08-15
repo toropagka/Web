@@ -12,10 +12,10 @@
   <div
     v-if="isEditing"
   >
-    <div class="w-full">
-      <div class="fixed bg-[#f4f5f7] right-0 left-0 mt-[-8px] z-[6]">
+    <div class="w-full sticky top-[45px] left-0 right-0 z-[6]">
+      <div class="top-0 bg-[#f4f5f7] pt-[5px] pb-[15px]">
         <div
-          class="flex justify-end gap-[8px] mb-2 mr-3"
+          class="flex justify-end gap-[8px] mr-3"
         >
           <PopMenu v-if="!editorsCanEdit">
             <ReglamentSmallButton>
@@ -78,9 +78,6 @@
       </div>
     </div>
     <div
-      class="h-[35px]"
-    />
-    <div
       class="bg-white p-3 rounded mb-3"
     >
       <input
@@ -104,17 +101,21 @@
   </div>
   <div v-else>
     <div
-      v-if="canEdit && !showCompleteMessage"
-      class="flex justify-end mb-2"
+      class="flex justify-end mb-2 h-[30px]"
     >
       <ReglamentSmallButton
-        v-if="!isTesting"
+        v-if="canEdit && !showCompleteMessage && !isTesting"
         class="w-[224px]"
         icon="edit"
         @click="setEdit"
       >
         {{ editButtonText }}
       </ReglamentSmallButton>
+      <div class="rounded-[6px] hover:bg-[#f4f5f7] bg-white flex justify-center items-center ml-[8px] px-[5px]">
+        <NavBarButtonsReglament
+          :reglament-uid="reglament.uid"
+        />
+      </div>
     </div>
     <ReglamentInfo
       v-if="!isTesting"
@@ -228,9 +229,11 @@ import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 
 export default {
   components: {
+    NavBarButtonsReglament,
     QuillEditor,
     ListBlocAdd,
     ReglamentQuestion,
@@ -711,5 +714,14 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
+.ql-snow .ql-tooltip {
+  @apply z-30
+}
+.ql-snow .ql-tooltip[data-mode=link]::before {
+    content: "Введите ссылку:";
+}
+.ql-snow .ql-tooltip[data-mode=video]::before {
+    content: "Введите ссылку:";
+}
 </style>

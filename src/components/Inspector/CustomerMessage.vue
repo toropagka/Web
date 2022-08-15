@@ -30,7 +30,9 @@ const getMessageTimeString = (dateCreate) => {
         class="bg-[#EAF2FC] max-w-[334px] py-[12px] px-[15px]"
         style="border-radius: 11px 0px 11px 11px;"
       >
-        <p class="text-[#4C4C4D] font-[500] text-[14px] leading-[19px] max-w-full break-words">
+        <p
+          class="text-[#4C4C4D] font-[500] text-[14px] leading-[19px] max-w-full text-right break-words clamp"
+        >
           {{ props.message }}
         </p>
         <span
@@ -50,10 +52,17 @@ const getMessageTimeString = (dateCreate) => {
   </Transition>
 </template>
 
-<style>
+<style scoped>
 .v-enter-active,
 .v-leave-active {
   transition: opacity 2s ease;
+}
+
+.clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .v-enter-from,

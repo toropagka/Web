@@ -136,7 +136,6 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           dispatch('setDots', resp.data.calendar.dates_with_tasks)
-          commit(TASK.DAYS_WITH_TASKS, resp)
           resolve(resp)
         })
         .catch((err) => {

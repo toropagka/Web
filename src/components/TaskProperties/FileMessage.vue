@@ -90,7 +90,10 @@
   </span>
 
   <!-- Audio -->
-  <span v-if="audio.includes(file.file_name.split('.').pop())">
+  <span
+    v-if="audio.includes(file.file_name.split('.').pop())"
+    class="flex flex-col"
+  >
     {{ getAudioUrl(file.uid, file.file_name.split('.').pop(), file.file_name) }}
     <audio
       :id="'audio_' + file.uid"
