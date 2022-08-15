@@ -72,7 +72,7 @@
           />
           <ListBlocAdd
             v-else-if="index == 0"
-            @click.stop="showAddProject = true"
+            @click.stop="clickAddProject"
           />
         </div>
       </div>
