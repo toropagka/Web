@@ -1074,12 +1074,14 @@ export default {
           if (this.newConfig.roots.length >= 1) {
             for (let i = 0; i < this.newConfig.roots.length; i++) {
               if (this.newConfig.roots[i] === node.dragged.node.id) {
-                if (i === 0) {
+                if (i === 0 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
                   this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i + 1]].info.order_new - 0.1
-                } else if (i > 0 && i !== this.newConfig.roots.length - 1) {
+                } else if (i > 0 && i !== this.newConfig.roots.length - 1 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
                   this.storeTasks[this.newConfig.roots[i]].info.order_new = (this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + this.storeTasks[this.newConfig.roots[i + 1]].info.order_new) / 2
                 } else {
-                  this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + 0.1
+                  if (this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
+                    this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + 0.1
+                  }
                 }
               }
             }
