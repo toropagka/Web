@@ -4,7 +4,6 @@ import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import TagModalBoxTagsLimit from '@/components/Tags/TagModalBoxTagsLimit.vue'
 import TagIcon from '@/components/Tags/Icons/TagIcon.vue'
 import Icon from '@/components/Icon.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import AddTag from '@/components/Tags/AddTag.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 
@@ -14,8 +13,9 @@ import { setLocalStorageItem } from '@/store/helpers/functions'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import * as TASK from '@/store/actions/tasks'
-import * as NAVIGATOR from '@/store/actions/navigator'
 import { SELECT_TAG } from '@/store/actions/tasks'
+import * as NAVIGATOR from '@/store/actions/navigator'
+import InputValue from '@/components/InputValue'
 
 export default {
   components: {
@@ -23,9 +23,9 @@ export default {
     TagIcon,
     AddTag,
     Icon,
-    BoardModalBoxRename,
     TagModalBoxTagsLimit,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    InputValue
   },
   props: {
     tags: {
@@ -37,6 +37,7 @@ export default {
     const showTagsLimit = ref(false)
     const focusedTag = ref('')
     const showModal = ref(false)
+    const showAddTag = ref(false)
     const randomColors = [
       '#F5F5DC',
       '#FFE5B4',
@@ -55,7 +56,8 @@ export default {
       focusedTag,
       showTagsLimit,
       showModal,
-      randomColors
+      randomColors,
+      showAddTag
     }
   },
   computed: {
@@ -127,10 +129,10 @@ export default {
         this.showTagsLimit = true
         return
       }
-      this.showModal = true
+      this.showAddTag = true
     },
     createTag (name) {
-      this.showModal = false
+      this.showAddTag = false
       const title = name.trim()
       const tag = {
         uid_parent: '00000000-0000-0000-0000-000000000000',
@@ -159,13 +161,6 @@ export default {
 </script>
 
 <template>
-  <BoardModalBoxRename
-    v-if="showModal"
-    :show="showModal"
-    title="Добавить метку"
-    @cancel="showModal = false"
-    @save="createTag"
-  />
   <TagModalBoxTagsLimit
     v-if="showTagsLimit"
     @cancel="showTagsLimit = false"
@@ -206,7 +201,15 @@ export default {
     class="grid gap-2 mt-3 grid-cols-1 order-2"
     :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
   >
-    <AddTag @click="clickAddTag" />
+    <InputValue
+      v-if="showAddTag"
+      @save="createTag"
+      @cancel="showAddTag = false"
+    />
+    <AddTag
+      v-else
+      @click="clickAddTag"
+    />
     <template
       v-for="(tag, pindex) in tags"
       :key="pindex"
