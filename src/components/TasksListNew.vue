@@ -102,8 +102,6 @@
       class="px-[3px]"
     />
     <!-- vue3-treeview -->
-    <pre>roots {{ newConfig.roots }}</pre>
-    <pre>leaves {{ newConfig.leaves }}</pre>
     <div
       v-if="status == 'success' && Object.keys(storeTasks).length"
       class="overflow-y-auto pt-[4px] px-[3px] min-h-[600px] w-full"
