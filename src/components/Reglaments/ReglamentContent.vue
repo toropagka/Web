@@ -714,5 +714,14 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
+.ql-snow .ql-tooltip {
+  @apply z-30
+}
+.ql-snow .ql-tooltip[data-mode=link]::before {
+    content: "Введите ссылку:";
+}
+.ql-snow .ql-tooltip[data-mode=video]::before {
+    content: "Введите ссылку:";
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <Overlay>
     <div class="rounded-xl shadow-lg p-[24px] bg-white z-50 flex w-[900px]">
-      <div class="grow max-h-[500px]">
+      <div class="grow max-h-[500px] w-[710px]">
         <cropper
           background-class="bg-transparent"
           :stencil-props="{

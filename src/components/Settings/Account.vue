@@ -142,12 +142,13 @@
           <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
         <div class="mt-2">
-          <p
-            class="rounded-md mt-2 text-[13px] text-[#007BE5]"
-            @click="changeCurrentTab ('tarif')"
+          <button
+            type="button"
+            class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+            @click="changeCurrentTab('tarif')"
           >
             Управление тарифом
-          </p>
+          </button>
         </div>
         <div class="mt-6">
           <p class="text-base font-medium mb-2 text-[#4C4C4D]">

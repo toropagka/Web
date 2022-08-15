@@ -92,6 +92,7 @@ export default {
     },
     changeSettingsTab (tabName) {
       localStorage.setItem('currentSettingsTab', tabName)
+      this.$store.state.navigator.currentSettingsTab = tabName
     }
   }
 }

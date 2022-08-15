@@ -675,6 +675,9 @@ export default {
       }
     },
     selectCard (card) {
+      if (this.selectedCardUid === card.uid) {
+        return
+      }
       this.selectedCardUid = card.uid
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)

@@ -198,6 +198,8 @@ export default {
       newDayTimerID: 0,
       dateToday: '',
       mdiMenu,
+      currentDay: null,
+      visitedDay: null,
       warn,
       showFreeModal: false,
       modalOneActive: false,
@@ -420,6 +422,9 @@ export default {
       }
     },
     onDayClick (day) {
+      if (this.checkOnWhichDay(day)) {
+        return
+      }
       this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
@@ -527,6 +532,13 @@ export default {
         return true
       }
       this.lastSelectedItem = item
+    },
+    checkOnWhichDay (day) {
+      this.currentDay = day.id
+      if (this.visitedDay === this.currentDay) {
+        return true
+      }
+      this.visitedDay = this.currentDay
     },
     resetLastTab () {
       this.lastSelectedItem = null

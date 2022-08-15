@@ -8,13 +8,6 @@
         @cancel="showAddLimit = false"
         @ok="showAddLimit = false"
       />
-      <BoardModalBoxRename
-        v-if="showAddReglament"
-        :show="showAddReglament"
-        title="Создать регламент"
-        @cancel="showAddReglament = false"
-        @save="onAddNewReglament"
-      />
       <div
         v-for="(reg, index) in reglaments"
         :key="index"
@@ -75,8 +68,13 @@
           <ReglamentBlocEmpty
             v-if="!reg.is_my_dep && reg.items.length === 0"
           />
+          <InputValue
+            v-if="showAddReglament && addReglamentDepartment === reg.uid"
+            @save="onAddNewReglament"
+            @cancel="showAddReglament = false"
+          />
           <ListBlocAdd
-            v-if="reg.is_my_dep"
+            v-else-if="reg.is_my_dep"
             @click.stop="clickAddReglament(reg.uid)"
           />
         </div>
@@ -131,7 +129,6 @@
 
 <script>
 import Icon from '@/components/Icon.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import ReglamentBlocItem from '@/components/Reglaments/ReglamentBlockItem.vue'
 import ReglamentBlocEmpty from '@/components/Reglaments/ReglamentBlocEmpty.vue'
@@ -146,11 +143,12 @@ import * as REGLAMENTS from '@/store/actions/reglaments'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import InputValue from '@/components/InputValue'
 
 export default {
   components: {
+    InputValue,
     Icon,
-    BoardModalBoxRename,
     ReglamentBlocItem,
     ReglamentBlocEmpty,
     ReglamentAddLimit,

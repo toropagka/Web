@@ -591,105 +591,111 @@ export default {
     })
   },
   methods: {
-    changeTaskPosition (position) {
-      let selectedTaskOrder = '' // order выделенной задачи
-      const rootTask = {} // order задачи, которая не выделена
-      // для задачи родителя
-      if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
-        for (let i = 0; i < this.newConfig.roots.length; i++) {
-          if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
-          // проверяем на крайние значения
-            switch (position) {
-              case 'up':
-              // проверяем крайнее значение
-                if ((i - 1) < 0) {
-                  return
-                }
-                this.newConfig.roots[i] = this.newConfig.roots[i - 1]
-                this.newConfig.roots[i - 1] = this.lastSelectedTaskUid
-                // невыделенная таска
-                rootTask.uid = this.newConfig.roots[i]
-                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
-                rootTask.uid_parent = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
-                // ставим order_new
-                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
-                break
-              case 'down':
-              // проверяем крайнее значение
-                if ((i + 1) >= this.newConfig.roots.length) {
-                  return
-                }
-                this.newConfig.roots[i] = this.newConfig.roots[i + 1]
-                this.newConfig.roots[i + 1] = this.lastSelectedTaskUid
-                // невыделенная таска
-                rootTask.uid = this.newConfig.roots[i]
-                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
-                rootTask.uid_parent = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
-                // ставим order_new
-                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
-                break
-            }
-          }
-        }
-        // для задачи ребенка
-      } else {
-        for (let i = 0; i < this.newConfig.leaves.length; i++) {
-          if (this.newConfig.leaves[i] === this.lastSelectedTaskUid) {
-            if (rootTask.has_seen) {
-              break
-            }
-            // проверяем на крайние значения
-            switch (position) {
-              case 'up':
-              // проверяем крайнее значение
-                if ((i - 1) < 0) {
-                  return
-                }
-                this.newConfig.leaves[i] = this.newConfig.leaves[i - 1]
-                this.newConfig.leaves[i - 1] = this.lastSelectedTaskUid
-                // невыделенная таска
-                rootTask.uid = this.newConfig.leaves[i]
-                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
-                rootTask.uid_parent = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
-                rootTask.has_seen = true
-                // ставим order_new
-                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
-                break
-              case 'down':
-              // проверяем крайнее значение
-                if ((i + 1) >= this.newConfig.leaves.length) {
-                  return
-                }
-                this.newConfig.leaves[i] = this.newConfig.leaves[i + 1]
-                this.newConfig.leaves[i + 1] = this.lastSelectedTaskUid
-                // невыделенная таска
-                rootTask.uid = this.newConfig.leaves[i]
-                rootTask.order_new = this.storeTasks[this.lastSelectedTaskUid].info.order_new
-                rootTask.uid_parent = this.storeTasks[this.lastSelectedTaskUid].info.uid_parent
-                rootTask.has_seen = true
-                // ставим order_new
-                selectedTaskOrder = this.storeTasks[rootTask.uid].info.order_new
-                break
-            }
-          }
+    sortTaskChildren (task) {
+      const sortedChildrens = []
+      for (let i = 0; i < this.storeTasks[task].children.length; i++) {
+        sortedChildrens.push(this.storeTasks[this.storeTasks[task].children[i]])
+      }
+      sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
+      console.log(sortedChildrens, 'childs')
+      console.log(this.$store.state.tasks.newtasks[task])
+      this.$store.state.tasks.newtasks[task].children = []
+      for (let i = 0; i < sortedChildrens.length; i++) {
+        if (sortedChildrens[i]) {
+          this.$store.state.tasks.newtasks[task].children.push(sortedChildrens[i].id)
         }
       }
-      this.$store.state.tasks.newtasks[this.lastSelectedTaskUid].info.order_new = selectedTaskOrder
-      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order_new - 100
-      // сортируем выбранную задачу
-      this.$store.dispatch(
-        TASK.CHANGE_TASK_PARENT_AND_ORDER,
-        {
-          uid: this.lastSelectedTaskUid,
-          parent: this.lastSelectedTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
-          order: selectedTaskOrder ?? 0
-        }
-      ).then((resp) => {
-        // сортируем невыбранную задачу
+    },
+    changeTaskPosition (position) {
+      const selectedTask = {} // выделенная задача
+      const rootTask = {} // не выделенная задача
+      switch (position) {
+        case 'up':
+          if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
+            for (let i = 0; i < this.newConfig.roots.length; i++) {
+              if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
+                this.newConfig.roots[i] = this.newConfig.roots[i - 1]
+                rootTask.uid = this.newConfig.roots[i]
+                rootTask.parent = this.storeTasks[rootTask.uid].parent
+                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+
+                selectedTask.uid = this.lastSelectedTaskUid
+                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                this.newConfig.roots[i - 1] = this.lastSelectedTaskUid
+              }
+            }
+          } else {
+            for (let i = 0; i < this.newConfig.leaves.length; i++) {
+              if (this.newConfig.leaves[i] === this.lastSelectedTaskUid) {
+                this.newConfig.leaves[i] = this.newConfig.leaves[i - 1]
+                rootTask.uid = this.newConfig.leaves[i]
+                rootTask.parent = this.storeTasks[rootTask.uid].parent
+                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+
+                selectedTask.uid = this.lastSelectedTaskUid
+                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                this.newConfig.leaves[i - 1] = this.lastSelectedTaskUid
+              }
+            }
+          }
+          break
+        case 'down':
+          if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
+            for (let i = this.newConfig.roots.length - 1; i >= 0; i--) {
+              if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
+                this.newConfig.roots[i] = this.newConfig.roots[i + 1]
+                rootTask.uid = this.newConfig.roots[i]
+                rootTask.parent = this.storeTasks[rootTask.uid].parent
+                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+
+                selectedTask.uid = this.lastSelectedTaskUid
+                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                this.newConfig.roots[i + 1] = this.lastSelectedTaskUid
+              }
+            }
+          } else {
+            for (let i = this.newConfig.leaves.length - 1; i >= 0; i--) {
+              if (this.newConfig.leaves[i] === this.lastSelectedTaskUid) {
+                this.newConfig.leaves[i] = this.newConfig.leaves[i + 1]
+                rootTask.uid = this.newConfig.leaves[i]
+                rootTask.parent = this.storeTasks[rootTask.uid].parent
+                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+
+                selectedTask.uid = this.lastSelectedTaskUid
+                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                this.newConfig.leaves[i + 1] = this.lastSelectedTaskUid
+              }
+            }
+          }
+          break
+      }
+      this.$store.state.tasks.newtasks[selectedTask.uid].info.order_new = selectedTask.order
+      this.$store.state.tasks.newtasks[selectedTask.uid].parent = selectedTask.parent
+      this.$store.state.tasks.newtasks[selectedTask.uid].info.uid_parent = selectedTask.parent ?? '00000000-0000-0000-0000-000000000000'
+
+      this.$store.state.tasks.newtasks[rootTask.uid].info.order_new = rootTask.order
+      this.$store.state.tasks.newtasks[rootTask.uid].parent = rootTask.parent
+      this.$store.state.tasks.newtasks[rootTask.uid].info.uid_parent = rootTask.parent ?? '00000000-0000-0000-0000-000000000000'
+
+      if (selectedTask.parent) {
+        this.sortTaskChildren(selectedTask.parent)
+      }
+
+      // изменяем выбранную задачу
+      this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
+        uid: selectedTask.uid,
+        parent: selectedTask.parent ?? '00000000-0000-0000-0000-000000000000',
+        order: selectedTask.order
+      }).then(() => {
+        // изменяем невыбранную задачу
         this.$store.dispatch(TASK.CHANGE_TASK_PARENT_AND_ORDER, {
           uid: rootTask.uid,
-          parent: rootTask.uid_parent ?? '00000000-0000-0000-0000-000000000000',
-          order: rootTask.order_new - 100
+          parent: rootTask.parent ?? '00000000-0000-0000-0000-000000000000',
+          order: rootTask.order
         })
       })
     },
@@ -1068,12 +1074,14 @@ export default {
           if (this.newConfig.roots.length >= 1) {
             for (let i = 0; i < this.newConfig.roots.length; i++) {
               if (this.newConfig.roots[i] === node.dragged.node.id) {
-                if (i === 0) {
+                if (i === 0 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
                   this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i + 1]].info.order_new - 0.1
-                } else if (i > 0 && i !== this.newConfig.roots.length - 1) {
+                } else if (i > 0 && i !== this.newConfig.roots.length - 1 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
                   this.storeTasks[this.newConfig.roots[i]].info.order_new = (this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + this.storeTasks[this.newConfig.roots[i + 1]].info.order_new) / 2
                 } else {
-                  this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + 0.1
+                  if (this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
+                    this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + 0.1
+                  }
                 }
               }
             }
@@ -1129,11 +1137,9 @@ export default {
             const nextTaskUid = tasksKeyArray[nextTaskIndex]
             const nextTaskData = this.storeTasks[nextTaskUid]
             // фокусим следующий итем и открываем его свойства
-            if (nextTaskIndex < tasksKeyArray.length) {
-              document.getElementById(nextTaskUid).focus({ preventScroll: false })
-              this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
-              this.lastSelectedTaskUid = nextTaskUid
-            }
+            document.getElementById(nextTaskUid || nextTaskUid - 1).focus({ preventScroll: false })
+            this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
+            this.lastSelectedTaskUid = nextTaskUid
           })
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
           this.$store.dispatch('asidePropertiesToggle', false)

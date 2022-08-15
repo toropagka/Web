@@ -1,21 +1,27 @@
-<script setup>
+<script>
 import AsideMenuItem from '@/components/AsideMenuItem.vue'
 
-defineProps({
-  isSubmenuList: {
-    type: Boolean,
-    default: false
+export default {
+  components: {
+    AsideMenuItem
   },
-  menu: {
-    type: Array,
-    default: () => []
+  props: {
+    isSubmenuList: {
+      type: Boolean,
+      default: false
+    },
+    menu: {
+      type: Array,
+      default: () => []
+    }
+  },
+  emits: ['menu-click'],
+  methods: {
+    menuClick (event, item) {
+      this.$emit('menu-click', event, item)
+    }
   }
-})
 
-const emit = defineEmits(['menu-click'])
-
-const menuClick = (event, item) => {
-  emit('menu-click', event, item)
 }
 </script>
 

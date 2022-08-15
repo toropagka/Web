@@ -1,21 +1,86 @@
+<template>
+  <TagModalBoxTagsLimit
+    v-if="showTagsLimit"
+    @cancel="showTagsLimit = false"
+    @ok="showTagsLimit = false"
+  />
+  <div
+    class="w-full flex items-center justify-between order-1"
+  >
+    <p
+      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
+    >
+      Метки
+    </p>
+    <div
+      class="flex"
+    >
+      <Icon
+        :path="listView.path"
+        :width="listView.width"
+        :height="listView.height"
+        :box="listView.viewBox"
+        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
+        :class="isGridView ? 'text-gray-400' : 'text-gray-800'"
+        @click="updateGridView(false)"
+      />
+      <Icon
+        :path="gridView.path"
+        :width="gridView.width"
+        :height="gridView.height"
+        :box="gridView.viewBox"
+        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
+        :class="!isGridView ? 'text-gray-400' : 'text-gray-800'"
+        @click="updateGridView(true)"
+      />
+    </div>
+  </div>
+  <div
+    class="grid gap-2 mt-3 grid-cols-1 order-2"
+    :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
+  >
+    <InputValue
+      v-if="showAddTag"
+      @save="createTag"
+      @cancel="showAddTag = false"
+    />
+    <AddTag
+      v-else
+      @click="clickAddTag"
+    />
+    <template
+      v-for="tag in tags"
+      :key="tag.uid"
+    >
+      <ListBlocItem
+        :count="tag.children?.length ?? 0"
+        :color="tag.back_color"
+        :title="tag.name"
+        @click="openProperties(tag)"
+      >
+        <TagIcon />
+      </ListBlocItem>
+    </template>
+  </div>
+
+  <EmptyTasksListPics v-if="isEmpty" />
+</template>
+
 <script>
-import { ref } from 'vue'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import TagModalBoxTagsLimit from '@/components/Tags/TagModalBoxTagsLimit.vue'
 import TagIcon from '@/components/Tags/Icons/TagIcon.vue'
 import Icon from '@/components/Icon.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import AddTag from '@/components/Tags/AddTag.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 
 import { setLocalStorageItem } from '@/store/helpers/functions'
-// import properties from '@/icons/properties.js'
-// import subArrow from '@/icons/arrow-sub.js'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import * as TASK from '@/store/actions/tasks'
-import * as NAVIGATOR from '@/store/actions/navigator'
 import { SELECT_TAG } from '@/store/actions/tasks'
+import * as NAVIGATOR from '@/store/actions/navigator'
+import InputValue from '@/components/InputValue'
 
 export default {
   components: {
@@ -23,9 +88,9 @@ export default {
     TagIcon,
     AddTag,
     Icon,
-    BoardModalBoxRename,
     TagModalBoxTagsLimit,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    InputValue
   },
   props: {
     tags: {
@@ -34,28 +99,25 @@ export default {
     }
   },
   data () {
-    const showTagsLimit = ref(false)
-    const focusedTag = ref('')
-    const showModal = ref(false)
-    const randomColors = [
-      '#F5F5DC',
-      '#FFE5B4',
-      '#FFC0CB',
-      '#D0F0C0',
-      '#C9A0DC',
-      '#D8BFD8',
-      '#FFCC00',
-      '#F4A460',
-      '#FFDB58',
-      '#E6E6FA'
-    ]
     return {
       gridView,
       listView,
-      focusedTag,
-      showTagsLimit,
-      showModal,
-      randomColors
+      focusedTag: '',
+      showTagsLimit: false,
+      showModal: false,
+      randomColors: [
+        '#F5F5DC',
+        '#FFE5B4',
+        '#FFC0CB',
+        '#D0F0C0',
+        '#C9A0DC',
+        '#D8BFD8',
+        '#FFCC00',
+        '#F4A460',
+        '#FFDB58',
+        '#E6E6FA'
+      ],
+      showAddTag: false
     }
   },
   computed: {
@@ -89,7 +151,6 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
       this.$store.commit(SELECT_TAG, tag)
-      console.log(tag)
     },
     gotoChildren (value) {
       this.$store.dispatch(TASK.TAG_TASKS_REQUEST, value.uid)
@@ -127,10 +188,10 @@ export default {
         this.showTagsLimit = true
         return
       }
-      this.showModal = true
+      this.showAddTag = true
     },
     createTag (name) {
-      this.showModal = false
+      this.showAddTag = false
       const title = name.trim()
       const tag = {
         uid_parent: '00000000-0000-0000-0000-000000000000',
@@ -157,70 +218,3 @@ export default {
   }
 }
 </script>
-
-<template>
-  <BoardModalBoxRename
-    v-if="showModal"
-    :show="showModal"
-    title="Добавить метку"
-    @cancel="showModal = false"
-    @save="createTag"
-  />
-  <TagModalBoxTagsLimit
-    v-if="showTagsLimit"
-    @cancel="showTagsLimit = false"
-    @ok="showTagsLimit = false"
-  />
-  <div
-    class="w-full flex items-center justify-between order-1"
-  >
-    <p
-      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
-    >
-      Метки
-    </p>
-    <div
-      class="flex"
-    >
-      <Icon
-        :path="listView.path"
-        :width="listView.width"
-        :height="listView.height"
-        :box="listView.viewBox"
-        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
-        :class="{ 'text-gray-800': !isGridView, 'text-gray-400': isGridView }"
-        @click="updateGridView(false)"
-      />
-      <Icon
-        :path="gridView.path"
-        :width="gridView.width"
-        :height="gridView.height"
-        :box="gridView.viewBox"
-        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
-        :class="{ 'text-gray-800': isGridView, 'text-gray-400': !isGridView }"
-        @click="updateGridView(true)"
-      />
-    </div>
-  </div>
-  <div
-    class="grid gap-2 mt-3 order-2"
-    :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'grid-cols-1': !isGridView, 'grid-cols-1': isPropertiesMobileExpanded && !isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
-  >
-    <AddTag @click="clickAddTag" />
-    <template
-      v-for="(tag, pindex) in tags"
-      :key="pindex"
-    >
-      <ListBlocItem
-        :count="tag.children?.length ?? 0"
-        :color="tag.back_color"
-        :title="tag.name"
-        @click="openProperties(tag)"
-      >
-        <TagIcon />
-      </ListBlocItem>
-    </template>
-  </div>
-
-  <EmptyTasksListPics v-if="isEmpty" />
-</template>
