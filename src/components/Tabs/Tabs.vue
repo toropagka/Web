@@ -13,7 +13,7 @@
         >
           <p
             href="#"
-            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[200px] active border-t-orange-400"
+            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[150px] 2xl:w-[200px] active border-t-orange-400"
             :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
           >
             {{ tab.name }}
