@@ -417,7 +417,7 @@ const mutations = {
           iconBackgroundClass: ''
         },
         {
-          label: 'Основные',
+          label: 'Настройки',
           uid: '88a45ac3-ac5d-486b-88bb-b96874580338',
           bold: false,
           type: 'option',
