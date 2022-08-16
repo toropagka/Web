@@ -32,7 +32,7 @@ export default {
         name: 'Регламенты',
         key: 'greedSource',
         greedPath: 'reglaments',
-        value: this.storeNavigator.reglaments?.items
+        value: this.storeNavigator.reglaments.items
       })
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
@@ -52,6 +52,7 @@ export default {
       }
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: reglament })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     }
   }
