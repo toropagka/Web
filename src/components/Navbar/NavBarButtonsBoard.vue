@@ -3,7 +3,7 @@
     <BoardModalBoxDelete
       v-if="showDeleteBoard"
       title="Удалить доску"
-      text="Вы действительно хотите удалить доску?"
+      :text="deleteMessage"
       @cancel="showDeleteBoard = false"
       @yes="onDeleteBoard"
     />
@@ -106,6 +106,12 @@ export default {
     }
   },
   computed: {
+    deleteMessage () {
+      if (this.board.children.length !== 0) {
+        return 'Вы действительно хотите удалить доску? \n\n Внимание! Все дочерние доски будут удалены.'
+      }
+      return 'Вы действительно хотите удалить доску?'
+    },
     board () {
       return this.$store.state.boards.boards[this.boardUid]
     },

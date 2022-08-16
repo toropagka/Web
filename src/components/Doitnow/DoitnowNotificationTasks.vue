@@ -32,7 +32,7 @@ export default {
         name: 'Регламенты',
         key: 'greedSource',
         greedPath: 'reglaments',
-        value: this.storeNavigator.reglaments.items
+        value: this.storeNavigator.reglaments?.items
       })
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })

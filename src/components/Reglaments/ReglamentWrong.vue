@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+
 export default {
   props: {
     question: {
@@ -75,12 +76,14 @@ export default {
   },
   methods: {
     checkMultiQuestion (creatorAnswers, userAnswers) {
-      const answersDifference = creatorAnswers.filter((item) => userAnswers.includes(item))
-      if (answersDifference.length !== creatorAnswers.length) {
-        this.correctAnswers = answersDifference.map((answer) => { return { id: answer.id, name: answer.name } })
-        return true
+      const correctUserAnswers = userAnswers.filter((answer) => creatorAnswers.includes(answer))
+      const correctAnswersDifference = creatorAnswers.filter((answer) => !correctUserAnswers.includes(answer))
+      if (creatorAnswers.length === userAnswers.length && correctAnswersDifference.length === 0) {
+        return false
       }
-      return false
+      const incorrectAnswersDifference = creatorAnswers.filter((answer) => correctUserAnswers.includes(answer))
+      this.correctAnswers = incorrectAnswersDifference.map((answer) => { return { id: answer.id, name: answer.name } })
+      return true
     }
   }
 }
