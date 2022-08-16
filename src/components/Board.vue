@@ -231,6 +231,7 @@
           <!--карточки -->
           <div class="min-h-0 overflow-y-auto scroll-style">
             <draggable
+              :id="column.UID"
               :data-column-id="column.UID"
               :list="getColumnCards(column)"
               ghost-class="ghost-card"
@@ -671,6 +672,8 @@ export default {
               this.selectCard(resp.data)
             }
             console.log('onAddNewCard ok', resp)
+            const column = document.getElementById(this.selectedColumn.UID)
+            column.scrollIntoView({ block: 'end', behavior: 'smooth' })
           })
       }
     },
