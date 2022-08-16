@@ -190,12 +190,12 @@ function onMessageSelectColor (message) {
   }
 }
 
-function onMessageSelectAccess (message) {
-  if (lastSelectedObj) {
-    selectAccess(lastSelectedObj)
-    clearInputMessageAndFocus()
-  }
-}
+// function onMessageSelectAccess (message) {
+//   if (lastSelectedObj) {
+//     selectAccess(lastSelectedObj)
+//     clearInputMessageAndFocus()
+//   }
+// }
 
 function onMessageSelectTime (message) {
   if (lastSelectedObj) {
@@ -255,10 +255,10 @@ const addCustomerMessage = () => {
     onMessageSelectColor(inputMessage.value)
     return
   }
-  if (currentState.value === 'accessSelection') {
-    onMessageSelectAccess(inputMessage.value)
-    return
-  }
+  // if (currentState.value === 'accessSelection') {
+  //   onMessageSelectAccess(inputMessage.value)
+  //   return
+  // }
   if (currentState.value === 'timeSelection') {
     onMessageSelectTime(inputMessage.value)
     return
@@ -379,26 +379,13 @@ const selectColor = (color) => {
   })
   if (currentState.value === 'colorSelection') {
     if (color.uid !== 'no_set') delegatedTask.uid_marker = color.uid
-    messages.value.push({
-      message: 'Кто будет иметь доступ к задаче?',
-      messageFromInspector: true,
-      type: 'accessSelection',
-      createDate: new Date().toISOString()
-    })
-    currentState.value = 'accessSelection'
-    clearInputMessageAndFocus()
-  }
-}
-
-const selectAccess = (emp) => {
-  if (currentState.value !== 'accessSelection') return
-  messages.value.push({
-    message: emp.name,
-    messageFromInspector: false,
-    createDate: new Date().toISOString()
-  })
-  if (currentState.value === 'accessSelection') {
-    if (emp.uid !== 'no_set') delegatedTask.emails = emp.email
+    // messages.value.push({
+    //   message: 'Кто будет иметь доступ к задаче?',
+    //   messageFromInspector: true,
+    //   type: 'accessSelection',
+    //   createDate: new Date().toISOString()
+    // })
+    // currentState.value = 'accessSelection'
     messages.value.push({
       message: 'На этом все, я поручу задачу?',
       messageFromInspector: true,
@@ -409,6 +396,27 @@ const selectAccess = (emp) => {
     clearInputMessageAndFocus()
   }
 }
+// скрыл сообщение доступа к задаче в инспекторе
+
+// const selectAccess = (emp) => {
+//   if (currentState.value !== 'accessSelection') return
+//   messages.value.push({
+//     message: emp.name,
+//     messageFromInspector: false,
+//     createDate: new Date().toISOString()
+//   })
+//   if (currentState.value === 'accessSelection') {
+//     if (emp.uid !== 'no_set') delegatedTask.emails = emp.email
+// messages.value.push({
+//   message: 'На этом все, я поручу задачу?',
+//   messageFromInspector: true,
+//   type: 'confirmDelegate',
+//   createDate: new Date().toISOString()
+// })
+// currentState.value = 'confirmDelegate'
+//   clearInputMessageAndFocus()
+// }
+// }
 
 const selectTime = (time) => {
   if (currentState.value !== 'timeSelection') return
