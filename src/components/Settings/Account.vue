@@ -3,6 +3,7 @@
   <UploadAvatar
     v-if="changeAvatar"
     :img="uploadedAvatar"
+    :image-type="avatarType"
     @close-window="changeAvatar = false"
   />
   <BoardModalBoxRename
@@ -21,6 +22,16 @@
     @cancel="showEditphone = false"
     @save="changeUserPhone"
   />
+  <ModalBox
+    v-if="notAllowedImageType"
+    :show="'fsd'"
+    title="Недопустимый формат изображения"
+    ok="Понятно"
+    @ok="notAllowedImageType = false"
+    @cancel="notAllowedImageType = false"
+  >
+    Попробуйте загрузить другое изображение. Допустимые форматы: png, jpeg, jpg.
+  </ModalBox>
   <ModalBox
     v-if="showEditpassword"
     :show="showEditpassword"
@@ -260,7 +271,9 @@ export default {
       showEditphone: false,
       showEditpassword: false,
       changeAvatar: false,
-      uploadedAvatar: ''
+      uploadedAvatar: '',
+      notAllowedImageType: false,
+      avatarType: ''
     }
   },
   computed: {
@@ -291,11 +304,17 @@ export default {
       this.$router.push('/doitnow')
     },
     changeUserPhoto (event) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
       const file = event.target.files[0]
+      if (!allowedTypes.includes(file.type)) {
+        this.notAllowedImageType = true
+        return
+      }
       if (file) {
         const reader = new FileReader()
         reader.addEventListener('load', () => {
           this.uploadedAvatar = reader.result
+          this.avatarType = file.type
           this.changeAvatar = true
         })
         reader.readAsDataURL(file)
