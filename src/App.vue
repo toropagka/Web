@@ -30,7 +30,6 @@ export default {
   mounted () {
     console.clear()
     this.$store.dispatch(LOCALIZATION_REQUEST)
-
     const fm = document.createElement('script')
     fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
     fm.onload = () => {

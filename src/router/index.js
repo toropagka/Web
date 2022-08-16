@@ -25,6 +25,10 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
+    if (window.location.pathname.includes('task') && !window.location.pathname.includes('tasks')) {
+      next()
+      return
+    }
     const lastTab = localStorage.getItem('lastTab')
     if (lastTab === null) {
       next('/tasks')
