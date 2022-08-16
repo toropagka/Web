@@ -341,12 +341,12 @@ const selectProject = (project) => {
   if (currentState.value === 'projectSelection') {
     if (project.uid !== 'no_set') delegatedTask.uid_project = project.uid
     messages.value.push({
-      message: 'Нет проблем, проставим дополнительные параметры?',
+      message: 'Супер, что насчет меток?',
       messageFromInspector: true,
-      type: 'confirmParams',
+      type: 'tagSelection',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'confirmParams'
+    currentState.value = 'tagSelection'
   }
 }
 
@@ -430,12 +430,12 @@ const selectTime = (time) => {
   if (currentState.value === 'timeSelection') {
     delegatedTask.customer_date = time.date
     messages.value.push({
-      message: 'В какой проект поместить задачу?',
+      message: 'Нет проблем, проставим дополнительные параметры?',
       messageFromInspector: true,
-      type: 'projectSelection',
+      type: 'confirmParams',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'projectSelection'
+    currentState.value = 'confirmParams'
   }
 }
 
@@ -448,12 +448,12 @@ const actionConfirmNewParams = (confirmed) => {
       createDate: new Date().toISOString()
     })
     messages.value.push({
-      message: 'Супер, что насчет меток?',
+      message: 'В какой проект поместить задачу?',
       messageFromInspector: true,
-      type: 'tagSelection',
+      type: 'projectSelection',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'tagSelection'
+    currentState.value = 'projectSelection'
     clearInputMessageAndFocus()
   } else {
     messages.value.push({
