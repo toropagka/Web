@@ -12,7 +12,7 @@
         class="ml-[6px] flex items-center h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
         @click="goToAssigment(iAm)"
       >
-        <div class="h-[30px] w-[30px]">
+        <div>
           <img
             :src="iAm.fotolink"
             :alt="iAm.name"
@@ -46,7 +46,7 @@
         class="ml-[6px] flex items-center h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
         @click="goToAssigment(toMe)"
       >
-        <div class="h-[30px] w-[30px]">
+        <div>
           <img
             :src="toMe.fotolink"
             :alt="toMe.name"
