@@ -176,7 +176,6 @@ export default {
       return window.location.origin
     },
     firstTask () {
-      console.log('firstTask', this.firstTask)
       if (this.slidesCopy.length && this.justRegistered) {
         return this.slidesCopy[0]
       }
@@ -245,7 +244,7 @@ export default {
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask && newtask.uid && !newtask.notify) {
+      if (newtask && newtask.uid && !this.notify) {
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
