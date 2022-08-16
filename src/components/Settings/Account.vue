@@ -6,7 +6,7 @@
     :image-type="avatarType"
     @close-window="changeAvatar = false"
   />
-  <BoardModalBoxRename
+  <UsernameRename
     v-if="showEditname"
     :show="showEditname"
     title="Введите новое имя пользователя"
@@ -247,6 +247,7 @@ import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
 import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
+import UsernameRename from '@/components/Settings/UsernameRename.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 import UploadAvatar from '@/components/UploadAvatar'
@@ -255,6 +256,7 @@ export default {
   components: {
     UploadAvatar,
     ModalBox,
+    UsernameRename,
     BoardModalBoxRename
   },
   emits: ['AccLogout', 'currentSettingsTab'],
