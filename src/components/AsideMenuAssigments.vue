@@ -2,7 +2,7 @@
   <div
     class="px-[16px]"
   >
-    <div v-if="assigments.delegate_iam.items">
+    <div v-if="assigments.delegate_iam.items.length">
       <p class="ml-[10px] my-2 font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
         {{ assigments.delegate_iam.name }}:
       </p>
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div v-if="assigments.delegate_to_me.items">
+    <div v-if="assigments.delegate_to_me.items.length">
       <p class="ml-[10px] my-2 font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
         {{ assigments.delegate_to_me.name }}:
       </p>
