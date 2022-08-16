@@ -36,7 +36,7 @@
     </div>
   </div>
   <div
-    v-else-if="tasksCount && !isLoading && isNotifiesLoaded"
+    v-else-if="tasksCount && !isLoading"
     class="flex items-center mt-[70px] mb-5 justify-between"
   >
     <!-- header -->
