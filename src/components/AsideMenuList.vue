@@ -1,8 +1,10 @@
 <script>
 import AsideMenuItem from '@/components/AsideMenuItem.vue'
+import AsideMenuAssigments from '@/components/AsideMenuAssigments'
 
 export default {
   components: {
+    AsideMenuAssigments,
     AsideMenuItem
   },
   props: {
@@ -13,15 +15,23 @@ export default {
     menu: {
       type: Array,
       default: () => []
+    },
+    assigments: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ['menu-click'],
+  computed: {
+    lastTab () {
+      return this.$store.state.navigator.lastTab
+    }
+  },
   methods: {
     menuClick (event, item) {
       this.$emit('menu-click', event, item)
     }
   }
-
 }
 </script>
 
@@ -36,6 +46,11 @@ export default {
         :item="item"
         :is-submenu-list="isSubmenuList"
         @menu-click="menuClick"
+      />
+      <!-- Отслеживаем uid вкладки 'Готово к сдаче' и после нее рендерим поручения -->
+      <AsideMenuAssigments
+        v-if="item.uid === 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0' && lastTab === 'tasks'"
+        :assigments="assigments"
       />
     </template>
   </ul>
