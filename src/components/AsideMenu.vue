@@ -160,7 +160,7 @@
               </svg>
             </div>
             <p class="font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
-              {{ board.name }}
+              {{ board.name.length < 26 ? board.name : board.name.substring(0, 26) + '...' }}
             </p>
           </li>
         </ul>
