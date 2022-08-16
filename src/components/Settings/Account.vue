@@ -92,7 +92,7 @@
       </p>
     </div>
   </ModalBox>
-  <form class="mx-6 overscroll-auto bg-white p-2 rounded">
+  <form class="overscroll-auto bg-white p-2 rounded">
     <div class="pl-[15px] pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
       Аккаунт
     </div>
