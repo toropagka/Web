@@ -27,11 +27,22 @@
       class="border rounded-xl"
     />
   </div>
+  <button
+    v-if="name === 'welcome'"
+    class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+    @click="clickSuccess"
+  >
+    Понятно
+  </button>
 </template>
 <script>
 export default {
   props: {
     title: {
+      type: String,
+      default: 'text'
+    },
+    name: {
       type: String,
       default: 'text'
     },
@@ -42,6 +53,13 @@ export default {
     video: {
       type: String,
       default: 'text'
+    }
+  },
+  emits: ['nextTask'],
+  methods: {
+    clickSuccess () {
+      this.$emit('nextTask')
+      this.$store.state.slides.slides[0].splice()
     }
   }
 }

@@ -61,7 +61,7 @@
     </button>
   </div>
   <DoitnowSkeleton
-    v-if="isLoading"
+    v-if="isLoading && isNotifiesLoaded"
     class="mt-20"
   />
   <transition :name="taskTransition">
@@ -81,7 +81,7 @@
   <transition :name="taskTransition">
     <div>
       <DoitnowTask
-        v-if="!displayModal && tasksCount && !isLoading && !notify"
+        v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
         :key="firstTask.uid"
         :task="firstTask"
         :childrens="childrens"
@@ -98,7 +98,7 @@
         @readTask="readTask"
       />
       <DoitnowNotificationTasks
-        v-if="!displayModal && tasksCount && !isLoading && notify"
+        v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
         :name="firstTask.name"
         :uid="firstTask.uid"
       />
@@ -158,6 +158,7 @@ export default {
     projectTasks: [],
     unsortedTasks: [],
     overdueReaded: [],
+    notifiesCopy: [],
     tasksLoaded: false,
     childrens: []
   }),
@@ -169,7 +170,7 @@ export default {
         this.overdueTasks.length +
         this.readyTasks.length +
         this.todayTasks.length +
-        this.notifies.length
+        this.notifiesCopy.length
       )
     },
     currentLocation () {
@@ -179,8 +180,8 @@ export default {
       if (this.slidesCopy.length && this.justRegistered) {
         return this.slidesCopy[0]
       }
-      if (this.notifies.length) {
-        return this.notifies[0]
+      if (this.notifiesCopy.length) {
+        return this.notifiesCopy[0]
       }
       if (this.unreadTasks.length) {
         return this.unreadTasks[0]
@@ -220,6 +221,9 @@ export default {
     isLoading () {
       return this.$store.state.tasks.status === 'loading'
     },
+    isNotifiesLoaded () {
+      return this.$store.state.notificationtasks.status === 'success'
+    },
     user () {
       return this.$store.state.user.user
     },
@@ -233,9 +237,9 @@ export default {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
     },
     notifies () {
-      return this.$store.state.notificationTasks.notificationTasks
+      return this.$store.state.notificationtasks.notificationtasks
     },
-    notify () {
+    isNotify () {
       return !!this.firstTask.notify
     },
     justRegistered () {
@@ -244,7 +248,7 @@ export default {
   },
   watch: {
     firstTask (newtask, oldtask) {
-      if (newtask && newtask.uid && !this.notify) {
+      if (newtask && newtask.uid && !this.isNotify) {
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -292,13 +296,13 @@ export default {
               initInspectorSocket()
             } catch (e) {}
           }).then(() => {
-            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
+            this.loadNotifies()
           })
         })
       })
     }
     if (userLoaded && navLoaded) {
-      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
+      this.loadNotifies()
     }
     if (this.justRegistered) {
       this.slidesCopy = [...this.slides]
@@ -309,7 +313,7 @@ export default {
     this.$store.dispatch('fullScreenToggle', 'add')
   },
   unmounted: function () {
-    this.$store.commit('NOTIFICATION_TASKS_CLEAR')
+    this.$store.dispatch('NOTIFICATION_TASKS_CLEAR')
   },
   methods: {
     loadAllTasks: function () {
@@ -378,6 +382,10 @@ export default {
           this.tasksLoaded = true
         })
     },
+    loadNotifies: function () {
+      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
+      this.notifiesCopy = [...this.notifies]
+    },
     linkToTask () {
       copyText(`${window.location.origin}/task/${this.firstTask.uid}`, undefined, (error, event) => {
         if (error) {
@@ -404,12 +412,15 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
+      for (let i = 0; i < this.slides.length; i++) {
+        console.log(this.slides[i].name === 'welcome')
+      }
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return
       }
-      if (this.notifies.length) {
-        this.notifies.shift()
+      if (this.notifiesCopy.length) {
+        this.notifiesCopy.shift()
         return
       }
       this.readTask()
