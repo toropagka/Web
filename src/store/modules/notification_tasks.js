@@ -2,7 +2,7 @@ import * as NOTIFICATION_TASKS from '../actions/notification_tasks'
 import store from '@/store/index.js'
 
 const state = {
-  notificationTasks: false
+  notificationTasks: []
 }
 
 const actions = {
@@ -11,7 +11,7 @@ const actions = {
     const userDep = store.state.employees.employees[userUid].uid_dep
     const uncompletedReglaments = Object.values(store.state.reglaments.reglaments)
       .filter((reglament) => { return reglament.department_uid === userDep && !reglament.is_passed })
-      .map((reglament) => { return { uid: reglament.uid, name: reglament.name } })
+      .map((reglament) => { return { uid: reglament.uid, name: reglament.name, notify: true } })
     commit(NOTIFICATION_TASKS.NOTIFICATION_TASK_SET, uncompletedReglaments)
   }
 }
