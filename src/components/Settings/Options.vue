@@ -5,7 +5,10 @@
     </div>
     <div class="my-2">
       <div class="flex mt-[15px]">
-        <div class="checkbox">
+        <div
+          v-if="settings"
+          class="checkbox"
+        >
           <input
             id="opt_1"
             v-model="settings.add_task_to_begin"
@@ -23,7 +26,10 @@
     </div>
     <div class="my-2 mt-[15px]">
       <div class="flex mt-2">
-        <div class="checkbox">
+        <div
+          v-if="settings"
+          class="checkbox"
+        >
           <input
             id="opt_4"
             v-model="settings.nav_show_overdue"
@@ -55,13 +61,15 @@
         </div>
       </div>
     </div>
-    <div class="my-2 mt-[50px]">
+    <div
+      v-if="settings"
+      class="my-2 mt-[50px]"
+    >
       <p class="text-base font-medium text-[#4C4C4D]">
         Напоминание о задаче за:
       </p>
       <div class="flex mt-2">
         <select
-          v-if="settings?.reminders_in_n_minutes !== null"
           v-model="settings.reminders_in_n_minutes"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
           @change="updateSettings"
