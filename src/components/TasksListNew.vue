@@ -609,11 +609,14 @@ export default {
     changeTaskPosition (position) {
       const selectedTask = {} // выделенная задача
       const rootTask = {} // не выделенная задача
+      if (this.lastSelectedTask.parent) {
+        this.sortTaskChildren(this.lastSelectedTask.parent)
+      }
       switch (position) {
         case 'up':
           if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
             for (let i = 0; i < this.newConfig.roots.length; i++) {
-              if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
+              if ((this.newConfig.roots[i] === this.lastSelectedTaskUid) && (i !== 0)) {
                 this.newConfig.roots[i] = this.newConfig.roots[i - 1]
                 rootTask.uid = this.newConfig.roots[i]
                 rootTask.parent = this.storeTasks[rootTask.uid].parent
@@ -626,17 +629,19 @@ export default {
               }
             }
           } else {
-            for (let i = 0; i < this.newConfig.leaves.length; i++) {
-              if (this.newConfig.leaves[i] === this.lastSelectedTaskUid) {
-                this.newConfig.leaves[i] = this.newConfig.leaves[i - 1]
-                rootTask.uid = this.newConfig.leaves[i]
-                rootTask.parent = this.storeTasks[rootTask.uid].parent
-                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+            if (this.storeTasks[this.lastSelectedTaskUid].parent) {
+              for (let i = 0; i < this.storeTasks[this.lastSelectedTask.uid_parent].children.length; i++) {
+                if ((this.storeTasks[this.lastSelectedTask.uid_parent].children[i] === this.lastSelectedTaskUid) && (i !== 0)) {
+                  this.storeTasks[this.lastSelectedTask.uid_parent].children[i] = this.storeTasks[this.lastSelectedTask.uid_parent].children[i - 1]
+                  rootTask.uid = this.storeTasks[this.lastSelectedTask.uid_parent].children[i]
+                  rootTask.parent = this.storeTasks[rootTask.uid].parent
+                  rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
 
-                selectedTask.uid = this.lastSelectedTaskUid
-                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
-                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
-                this.newConfig.leaves[i - 1] = this.lastSelectedTaskUid
+                  selectedTask.uid = this.lastSelectedTaskUid
+                  selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                  selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                  this.storeTasks[this.lastSelectedTask.uid_parent].children[i - 1] = this.lastSelectedTaskUid
+                }
               }
             }
           }
@@ -644,7 +649,7 @@ export default {
         case 'down':
           if (this.newConfig.roots.includes(this.lastSelectedTaskUid)) {
             for (let i = this.newConfig.roots.length - 1; i >= 0; i--) {
-              if (this.newConfig.roots[i] === this.lastSelectedTaskUid) {
+              if ((this.newConfig.roots[i] === this.lastSelectedTaskUid) && (i !== this.newConfig.roots.length - 1)) {
                 this.newConfig.roots[i] = this.newConfig.roots[i + 1]
                 rootTask.uid = this.newConfig.roots[i]
                 rootTask.parent = this.storeTasks[rootTask.uid].parent
@@ -657,21 +662,27 @@ export default {
               }
             }
           } else {
-            for (let i = this.newConfig.leaves.length - 1; i >= 0; i--) {
-              if (this.newConfig.leaves[i] === this.lastSelectedTaskUid) {
-                this.newConfig.leaves[i] = this.newConfig.leaves[i + 1]
-                rootTask.uid = this.newConfig.leaves[i]
-                rootTask.parent = this.storeTasks[rootTask.uid].parent
-                rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
+            if (this.storeTasks[this.lastSelectedTaskUid].parent) {
+              for (let i = this.storeTasks[this.lastSelectedTask.uid_parent].children.length - 1; i >= 0; i--) {
+                if (this.storeTasks[this.lastSelectedTask.uid_parent].children[i] === this.lastSelectedTaskUid && (i !== this.storeTasks[this.lastSelectedTask.uid_parent].children.length - 1)) {
+                  this.storeTasks[this.lastSelectedTask.uid_parent].children[i] = this.storeTasks[this.lastSelectedTask.uid_parent].children[i + 1]
+                  rootTask.uid = this.storeTasks[this.lastSelectedTask.uid_parent].children[i]
+                  rootTask.parent = this.storeTasks[rootTask.uid].parent
+                  rootTask.order = this.storeTasks[this.lastSelectedTaskUid].info.order_new
 
-                selectedTask.uid = this.lastSelectedTaskUid
-                selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
-                selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
-                this.newConfig.leaves[i + 1] = this.lastSelectedTaskUid
+                  selectedTask.uid = this.lastSelectedTaskUid
+                  selectedTask.parent = this.storeTasks[this.lastSelectedTaskUid].parent
+                  selectedTask.order = this.storeTasks[rootTask.uid].info.order_new
+                  this.storeTasks[this.lastSelectedTask.uid_parent].children[i + 1] = this.lastSelectedTaskUid
+                }
               }
             }
           }
           break
+      }
+      // если selectedTask не заполнился, значит задача не попадает под условия сортировки
+      if (!Object.keys(selectedTask).length) {
+        return
       }
       this.$store.state.tasks.newtasks[selectedTask.uid].info.order_new = selectedTask.order
       this.$store.state.tasks.newtasks[selectedTask.uid].parent = selectedTask.parent
