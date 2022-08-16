@@ -48,6 +48,10 @@ export default {
     img: {
       type: String,
       default: null
+    },
+    imageType: {
+      type: String,
+      default: ''
     }
   },
   emits: ['closeWindow'],
@@ -58,6 +62,9 @@ export default {
   },
   methods: {
     uploadAvatar () {
+      if (this.imageType === 'image/png') {
+        this.fillTransparentPngBgToWhite()
+      }
       this.canvas.toBlob((blob) => {
         const formData = new FormData()
         formData.append('files[0]', blob)
@@ -66,13 +73,26 @@ export default {
         }
         this.$store.dispatch(USER_CHANGE_PHOTO, data)
         this.$emit('closeWindow')
-      })
+      }, 'image/jpeg')
+    },
+    fillTransparentPngBgToWhite () {
+      // Заполняет пустые пиксели png картинки на белые, чтобы избежать сплошного черного фона при конверте в jpeg
+      const imgData = this.canvas.getContext('2d').getImageData(0, 0, this.canvas.width, this.canvas.height)
+      const data = imgData.data
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i + 3] < 255) {
+          data[i] = 255
+          data[i + 1] = 255
+          data[i + 2] = 255
+          data[i + 3] = 255
+        }
+      }
+      this.canvas.getContext('2d').putImageData(imgData, 0, 0)
     },
     closeWindow () {
       this.$emit('closeWindow')
     },
     change ({ coordinates, canvas }) {
-      console.log(coordinates, canvas)
       this.canvas = canvas
     }
   }

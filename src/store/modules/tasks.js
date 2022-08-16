@@ -1123,23 +1123,6 @@ const mutations = {
       (item) => item !== uid
     )
   },
-  [TASK.ADD_TASK_TO_ROOTS]: (state, taskUid) => {
-    if (!state.newConfig.roots.includes(taskUid)) {
-      state.newConfig.roots.push(taskUid)
-    }
-  },
-  [TASK.ADD_TASK_TO_LEAVES]: (state, taskUid) => {
-    if (!state.newConfig.leaves.includes(taskUid)) {
-      state.newConfig.leaves.push(taskUid)
-    }
-  },
-  [TASK.REMOVE_TASK_FROM_ROOTS]: (state, taskUid) => {
-    for (let i = 0; i < state.newConfig.roots.length; i++) {
-      if (taskUid === state.newConfig.roots[i]) {
-        state.newConfig.roots.splice(i, 1)
-      }
-    }
-  },
   [TASK.IN_WORK_TASKS_REQUEST]: (state, resp) => {
     state.inWork = resp.data
     state.inWork.title = 'В работе'
@@ -1171,9 +1154,10 @@ const mutations = {
       if (node.has_children && !state.newConfig.listHasChildren) {
         state.newConfig.listHasChildren = true
       }
-
-      state.newConfig.roots.push(node.uid)
-      if (!node.has_children) {
+      if (!state.newConfig.roots.includes(node.uid)) {
+        state.newConfig.roots.push(node.uid)
+      }
+      if (!node.has_children && !state.newConfig.leaves.includes(node.uid)) {
         state.newConfig.leaves.push(node.uid)
       }
 
@@ -1224,7 +1208,7 @@ const mutations = {
   },
   [TASK.UPDATE_NEW_TASK_LIST]: (state, tasks) => {
     for (const task of tasks) {
-      if (!task.has_children) {
+      if (!task.has_children && !state.newConfig.leaves.includes(task.uid)) {
         state.newConfig.leaves.push(task.uid)
       }
       task._isEditable = false

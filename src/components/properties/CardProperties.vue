@@ -121,7 +121,7 @@
     </div>
 
     <TaskPropsCommentEditor
-      v-if="canEdit || selectedCard?.comment.length > 0"
+      v-if="canEdit || selectedCard?.comment?.length > 0"
       class="mt-3 h-32 break-words"
       :comment="selectedCard?.comment"
       :can-edit="canEdit"
@@ -362,7 +362,7 @@ export default {
       }
       const files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files?.length; i++) {
         const file = files[i]
         formData.append('files[' + i + ']', file)
       }
@@ -471,7 +471,7 @@ export default {
     changeCardCover (event) {
       const files = event.target.files
       const formData = new FormData()
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files?.length; i++) {
         const file = files[i]
         formData.append('files[' + i + ']', file)
       }

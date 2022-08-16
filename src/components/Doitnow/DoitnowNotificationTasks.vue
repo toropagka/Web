@@ -20,8 +20,23 @@ export default {
       default: null
     }
   },
+  computed: {
+    storeNavigator () {
+      return this.$store.state.navigator.navigator
+    }
+  },
   methods: {
     gotoReglamentContent () {
+      this.$router.push('/directory')
+      this.$store.commit('updateStackWithInitValue', {
+        name: 'Регламенты',
+        key: 'greedSource',
+        greedPath: 'reglaments',
+        value: this.storeNavigator.reglaments?.items
+      })
+      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
       const reglament = this.$store.state.reglaments.reglaments[this.uid]
       this.$store.commit('basic', {
         key: 'reglamentSource',
@@ -35,9 +50,9 @@ export default {
         greedPath: 'reglament_content',
         value: []
       }
-
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: reglament })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     }
   }

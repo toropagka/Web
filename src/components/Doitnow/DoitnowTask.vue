@@ -21,6 +21,8 @@
         :title="task.title"
         :text="task.text"
         :video="task.video"
+        :name="task.name"
+        @nextTask="nextTask"
       />
       <div
         v-else
@@ -98,7 +100,7 @@
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
           <div
-            v-if="task.uid && task.emails.includes(user.current_user_email) && task.uid_performer !== user.current_user_uid"
+            v-if="task.uid && task.emails.includes(user?.current_user_email) && task.uid_performer !== user?.current_user_uid"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
           >
             Задача в доступе
@@ -222,7 +224,7 @@
       </div>
       <TaskPropsCommentEditor
         v-if="task.uid"
-        v-show="task.comment.length || task.uid_customer === user.current_user_uid"
+        v-show="task.comment.length || task.uid_customer === user?.current_user_uid"
         class="mt-3"
         :comment="task.comment"
         :can-edit="task.uid_customer === user?.current_user_uid"
@@ -298,7 +300,7 @@
             class="mt-3"
             :task="task"
             :task-messages="taskMessages"
-            :current-user-uid="user.current_user_uid"
+            :current-user-uid="user?.current_user_uid"
             :show-all-messages="true"
             :show-only-files="showOnlyFiles"
             @answerMessage="onAnswerMessage"
@@ -319,7 +321,7 @@
       >
         <!-- accept -->
         <button
-          v-if="task.mode !== 'slide' || task.uid_customer === user.current_user_uid || task.uid_performer === user.current_user_uid"
+          v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 items-center justify-center text-sm hover:bg-white bg-green-100 hover:bg-opacity-90 font-medium border-green-400 min-h-[40px] w-[181px] rounded-lg border hover:text-green-500 mb-2 hover:animate-fadeIn"
           @click="accept"
         >
@@ -378,7 +380,7 @@
         />
         <!-- Change access -->
         <button
-          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user.current_user_email)) && task.uid_customer !== user.current_user_uid && task.uid_performer !== user.current_user_uid && task.mode !== 'slide'"
+          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
           class="flex py-0.5 items-center justify-center text-sm bg-gray-100 w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
           @click="() => onChangeAccess(task.emails)"
         >

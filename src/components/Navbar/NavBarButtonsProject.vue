@@ -3,7 +3,7 @@
     <BoardModalBoxDelete
       v-if="showDeleteProject"
       title="Удалить проект"
-      text="Вы действительно хотите удалить проект?"
+      :text="deleteMessage"
       @cancel="showDeleteProject = false"
       @yes="onDeleteProject"
     />
@@ -79,6 +79,12 @@ export default {
     }
   },
   computed: {
+    deleteMessage () {
+      if (this.project.children.length !== 0) {
+        return 'Вы действительно хотите удалить проект? \n\n Внимание! Все дочерние проекты будут удалены.'
+      }
+      return 'Вы действительно хотите удалить проект?'
+    },
     project () {
       return this.$store.state.projects.projects[this.projectUid]
     },

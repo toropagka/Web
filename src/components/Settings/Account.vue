@@ -3,9 +3,10 @@
   <UploadAvatar
     v-if="changeAvatar"
     :img="uploadedAvatar"
+    :image-type="avatarType"
     @close-window="changeAvatar = false"
   />
-  <BoardModalBoxRename
+  <UsernameRename
     v-if="showEditname"
     :show="showEditname"
     title="Введите новое имя пользователя"
@@ -13,7 +14,7 @@
     @cancel="showEditname = false"
     @save="changeUserName"
   />
-  <BoardModalBoxRename
+  <PhoneModalBoxRename
     v-if="showEditphone"
     :show="showEditphone"
     title="Введите новый номер телефона"
@@ -21,6 +22,16 @@
     @cancel="showEditphone = false"
     @save="changeUserPhone"
   />
+  <ModalBox
+    v-if="notAllowedImageType"
+    :show="'fsd'"
+    title="Недопустимый формат изображения"
+    ok="Понятно"
+    @ok="notAllowedImageType = false"
+    @cancel="notAllowedImageType = false"
+  >
+    Попробуйте загрузить другое изображение. Допустимые форматы: png, jpeg, jpg.
+  </ModalBox>
   <ModalBox
     v-if="showEditpassword"
     :show="showEditpassword"
@@ -92,7 +103,7 @@
       </p>
     </div>
   </ModalBox>
-  <form class="mx-6 overscroll-auto bg-white p-2 rounded">
+  <form class="overscroll-auto bg-white p-2 rounded">
     <div class="pl-[15px] pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
       Аккаунт
     </div>
@@ -236,7 +247,8 @@ import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
 import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
+import UsernameRename from '@/components/Settings/UsernameRename.vue'
+import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 import UploadAvatar from '@/components/UploadAvatar'
 
@@ -244,7 +256,8 @@ export default {
   components: {
     UploadAvatar,
     ModalBox,
-    BoardModalBoxRename
+    UsernameRename,
+    PhoneModalBoxRename
   },
   emits: ['AccLogout', 'currentSettingsTab'],
   data () {
@@ -260,7 +273,9 @@ export default {
       showEditphone: false,
       showEditpassword: false,
       changeAvatar: false,
-      uploadedAvatar: ''
+      uploadedAvatar: '',
+      notAllowedImageType: false,
+      avatarType: ''
     }
   },
   computed: {
@@ -291,11 +306,17 @@ export default {
       this.$router.push('/doitnow')
     },
     changeUserPhoto (event) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
       const file = event.target.files[0]
+      if (!allowedTypes.includes(file.type)) {
+        this.notAllowedImageType = true
+        return
+      }
       if (file) {
         const reader = new FileReader()
         reader.addEventListener('load', () => {
           this.uploadedAvatar = reader.result
+          this.avatarType = file.type
           this.changeAvatar = true
         })
         reader.readAsDataURL(file)
