@@ -76,14 +76,12 @@ export default {
   },
   methods: {
     checkMultiQuestion (creatorAnswers, userAnswers) {
-      // массив с ответами создателя которые есть в ответах пользователя
-      // массив с ответами пользователя которых нет в ответах создателя
-      const correctUserAnswers = userAnswers.filter((item) => creatorAnswers.includes(item))
-      const correctAnswersDifference = creatorAnswers.filter((item) => !correctUserAnswers.includes(item))
+      const correctUserAnswers = userAnswers.filter((answer) => creatorAnswers.includes(answer))
+      const correctAnswersDifference = creatorAnswers.filter((answer) => !correctUserAnswers.includes(answer))
       if (creatorAnswers.length === userAnswers.length && correctAnswersDifference.length === 0) {
         return false
       }
-      const incorrectAnswersDifference = creatorAnswers.filter((item) => correctUserAnswers.includes(item))
+      const incorrectAnswersDifference = creatorAnswers.filter((answer) => correctUserAnswers.includes(answer))
       this.correctAnswers = incorrectAnswersDifference.map((answer) => { return { id: answer.id, name: answer.name } })
       return true
     }
