@@ -127,6 +127,7 @@
             <control
               v-model="form.username"
               type="text"
+              :maxlength="'50'"
               :icon="mdiAccountOutline"
               name="username"
               autocomplete="username"
