@@ -7,7 +7,7 @@ const employees = computed(() => store.state.employees.employees)
 
 function redirect (notification) {
   const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
-  window.open(link)
+  window.location.href = link
 }
 </script>
 <template>

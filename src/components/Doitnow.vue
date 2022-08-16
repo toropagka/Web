@@ -37,7 +37,7 @@
   </div>
   <div
     v-else-if="tasksCount && !isLoading"
-    class="flex items-center mt-[70px] mb-5 justify-between"
+    class="flex items-center pt-[70px] mb-5 justify-between"
   >
     <!-- header -->
     <div class="flex items-center">

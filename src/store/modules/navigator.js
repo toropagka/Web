@@ -440,6 +440,13 @@ const mutations = {
         }
       ])
     }
+
+    // Если только переходим на другой таб (код выше), без запроса к серверу
+    // используется в DoitnowEmpty.vue
+    if (!resp) {
+      return
+    }
+
     const newAssignments = []
     newAssignments.push({
       dep: 'Поручено мной',
