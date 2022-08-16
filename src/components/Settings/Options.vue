@@ -61,7 +61,7 @@
       </p>
       <div class="flex mt-2">
         <select
-          v-if="settings?.reminders_in_n_minutes !== null"
+          v-if="settings?.reminders_in_n_minutes"
           v-model="settings.reminders_in_n_minutes"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
           @change="updateSettings"
