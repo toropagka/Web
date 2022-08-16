@@ -1,39 +1,3 @@
-<script setup>
-import { computed, ref } from 'vue'
-import { useStore } from 'vuex'
-import { PATCH_SETTINGS } from '@/store/actions/navigator.js'
-import { UPDATE_SOUND_SETTING } from '@/store/actions/inspector'
-
-const store = useStore()
-const user = computed(() => store.state.user.user)
-const settings = computed(() => store.state.navigator?.navigator?.settings)
-
-const isNotificationSoundOn = ref(store.state.inspector.is_notification_sound_on)
-
-const updateSoundSetting = () => {
-  store.dispatch(UPDATE_SOUND_SETTING, { uid_user: user.value.current_user_uid, value: isNotificationSoundOn.value })
-}
-const updateSettings = () => {
-  const data = {
-    add_task_to_begin: settings.value.add_task_to_begin === true ? 1 : 0,
-    cal_number_of_first_week: settings.value.cal_number_of_first_week === true ? 1 : 0,
-    cal_show_week_number: settings.value.cal_show_week_number === true ? 1 : 0,
-    nav_show_tags: settings.value.nav_show_tags === true ? 1 : 0,
-    nav_show_overdue: settings.value.nav_show_overdue === true ? 1 : 0,
-    nav_show_summary: settings.value.nav_show_summary === true ? 1 : 0,
-    nav_show_emps: settings.value.nav_show_emps === true ? 1 : 0,
-    nav_show_markers: settings.value.nav_show_markers === true ? 1 : 0,
-    language: settings.value.language,
-    stopwatch: settings.value.stopwatch === true ? 1 : 0,
-    cal_work_time: settings.value.cal_work_time === true ? 1 : 0,
-    reminders_in_n_minutes: settings.value.reminders_in_n_minutes,
-    cal_work_week: settings.value.cal_work_week === true ? 1 : 0,
-    compact_mode: settings.value.compact_mode === true ? 1 : 0
-  }
-  store.dispatch(PATCH_SETTINGS, data).then(resp => {
-  })
-}
-</script>
 <template>
   <form class="px-5 bg-white py-2 rounded pb-[200px]">
     <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
@@ -48,7 +12,7 @@ const updateSettings = () => {
             type="checkbox"
             value="0"
             class="custom-checkbox-orange"
-            @change="updateSettings()"
+            @change="updateSettings"
           >
           <label
             class="text-sm text-[#606061]"
@@ -65,7 +29,7 @@ const updateSettings = () => {
             v-model="settings.nav_show_overdue"
             type="checkbox"
             class="custom-checkbox-orange outline-none"
-            @change="updateSettings()"
+            @change="updateSettings"
           >
           <label
             class="text-sm text-[#606061]"
@@ -100,7 +64,7 @@ const updateSettings = () => {
           v-if="settings?.reminders_in_n_minutes !== null"
           v-model="settings.reminders_in_n_minutes"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
-          @change="updateSettings()"
+          @change="updateSettings"
         >
           <option value="0">
             0 мин
@@ -129,7 +93,7 @@ const updateSettings = () => {
           v-if="settings?.language"
           v-model="settings.language"
           class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
-          @change="updateSettings()"
+          @change="updateSettings"
         >
           <option value="russian">
             Русский
@@ -142,6 +106,52 @@ const updateSettings = () => {
     </div>
   </form>
 </template>
+
+<script>
+import { UPDATE_SOUND_SETTING } from '@/store/actions/inspector'
+import { PATCH_SETTINGS } from '@/store/actions/navigator'
+
+export default {
+  data () {
+    return {
+      isNotificationSoundOn: this.$store.state.inspector.is_notification_sound_on
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.user.user
+    },
+    settings () {
+      return this.$store.state.navigator?.navigator?.settings
+    }
+  },
+  methods: {
+    updateSoundSetting () {
+      this.$store.dispatch(UPDATE_SOUND_SETTING, { uid_user: this.user.current_user_uid, value: this.isNotificationSoundOn })
+    },
+    updateSettings () {
+      const data = {
+        add_task_to_begin: this.settings.add_task_to_begin ? 1 : 0,
+        cal_number_of_first_week: this.settings.cal_number_of_first_week ? 1 : 0,
+        cal_show_week_number: this.settings.cal_show_week_number ? 1 : 0,
+        nav_show_tags: this.settings.nav_show_tags ? 1 : 0,
+        nav_show_overdue: this.settings.nav_show_overdue ? 1 : 0,
+        nav_show_summary: this.settings.nav_show_summary ? 1 : 0,
+        nav_show_emps: this.settings.nav_show_emps ? 1 : 0,
+        nav_show_markers: this.settings.nav_show_markers ? 1 : 0,
+        language: this.settings.language,
+        stopwatch: this.settings.stopwatch ? 1 : 0,
+        cal_work_time: this.settings.cal_work_time ? 1 : 0,
+        reminders_in_n_minutes: this.settings.reminders_in_n_minutes,
+        cal_work_week: this.settings.cal_work_week ? 1 : 0,
+        compact_mode: this.settings.compact_mode ? 1 : 0
+      }
+      this.$store.dispatch(PATCH_SETTINGS, data)
+    }
+  }
+}
+</script>
+
 <style scoped>
 /* для элемента input c type="checkbox" */
 .custom-checkbox-orange {
