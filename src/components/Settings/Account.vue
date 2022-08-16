@@ -14,7 +14,7 @@
     @cancel="showEditname = false"
     @save="changeUserName"
   />
-  <BoardModalBoxRename
+  <PhoneModalBoxRename
     v-if="showEditphone"
     :show="showEditphone"
     title="Введите новый номер телефона"
@@ -248,7 +248,7 @@ import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import UsernameRename from '@/components/Settings/UsernameRename.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
+import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 import UploadAvatar from '@/components/UploadAvatar'
 
@@ -257,7 +257,7 @@ export default {
     UploadAvatar,
     ModalBox,
     UsernameRename,
-    BoardModalBoxRename
+    PhoneModalBoxRename
   },
   emits: ['AccLogout', 'currentSettingsTab'],
   data () {
