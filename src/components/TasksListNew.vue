@@ -113,6 +113,7 @@
         @nodeOpened="nodeExpanding"
         @nodeFocus="nodeSelected"
         @nodeDragend="nodeDragEnd"
+        @nodeBlur="returnFocus"
       >
         <template #before-input="props">
           <div
@@ -755,6 +756,11 @@ export default {
             }
           }
         })
+    },
+    returnFocus () {
+      this.$nextTick(() => {
+        document.getElementById(this.lastSelectedTaskUid).parentElement.focus({ preventScroll: false })
+      })
     },
     countChecklist (checklist) {
       const data = { done: 0, undone: 0 }
