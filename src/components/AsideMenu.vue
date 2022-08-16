@@ -8,7 +8,7 @@
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="mt-[50px]">
+      <div class="mt-[60px]">
         <DatePicker
           v-if="lastTab === 'tasks'"
           id="step4"

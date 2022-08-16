@@ -190,12 +190,12 @@ function onMessageSelectColor (message) {
   }
 }
 
-function onMessageSelectAccess (message) {
-  if (lastSelectedObj) {
-    selectAccess(lastSelectedObj)
-    clearInputMessageAndFocus()
-  }
-}
+// function onMessageSelectAccess (message) {
+//   if (lastSelectedObj) {
+//     selectAccess(lastSelectedObj)
+//     clearInputMessageAndFocus()
+//   }
+// }
 
 function onMessageSelectTime (message) {
   if (lastSelectedObj) {
@@ -255,10 +255,10 @@ const addCustomerMessage = () => {
     onMessageSelectColor(inputMessage.value)
     return
   }
-  if (currentState.value === 'accessSelection') {
-    onMessageSelectAccess(inputMessage.value)
-    return
-  }
+  // if (currentState.value === 'accessSelection') {
+  //   onMessageSelectAccess(inputMessage.value)
+  //   return
+  // }
   if (currentState.value === 'timeSelection') {
     onMessageSelectTime(inputMessage.value)
     return
@@ -341,12 +341,12 @@ const selectProject = (project) => {
   if (currentState.value === 'projectSelection') {
     if (project.uid !== 'no_set') delegatedTask.uid_project = project.uid
     messages.value.push({
-      message: 'Нет проблем, проставим дополнительные параметры?',
+      message: 'Супер, что насчет меток?',
       messageFromInspector: true,
-      type: 'confirmParams',
+      type: 'tagSelection',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'confirmParams'
+    currentState.value = 'tagSelection'
   }
 }
 
@@ -379,26 +379,13 @@ const selectColor = (color) => {
   })
   if (currentState.value === 'colorSelection') {
     if (color.uid !== 'no_set') delegatedTask.uid_marker = color.uid
-    messages.value.push({
-      message: 'Кто будет иметь доступ к задаче?',
-      messageFromInspector: true,
-      type: 'accessSelection',
-      createDate: new Date().toISOString()
-    })
-    currentState.value = 'accessSelection'
-    clearInputMessageAndFocus()
-  }
-}
-
-const selectAccess = (emp) => {
-  if (currentState.value !== 'accessSelection') return
-  messages.value.push({
-    message: emp.name,
-    messageFromInspector: false,
-    createDate: new Date().toISOString()
-  })
-  if (currentState.value === 'accessSelection') {
-    if (emp.uid !== 'no_set') delegatedTask.emails = emp.email
+    // messages.value.push({
+    //   message: 'Кто будет иметь доступ к задаче?',
+    //   messageFromInspector: true,
+    //   type: 'accessSelection',
+    //   createDate: new Date().toISOString()
+    // })
+    // currentState.value = 'accessSelection'
     messages.value.push({
       message: 'На этом все, я поручу задачу?',
       messageFromInspector: true,
@@ -409,6 +396,27 @@ const selectAccess = (emp) => {
     clearInputMessageAndFocus()
   }
 }
+// скрыл сообщение доступа к задаче в инспекторе
+
+// const selectAccess = (emp) => {
+//   if (currentState.value !== 'accessSelection') return
+//   messages.value.push({
+//     message: emp.name,
+//     messageFromInspector: false,
+//     createDate: new Date().toISOString()
+//   })
+//   if (currentState.value === 'accessSelection') {
+//     if (emp.uid !== 'no_set') delegatedTask.emails = emp.email
+// messages.value.push({
+//   message: 'На этом все, я поручу задачу?',
+//   messageFromInspector: true,
+//   type: 'confirmDelegate',
+//   createDate: new Date().toISOString()
+// })
+// currentState.value = 'confirmDelegate'
+//   clearInputMessageAndFocus()
+// }
+// }
 
 const selectTime = (time) => {
   if (currentState.value !== 'timeSelection') return
@@ -422,12 +430,12 @@ const selectTime = (time) => {
   if (currentState.value === 'timeSelection') {
     delegatedTask.customer_date = time.date
     messages.value.push({
-      message: 'В какой проект поместить задачу?',
+      message: 'Нет проблем, проставим дополнительные параметры?',
       messageFromInspector: true,
-      type: 'projectSelection',
+      type: 'confirmParams',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'projectSelection'
+    currentState.value = 'confirmParams'
   }
 }
 
@@ -440,12 +448,12 @@ const actionConfirmNewParams = (confirmed) => {
       createDate: new Date().toISOString()
     })
     messages.value.push({
-      message: 'Супер, что насчет меток?',
+      message: 'В какой проект поместить задачу?',
       messageFromInspector: true,
-      type: 'tagSelection',
+      type: 'projectSelection',
       createDate: new Date().toISOString()
     })
-    currentState.value = 'tagSelection'
+    currentState.value = 'projectSelection'
     clearInputMessageAndFocus()
   } else {
     messages.value.push({
