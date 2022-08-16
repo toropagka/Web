@@ -16,7 +16,7 @@ import { NOTIFICATION_TASKS_GENERATE, NOTIFICATION_TASKS_CLEAR } from '@/store/a
 export default {
   computed: {
     notificationTasks () {
-      return this.$store.state.notificationTasks.notificationTasks
+      return this.$store.state.notificationtasks.notificationtasks
     }
   },
   mounted () {
@@ -24,7 +24,7 @@ export default {
     store.dispatch(NOTIFICATION_TASKS_GENERATE)
   },
   unmounted () {
-    this.$store.commit(NOTIFICATION_TASKS_CLEAR)
+    this.$store.dispatch(NOTIFICATION_TASKS_CLEAR)
   }
 }
 </script>

@@ -278,6 +278,9 @@ export default {
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
     },
+    sendTaskMsg (msg) {
+      this.$emit('sendTaskMsg', msg)
+    },
     dateToTimeFormat (date) {
       const hours = this.pad2(date.getHours())
       const seconds = this.pad2(date.getSeconds())

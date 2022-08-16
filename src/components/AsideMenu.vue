@@ -51,6 +51,7 @@
             v-else
             :key="`b-${index}`"
             :menu="menuGroup"
+            :assigments="assigments"
             @menu-click="menuClick"
           />
         </template>
@@ -159,7 +160,7 @@
               </svg>
             </div>
             <p class="font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
-              {{ board.name }}
+              {{ board.name.length < 26 ? board.name : board.name.substring(0, 26) + '...' }}
             </p>
           </li>
         </ul>
@@ -264,6 +265,9 @@ export default {
         }
       })
       return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
+    },
+    assigments () {
+      return { delegate_to_me: this.storeNavigator.delegate_to_me, delegate_iam: this.storeNavigator.delegate_iam }
     }
   },
   mounted () {

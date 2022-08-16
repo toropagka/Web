@@ -113,6 +113,7 @@
         @nodeOpened="nodeExpanding"
         @nodeFocus="nodeSelected"
         @nodeDragend="nodeDragEnd"
+        @nodeBlur="returnFocus"
       >
         <template #before-input="props">
           <div
@@ -756,6 +757,11 @@ export default {
           }
         })
     },
+    returnFocus () {
+      this.$nextTick(() => {
+        document.getElementById(this.lastSelectedTaskUid).parentElement.focus({ preventScroll: false })
+      })
+    },
     countChecklist (checklist) {
       const data = { done: 0, undone: 0 }
       // нормализуем перенос сторки (разные на windows и на mac)
@@ -1141,20 +1147,25 @@ export default {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
           // получаем массив ключей и переворачиваем, чтобы получить текущий
           const tasksKeyArray = Object.keys(this?.storeTasks)
-          const nextTaskIndex = tasksKeyArray.reverse().indexOf(task.uid) + 1
+          const currentSelectedTaskIndex = tasksKeyArray.reverse().indexOf(task.uid)
+          const nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
 
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
+            this.$store.commit(TASK.REMOVE_TASK, task.uid)
+            this.$store.dispatch(TASK.DAYS_WITH_TASKS)
             // получаем юид и его дату
-            const nextTaskUid = tasksKeyArray[nextTaskIndex]
-            const nextTaskData = this.storeTasks[nextTaskUid]
+            const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
+            const nextSelectedTaskData = this.storeTasks[nextSelectedTaskUid]
+
+            if (!nextSelectedTaskUid || !nextSelectedTaskData) {
+              this.$store.dispatch('asidePropertiesToggle', false)
+              return
+            }
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(nextTaskUid || nextTaskUid - 1).focus({ preventScroll: false })
-            this.nodeSelected({ id: nextTaskData.id, info: nextTaskData.info })
-            this.lastSelectedTaskUid = nextTaskUid
+            document.getElementById(nextSelectedTaskUid || nextSelectedTaskUid - 1).focus({ preventScroll: false })
+            this.nodeSelected({ id: nextSelectedTaskData.id, info: nextSelectedTaskData.info })
+            this.lastSelectedTaskUid = nextSelectedTaskUid
           })
-          this.$store.commit(TASK.REMOVE_TASK, task.uid)
-          this.$store.dispatch('asidePropertiesToggle', false)
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
         }
       })
     }
