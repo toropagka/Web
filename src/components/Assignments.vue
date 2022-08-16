@@ -80,7 +80,7 @@
       <img
         class="mx-auto mt-10"
 
-        width="320"
+        width="280"
         height="314"
 
         src="@/assets/images/assigments.svg"
