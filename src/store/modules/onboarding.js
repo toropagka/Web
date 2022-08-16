@@ -48,9 +48,7 @@ const mutations = {
     state.visitedModals = []
     state.showModals = true
     state.hideNavBar = true
-
     state.justRegistered = true
-    state.showModals = true
     state.showOnboarding = true
   },
   [USER_VIEWED_MODAL]: (state, data) => {

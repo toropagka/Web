@@ -405,6 +405,9 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
+      for (let i = 0; i < this.slides.length; i++) {
+        console.log(this.slides[i].name === 'welcome')
+      }
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return

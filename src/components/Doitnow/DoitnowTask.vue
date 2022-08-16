@@ -21,6 +21,8 @@
         :title="task.title"
         :text="task.text"
         :video="task.video"
+        :name="task.name"
+        @nextTask="nextTask"
       />
       <div
         v-else
