@@ -43,7 +43,6 @@ const updateSettings = () => {
       <div class="flex mt-[15px]">
         <div class="checkbox">
           <input
-            v-if="settings?.add_task_to_begin"
             id="opt_1"
             v-model="settings.add_task_to_begin"
             type="checkbox"
@@ -62,7 +61,6 @@ const updateSettings = () => {
       <div class="flex mt-2">
         <div class="checkbox">
           <input
-            v-if="settings?.nav_show_overdue"
             id="opt_4"
             v-model="settings.nav_show_overdue"
             type="checkbox"
