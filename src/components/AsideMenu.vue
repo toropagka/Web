@@ -206,8 +206,7 @@ export default {
       showFreeModal: false,
       modalOneActive: false,
       lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
-      currentSettingsTab: 'account',
-      lastSelectedItem: null
+      currentSettingsTab: 'account'
     }
   },
   computed: {
@@ -299,7 +298,7 @@ export default {
     // TODO: clean up messy logic
     menuClick (event, item) {
       // Если уже находимся на этой вкладке игнорировать дальнейший код
-      if (this.checkOnWhichTab(item.uid)) {
+      if (this.checkOnWhichTab(item)) {
         return
       }
 
@@ -444,7 +443,7 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     },
     goToBoard (board) {
-      if (this.checkOnWhichTab(board.uid)) {
+      if (this.checkOnWhichTab(board)) {
         return
       }
 
@@ -488,7 +487,7 @@ export default {
       })
     },
     goToProject (project) {
-      if (this.checkOnWhichTab(project.uid)) {
+      if (this.checkOnWhichTab(project)) {
         return
       }
 
@@ -531,10 +530,9 @@ export default {
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     checkOnWhichTab (item) {
-      if (this.lastSelectedItem === item) {
+      if (this.navStack[this.navStack.length - 1]?.value.uid === item.uid || this.navStack[this.navStack.length - 1]?.uid === item.uid || this.navStack[this.navStack.length - 1]?.name === item.label || this.navStack[this.navStack.length - 1]?.name === item.name) {
         return true
       }
-      this.lastSelectedItem = item
     },
     checkOnWhichDay (day) {
       this.currentDay = day.id
@@ -551,7 +549,7 @@ export default {
       //
     },
     assigmentsClick (user) {
-      if (this.checkOnWhichTab(user.uid)) {
+      if (this.checkOnWhichTab(user)) {
         return
       }
 
@@ -574,6 +572,7 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+      this.$store.state.navbar.lastSelectedAsideTab = user.uid
     }
   }
 }
