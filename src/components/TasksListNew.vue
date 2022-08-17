@@ -109,7 +109,6 @@
         @nodeOpened="nodeExpanding"
         @nodeFocus="nodeSelected"
         @nodeDragend="nodeDragEnd"
-        @nodeBlur="returnFocus"
       >
         <template #before-input="props">
           <div
