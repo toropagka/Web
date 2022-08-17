@@ -274,6 +274,7 @@ import * as DEPARTMENT from '@/store/actions/departments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import * as SLIDES from '@/store/actions/slides.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
@@ -485,6 +486,7 @@ export default {
             }
           })
           .then((resp) => {
+            this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: false })
             console.log('onAddNewEmp', resp)
           })
       }

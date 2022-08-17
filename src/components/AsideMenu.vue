@@ -306,6 +306,8 @@ export default {
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
       }
+
+      console.log(item)
       // скрывать навбар при онбординге
       // if (this.$store.state.onboarding.visitedModals) {
       //   this.$store.state.onboarding.hideNavBar = false
