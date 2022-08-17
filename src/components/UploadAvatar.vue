@@ -40,6 +40,7 @@
 import Overlay from '@/components/modals/Overlay'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
+import * as SLIDES from '@/store/actions/slides.js'
 import { USER_CHANGE_PHOTO } from '@/store/actions/user'
 
 export default {
@@ -72,6 +73,9 @@ export default {
           file: formData
         }
         this.$store.dispatch(USER_CHANGE_PHOTO, data)
+          .then((resp) => {
+            this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addAvatar', visible: false })
+          })
         this.$emit('closeWindow')
       }, 'image/jpeg')
     },

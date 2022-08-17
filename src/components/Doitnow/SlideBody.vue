@@ -67,6 +67,7 @@ export default {
   emits: ['nextTask'],
   methods: {
     clickAddAvatar () {
+      this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'settings'
       this.$router.push('/settings')
       this.$store.commit(NAVIGATOR_SUCCESS)
