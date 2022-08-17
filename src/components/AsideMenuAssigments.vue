@@ -28,11 +28,6 @@
           >
             {{ iAm.name }}
           </p>
-          <p
-            class="font-roboto text-[12px] leading-[14px] truncate"
-          >
-            {{ iAm.email }}
-          </p>
         </div>
       </div>
     </div>
@@ -61,11 +56,6 @@
             class="font-roboto text-[13px] leading-[15px] font-medium truncate"
           >
             {{ toMe.name }}
-          </p>
-          <p
-            class="font-roboto text-[12px] leading-[14px] truncate"
-          >
-            {{ toMe.email }}
           </p>
         </div>
       </div>
