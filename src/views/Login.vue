@@ -146,9 +146,12 @@
               v-maska="'+7 (###) ###-##-##'"
               type="text"
               :icon="mdiPhoneOutline"
+              :valid="validatePhone"
               name="phone"
               autocomplete="phone"
               placeholder="Номер телефона"
+              @click="form.phoneTouched = true"
+              @blur="validateAndShowMessage"
             />
           </field>
 
@@ -225,7 +228,8 @@ export default {
         showBackButton: false,
         showPassword: false,
         passwordTouched: false,
-        usernameTouched: false
+        usernameTouched: false,
+        phoneTouched: false
       },
       showValues: {
         showRegisterInputsValue: false,
@@ -240,6 +244,9 @@ export default {
     validateName () {
       return this.form.username.length > 0
     },
+    validatePhone () {
+      return !(this.form.phone.length > 0 && this.form.phone.length < 18)
+    },
     ifSpaceInPassword () {
       return this.form.password[0] === ' ' || this.form.password[this.form.password.length - 1] === ' '
     },
@@ -247,7 +254,7 @@ export default {
       return (!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)
     },
     allFieldsAreValid () {
-      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.form.username.length > 0
+      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.validatePhone && this.form.username.length > 0
     }
   },
   methods: {
@@ -391,6 +398,9 @@ export default {
       } else if (!this.validateName && this.form.usernameTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Впишите имя'
+      } else if (!this.validatePhone && this.form.phoneTouched) {
+        this.form.showError = true
+        this.form.errorMessage = 'Некорректный номер телефона'
       } else if (this.ifEmptyFields) {
         this.form.showError = true
         this.form.errorMessage = 'Для успешной регистрации заполните все поля'

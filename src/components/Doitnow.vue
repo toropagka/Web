@@ -304,7 +304,7 @@ export default {
       this.loadNotifies()
     }
     if (this.justRegistered) {
-      this.slidesCopy = [...this.slides]
+      this.setSlidesCopy()
     }
     if (!this.displayModal) {
       this.loadAllTasks()
@@ -394,9 +394,16 @@ export default {
         }
       })
     },
+    setSlidesCopy () {
+      for (let i = 0; i < this.slides.length; i++) {
+        if (this.slides[i].visible) {
+          this.slidesCopy.push(this.slides[i])
+        }
+      }
+    },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
-      this.slidesCopy = [...this.slides]
+      this.setSlidesCopy()
       this.loadAllTasks()
     },
     readTask: function () {

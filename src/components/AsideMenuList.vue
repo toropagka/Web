@@ -21,7 +21,7 @@ export default {
       default: () => {}
     }
   },
-  emits: ['menu-click'],
+  emits: ['menu-click', 'assigments-click'],
   computed: {
     lastTab () {
       return this.$store.state.navigator.lastTab
@@ -30,6 +30,9 @@ export default {
   methods: {
     menuClick (event, item) {
       this.$emit('menu-click', event, item)
+    },
+    assigmentsClick (item) {
+      this.$emit('assigments-click', item)
     }
   }
 }
@@ -51,6 +54,7 @@ export default {
       <AsideMenuAssigments
         v-if="item.uid === 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0' && lastTab === 'tasks'"
         :assigments="assigments"
+        @assigments-click="assigmentsClick"
       />
     </template>
   </ul>

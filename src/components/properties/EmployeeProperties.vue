@@ -34,6 +34,7 @@
     <input
       v-model="currEmpName"
       type="text"
+      maxlength="50"
       placeholder="Имя сотрудника"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="changeEmpName"
@@ -265,6 +266,9 @@ export default {
         if (reglament.passed?.includes(this.selectedEmployeeUid)) acc[reglament.uid] = reglament
         return acc
       }, {})
+    },
+    storeNavigator () {
+      return this.$store.state.navigator.navigator
     }
   },
   watch: {
@@ -280,8 +284,34 @@ export default {
       console.log(msg, param)
     },
     clickReglament (reglamentUid) {
-      const link = `${window.location.origin}/reglament/${reglamentUid}`
-      window.location = link
+      this.$router.push('/directory')
+      this.closeProperties()
+      this.$store.commit('updateStackWithInitValue', {
+        name: 'Регламенты',
+        key: 'greedSource',
+        greedPath: 'reglaments',
+        value: this.storeNavigator.reglaments?.items
+      })
+      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+      const reglament = this.$store.state.reglaments.reglaments[reglamentUid]
+      this.$store.commit('basic', {
+        key: 'reglamentSource',
+        value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.uid }
+      })
+      const navElem = {
+        name: this.name,
+        key: 'greedSource',
+        uid: this.uid,
+        global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
+        greedPath: 'reglament_content',
+        value: []
+      }
+      this.$store.commit('pushIntoNavStack', navElem)
+      this.$store.commit('basic', { key: 'greedSource', value: reglament })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     },
     removeEmployee () {
       this.showConfirm = false

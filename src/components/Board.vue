@@ -90,7 +90,7 @@
             :class="{ 'draggable-column cursor-move': column.CanEditStage }"
           >
             <p
-              class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px]"
+              class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
               :style="{ color: getContrastYIQ(column.Color) }"
             >
               {{ column.Name }}
@@ -674,9 +674,9 @@ export default {
             }
             console.log('onAddNewCard ok', resp)
             const column = document.getElementById(this.selectedColumn.UID)
-            document.getElementById(resp.data.uid).focus({ preventScroll: false })
 
             column.scrollIntoView({ block: 'end', behavior: 'smooth' })
+            this.selectCard(resp.data)
           })
       }
     },

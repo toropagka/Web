@@ -98,7 +98,7 @@
           class="group flex items-center w-full"
           :class="{ 'justify-between': index === 0, 'mt-[28px]': index !== 0 }"
         >
-          <p class="font-roboto text-[#424242] text-[19px] leading-[22px] font-bold">
+          <p class="font-roboto text-[#424242] text-[19px] leading-[22px] font-bold w-11/12 break-words">
             {{ value.dep }}
           </p>
           <div
@@ -274,6 +274,7 @@ import * as DEPARTMENT from '@/store/actions/departments'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
+import * as SLIDES from '@/store/actions/slides.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 export default {
@@ -485,6 +486,7 @@ export default {
             }
           })
           .then((resp) => {
+            this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: false })
             console.log('onAddNewEmp', resp)
           })
       }
