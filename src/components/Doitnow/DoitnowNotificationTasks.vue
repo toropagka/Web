@@ -10,7 +10,7 @@
         class="justify-center cursor-pointer bg-orange-400 text-white mt-8 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
         @click="gotoReglamentContent"
       >
-        Перейти к регламенту
+        Пройти регламент
       </button>
     </div>
   </div>
