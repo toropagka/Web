@@ -19,7 +19,13 @@
         v-if="showError"
         class="mt-2 mb-[-15px] text-red-500"
       >
-        Поле не должно быть пустым
+        {{ errorText }}
+      </p>
+      <p
+        v-if="showLengthError"
+        class="mt-2 mb-[-15px] text-red-500"
+      >
+        {{ errorText }}
       </p>
     </div>
   </ModalBox>
@@ -52,7 +58,9 @@ export default {
   emits: ['cancel', 'save'],
   data: () => ({
     currentValue: '',
-    showError: false
+    showEmptyError: false,
+    showLengthError: false,
+    errorText: ''
   }),
   watch: {
     show: {
@@ -73,12 +81,19 @@ export default {
     },
     onSave () {
       if (this.currentValue.length === 0) {
-        this.showError = true
+        this.showEmptyError = true
+        this.errorText = 'Поле не должно быть пустым'
+        return
+      }
+      this.showError = false
+      if (this.currentValue.length < 18) {
+        this.showLengthError = true
+        this.errorText = 'Некорректный номер телефона'
         return
       }
       if (this.show) {
         this.$emit('save', this.currentValue)
-        this.showError = false
+        this.showLengthError = false
       }
     }
   }
