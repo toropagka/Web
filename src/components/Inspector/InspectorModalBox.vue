@@ -2,6 +2,7 @@
 import { computed, ref, watch, provide, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { shouldAddTaskIntoList } from '@/websync/utils'
+import * as SLIDES from '@/store/actions/slides.js'
 
 // import JbButton from '@/components/JbButton.vue'
 import CardComponent from '@/components/CardComponent.vue'
@@ -29,7 +30,7 @@ const props = defineProps({
   hasButton: Boolean
 })
 
-const emit = defineEmits(['update:modelValue', 'cancel', 'confirm'])
+const emit = defineEmits(['update:modelValue', 'cancel', 'confirm', 'delegated'])
 
 const value = computed({
   get: () => props.modelValue,
@@ -132,6 +133,9 @@ const createTask = () => {
       uid_customer: delegatedTask.uid_customer,
       is_inspectable: 1,
       taskJson: JSON.stringify(resp.data)
+    }).then(() => {
+      store.commit(SLIDES.CHANGE_VISIBLE, { name: 'delegateTasks', visible: false })
+      emit('delegated')
     })
     // update both, performer and customer in inspector service
     const performer = employees.value[resp.data.uid_performer]
