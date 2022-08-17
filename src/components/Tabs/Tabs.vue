@@ -93,7 +93,6 @@ export default {
     return {
       showInspector: false,
       showFreeModal: false,
-      lastSelectedTabsCode: '',
       tabs: [
         {
           code: 'doitnow',
@@ -326,7 +325,7 @@ export default {
   },
   methods: {
     switchTab (tab) {
-      if (tab.code === this.lastSelectedTabsCode) {
+      if (tab.code === this.lastTab) {
         return
       }
       console.log(tab.code)
