@@ -87,7 +87,7 @@
           class="break-words"
           :for="`project-check-button-${project.uid}`"
         >
-          <span class="max-w-[250px] truncate ... mr-[20px]">
+          <span class="max-w-[250px] ... mr-[20px]">
             {{ project.name }}
           </span>
         </label>
