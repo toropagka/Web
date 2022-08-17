@@ -12,10 +12,6 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <InspectorLimit
-    v-if="showFreeModal"
-    @cancel="showFreeModal = false"
-  />
   <div
     v-if="displayModal"
     class="flex flex-col items-center max-w-[600px] mx-auto"
@@ -324,7 +320,6 @@
 <script>
 import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
-import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 // import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics.vue'
@@ -370,7 +365,6 @@ export default {
     TaskListEdit,
     TasksSkeleton,
     ModalBoxDelete,
-    InspectorLimit,
     EmptyTasksListPics,
     TaskStatus,
     contenteditable,

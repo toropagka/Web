@@ -26,6 +26,10 @@
         >
           Добавить задачу
         </button>
+        <InspectorLimit
+          v-if="showFreeModal"
+          @cancel="showFreeModal = false"
+        />
         <inspector-modal-box
           v-model="showInspector"
           button="warning"
@@ -75,11 +79,14 @@
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
+
 import EventAlert from '@/components/EventAlert.vue'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 export default {
   components: {
     InspectorModalBox,
+    InspectorLimit,
     EventAlert
   },
   data () {
