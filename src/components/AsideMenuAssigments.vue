@@ -51,6 +51,7 @@ export default {
       require: true
     }
   },
+  emits: ['assigments-click'],
   methods: {
     goToAssigment (user) {
       const action = UID_TO_ACTION[user.parentID]
@@ -68,6 +69,7 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+      this.$emit('assigments-click', user)
     }
   }
 }

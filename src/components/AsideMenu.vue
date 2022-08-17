@@ -53,6 +53,7 @@
             :menu="menuGroup"
             :assigments="assigments"
             @menu-click="menuClick"
+            @assigments-click="assigmentsClick"
           />
         </template>
         <ul
@@ -320,8 +321,6 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
-      console.log('item', item)
-
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
         const navElem = {
@@ -550,6 +549,9 @@ export default {
     onNewDay () {
       this.$store.commit('updateCalendarToday')
       //
+    },
+    assigmentsClick (user) {
+      this.checkOnWhichTab(user.uid)
     }
   }
 }
