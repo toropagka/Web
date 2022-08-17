@@ -44,6 +44,7 @@
 </template>
 <script>
 import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
+import * as SLIDES from '@/store/actions/slides.js'
 export default {
   props: {
     title: {
@@ -79,6 +80,7 @@ export default {
       this.$store.state.navigator.currentSettingsTab = 'account'
     },
     clickSuccess () {
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: false })
       this.$emit('nextTask')
     }
   }

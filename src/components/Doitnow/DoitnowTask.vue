@@ -17,7 +17,7 @@
     />
     <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
       <SlideBody
-        v-if="task.mode === 'slide'"
+        v-if="task.mode === 'slide' && task.visible"
         :title="task.title"
         :text="task.text"
         :video="task.video"
@@ -217,10 +217,10 @@
               class="flex mb-2"
             >
               <span class="text-black overflow-hidden truncate">{{
-                  projects[task.uid_project]?.name.length > 99
+                projects[task.uid_project]?.name.length > 99
                   ? projects[task.uid_project]?.name.split('').slice(0,100).join('') + '...'
                   : projects[task.uid_project]?.name
-                }}</span>
+              }}</span>
             </div>
           </div>
         </div>
