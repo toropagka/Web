@@ -216,7 +216,11 @@
             <div
               class="flex mb-2"
             >
-              <span class="text-black overflow-hidden truncate">{{ projects[task.uid_project]?.name }}</span>
+              <span class="text-black overflow-hidden truncate">{{
+                  projects[task.uid_project]?.name.length > 99
+                  ? projects[task.uid_project]?.name.split('').slice(0,100).join('') + '...'
+                  : projects[task.uid_project]?.name
+                }}</span>
             </div>
           </div>
         </div>
@@ -928,9 +932,6 @@ export default {
         _isEditing: false
       }
       this.$emit('changeValue', data)
-    },
-    print (message) {
-      alert(message)
     },
     showChat () {
       if (!this.isChatVisible) {
