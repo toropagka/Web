@@ -59,9 +59,9 @@
         class="grow w-[calc(100%+24px)]"
       >
         <div
-          class="group w-full flex items-center gap-[12px] px-[12px] h-[34px] border border-black/12 rounded-[6px] cursor-pointer"
+          class="group w-full flex items-center gap-[12px] px-[12px] min-h-[34px] border border-black/12 rounded-[6px] cursor-pointer"
         >
-          <div class="grow font-roboto text-[#575758] text-[12px] font-[500]">
+          <div class="grow font-roboto text-[#575758] text-[12px] font-[500] w-11/12 break-words">
             {{ selectedColumnName }}
           </div>
           <svg
