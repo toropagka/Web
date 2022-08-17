@@ -533,11 +533,10 @@ export default {
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
-      if (lastNavStack?.value.uid === item.uid ||
+      if (lastNavStack?.value?.uid === item.uid ||
         lastNavStack?.uid === item.uid ||
         lastNavStack?.name === item.label ||
         (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
-        console.log('nen')
         return true
       }
     },
