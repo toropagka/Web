@@ -20,7 +20,7 @@
         class="popper"
         @click="close"
       >
-        <div class="text-white body-popover-custom max-w-[320px] truncate overflow-x-hidden">
+        <div class="text-white body-popover-custom max-w-[320px] overflow-auto whitespace-nowrap">
           <div class="container-project-popover">
             <TaskPropsButtonProjectItem
               v-for="(project, index) in myProjects"
@@ -83,7 +83,7 @@
           fill-opacity="0.5"
         />
       </svg>
-      <span class="truncate ... max-w-[300px]">
+      <span class="... max-w-[300px]">
         {{ projects[selectedProject]?.name ?? '???' }}
       </span>
       <button

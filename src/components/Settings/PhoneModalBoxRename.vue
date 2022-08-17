@@ -14,12 +14,13 @@
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         @keyup.enter="onSave"
         @keyup.esc="onCancel"
+        @blur="validateAndShowMessage"
       >
       <p
         v-if="showError"
         class="mt-2 mb-[-15px] text-red-500"
       >
-        Поле не должно быть пустым
+        {{ errorText }}
       </p>
     </div>
   </ModalBox>
@@ -52,8 +53,14 @@ export default {
   emits: ['cancel', 'save'],
   data: () => ({
     currentValue: '',
-    showError: false
+    showError: false,
+    errorText: 'Некорректный номер телефона'
   }),
+  computed: {
+    validatePhone () {
+      return (!(this.currentValue.length > 0 && this.currentValue.length < 18))
+    }
+  },
   watch: {
     show: {
       immediate: true,
@@ -68,17 +75,23 @@ export default {
     }
   },
   methods: {
+    validateAndShowMessage () {
+      if (this.validatePhone === false) {
+        this.showError = true
+        return
+      }
+      this.showError = false
+    },
     onCancel () {
       if (this.show) this.$emit('cancel')
     },
     onSave () {
-      if (this.currentValue.length === 0) {
-        this.showError = true
+      if (this.validatePhone === false) {
         return
       }
       if (this.show) {
         this.$emit('save', this.currentValue)
-        this.showError = false
+        this.showLengthError = false
       }
     }
   }

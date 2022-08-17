@@ -206,8 +206,7 @@ export default {
       showFreeModal: false,
       modalOneActive: false,
       lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
-      currentSettingsTab: 'account',
-      lastSelectedItem: null
+      currentSettingsTab: 'account'
     }
   },
   computed: {
@@ -299,13 +298,15 @@ export default {
     // TODO: clean up messy logic
     menuClick (event, item) {
       // Если уже находимся на этой вкладке игнорировать дальнейший код
-      if (this.checkOnWhichTab(item.uid)) {
+      if (this.checkOnWhichTab(item)) {
         return
       }
-
+      this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
       }
+
+      console.log(item)
       // скрывать навбар при онбординге
       // if (this.$store.state.onboarding.visitedModals) {
       //   this.$store.state.onboarding.hideNavBar = false
@@ -444,7 +445,7 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     },
     goToBoard (board) {
-      if (this.checkOnWhichTab(board.uid)) {
+      if (this.checkOnWhichTab(board)) {
         return
       }
 
@@ -488,7 +489,7 @@ export default {
       })
     },
     goToProject (project) {
-      if (this.checkOnWhichTab(project.uid)) {
+      if (this.checkOnWhichTab(project)) {
         return
       }
 
@@ -531,10 +532,13 @@ export default {
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     checkOnWhichTab (item) {
-      if (this.lastSelectedItem === item) {
+      const lastNavStack = this.navStack[this.navStack.length - 1]
+      if (lastNavStack?.value?.uid === item.uid ||
+        lastNavStack?.uid === item.uid ||
+        lastNavStack?.name === item.label ||
+        (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
         return true
       }
-      this.lastSelectedItem = item
     },
     checkOnWhichDay (day) {
       this.currentDay = day.id
@@ -551,7 +555,30 @@ export default {
       //
     },
     assigmentsClick (user) {
-      this.checkOnWhichTab(user.uid)
+      if (this.checkOnWhichTab(user)) {
+        return
+      }
+
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
+
+      const action = UID_TO_ACTION[user.parentID]
+      if (!action) {
+        console.error('UID_TO_ACTION in undefined', user.parentID)
+        return
+      }
+      this.$store.dispatch(action, user.email)
+      const navElem = {
+        name: user.name,
+        key: 'taskListSource',
+        value: { uid: user.parentID, param: user.email }
+      }
+      this.$store.commit('updateStackWithInitValue', navElem)
+      this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+      this.$store.state.navbar.lastSelectedAsideTab = user.uid
     }
   }
 }

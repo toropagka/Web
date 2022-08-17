@@ -1049,6 +1049,11 @@ export default {
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
+            .then(() => {
+              setTimeout(() => {
+                document.getElementById(arg.id).scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+              }, 300)
+            })
         })
       }
     },

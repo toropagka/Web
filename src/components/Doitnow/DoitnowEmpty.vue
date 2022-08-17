@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="h-full flex items-center">
     <div class="max-w-xl mx-auto">
       <img
-        class="mx-auto mt-10"
+        class="mx-auto"
         width="320"
         height="314"
         src="@/assets/images/emptydoitnow.png"

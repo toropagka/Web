@@ -49,7 +49,7 @@ export default {
                   <p class="text-sm font-semibold text-gray-500">
                     {{ notification.text }}
                   </p>
-                  <div class="flex items-center mt-3">
+                  <div class="flex items-start mt-3">
                     <img
                       v-if="employees[notification.task.uid_customer]"
                       :src="employees[notification.task.uid_customer].fotolink"
@@ -61,7 +61,7 @@ export default {
                       class="text-sm font-semibold text-blue-500"
                       :href="currentLocation + 'task/' + notification.task.uid"
                     >
-                      {{ notification.task.name }}
+                      {{ notification.task.name.length < 150 ? notification.task.name : notification.task.name.substring(0, 149) + '...' }}
                     </a>
                   </div>
                 </div>

@@ -231,6 +231,8 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 
+import * as SLIDES from '@/store/actions/slides.js'
+
 export default {
   components: {
     NavBarButtonsReglament,
@@ -690,6 +692,7 @@ export default {
         this.isPassed = resp.data.is_passed
         this.disableButton = false
         this.completeText = 'Завершить'
+        this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
       })
     },
     addReglamentEditor (email) {

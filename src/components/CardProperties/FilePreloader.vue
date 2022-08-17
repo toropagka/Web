@@ -75,7 +75,7 @@ const loadFileFromInternet = () => {
           {{ props.fileSize }}
         </p>
         <p
-          class="font-[700] text-[11px] leading-[13px] group-hover:hidden min-w-[30px]"
+          class="font-[700] ml-2 text-[11px] leading-[13px] group-hover:hidden min-w-[30px]"
           style="color: rgba(0, 0, 0, 0.4);"
         >
           {{ props.fileDateCreate }}
@@ -86,7 +86,7 @@ const loadFileFromInternet = () => {
             @onQuoteMessage="$emit('onQuoteMessage')"
             @onDeleteMessage="$emit('onDeleteMessage')"
           >
-            <div class="min-w-[30px] min-h-[14px] flex cursor-pointer items-end justify-center">
+            <div class="min-w-[30px] ml-2 min-h-[14px] flex cursor-pointer items-end justify-center">
               <svg
                 width="14"
                 height="4"

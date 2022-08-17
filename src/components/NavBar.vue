@@ -170,7 +170,7 @@ export default {
     </div>
     <div
       v-if="$store.state.onboarding.hideNavBar === false"
-      class="nav-scroll flex-wrap"
+      class="nav-scroll flex-wrap overflow-scroll scroll-style"
     >
       <nav-bar-item
         v-for="(navItem, index) in navStack"

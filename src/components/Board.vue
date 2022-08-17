@@ -674,9 +674,9 @@ export default {
             }
             console.log('onAddNewCard ok', resp)
             const column = document.getElementById(this.selectedColumn.UID)
-            document.getElementById(resp.data.uid).focus({ preventScroll: false })
 
             column.scrollIntoView({ block: 'end', behavior: 'smooth' })
+            this.selectCard(resp.data)
           })
       }
     },
