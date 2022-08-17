@@ -26,13 +26,12 @@
       />
       <div
         v-else
-        class="flex mx-[30px] justify-between items-center mb-6 p-2 rounded-[8px]"
+        class="flex mr-[30px] justify-between items-center mb-6 p-2 rounded-[8px]"
         :style="{ backgroundColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : '', color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
       >
         <!-- task info/status -->
         <div class="flex items-center -ml-2">
           <TaskStatus
-            class="pl-2"
             :task="task"
             @changeStatus="changeStatus"
           />
