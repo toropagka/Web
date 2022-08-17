@@ -1,10 +1,18 @@
 <template>
-  <div
-    class="px-5"
-  >
-    <button @click.stop="gotoReglamentContent">
-      Пройти регламент "{{ name }}"
-    </button>
+  <div class="flex px-5 justify-between">
+    <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
+      <div
+        class="taskName ring-0 outline-none max-w-7xl mt-0.5 overflow-x-hidden"
+      >
+        Пройти регламент "{{ name }}"
+      </div>
+      <button
+        class="justify-center cursor-pointer bg-orange-400 text-white mt-8 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+        @click="gotoReglamentContent"
+      >
+        Пройти регламент
+      </button>
+    </div>
   </div>
 </template>
 
@@ -28,6 +36,9 @@ export default {
   methods: {
     gotoReglamentContent () {
       this.$router.push('/directory')
+      localStorage.setItem('lastTab', 'directory')
+      this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
+      this.$store.commit('NAVIGATOR_SUCCESS')
       this.$store.commit('updateStackWithInitValue', {
         name: 'Регламенты',
         key: 'greedSource',

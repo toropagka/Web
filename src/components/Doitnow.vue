@@ -36,7 +36,7 @@
     </div>
   </div>
   <div
-    v-else-if="tasksCount && !isLoading"
+    v-else-if="tasksCount && !isLoading && isNotifiesLoaded"
     class="flex items-center pt-[70px] mb-5 justify-between"
   >
     <!-- header -->
@@ -66,7 +66,7 @@
   />
   <transition :name="taskTransition">
     <div
-      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid"
+      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid && !isNotify"
       class="px-5"
     >
       <a
@@ -272,7 +272,6 @@ export default {
   mounted: function () {
     const navLoaded = this.$store.state.navigator.hasLoadedOnce
     const userLoaded = this.$store.state.user.hasLoadedOnce
-    // this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
     // сначала запрашиваем пользователя, потом регламенты, потом навигатор
     if (!userLoaded || !navLoaded) {
       this.$store.dispatch(USER_REQUEST).then(() => {
