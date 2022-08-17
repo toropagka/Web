@@ -58,6 +58,7 @@ const loadFileFromInternet = () => {
       <p
         v-if="!fileIsDownloaded"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer"
+        style="word-break: break-word"
         @click.stop="loadFileFromInternet"
       >
         {{ props.fileName }}
