@@ -14,7 +14,7 @@
   </div>
   <div
     v-if="video"
-    class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
+    class="flex items-end font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
   >
     <iframe
       width="560"
@@ -26,6 +26,13 @@
       allowfullscreen
       class="border rounded-xl"
     />
+    <button
+      v-if="name === 'addEmployees'"
+      class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      @click="clickAddEmployees"
+    >
+      Добавить сотрудников
+    </button>
   </div>
   <button
     v-if="name === 'welcome'"
@@ -65,6 +72,11 @@ export default {
     }
   },
   emits: ['nextTask'],
+  computed: {
+    storeNavigator () {
+      return this.$store.getters.sortedNavigator
+    }
+  },
   methods: {
     clickAddAvatar () {
       this.$emit('nextTask')
@@ -79,10 +91,29 @@ export default {
       })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'settings' })
       this.$store.state.navigator.currentSettingsTab = 'account'
+      localStorage.setItem('lastTab', 'settings')
     },
     clickSuccess () {
       this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: false })
       this.$emit('nextTask')
+    },
+    clickAddEmployees () {
+      this.$emit('nextTask')
+      this.$store.state.navigator.lastTab = 'directory'
+      this.$router.push('/directory')
+      this.$store.commit(NAVIGATOR_SUCCESS)
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
+      const navElem = {
+        name: 'Сотрудники',
+        key: 'greedSource',
+        greedPath: 'new_emps',
+        value: this.storeNavigator.new_emps
+      }
+      this.$store.commit('updateStackWithInitValue', navElem)
+      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_emps })
+      this.$store.state.navigator.currentSettingsTab = 'directory'
+      localStorage.setItem('lastTab', 'directory')
     }
   }
 }
