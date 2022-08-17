@@ -532,7 +532,12 @@ export default {
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     checkOnWhichTab (item) {
-      if (this.navStack[this.navStack.length - 1]?.value.uid === item.uid || this.navStack[this.navStack.length - 1]?.uid === item.uid || this.navStack[this.navStack.length - 1]?.name === item.label || this.navStack[this.navStack.length - 1]?.name === item.name) {
+      const lastNavStack = this.navStack[this.navStack.length - 1]
+      if (lastNavStack?.value.uid === item.uid ||
+        lastNavStack?.uid === item.uid ||
+        lastNavStack?.name === item.label ||
+        (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
+        console.log('nen')
         return true
       }
     },
