@@ -36,6 +36,8 @@ export default {
   methods: {
     gotoReglamentContent () {
       this.$router.push('/directory')
+      localStorage.setItem('lastTab', 'directory')
+      this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.commit('NAVIGATOR_SUCCESS')
       this.$store.commit('updateStackWithInitValue', {
         name: 'Регламенты',

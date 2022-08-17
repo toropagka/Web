@@ -349,7 +349,7 @@ const mutations = {
       state.menu.push([
         {
           label: 'Сотрудники',
-          uid: resp.data.emps.uid,
+          uid: resp?.data?.emps?.uid,
           bold: false,
           type: 'greed',
           path: 'new_emps',

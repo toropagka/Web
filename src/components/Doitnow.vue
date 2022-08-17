@@ -272,7 +272,6 @@ export default {
   mounted: function () {
     const navLoaded = this.$store.state.navigator.hasLoadedOnce
     const userLoaded = this.$store.state.user.hasLoadedOnce
-    // this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
     // сначала запрашиваем пользователя, потом регламенты, потом навигатор
     if (!userLoaded || !navLoaded) {
       this.$store.dispatch(USER_REQUEST).then(() => {
