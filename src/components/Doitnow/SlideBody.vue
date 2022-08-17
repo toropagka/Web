@@ -34,8 +34,16 @@
   >
     Понятно
   </button>
+  <button
+    v-if="name === 'addAvatar'"
+    class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+    @click="clickAddAvatar"
+  >
+    Загрузить
+  </button>
 </template>
 <script>
+import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
 export default {
   props: {
     title: {
@@ -57,9 +65,21 @@ export default {
   },
   emits: ['nextTask'],
   methods: {
+    clickAddAvatar () {
+      this.$store.state.navigator.lastTab = 'settings'
+      this.$router.push('/settings')
+      this.$store.commit(NAVIGATOR_SUCCESS)
+      this.$store.commit('updateStackWithInitValue', {
+        name: 'Аккаунт',
+        value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
+        typeVal: new Date(),
+        type: 'account'
+      })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'settings' })
+      this.$store.state.navigator.currentSettingsTab = 'account'
+    },
     clickSuccess () {
       this.$emit('nextTask')
-      this.$store.state.slides.slides[0].splice()
     }
   }
 }

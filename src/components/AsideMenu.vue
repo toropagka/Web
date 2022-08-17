@@ -53,6 +53,7 @@
             :menu="menuGroup"
             :assigments="assigments"
             @menu-click="menuClick"
+            @assigments-click="assigmentsClick"
           />
         </template>
         <ul
@@ -267,7 +268,7 @@ export default {
       return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
     },
     assigments () {
-      return { delegate_to_me: this.storeNavigator.delegate_to_me, delegate_iam: this.storeNavigator.delegate_iam }
+      return { delegate_iam: this.storeNavigator.delegate_iam, delegate_to_me: this.storeNavigator.delegate_to_me }
     }
   },
   mounted () {
@@ -319,8 +320,6 @@ export default {
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-
-      console.log('item', item)
 
       if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
@@ -550,6 +549,9 @@ export default {
     onNewDay () {
       this.$store.commit('updateCalendarToday')
       //
+    },
+    assigmentsClick (user) {
+      this.checkOnWhichTab(user.uid)
     }
   }
 }

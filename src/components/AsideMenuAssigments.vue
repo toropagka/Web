@@ -2,74 +2,40 @@
   <div
     class="px-[16px]"
   >
-    <div v-if="assigments.delegate_iam.items.length">
-      <p class="ml-[10px] my-2 font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
-        {{ assigments.delegate_iam.name }}:
-      </p>
+    <template v-for="delegate in assigments">
       <div
-        v-for="iAm in assigments.delegate_iam.items"
-        :key="iAm.uid"
-        class="ml-[6px] flex items-center h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
-        @click="goToAssigment(iAm)"
+        v-if="delegate.items.length"
+        :key="delegate.name"
       >
-        <div>
-          <img
-            :src="iAm.fotolink"
-            :alt="iAm.name"
-            height="30"
-            width="30"
-            class="rounded-[6px] border-2"
-            style="border-color: rgb(63, 191, 100);"
-          >
-        </div>
-        <div class="flex-initial ml-[10px] overflow-hidden w-full">
-          <p
-            class="font-roboto text-[13px] leading-[15px] font-medium truncate"
-          >
-            {{ iAm.name }}
-          </p>
-          <p
-            class="font-roboto text-[12px] leading-[14px] truncate"
-          >
-            {{ iAm.email }}
-          </p>
+        <p class="ml-[10px] my-2 font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
+          {{ delegate.name }}:
+        </p>
+        <div
+          v-for="item in delegate.items"
+          :key="item.uid"
+          class="ml-[6px] flex items-center h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
+          @click="goToAssigment(item)"
+        >
+          <div>
+            <img
+              :src="item.fotolink"
+              :alt="item.name"
+              height="30"
+              width="30"
+              class="rounded-[6px] border-2"
+              :style="[delegate.uid === assigments.delegate_iam.uid ? {'border-color': 'rgb(63, 191, 100)'} : {'border-color': 'rgb(236, 69, 46)'}]"
+            >
+          </div>
+          <div class="flex-initial ml-[10px] overflow-hidden w-full">
+            <p
+              class="font-roboto text-[13px] leading-[15px] font-medium truncate"
+            >
+              {{ item.name }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-    <div v-if="assigments.delegate_to_me.items.length">
-      <p class="ml-[10px] my-2 font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
-        {{ assigments.delegate_to_me.name }}:
-      </p>
-      <div
-        v-for="toMe in assigments.delegate_to_me.items"
-        :key="toMe.uid"
-        class="ml-[6px] flex items-center h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
-        @click="goToAssigment(toMe)"
-      >
-        <div>
-          <img
-            :src="toMe.fotolink"
-            :alt="toMe.name"
-            height="30"
-            width="30"
-            class="rounded-[6px] border-2"
-            style="border-color: rgb(236, 69, 46);"
-          >
-        </div>
-        <div class="flex-initial ml-[10px] overflow-hidden w-full">
-          <p
-            class="font-roboto text-[13px] leading-[15px] font-medium truncate"
-          >
-            {{ toMe.name }}
-          </p>
-          <p
-            class="font-roboto text-[12px] leading-[14px] truncate"
-          >
-            {{ toMe.email }}
-          </p>
-        </div>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -85,6 +51,7 @@ export default {
       require: true
     }
   },
+  emits: ['assigments-click'],
   methods: {
     goToAssigment (user) {
       const action = UID_TO_ACTION[user.parentID]
@@ -102,6 +69,7 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+      this.$emit('assigments-click', user)
     }
   }
 }
