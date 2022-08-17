@@ -1,3 +1,5 @@
+import * as SLIDES from '@/store/actions/slides.js'
+
 const state = {
   slides: [
     {
@@ -7,7 +9,8 @@ const state = {
       text: `ЛидерТаск – это система для совместной работы в команде, которая: <ul class="list-['-'] pl-8"><li class="pl-2"> запишет и сохранит все задачи;
         проекты, дела и встречи </li><li class="pl-2"> проследит за выполнением ваших поручений сотрудникам; </li><li class="pl-2"> будет вести статистику;
         каждого участника команды </li><li class="pl-2"> автоматизирует внедрение новых сотрудников; </li><li class="pl-2"> и многое другое </li></ul>`,
-      video: 'https://www.youtube.com/embed/FbdQZihaWqQ'
+      video: 'https://www.youtube.com/embed/FbdQZihaWqQ',
+      visible: JSON.parse(localStorage.getItem('slides'))?.welcome ?? true
     },
     {
       name: 'addAvatar',
@@ -16,7 +19,8 @@ const state = {
       text: `<div class="mb-[25px]">
       1. Аватар поможет вашим коллегам быстрее найти Вас в списках (особенно, когда в вашей команде есть сотрудники с одинаковыми именами)<br>
       2. Это просто эстетично и гораздо лучше стандартной серой картинки`,
-      video: ''
+      video: '',
+      visible: JSON.parse(localStorage.getItem('slides'))?.addAvatar ?? true
     },
     {
       name: 'addEmployees',
@@ -26,7 +30,8 @@ const state = {
       <p class="mt-1 mb-1">После добавления сотрудников Вы сможете поручать им задачи, а Лидертаск сможет самостоятельно им напоминать звонками, смс и сообщениями в телеграмм о том, чтобы Ваши задачи были сделаны в срок.</p>
       <p class="mt-1 mb-1">Подключить сотрудников.</p>
       <p class="mt-1 mb-1">Посмотрите, как Лидертаск помогает завершать задачи в срок:</p>`,
-      video: 'https://www.youtube.com/embed/Jx-TBirC_Cc'
+      video: 'https://www.youtube.com/embed/Jx-TBirC_Cc',
+      visible: JSON.parse(localStorage.getItem('slides'))?.addEmployees ?? true
     },
     {
       name: 'addReglaments',
@@ -38,7 +43,8 @@ const state = {
       <li>Создаем отделы к которым привязаны эти регламенты</li>
       <li>Добавляем сотрудников в нужные отделы - все теперь Лидертаск сам проследит чтобы все изучили правила и сдали тест на их знание. Все новые сотрудники будут проходить аттестацию по тем правилам, которые определены в его отделе.</li>
       </ol>`,
-      video: ''
+      video: '',
+      visible: JSON.parse(localStorage.getItem('slides'))?.addReglaments ?? true
     },
     {
       name: 'delegateTasks',
@@ -52,14 +58,39 @@ const state = {
       <p class="mt-1 mb-1">ЛидерТаск сам будет следить за выполнением задачи вашим сотрудником и в случае простоя - звонить и писать сообщения сотруднику, если сотрудник не будет отвечать - Вы получите звонок и сообщение.</p>
   <p class="mt-1 mb-1">Таким образом вы сможете принять решение о невыполненной работы ДО дедлайна когда будет уже поздно.</p>
       <p class="mt-1 mb-1">Поручайте задачи в Лидертаск и экономьте свое время - получайте готовые задачи до срока!</p>`,
-      video: ''
+      video: '',
+      visible: JSON.parse(localStorage.getItem('slides'))?.delegateTasks ?? true
     }
   ]
 }
 
 const actions = {}
 
-const mutations = {}
+const mutations = {
+  [SLIDES.CHANGE_VISIBLE]: (state, value) => {
+    for (let i = 0; i < state.slides.length; i++) {
+      if (state.slides[i].name === value.name) {
+        let data = {}
+        try {
+          data = JSON.parse(localStorage.getItem('slides'))
+          data[value.name] = value.visible
+          console.log(data)
+        } catch (e) {
+          console.log(e)
+          data = {
+            welcome: true,
+            addAvatar: true,
+            addEmployees: true,
+            addReglaments: true,
+            delegateTasks: true
+          }
+        }
+        localStorage.setItem('slides', JSON.stringify(data))
+        console.log(JSON.parse(localStorage.getItem('slides')))
+      }
+    }
+  }
+}
 
 export default {
   state,
