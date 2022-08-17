@@ -34,6 +34,7 @@
     <input
       v-model="currEmpName"
       type="text"
+      maxlength="50"
       placeholder="Имя сотрудника"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="changeEmpName"
