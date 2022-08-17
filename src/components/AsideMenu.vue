@@ -302,7 +302,7 @@ export default {
       if (this.checkOnWhichTab(item.uid)) {
         return
       }
-
+      this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
       }
