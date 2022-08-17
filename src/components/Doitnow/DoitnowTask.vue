@@ -199,7 +199,7 @@
               Просрочено:
             </span>
             <div
-              class="flex mb-2"
+              class="flex"
             >
               <span class="text-red-500">{{ plural }}</span>
             </div>
