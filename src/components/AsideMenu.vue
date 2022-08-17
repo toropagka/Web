@@ -551,7 +551,29 @@ export default {
       //
     },
     assigmentsClick (user) {
-      this.checkOnWhichTab(user.uid)
+      if (this.checkOnWhichTab(user.uid)) {
+        return
+      }
+
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
+
+      const action = UID_TO_ACTION[user.parentID]
+      if (!action) {
+        console.error('UID_TO_ACTION in undefined', user.parentID)
+        return
+      }
+      this.$store.dispatch(action, user.email)
+      const navElem = {
+        name: user.name,
+        key: 'taskListSource',
+        value: { uid: user.parentID, param: user.email }
+      }
+      this.$store.commit('updateStackWithInitValue', navElem)
+      this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     }
   }
 }

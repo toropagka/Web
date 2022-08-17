@@ -40,9 +40,6 @@
 </template>
 
 <script>
-import { UID_TO_ACTION } from '@/store/helpers/functions'
-import * as TASK from '@/store/actions/tasks'
-
 export default {
   props: {
     assigments: {
@@ -54,21 +51,6 @@ export default {
   emits: ['assigments-click'],
   methods: {
     goToAssigment (user) {
-      const action = UID_TO_ACTION[user.parentID]
-      if (!action) {
-        console.error('UID_TO_ACTION in undefined', user.parentID)
-        return
-      }
-      this.$store.dispatch(action, user.email)
-      const navElem = {
-        name: user.name,
-        key: 'taskListSource',
-        value: { uid: user.parentID, param: user.email }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$emit('assigments-click', user)
     }
   }
