@@ -54,10 +54,11 @@ const loadFileFromInternet = () => {
         fill-opacity="0.5"
       />
     </svg>
-    <div class="flex flex-col space-y-[2px] max-w-[calc(100%-37px)]">
+    <div class="flex flex-col space-y-[2px]">
       <p
         v-if="!fileIsDownloaded"
-        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer break-words"
+        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer"
+        style="word-break: break-word"
         @click.stop="loadFileFromInternet"
       >
         {{ props.fileName }}
