@@ -22,14 +22,6 @@
       @yes="onDeleteColumn"
     />
     <!-- Изменения названия колонка -->
-    <BoardModalBoxRename
-      v-if="showRenameColumn"
-      :show="showRenameColumn"
-      title="Название колонки"
-      :value="selectedColumnName"
-      @cancel="showRenameColumn = false"
-      @save="onRenameColumn"
-    />
     <BoardModalBoxColor
       v-if="showColorColumn"
       :color="selectedColumnColor"
@@ -89,7 +81,15 @@
             class="px-1 flex justify-between items-start"
             :class="{ 'draggable-column cursor-move': column.CanEditStage }"
           >
+            <BoardInputValue
+              v-if="showRenameColumn && column.UID === selectedColumn.UID"
+              :show="showRenameColumn && column.UID === selectedColumn.UID"
+              :value="selectedColumnName"
+              @cancel="showRenameColumn = false"
+              @save="onRenameColumn"
+            />
             <p
+              v-else
               class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
               :style="{ color: getContrastYIQ(column.Color) }"
             >
@@ -354,7 +354,6 @@ import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import draggable from 'vuedraggable'
 import BoardCard from '@/components/Board/BoardCard.vue'
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 import BoardModalBoxColor from '@/components/Board/BoardModalBoxColor.vue'
 import BoardModalBoxMove from '@/components/Board/BoardModalBoxMove.vue'
@@ -369,7 +368,6 @@ export default {
   components: {
     PopMenu,
     PopMenuItem,
-    BoardModalBoxRename,
     BoardModalBoxDelete,
     BoardModalBoxColor,
     BoardModalBoxMove,
