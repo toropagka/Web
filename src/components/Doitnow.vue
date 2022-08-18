@@ -40,15 +40,9 @@
     class="flex items-center pt-[70px] mb-5 justify-between"
   >
     <!-- header -->
-    <div class="flex items-center">
-      <div
-        class="font-Roboto font-medium text-sm bg-gray-200 px-2.5 mx-5 py-2 rounded-lg flex"
-      >
-        В очереди задач: {{ tasksCount }}
-      </div>
-    </div>
+    <div class="flex items-center" />
     <button
-      class="border border-slate-600 py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
+      class="border border-slate-600 py-3 px-4 flex rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
       @click="nextTask"
     >
       <span class="pr-2">Следующая задача</span>
@@ -65,20 +59,6 @@
     class="mt-20"
   />
   <transition :name="taskTransition">
-    <div
-      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid && !isNotify"
-      class="px-5"
-    >
-      <a
-        class="dark:bg-gray-700 cursor-pointer dark:text-gray-100 rounded-lg text-[14px] breadcrumbs text-[#7E7E80] font-medium"
-        target="_blank"
-        :href="`${currentLocation}/task/${firstTask?.uid}`"
-      >
-        Открыть задачу
-      </a>
-    </div>
-  </transition>
-  <transition :name="taskTransition">
     <div>
       <DoitnowTask
         v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
@@ -92,6 +72,7 @@
         :task-messages="taskMessages.slice().reverse()"
         :employees="employees"
         :projects="projects"
+        :tasks-count="tasksCount"
         @clickTask="onClickTask"
         @nextTask="nextTask"
         @changeValue="changeValue"
