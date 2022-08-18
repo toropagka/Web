@@ -44,27 +44,6 @@ const actions = {
   [NOTIFICATION_TASKS.NOTIFICATION_TASKS_CLEAR]: ({ commit }) => {
     commit(NOTIFICATION_TASKS.NOTIFICATION_TASKS_CLEAR)
     commit(NOTIFICATION_TASKS.NOTIFICATION_TASKS_STATUS_SET, '')
-  },
-  [NOTIFICATION_TASKS.NOTIFICATION_TASKS_CHECK_QUESTIONS]: ({ commit }, reglament) => {
-    return new Promise((resolve, reject) => {
-      store.dispatch('REGLAMENT_REQUEST', reglament.uid)
-        .then(() => {
-          const reglamentQuestions = store.state.reglaments.reglamentQuestions
-          resolve(reglamentQuestions.length)
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    }).then((result) => {
-      if (result !== 0) {
-        const notifyElem = {
-          uid: reglament.uid,
-          name: reglament.name,
-          notify: true
-        }
-        commit(NOTIFICATION_TASKS.NOTIFICATION_TASKS_PUSH, notifyElem)
-      }
-    })
   }
 }
 
