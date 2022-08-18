@@ -309,6 +309,8 @@ export default {
     },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
+      this.$store.state.navigator.lastTab = 'doitnow'
+      localStorage.setItem('lastTab', 'doitnow')
       this.$router.push('/doitnow')
     },
     changeUserPhoto (event) {

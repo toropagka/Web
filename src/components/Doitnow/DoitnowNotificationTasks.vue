@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     gotoReglamentContent () {
+      this.$store.state.reglaments.returnDoitnow = true
       this.$router.push('/directory')
       localStorage.setItem('lastTab', 'directory')
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
