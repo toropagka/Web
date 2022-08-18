@@ -313,6 +313,7 @@
           <BoardInputValue
             v-if="showAddColumn"
             :show="showAddColumn"
+            :maxlength="50"
             class="mt-[4px] h-[40px]"
             @cancel="showAddColumn = false"
             @save="onAddNewColumn"
