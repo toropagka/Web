@@ -42,7 +42,7 @@
         }"
       >
         <template
-          v-for="notify in notificationTasks"
+          v-for="notify in notificationtasks"
           :key="notify.uid"
         >
           <ListBlocItem
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
 import { NOTIFICATION_TASKS_GENERATE, NOTIFICATION_TASKS_CLEAR } from '@/store/actions/notification_tasks'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
@@ -81,6 +80,7 @@ export default {
   },
   data () {
     return {
+      notificationtasks: [],
       listView,
       gridView,
       notifyIcon: {
@@ -110,8 +110,9 @@ export default {
     }
   },
   mounted () {
-    const store = useStore()
-    store.dispatch(NOTIFICATION_TASKS_GENERATE)
+    this.$store.dispatch(NOTIFICATION_TASKS_GENERATE).then(() => {
+      this.notificationtasks = this.notificationTasks
+    })
   },
   unmounted () {
     this.$store.dispatch(NOTIFICATION_TASKS_CLEAR)

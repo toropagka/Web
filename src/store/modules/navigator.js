@@ -62,8 +62,8 @@ const getters = {
   getNavigator: (state) => state.navigator,
   navigatorStatus: (state) => state.status,
   sortedNavigator: (state) => {
-    state.navigator.new_private_boards[1].items.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
-    state.navigator.new_private_projects[1].items.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
+    state.navigator?.new_private_boards[1]?.items.sort((board1, board2) => { return board1?.name.localeCompare(board2?.name) })
+    state.navigator?.new_private_projects[1]?.items.sort((project1, project2) => { return project1?.name.localeCompare(project2?.name) })
     return state.navigator
   }
 }

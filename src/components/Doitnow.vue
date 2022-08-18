@@ -40,15 +40,9 @@
     class="flex items-center pt-[70px] mb-5 justify-between"
   >
     <!-- header -->
-    <div class="flex items-center">
-      <div
-        class="font-Roboto font-medium text-sm bg-gray-200 px-2.5 mx-5 py-2 rounded-lg flex"
-      >
-        В очереди задач: {{ tasksCount }}
-      </div>
-    </div>
+    <div class="flex items-center" />
     <button
-      class="border border-slate-600 py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
+      class="border border-slate-600 py-3 px-4 flex rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
       @click="nextTask"
     >
       <span class="pr-2">Следующая задача</span>
@@ -60,24 +54,6 @@
       />
     </button>
   </div>
-  <DoitnowSkeleton
-    v-if="isLoading && isNotifiesLoaded"
-    class="mt-20"
-  />
-  <transition :name="taskTransition">
-    <div
-      v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid && !isNotify"
-      class="px-5"
-    >
-      <a
-        class="dark:bg-gray-700 cursor-pointer dark:text-gray-100 rounded-lg text-[14px] breadcrumbs text-[#7E7E80] font-medium"
-        target="_blank"
-        :href="`${currentLocation}/task/${firstTask?.uid}`"
-      >
-        Открыть задачу
-      </a>
-    </div>
-  </transition>
   <transition :name="taskTransition">
     <div>
       <DoitnowTask
@@ -92,6 +68,7 @@
         :task-messages="taskMessages.slice().reverse()"
         :employees="employees"
         :projects="projects"
+        :tasks-count="tasksCount"
         @clickTask="onClickTask"
         @nextTask="nextTask"
         @changeValue="changeValue"
@@ -104,6 +81,10 @@
       />
     </div>
   </transition>
+  <DoitnowSkeleton
+    v-if="isLoading"
+    class="mt-20"
+  />
   <DoitnowEmpty
     v-if="(tasksCount === 0 && !isLoading)"
     @clickPlanning="goToNextDay"
@@ -160,7 +141,8 @@ export default {
     overdueReaded: [],
     notifiesCopy: [],
     tasksLoaded: false,
-    childrens: []
+    childrens: [],
+    isNextTaskLoading: false
   }),
   computed: {
     tasksCount () {
@@ -219,7 +201,7 @@ export default {
       return this.$store.state.tasks.tags
     },
     isLoading () {
-      return this.$store.state.tasks.status === 'loading'
+      return (this.$store.state.tasks.status === 'loading' && this.isNotifiesLoaded) || this.isNextTaskLoading
     },
     isNotifiesLoaded () {
       return this.$store.state.notificationtasks.status === 'success'
@@ -237,6 +219,7 @@ export default {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
     },
     notifies () {
+      this.setNotifiesCopy(this.$store.state.notificationtasks.notificationtasks)
       return this.$store.state.notificationtasks.notificationtasks
     },
     isNotify () {
@@ -249,6 +232,7 @@ export default {
   watch: {
     firstTask (newtask, oldtask) {
       if (newtask && newtask.uid && !this.isNotify) {
+        this.isNextTaskLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -261,8 +245,13 @@ export default {
                 this.$store.dispatch(MSG.INSPECTOR_MESSAGES_REQUEST, newtask.uid)
                   .then(() => {
                     this.$store.commit(FILES.MERGE_FILES_WITH_MESSAGES)
+                  }).finally(() => {
+                    this.isNextTaskLoading = false
                   })
               })
+          })
+          .catch(() => {
+            this.isNextTaskLoading = false
           })
         this.$store.dispatch(MSG.INSPECTOR_MESSAGES_REQUEST, newtask.uid)
         this.$store.dispatch(TASK.SUBTASKS_REQUEST, newtask.uid)
@@ -295,13 +284,17 @@ export default {
               initInspectorSocket()
             } catch (e) {}
           }).then(() => {
-            this.loadNotifies()
+            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+              this.notifiesCopy = this.notifies
+            })
           })
         })
       })
     }
     if (userLoaded && navLoaded) {
-      this.loadNotifies()
+      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+        this.notifiesCopy = this.notifies
+      })
     }
     if (this.justRegistered) {
       this.setSlidesCopy()
@@ -381,10 +374,6 @@ export default {
           this.tasksLoaded = true
         })
     },
-    loadNotifies: function () {
-      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
-      this.notifiesCopy = [...this.notifies]
-    },
     linkToTask () {
       copyText(`${window.location.origin}/task/${this.firstTask.uid}`, undefined, (error, event) => {
         if (error) {
@@ -400,6 +389,9 @@ export default {
           this.slidesCopy.push(this.slides[i])
         }
       }
+    },
+    setNotifiesCopy () {
+      this.notifiesCopy = this.notifies
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
