@@ -60,10 +60,6 @@
       />
     </button>
   </div>
-  <DoitnowSkeleton
-    v-if="isLoading && isNotifiesLoaded"
-    class="mt-20"
-  />
   <transition :name="taskTransition">
     <div
       v-if="!(tasksCount === 0 && !isLoading) && !displayModal && firstTask?.uid && !isNotify"
@@ -104,6 +100,10 @@
       />
     </div>
   </transition>
+  <DoitnowSkeleton
+    v-if="isLoading"
+    class="mt-20"
+  />
   <DoitnowEmpty
     v-if="(tasksCount === 0 && !isLoading)"
     @clickPlanning="goToNextDay"
@@ -160,7 +160,8 @@ export default {
     overdueReaded: [],
     notifiesCopy: [],
     tasksLoaded: false,
-    childrens: []
+    childrens: [],
+    isNextTaskLoading: false
   }),
   computed: {
     tasksCount () {
@@ -219,7 +220,7 @@ export default {
       return this.$store.state.tasks.tags
     },
     isLoading () {
-      return this.$store.state.tasks.status === 'loading'
+      return (this.$store.state.tasks.status === 'loading' && this.isNotifiesLoaded) || this.isNextTaskLoading
     },
     isNotifiesLoaded () {
       return this.$store.state.notificationtasks.status === 'success'
@@ -249,6 +250,7 @@ export default {
   watch: {
     firstTask (newtask, oldtask) {
       if (newtask && newtask.uid && !this.isNotify) {
+        this.isNextTaskLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -261,8 +263,13 @@ export default {
                 this.$store.dispatch(MSG.INSPECTOR_MESSAGES_REQUEST, newtask.uid)
                   .then(() => {
                     this.$store.commit(FILES.MERGE_FILES_WITH_MESSAGES)
+                  }).finally(() => {
+                    this.isNextTaskLoading = false
                   })
               })
+          })
+          .catch(() => {
+            this.isNextTaskLoading = false
           })
         this.$store.dispatch(MSG.INSPECTOR_MESSAGES_REQUEST, newtask.uid)
         this.$store.dispatch(TASK.SUBTASKS_REQUEST, newtask.uid)
