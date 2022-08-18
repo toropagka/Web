@@ -92,6 +92,7 @@
       content-type="html"
       :toolbar="'full'"
       class="h-auto mb-5 bg-white"
+      @paste="pasteEvent"
     />
     <div
       class="flex font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium"
@@ -720,6 +721,12 @@ export default {
       }
       this.isTesting = true
       window.scrollTo(0, 0)
+    },
+    pasteEvent (e) {
+      const node = e.target.parentNode.classList.contains('ql-editor') ? e.target : e.target.parentNode
+      setTimeout(() => {
+        node.scrollIntoView({ block: 'center' })
+      }, 1)
     }
   }
 }
@@ -733,5 +740,11 @@ export default {
 }
 .ql-snow .ql-tooltip[data-mode=video]::before {
     content: "Введите ссылку:";
+}
+.ql-clipboard {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 0;
 }
 </style>
