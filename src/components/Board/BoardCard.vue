@@ -241,7 +241,7 @@
         alt="Avatar"
       >
       <span
-        class="ml-1 text-[12px] leading-[14px] text-[#777777] font-['Roboto']"
+        class="ml-1 text-[12px] leading-[14px] text-[#777777] font-['Roboto'] truncate"
       >
         {{ getEmpNameByEmail(card.user) }}
       </span>

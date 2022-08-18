@@ -19,6 +19,7 @@
         <div
           v-if="!pics.includes(fileName.split('.').pop())"
           class="mt-2 text-right font-medium mb-2 flex relative flex-row"
+          style="word-break: break-word"
         >
           <div class="float-left">
             <FileMessage

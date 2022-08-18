@@ -54,7 +54,7 @@
             v-else
             class="text-sm text-center max-w-[176px]"
           >
-            На данный момент у Вас нет меток. Их можно добавить на вкладке "Прочее > Метки"
+            На данный момент у Вас нет меток. Их можно добавить на вкладке "Справочники > Метки"
           </div>
         </div>
       </div>
@@ -104,8 +104,8 @@
           />
         </svg>
         <span class="rounded custom-method truncate max-w-[300px]">{{
-            tags[key]?.name ?? '???'
-          }}</span>
+          tags[key]?.name ?? '???'
+        }}</span>
         <button
           class="btn-close-popover"
           @click.stop="removeTag(key)"
@@ -165,8 +165,8 @@
         </div>
         <div class="text-white body-popover-custom">
           <div
-            class="container-tags-popover"
             v-if="myTags.length"
+            class="container-tags-popover"
           >
             <TaskPropsButtonTagsItem
               v-for="(tag, index) in myTags"
@@ -182,7 +182,7 @@
             v-else
             class="text-sm text-center max-w-[176px]"
           >
-            На данный момент у Вас нет меток. Их можно добавить на вкладке "Прочее > Метки"
+            На данный момент у Вас нет меток. Их можно добавить на вкладке "Справочники > Метки"
           </div>
         </div>
       </div>
