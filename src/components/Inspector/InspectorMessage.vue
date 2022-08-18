@@ -411,7 +411,10 @@ const getValidBackColor = function (backColor) {
                 height="20"
                 class="mr-1 rounded-[8px]"
               >
-              <span class="text-[#4C4C4D] font-[400] text-[13px] leading-[15px]">{{ employee.name }}</span>
+              <span class="text-[#4C4C4D] font-[400] text-[13px] leading-[15px]">{{
+                employee.name.length > 20
+                  ? employee.name.substring(0,20) + '...'
+                  : employee.name }}</span>
             </div>
           </div>
           <p
