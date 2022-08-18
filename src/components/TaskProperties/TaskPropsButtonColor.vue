@@ -71,7 +71,7 @@
       class="mt-3 tags-custom-color dark:bg-gray-800 dark:text-gray-100 project-hover-close"
       :class="{ 'cursor-pointer': canEdit, 'cursor-default': !canEdit }"
     >
-      <span v-if="selectedColor !== '00000000-0000-0000-0000-000000000000'">
+      <template v-if="selectedColor !== '00000000-0000-0000-0000-000000000000'">
         <svg
           width="24"
           height="24"
@@ -90,7 +90,7 @@
             fill-opacity="1"
           />
         </svg>
-        <span class="rounded"> {{ colors[selectedColor]?.name ?? '???' }}</span>
+        <span class="rounded truncate max-w-[300px]"> {{ colors[selectedColor]?.name ?? '???' }}</span>
         <button
           v-if="canEdit"
           class="btn-close-popover"
@@ -110,8 +110,8 @@
             />
           </svg>
         </button>
-      </span>
-      <span v-else>
+      </template>
+      <template v-else>
         <svg
           width="24"
           height="24"
@@ -131,7 +131,7 @@
           />
         </svg>
         <span class="rounded">Цвет</span>
-      </span>
+      </template>
     </div>
   </Popper>
 </template>
