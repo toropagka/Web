@@ -1,13 +1,24 @@
-<script setup>
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+<script>
 import Employee from '@/components/Notifications/Employee'
-const store = useStore()
-const employees = computed(() => store.state.employees.employees)
+import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
+export default {
+  components: {
+    Employee
+  },
+  computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    }
+  },
+  methods: {
 
-function redirect (notification) {
-  const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
-  window.location.href = link
+    redirect (notification) {
+      const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
+      window.location.href = link
+      this.$store.commit(NAVIGATOR_SUCCESS)
+      localStorage.setItem('lastTab', 'tasks')
+    }
+  }
 }
 </script>
 <template>

@@ -3,7 +3,11 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить регламент"
-      :text="`Вы действительно хотите удалить регламент ${currentReglament.name}?`"
+      :text="`Вы действительно хотите удалить регламент\n ${
+        currentReglament.name.length > 50
+          ? currentReglament.name.substring(0, 50) + '...'
+          : currentReglament.name
+      }?`"
       @cancel="showConfirm = false"
       @yes="removeReglament"
     />

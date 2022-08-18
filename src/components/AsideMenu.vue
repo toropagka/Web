@@ -297,6 +297,7 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
+      console.log(this.$store.state.navigator.currentSettingsTab)
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return
@@ -322,7 +323,7 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
 
-      if (['account', 'tarif', 'option', 'karma'].includes(item.type)) {
+      if (['account', 'tarif', 'option', 'karma', 'support'].includes(item.type)) {
         this.$store.state.navigator.currentSettingsTab = item.type
         const navElem = {
           name: item.label,

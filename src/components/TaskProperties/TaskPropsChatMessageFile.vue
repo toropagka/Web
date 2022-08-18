@@ -18,7 +18,8 @@
       >
         <div
           v-if="!pics.includes(fileName.split('.').pop())"
-          class="mt-2 text-right font-medium mb-2 flex relative flex-col"
+          class="mt-2 text-right font-medium mb-2 flex relative flex-row"
+          style="word-break: break-word"
         >
           <div class="float-left">
             <FileMessage
@@ -51,7 +52,7 @@
               v-if="time && size"
               class="group flex justify-between w-full text-[#7E7E80] dark:text-gray-300 "
             >
-              <p class="text-[12px] leading-[15px] h-1[px font-normal">
+              <p class="text-[12px] leading-[15px] mt-[1px] h-1[px font-normal">
                 {{ size }}
               </p>
               <div
@@ -168,7 +169,7 @@
             v-if="time && size"
             class="group flex justify-between w-full text-[#7E7E80] dark:text-gray-300 "
           >
-            <p class="text-[12px] leading-[15px] h-1[px font-normal">
+            <p class="text-[12px] mt-[1px] leading-[15px] h-1[px font-normal">
               {{ size }}
             </p>
             <div

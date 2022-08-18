@@ -89,43 +89,57 @@
         >
           <div class="container-employee-popover">
             <div
-              v-for="emp in employees"
-              :key="emp.uid"
+              v-if="isEmployeesInOrg"
             >
               <div
-                v-if="emp.uid !== currentUserUid"
-                class="list-employee-access"
-                @click="changePerformer(emp.email)"
+                v-for="emp in employees"
+                :key="emp.uid"
               >
-                <img
-                  :src="emp.fotolink"
-                  class="mr-1 border-fotolink border-solid border-2 border-sky-500"
-                  width="30"
-                  height="30"
+                <div
+                  v-if="emp.uid !== currentUserUid"
+                  class="list-employee-access"
+                  @click="changePerformer(emp.email)"
                 >
-                <label class="employee-name-custom">
-                  {{ emp.name }}
-                  <div class="popover-employee-email">{{ emp.email }}</div>
-                </label>
-                <span
-                  v-if="isCurrentPerformerEmail(emp.email)"
-                  class="inline-flex justify-center items-center"
-                >
-                  <svg
-                    viewBox="0 0 26 20"
-                    width="10"
-                    height="10"
-                    class="inline-block"
+                  <img
+                    :src="emp.fotolink"
+                    class="mr-1 border-fotolink border-solid border-2 border-sky-500"
+                    width="30"
+                    height="30"
                   >
-                    <path
-                      fill="currentColor"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M24.4107 1.30299C25.2766 2.02718 25.3681 3.2892 24.6148 4.1218L11.8142 18.2718C10.8103 19.3815 9.06094 19.4991 7.9062 18.5344L0.902667 12.6839C0.0362917 11.9601 -0.0558157 10.6982 0.69694 9.86518C1.44969 9.0322 2.76226 8.94364 3.62864 9.66738L9.58691 14.6447L21.4789 1.49931C22.2321 0.666707 23.5447 0.578813 24.4107 1.30299Z"
-                    />
-                  </svg>
-                </span>
+                  <label class="employee-name-custom">
+                    {{ emp.name }}
+                    <div class="popover-employee-email">{{ emp.email }}</div>
+                  </label>
+                  <span
+                    v-if="isCurrentPerformerEmail(emp.email)"
+                    class="inline-flex justify-center items-center"
+                  >
+                    <svg
+                      viewBox="0 0 26 20"
+                      width="10"
+                      height="10"
+                      class="inline-block"
+                    >
+                      <path
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M24.4107 1.30299C25.2766 2.02718 25.3681 3.2892 24.6148 4.1218L11.8142 18.2718C10.8103 19.3815 9.06094 19.4991 7.9062 18.5344L0.902667 12.6839C0.0362917 11.9601 -0.0558157 10.6982 0.69694 9.86518C1.44969 9.0322 2.76226 8.94364 3.62864 9.66738L9.58691 14.6447L21.4789 1.49931C22.2321 0.666707 23.5447 0.578813 24.4107 1.30299Z"
+                      />
+                    </svg>
+                  </span>
+                </div>
               </div>
+            </div>
+            <div
+              v-else-if="!isEmployeesInOrg"
+            >
+              <p
+                class="w-[300px]"
+              >
+                Список сотруников, которым Вы можете поручить задачу пуст. Необходимо создать сотрудника. Для этого перейдите во вкладку сверху под названием
+                <span class="font-bold">"Справочники"</span>  и в левом меню зайдите на страницу <span class="font-bold">"Сотрудники"</span>. Нажмите на <span class="font-bold">"+"</span>   и введите данные сотрудника. Этому сотруднику придет приглашение.
+              </p>
             </div>
           </div>
         </div>
@@ -171,6 +185,9 @@ export default {
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
+    },
+    isEmployeesInOrg () {
+      return Object.keys(this.employees).length > 1
     }
   },
   methods: {

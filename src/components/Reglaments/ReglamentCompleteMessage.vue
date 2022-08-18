@@ -2,7 +2,12 @@
 export default {
   props: {
     isPassed: {
-      type: Number
+      type: Number,
+      default: 0
+    },
+    name: {
+      type: String,
+      default: ''
     }
   },
   emits: ['confirm'],
@@ -17,7 +22,7 @@ export default {
       v-if="isPassed"
       class="font-[500] text-[22px]"
     >
-      Поздравляем, вы прошли регламент!
+      Вы успешно сдали тест регламента {{ name }}!
     </p>
     <p
       v-else

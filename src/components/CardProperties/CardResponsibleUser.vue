@@ -1,6 +1,6 @@
 <template>
   <Popper
-    class="light"
+    class="light overflow-hidden"
     :disabled="!canEdit"
   >
     <div
@@ -60,7 +60,7 @@
           </svg>
         </div>
 
-        {{ userName }}
+        <span class="truncate">{{ userName }}</span>
       </div>
     </div>
     <template
