@@ -83,7 +83,7 @@
           fill-opacity="0.5"
         />
       </svg>
-      <span class="... max-w-[300px]">
+      <span class="... max-w-[300px] truncate">
         {{ projects[selectedProject]?.name ?? '???' }}
       </span>
       <button
