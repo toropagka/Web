@@ -85,6 +85,7 @@ const mutations = {
             delegateTasks: true
           }
         }
+        state.slides[i].visible = value.visible
         localStorage.setItem('slides', JSON.stringify(data))
         console.log(JSON.parse(localStorage.getItem('slides')))
       }

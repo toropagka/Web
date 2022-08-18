@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between left-0 right-0 flex-row items-center h-[50px] bg-[#f4f5f7]"
+    class="flex justify-between left-0 right-0 flex-row items-center h-[45px] bg-[#f4f5f7]"
     :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
   >
     <div>
