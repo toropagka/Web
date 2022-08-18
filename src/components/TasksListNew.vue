@@ -379,6 +379,7 @@ export default {
       createTaskText: '',
       lastSelectedTaskUid: '',
       lastSelectedTask: {},
+      orderNewSubtask: 0,
       /* steps: [
         {
           attachTo: { element: '#step1' },
@@ -984,13 +985,14 @@ export default {
       const range = document.createRange()
       const sel = document.getSelection()
       taskName.focus({ preventScroll: false })
-      range.setStart(taskName, 1)
+      range.setStart(taskName, 0)
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
       this.lastSelectedTaskUid = uid
     },
     addSubtask (parent) {
+      this.orderNewSubtask = this.orderNewSubtask - 1
       const newSubtask = {
         date_create: new Date(),
         uid: this.uuidv4(),
@@ -1000,6 +1002,7 @@ export default {
         emails: '',
         comment: '',
         tags: [],
+        order_new: this.orderNewSubtask,
         uid_marker: '00000000-0000-0000-0000-000000000000',
         status: 0,
         uid_parent: parent.uid,
@@ -1016,6 +1019,7 @@ export default {
           // Don't know the event when I can call edit just created subtask
           // If we don't wait, then we won't focus on just created subtask
           setTimeout(() => {
+            this.sortTaskChildren(parent.uid)
             document.getElementById(newSubtask.uid).parentNode.draggable = false
             this.gotoNode(newSubtask.uid)
           }, 200)
