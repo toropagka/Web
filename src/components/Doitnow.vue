@@ -237,6 +237,7 @@ export default {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
     },
     notifies () {
+      this.setNotifiesCopy(this.$store.state.notificationtasks.notificationtasks)
       return this.$store.state.notificationtasks.notificationtasks
     },
     isNotify () {
@@ -295,13 +296,17 @@ export default {
               initInspectorSocket()
             } catch (e) {}
           }).then(() => {
-            this.loadNotifies()
+            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+              this.notifiesCopy = this.notifies
+            })
           })
         })
       })
     }
     if (userLoaded && navLoaded) {
-      this.loadNotifies()
+      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+        this.notifiesCopy = this.notifies
+      })
     }
     if (this.justRegistered) {
       this.setSlidesCopy()
@@ -381,10 +386,6 @@ export default {
           this.tasksLoaded = true
         })
     },
-    loadNotifies: function () {
-      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE')
-      this.notifiesCopy = [...this.notifies]
-    },
     linkToTask () {
       copyText(`${window.location.origin}/task/${this.firstTask.uid}`, undefined, (error, event) => {
         if (error) {
@@ -400,6 +401,9 @@ export default {
           this.slidesCopy.push(this.slides[i])
         }
       }
+    },
+    setNotifiesCopy () {
+      this.notifiesCopy = this.notifies
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
