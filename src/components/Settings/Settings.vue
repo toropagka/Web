@@ -15,6 +15,9 @@
     <acc-karma
       v-if="currentSettingsTab === 'karma'"
     />
+    <Support
+      v-if="currentSettingsTab === 'support'"
+    />
   </div>
 </template>
 <script>
@@ -22,6 +25,7 @@ import AccKarma from '@/components/AccKarma.vue'
 import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Account from '@/components/Settings/Account.vue'
+import Support from '@/components/Settings/Support.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 
 import { USER_REQUEST } from '@/store/actions/user'
@@ -37,7 +41,8 @@ export default {
     AsideMenu,
     Tarif,
     Options,
-    Account
+    Account,
+    Support
   },
   computed: {
     currentSettingsTab () {
