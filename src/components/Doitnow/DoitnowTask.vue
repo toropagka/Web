@@ -327,7 +327,11 @@
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 items-center bg-gray-200 justify-center text-sm font-medium min-h-[40px] w-[181px] rounded-lg border mb-2"
         >
-          В очереди задач: {{ tasksCount }}
+          <a
+            :href="`${currentLocation}/task/${task?.uid}`"
+          >
+            Открыть задачу
+          </a>
         </div>
         <button
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
