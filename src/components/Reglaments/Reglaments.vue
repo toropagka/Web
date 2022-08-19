@@ -231,7 +231,7 @@ export default {
       const departmentMap = {}
       for (const dep of this.allDepartments) {
         const reglament = {
-          dep: dep.name,
+          dep: dep.name.length > 50 ? dep.name.substring(0, 50) + '...' : dep.name,
           uid: dep.uid,
           is_my_dep: dep.emails.find(email => email.toLowerCase() === currentUserEmail),
           items: []
