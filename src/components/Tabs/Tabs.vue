@@ -70,7 +70,7 @@
             <span
               class="ml-[6px] text-[15px] group-hover:text-[#4c4c4d]/75 text-[#4c4c4d] font-roboto"
             >
-              {{ user?.current_user_name ?? '' }}
+              {{ user?.current_user_name ?? user?.current_user_email }}
             </span>
           </div>
         </div>
