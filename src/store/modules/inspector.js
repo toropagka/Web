@@ -86,10 +86,10 @@ const mutations = {
     state.karma = karma
   },
   [INSPECTOR.GET_SOUND_SETTING]: (state, value) => {
-    state.is_notification_sound_on = value === 1
+    state.is_notification_sound_on = Boolean(value)
   },
   [INSPECTOR.UPDATE_SOUND_SETTING]: (state, value) => {
-    state.is_notification_sound_on = value
+    state.is_notification_sound_on = Boolean(value)
   }
 }
 
