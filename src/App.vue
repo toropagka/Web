@@ -50,7 +50,6 @@ export default {
     class="fixed left-0 top-0 z-[50] ml-3"
   />
   <div
-    v-show="navStack[0].greedPath === 'support'"
     id="vk_community_messages"
   />
   <router-view />

@@ -1,42 +1,3 @@
-<script setup>
-import { onMounted, ref } from 'vue'
-import { useStore } from 'vuex'
-import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
-import { writeCache } from '@/store/helpers/functions'
-
-import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
-
-defineEmits(['onQuoteMessage', 'onDeleteMessage'])
-const props = defineProps({
-  fileUid: String,
-  fileName: String,
-  fileExtension: String,
-  fileDateCreate: String,
-  preloaderColor: String,
-  canDelete: {
-    type: Boolean,
-    default: true
-  }
-})
-const store = useStore()
-const audioLoaded = ref(false)
-const audioSrc = ref('')
-
-const loadAudioFromInternet = () => {
-  store.dispatch(FILE_REQUEST, props.fileUid).then((resp) => {
-    const imageBlob = new Blob([resp.data], { type: 'audio/' + props.fileExtension })
-    writeCache(props.fileUid, imageBlob)
-    const urlCreator = window.URL || window.webkitURL
-    const imageURL = urlCreator.createObjectURL(imageBlob)
-    audioSrc.value = imageURL
-    audioLoaded.value = true
-  })
-}
-
-onMounted(() => {
-  loadAudioFromInternet()
-})
-</script>
 <template>
   <div v-if="!audioLoaded">
     Audio is loading
@@ -54,17 +15,17 @@ onMounted(() => {
     </figure>
   </div>
   <p class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px]">
-    {{ props.fileName }}
+    {{ fileName }}
   </p>
   <p
     class="leading-[13px] text-[11px] font-[700] text-right mt-[8px] group-hover:hidden min-w-[30px]"
     style="color: rgba(0, 0, 0, 0.4);"
   >
-    {{ props.fileDateCreate }}
+    {{ fileDateCreate }}
   </p>
   <div class="group-hover:flex hidden justify-end">
     <card-chat-message-options-pop-menu
-      :can-delete="props.canDelete"
+      :can-delete="canDelete"
       @onQuoteMessage="$emit('onQuoteMessage')"
       @onDeleteMessage="$emit('onDeleteMessage')"
     >
@@ -94,3 +55,49 @@ onMounted(() => {
     </card-chat-message-options-pop-menu>
   </div>
 </template>
+<script>
+import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
+import { writeCache } from '@/store/helpers/functions'
+
+import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+
+export default {
+  components: {
+    CardChatMessageOptionsPopMenu
+  },
+  props: {
+    fileUid: String,
+    fileName: String,
+    fileExtension: String,
+    fileDateCreate: String,
+    preloaderColor: String,
+    canDelete: {
+      type: Boolean,
+      default: true
+    }
+  },
+  emits: ['onQuoteMessage', 'onDeleteMessage'],
+  data () {
+    return {
+      audioLoaded: false,
+      audoSrc: ''
+    }
+  },
+
+  mounted () {
+    this.loadAudioFromInternet()
+  },
+  methods: {
+    loadAudioFromInternet () {
+      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+        const imageBlob = new Blob([resp.data], { type: 'audio/' + this.fileExtension })
+        writeCache(this.fileUid, imageBlob)
+        const urlCreator = window.URL || window.webkitURL
+        const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.audioSrc = imageURL
+        this.audioLoaded = true
+      })
+    }
+  }
+}
+</script>
