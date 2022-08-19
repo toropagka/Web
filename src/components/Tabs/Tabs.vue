@@ -55,7 +55,8 @@
             :message-text="'Продлить лицензию'"
           />
         </div>
-        <div
+        <router-link
+          :to="'/settings'"
           class="group w-full cursor-pointer mt-1"
           @click="gotoSettings"
         >
@@ -73,7 +74,7 @@
               {{ user?.current_user_name ?? '' }}
             </span>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
