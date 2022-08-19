@@ -206,7 +206,7 @@
   <ReglamentCompleteMessage
     v-if="showCompleteMessage"
     :is-passed="isPassed"
-    :name="currName"
+    :name="reglament.name"
     @confirm="confirm"
   />
   <div class="h-[20px]" />
