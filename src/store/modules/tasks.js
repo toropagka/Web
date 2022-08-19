@@ -1111,7 +1111,7 @@ const actions = {
       if (nextSelectedTaskData?.info) {
         commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
       }
-      resolve({ uid: nextSelectedTaskUid, data: nextSelectedTaskData })
+      resolve(nextSelectedTaskData)
     })
   }
 }

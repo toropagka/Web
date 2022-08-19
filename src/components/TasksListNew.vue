@@ -1153,13 +1153,13 @@ export default {
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
             this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           })
-          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(({ uid, data }) => {
-            if (!uid || !data) {
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(data => {
+            if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
               return
             }
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(uid || uid - 1).focus({ preventScroll: false })
+            document.getElementById(data.id).focus({ preventScroll: false })
           })
         }
       })
