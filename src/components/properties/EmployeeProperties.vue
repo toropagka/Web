@@ -3,7 +3,11 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить сотрудника"
-      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName}?`"
+      class="break-words"
+      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName.length > 30
+        ? selectedEmployeeName.substring(0, 30) + '...'
+        : selectedEmployeeName
+      }?`"
       @cancel="showConfirm = false"
       @yes="removeEmployee"
     />
