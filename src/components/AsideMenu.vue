@@ -202,6 +202,7 @@ export default {
       mdiMenu,
       currentDay: null,
       visitedDay: null,
+      userParentId: null,
       warn,
       showFreeModal: false,
       modalOneActive: false,
@@ -563,10 +564,10 @@ export default {
       //
     },
     assigmentsClick (user) {
-      if (this.checkOnWhichTab(user)) {
+      if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
         return
       }
-
+      console.log(user.parentID)
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -587,6 +588,7 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
+      this.userParentId = user.parentID
     }
   }
 }

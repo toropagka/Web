@@ -124,7 +124,7 @@
         </svg>
       </a>
       <a
-        href="https://vk.com/leadertask"
+        href="https://vk.me/leadertask"
         target="_blank"
       >
         <svg
