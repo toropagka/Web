@@ -69,6 +69,7 @@
         :employees="employees"
         :projects="projects"
         :tasks-count="tasksCount"
+        :is-task-messages-loading="isTaskMessagesLoading"
         @clickTask="onClickTask"
         @nextTask="nextTask"
         @changeValue="changeValue"
@@ -142,7 +143,7 @@ export default {
     notifiesCopy: [],
     tasksLoaded: false,
     childrens: [],
-    isNextTaskLoading: false
+    isTaskMessagesLoading: false
   }),
   computed: {
     tasksCount () {
@@ -201,7 +202,7 @@ export default {
       return this.$store.state.tasks.tags
     },
     isLoading () {
-      return (this.$store.state.tasks.status === 'loading' && this.isNotifiesLoaded) || this.isNextTaskLoading
+      return this.$store.state.tasks.status === 'loading' || !this.isNotifiesLoaded
     },
     isNotifiesLoaded () {
       return this.$store.state.notificationtasks.status === 'success'
@@ -232,7 +233,7 @@ export default {
   watch: {
     firstTask (newtask, oldtask) {
       if (newtask && newtask.uid && !this.isNotify) {
-        this.isNextTaskLoading = true
+        this.isTaskMessagesLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
             this.childrens = resp.data.tasks
@@ -246,7 +247,7 @@ export default {
                   .then(() => {
                     this.$store.commit(FILES.MERGE_FILES_WITH_MESSAGES)
                   }).finally(() => {
-                    this.isNextTaskLoading = false
+                    this.isTaskMessagesLoading = false
                   })
               })
           })
