@@ -44,10 +44,31 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
-    <aside-menu
+    <AsideMenu
       v-if="!isFileRedirect"
       class="fixed"
       :menu="menu"
+    />
+    <SubMenu
+      v-if="isSubMenuActive"
+      class="pt-[45px]"
+      @closeSubMenu="closeSubMenu"
+    >
+      <BoardsSubmenu
+        v-if="lastPath === 'new_private_boards'"
+        :items="storeNavigator[lastPath]"
+        @closeSubMenu="closeSubMenu"
+      />
+      <ProjectsSubmenu
+        v-if="lastPath === 'new_private_projects'"
+        :items="storeNavigator[lastPath]"
+        @closeSubMenu="closeSubMenu"
+      />
+    </SubMenu>
+    <overlay
+      v-show="isSubMenuActive"
+      :z-index="'z-20'"
+      @overlay-click="submenuOverlayClick"
     />
     <overlay
       v-if="!isFileRedirect"
@@ -143,6 +164,10 @@ import InspectorNotification from '@/components/Notifications/InspectorNotificat
 import Overlay from '@/components/modals/Overlay.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 
+import SubMenu from '@/components/Menu/SubMenu.vue'
+import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
+import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
+
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
@@ -176,10 +201,13 @@ export default {
     MainSection,
     AsideMenu,
     Overlay,
+    ProjectsSubmenu,
+    SubMenu,
     NavBar,
     PropertiesRight,
     ErrorNotification,
     Notification,
+    BoardsSubmenu,
     InspectorNotification,
     TasksListNew,
     Projects,
@@ -208,6 +236,12 @@ export default {
   computed: {
     mainSectionState () {
       return this.$store.state.mainSectionState
+    },
+    isSubMenuActive () {
+      return this.$store.state.navigator.submenu.status
+    },
+    lastPath () {
+      return this.$store.state.navigator.submenu.path
     },
     greedPath () {
       return this.$store.state.greedPath
@@ -258,6 +292,12 @@ export default {
     }
   },
   methods: {
+    closeSubMenu () {
+      this.$store.state.navigator.submenu.status = false
+    },
+    submenuOverlayClick () {
+      this.$store.state.navigator.submenu.status = false
+    },
     getNavigator () {
       if (this.$store.state.auth.token) {
         const data = {

@@ -297,7 +297,6 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
-      console.log(this.$store.state.navigator.currentSettingsTab)
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return
@@ -305,6 +304,14 @@ export default {
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
+      }
+
+      if (item.path === 'new_private_boards' || item.path === 'new_private_projects') {
+        this.$store.state.navigator.submenu.status = true
+        this.$store.state.navigator.submenu.path = item.path
+        return
+      } else {
+        this.$store.state.navigator.submenu.status = false
       }
 
       console.log(item)
