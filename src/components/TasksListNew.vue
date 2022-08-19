@@ -1050,8 +1050,6 @@ export default {
       }
 
       if (this.lastSelectedTaskUid !== arg.id) {
-        this.$store.commit(TASK.SELECT_TASK, arg.info)
-
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
