@@ -82,11 +82,11 @@
     </div>
   </transition>
   <DoitnowSkeleton
-    v-if="isLoading"
+    v-if="isLoading && !isNotifiesLoaded"
     class="mt-20"
   />
   <DoitnowEmpty
-    v-if="(tasksCount === 0 && !isLoading)"
+    v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
     @clickPlanning="goToNextDay"
   />
 </template>
