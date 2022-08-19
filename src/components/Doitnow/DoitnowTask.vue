@@ -1215,8 +1215,9 @@ export default {
         value: status
       }).then(() => {
         this.$emit('changeValue', { status: status })
+        this.showStatusModal = false
+        this.$emit('nextTask')
       })
-      this.showStatusModal = false
     }
   }
 }
