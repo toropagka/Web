@@ -25,6 +25,7 @@ import colors from './modules/colors'
 import localization from './modules/localization'
 import inspector from './modules/inspector'
 import notificationtasks from './modules/notification_tasks'
+import tabs from './modules/tabs'
 
 export default createStore({
   state: {
@@ -164,6 +165,7 @@ export default createStore({
     colors,
     localization,
     inspector,
-    notificationtasks
+    notificationtasks,
+    tabs
   }
 })

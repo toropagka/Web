@@ -202,6 +202,7 @@ export default {
       mdiMenu,
       currentDay: null,
       visitedDay: null,
+      userParentId: null,
       warn,
       showFreeModal: false,
       modalOneActive: false,
@@ -297,14 +298,22 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
-      console.log(this.$store.state.navigator.currentSettingsTab)
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return
       }
+      this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
+      }
+
+      if (item.path === 'new_private_boards' || item.path === 'new_private_projects') {
+        this.$store.state.navigator.submenu.status = true
+        this.$store.state.navigator.submenu.path = item.path
+        return
+      } else {
+        this.$store.state.navigator.submenu.status = false
       }
 
       console.log(item)
@@ -430,6 +439,7 @@ export default {
       if (this.checkOnWhichDay(day)) {
         return
       }
+      this.userParentId = null
       this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
@@ -449,7 +459,7 @@ export default {
       if (this.checkOnWhichTab(board)) {
         return
       }
-
+      this.userParentId = null
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -493,7 +503,7 @@ export default {
       if (this.checkOnWhichTab(project)) {
         return
       }
-
+      this.userParentId = null
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -556,10 +566,10 @@ export default {
       //
     },
     assigmentsClick (user) {
-      if (this.checkOnWhichTab(user)) {
+      if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
         return
       }
-
+      console.log(user.parentID)
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -580,6 +590,7 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
+      this.userParentId = user.parentID
     }
   }
 }

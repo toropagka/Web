@@ -296,9 +296,10 @@
             @readTask="readTask"
             @removeAnswerHint="removeAnswerHint"
           />
+          <MessageSkeleton v-if="isTaskMessagesLoading" />
           <!-- chat -->
           <TaskPropsChatMessages
-            v-if="taskMessages?.length"
+            v-else-if="taskMessages?.length"
             id="content"
             class="mt-3"
             :task="task"
@@ -327,7 +328,11 @@
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
           class="flex py-0.5 items-center bg-gray-200 justify-center text-sm font-medium min-h-[40px] w-[181px] rounded-lg border mb-2"
         >
-          В очереди задач: {{ tasksCount }}
+          <a
+            :href="`${currentLocation}/task/${task?.uid}`"
+          >
+            Открыть задачу
+          </a>
         </div>
         <button
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
@@ -435,6 +440,7 @@ import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.v
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
+import MessageSkeleton from '../TaskProperties/MessageSkeleton.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -482,7 +488,8 @@ export default {
     contenteditable,
     Popper,
     TaskStatus,
-    SlideBody
+    SlideBody,
+    MessageSkeleton
   },
   directives: {
     linkify
@@ -527,6 +534,10 @@ export default {
     tasksCount: {
       type: Number,
       default: () => 0
+    },
+    isTaskMessagesLoading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['clickTask', 'nextTask', 'changeValue', 'readTask'],
@@ -818,7 +829,7 @@ export default {
       this.$emit('changeValue', { comment: text })
     },
     getByNameOrEmail (employees) {
-      return employees[this.task.uid_customer]?.name || employees[this.task.uid_customer]?.email
+      return employees[this.task.uid_customer]?.name || this.task?.email_customer
     },
     _linkify (text) {
       return text.replace(/(lt?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
@@ -1215,8 +1226,9 @@ export default {
         value: status
       }).then(() => {
         this.$emit('changeValue', { status: status })
+        this.showStatusModal = false
+        this.$emit('nextTask')
       })
-      this.showStatusModal = false
     }
   }
 }

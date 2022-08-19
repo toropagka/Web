@@ -30,6 +30,7 @@ import AsideMenu from '@/components/AsideMenu.vue'
 
 import { USER_REQUEST } from '@/store/actions/user'
 import { AUTH_LOGOUT } from '@/store/actions/auth'
+import { GET_SOUND_SETTING } from '@/store/actions/inspector'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 
 import initWebSync from '@/websync/index.js'
@@ -53,6 +54,9 @@ export default {
     },
     menu () {
       return this.$store.state.navigator.menu
+    },
+    user () {
+      return this.$store.state.user.user
     }
   },
   mounted () {
@@ -63,6 +67,7 @@ export default {
     if (!userLoaded || !navLoaded) {
       this.$store.commit(NAVIGATOR_REQUEST)
       this.$store.dispatch(USER_REQUEST).then(() => {
+        this.$store.dispatch(GET_SOUND_SETTING, this.user.current_user_uid)
         // запрос регламентов
         const data = {
           organization: this.$store?.state?.user?.user?.owner_email,

@@ -1,69 +1,9 @@
-<script setup>
-import { onMounted, ref } from 'vue'
-import { useStore } from 'vuex'
-import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
-import { writeCache } from '@/store/helpers/functions'
 
-import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
-
-defineEmits(['onQuoteMessage', 'onDeleteMessage'])
-const props = defineProps({
-  fileUid: String,
-  fileName: String,
-  fileExtension: String,
-  fileDateCreate: String,
-  preloaderColor: String,
-  canDelete: {
-    type: Boolean,
-    default: true
-  }
-})
-
-const store = useStore()
-const imageLoaded = ref(false)
-const imageSrc = ref('')
-
-const isFileInCache = () => {
-  return !!localStorage.getItem(props.fileUid)
-}
-
-const b64toBlob = (base64) => fetch(base64).then(res => res.blob())
-
-const loadImageFromInternet = () => {
-  store.dispatch(FILE_REQUEST, props.fileUid).then((resp) => {
-    const imageBlob = new Blob([resp.data], { type: 'image/' + props.fileExtension })
-    writeCache(props.fileUid, imageBlob)
-    const urlCreator = window.URL || window.webkitURL
-    const imageURL = urlCreator.createObjectURL(imageBlob)
-    imageSrc.value = imageURL
-    imageLoaded.value = true
-  })
-}
-
-const loadImageFromCache = () => {
-  const cachedImageBase64 = localStorage.getItem(props.fileUid)
-  b64toBlob(cachedImageBase64).then(imageBlob => {
-    const urlCreator = window.URL || window.webkitURL
-    const imageURL = urlCreator.createObjectURL(imageBlob)
-    imageSrc.value = imageURL
-    imageLoaded.value = true
-  })
-}
-
-onMounted(() => {
-  if (isFileInCache()) {
-    loadImageFromCache()
-  } else {
-    loadImageFromInternet()
-  }
-})
-
-</script>
 <template>
   <div
     v-if="!imageLoaded"
     class="rounded-[6px] w-[250px] h-[230px] animate-pulse"
-    :style="{ 'background': props.preloaderColor }"
+    :style="{ 'background': preloaderColor }"
   />
   <a
     :href="imageSrc"
@@ -81,17 +21,17 @@ onMounted(() => {
     target="_blank"
     class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px]"
   >
-    {{ props.fileName }}
+    {{ fileName }}
   </a>
   <p
     class="leading-[13px] text-[11px] font-[700] text-right mt-[8px] group-hover:hidden min-w-[30px]"
     style="color: rgba(0, 0, 0, 0.4);"
   >
-    {{ props.fileDateCreate }}
+    {{ fileDateCreate }}
   </p>
   <div class="group-hover:flex hidden justify-end">
     <card-chat-message-options-pop-menu
-      :can-delete="props.canDelete"
+      :can-delete="canDelete"
       @onQuoteMessage="$emit('onQuoteMessage')"
       @onDeleteMessage="$emit('onDeleteMessage')"
     >
@@ -121,3 +61,72 @@ onMounted(() => {
     </card-chat-message-options-pop-menu>
   </div>
 </template>
+<script>
+import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
+import { writeCache } from '@/store/helpers/functions'
+
+import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+
+export default {
+  components: {
+    CardChatMessageOptionsPopMenu
+  },
+  props: {
+    fileUid: String,
+    fileName: String,
+    fileExtension: String,
+    fileDateCreate: String,
+    preloaderColor: String,
+    canDelete: {
+      type: Boolean,
+      default: true
+    }
+  },
+
+  emits: ['onQuoteMessage', 'onDeleteMessage'],
+
+  data () {
+    return {
+      imageLoaded: false,
+      imageSrc: ''
+    }
+  },
+  mounted () {
+    if (this.isFileInCache()) {
+      this.loadImageFromCache()
+    } else {
+      this.loadImageFromInternet()
+    }
+  },
+  methods: {
+    isFileInCache () {
+      return !!localStorage.getItem(this.fileUid)
+    },
+
+    b64toBlob (base64) {
+      return fetch(base64).then(res => res.blob())
+    },
+
+    loadImageFromInternet () {
+      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+        const imageBlob = new Blob([resp.data], { type: 'image/' + this.fileExtension })
+        writeCache(this.fileUid, imageBlob)
+        const urlCreator = window.URL || window.webkitURL
+        const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.imageSrc = imageURL
+        this.imageLoaded = true
+      })
+    },
+
+    loadImageFromCache () {
+      const cachedImageBase64 = localStorage.getItem(this.fileUid)
+      this.b64toBlob(cachedImageBase64).then(imageBlob => {
+        const urlCreator = window.URL || window.webkitURL
+        const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.imageSrc = imageURL
+        this.imageLoaded = true
+      })
+    }
+  }
+}
+</script>

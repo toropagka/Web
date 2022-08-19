@@ -1099,6 +1099,20 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [TASK.SELECT_NEXT_TASK]: ({ dispatch, commit }, payload) => {
+    return new Promise((resolve, reject) => {
+      const tasksKeyArray = Object.keys(payload.tasks)
+      const currentSelectedTaskIndex = tasksKeyArray.reverse().indexOf(payload.prevTaskUid)
+      const nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+      const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
+      const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
+
+      if (nextSelectedTaskData?.info) {
+        commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
+      }
+      resolve(nextSelectedTaskData)
+    })
   }
 }
 
@@ -1447,8 +1461,10 @@ const mutations = {
   },
   [TASK.GET_INSPECTABLE_TASKS]: (state, uids) => {
     for (const uid of uids) {
-      state.newtasks[uid].info.is_inspectable = true
-      state.newtasks[uid].info.has_msgs = true
+      if (state.newtasks[uid]?.info) {
+        state.newtasks[uid].info.is_inspectable = true
+        state.newtasks[uid].info.has_msgs = true
+      }
     }
   },
   initDoitnowAbortController (state, controller) {

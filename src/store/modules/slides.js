@@ -84,6 +84,7 @@ const mutations = {
             addReglaments: true,
             delegateTasks: true
           }
+          data[value.name] = value.visible
         }
         state.slides[i].visible = value.visible
         localStorage.setItem('slides', JSON.stringify(data))

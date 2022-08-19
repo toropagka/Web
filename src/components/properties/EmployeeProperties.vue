@@ -3,7 +3,11 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить сотрудника"
-      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName}?`"
+      class="break-words"
+      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName.length > 30
+        ? selectedEmployeeName.substring(0, 30) + '...'
+        : selectedEmployeeName
+      }?`"
       @cancel="showConfirm = false"
       @yes="removeEmployee"
     />
@@ -79,7 +83,10 @@
           class="group w-full flex items-center gap-[12px] px-[12px] h-[42px] border border-black/12 rounded-[6px] cursor-pointer"
         >
           <div class="grow w-full font-roboto text-[#606061] text-[15px]">
-            {{ selectedEmployeeDep || 'Вне отдела' }}
+            {{
+              selectedEmployeeDep.length > 30
+                ? selectedEmployeeDep.substring(0, 30) + '...'
+                : selectedEmployeeDep || 'Вне отдела' }}
           </div>
           <svg
             width="12"
@@ -102,7 +109,10 @@
             :key="index"
             @click="setDepartment(index)"
           >
-            {{ dep.name }}
+            {{
+              dep.name .length > 30
+                ? dep.name .substring(0, 30) + '...'
+                : dep.name }}
           </PopMenuItem>
         </template>
       </PopMenu>
@@ -111,7 +121,9 @@
       v-else
       class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
     >
-      {{ selectedEmployeeDep || 'Вне отдела' }}
+      {{ selectedEmployeeDep.length > 30
+        ? selectedEmployeeDep.substring(0, 30) + '...'
+        : selectedEmployeeDep || 'Вне отдела' }}
     </div>
     <div
       v-if="openedReglaments.length"

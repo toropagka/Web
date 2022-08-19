@@ -31,6 +31,7 @@
         :href="fileURL"
         target="_blank"
         :download="fileName"
+        style="word-break: break-word"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
       >
         {{ fileName }}
@@ -104,8 +105,7 @@ export default {
   data () {
     return {
       fileURL: '',
-      fileIsDownloaded: false,
-      fileLink: null
+      fileIsDownloaded: false
     }
   },
   methods: {
@@ -116,7 +116,7 @@ export default {
         this.fileURL = urlCreator.createObjectURL(imageBlob)
         this.fileIsDownloaded = true
         this.$nextTick(() => {
-          this.fileLink.click()
+          this.$refs.fileLink.click()
         })
       })
     }

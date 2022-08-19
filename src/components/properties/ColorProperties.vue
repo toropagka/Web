@@ -164,7 +164,7 @@ import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 
-import { UPDATE_COLOR_REQUEST, REMOVE_COLOR_REQUEST } from '@/store/actions/colors'
+import { UPDATE_COLOR_REQUEST, REMOVE_COLOR_REQUEST, REMOVE_MYCOLOR_REQUEST } from '@/store/actions/colors'
 import { NAVIGATOR_REMOVE_COLOR } from '@/store/actions/navigator'
 
 export default {
@@ -300,6 +300,8 @@ export default {
           console.log('removeColor', resp)
           //
           this.$store.dispatch('asidePropertiesToggle', false)
+          this.$store.commit(REMOVE_COLOR_REQUEST, this.selectedColorUid)
+          this.$store.commit(REMOVE_MYCOLOR_REQUEST, this.selectedColorUid)
           this.$store.commit(NAVIGATOR_REMOVE_COLOR, this.selectedColor)
           // выходим выше на один уровень навигации (надеемся что этот цвет последний в стеке)
           this.$store.dispatch('popNavStack')

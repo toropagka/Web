@@ -55,7 +55,8 @@
             :message-text="'Продлить лицензию'"
           />
         </div>
-        <div
+        <router-link
+          :to="'/settings'"
           class="group w-full cursor-pointer mt-1"
           @click="gotoSettings"
         >
@@ -70,10 +71,10 @@
             <span
               class="ml-[6px] text-[15px] group-hover:text-[#4c4c4d]/75 text-[#4c4c4d] font-roboto"
             >
-              {{ user?.current_user_name ?? '' }}
+              {{ user?.current_user_name ?? user?.current_user_email }}
             </span>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -81,9 +82,9 @@
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
-
 import EventAlert from '@/components/EventAlert.vue'
-import { UID_TO_ACTION } from '@/store/helpers/functions'
+import { SWITCH_TAB } from '@/store/actions/tabs'
+
 export default {
   components: {
     InspectorModalBox,
@@ -315,63 +316,7 @@ export default {
   },
   methods: {
     switchTab (tab) {
-      if (tab.code === this.lastTab) {
-        return
-      }
-      console.log(tab.code)
-      this.lastSelectedTabsCode = tab.code
-      localStorage.setItem('lastTab', tab.code)
-      if (this.$store.state.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      switch (tab.code) {
-        case 'doitnow':
-          break
-        case 'tasks':
-          this.$store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
-          // asidemenu logic
-          this.$store.commit('updateStackWithInitValue', {
-            name: 'Сегодня',
-            key: 'taskListSource',
-            value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date() },
-            typeVal: new Date(),
-            type: 'date'
-          })
-          this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: null } })
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-          break
-        case 'directory':
-          // asidemenu logic
-          this.$store.commit('updateStackWithInitValue', {
-            name: 'Регламенты',
-            key: 'greedSource',
-            greedPath: 'reglaments',
-            value: this.storeNavigator.reglaments?.items
-          })
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-          this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-          break
-        case 'settings':
-          this.$router.push('/settings')
-          this.$store.commit('updateStackWithInitValue', {
-            name: 'Аккаунт',
-            value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
-            typeVal: new Date(),
-            type: 'account'
-          })
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'settings' })
-          this.$store.state.navigator.currentSettingsTab = 'account'
-          break
-      }
-      this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
-      this.$store.state.navigator.menu = []
-      this.$store.state.navigator.menu.code = tab.code
-      if (tab.items) {
-        this.$store.state.navigator.menu.push(...tab.items)
-        console.log(this.$store.state.navigator.menu, tab.items)
-        console.log(this.$store.state.navigator.menu)
-      }
+      this.$store.dispatch(SWITCH_TAB, tab)
     },
     shouldShowInspector () {
       if (this.$store.state.user.user.tarif !== 'alpha' && this.$store.state.user.user.tarif !== 'trial') {

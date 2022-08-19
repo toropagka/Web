@@ -12,11 +12,13 @@
       <input
         ref="inputValueName"
         v-model="currentValueName"
+        maxlength="50"
         type="text"
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-black/12 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         @keyup.enter="onNext"
         @keyup.esc="onCancel"
       >
+      <div>Осталось символов: {{ symbolsRemain }}</div>
       <p class="w-full text-[13px] leading-[18px] text-[#4c4c4d] font-roboto font-medium">
         Email:
       </p>
@@ -64,6 +66,11 @@ export default {
     showError: false,
     showEmailError: false
   }),
+  computed: {
+    symbolsRemain () {
+      return 50 - this.currentValueName.length
+    }
+  },
   watch: {
     show: {
       immediate: true,

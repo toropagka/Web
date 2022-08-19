@@ -137,14 +137,14 @@
         />
         <!-- Кнопка Цвет -->
         <TaskPropsButtonColor
-          v-if="(selectedTask.type === 1 || selectedTask.type === 2) && ((selectedTask.uid_customer === user?.current_user_uid) && (selectedTask.status !== 1))"
+          v-if="(selectedTask.type === 1 || selectedTask.type === 2 || selectedTask.type === 3) && ((selectedTask.uid_customer === user?.current_user_uid || selectedTask.uid_performer === user?.current_user_uid) && (selectedTask.status !== 1))"
           :selected-color="selectedTask.uid_marker"
-          :can-edit="selectedTask.type === 1 || selectedTask.type === 2"
+          :can-edit="selectedTask.type === 1 || selectedTask.type === 2 || selectedTask.type === 3"
           @changeColor="onChangeColor"
         />
         <!-- Кнопка Метки -->
         <TaskPropsButtonTags
-          v-if="(selectedTask.type === 1 || selectedTask.type === 2) && ((selectedTask.uid_customer === user?.current_user_uid) && (selectedTask.status !== 1))"
+          v-if="(selectedTask.type === 1 || selectedTask.type === 2 || selectedTask.type === 3) && ((selectedTask.uid_customer === user?.current_user_uid || selectedTask.uid_performer === user?.current_user_uid) && (selectedTask.status !== 1))"
           :selected-tags="selectedTask.tags"
           @changeTags="onChangeTags"
         />
@@ -766,7 +766,11 @@ export default {
         if (!shouldAddTaskIntoList(this.selectedTask)) {
           this.$store.commit(TASK.REMOVE_TASK, taskUid)
           this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          this.$store.dispatch('asidePropertiesToggle', false)
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: taskUid, tasks: this.$store.state.tasks.newtasks }).then(resp => {
+            if (!resp) {
+              this.$store.dispatch('asidePropertiesToggle', false)
+            }
+          })
         }
       })
     },

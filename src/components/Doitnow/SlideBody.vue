@@ -36,7 +36,7 @@
   </div>
   <div
     v-if="video"
-    class="flex items-end font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
+    class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
   >
     <iframe
       width="560"

@@ -4,6 +4,7 @@ import {
   PUSH_COLOR,
   PUSH_MYCOLOR,
   REMOVE_COLOR_REQUEST,
+  REMOVE_MYCOLOR_REQUEST,
   SELECT_COLOR,
   UPDATE_COLOR_REQUEST
 } from '../actions/colors'
@@ -60,6 +61,9 @@ const actions = {
 
 const mutations = {
   [REMOVE_COLOR_REQUEST]: (state, uid) => {
+    delete state.colors[uid]
+  },
+  [REMOVE_MYCOLOR_REQUEST]: (state, uid) => {
     delete state.mycolors[uid]
   },
   [PUSH_COLOR]: (state, colors) => {
