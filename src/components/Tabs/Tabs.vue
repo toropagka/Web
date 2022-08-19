@@ -82,7 +82,7 @@
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import EventAlert from '@/components/EventAlert.vue'
-// import { SWITCH_TAB } from '@/store/actions/tabs'
+import { SWITCH_TAB } from '@/store/actions/tabs'
 
 export default {
   components: {
@@ -315,7 +315,7 @@ export default {
   },
   methods: {
     switchTab (tab) {
-      // this.$store.dispatch(SWITCH_TAB, tab
+      this.$store.dispatch(SWITCH_TAB, tab)
     },
     shouldShowInspector () {
       if (this.$store.state.user.user.tarif !== 'alpha' && this.$store.state.user.user.tarif !== 'trial') {

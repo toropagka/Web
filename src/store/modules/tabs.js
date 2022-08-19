@@ -1,11 +1,6 @@
 import * as TAB from '../actions/tabs'
 import { UID_TO_ACTION } from '../helpers/functions'
 import store from '@/store/index.js'
-import router from '@/router/index.js'
-
-const state = {
-
-}
 
 const getters = {
   lastTab () {
@@ -28,10 +23,8 @@ const actions = {
     }
     switch (tab.code) {
       case 'doitnow':
-        router.push('/doitnow')
         break
       case 'tasks':
-        router.push('/tasks')
         store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
         // asidemenu logic
         store.commit('updateStackWithInitValue', {
@@ -45,23 +38,20 @@ const actions = {
         store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
         break
       case 'directory':
-        router.push('/directory')
         // asidemenu logic
         store.commit('updateStackWithInitValue', {
           name: 'Регламенты',
           key: 'greedSource',
           greedPath: 'reglaments',
-          value: this.storeNavigator.reglaments?.items
+          value: getters.storeNavigator.reglaments?.items
         })
-        store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
+        store.commit('basic', { key: 'greedSource', value: getters.storeNavigator.reglaments?.items })
         store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         break
       case 'clients':
-        router.push('/clients')
         break
       case 'settings':
-        router.push('/settings')
         store.commit('updateStackWithInitValue', {
           name: 'Аккаунт',
           value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
@@ -83,13 +73,7 @@ const actions = {
   }
 }
 
-const mutations = {
-
-}
-
 export default {
-  state,
   getters,
-  actions,
-  mutations
+  actions
 }
