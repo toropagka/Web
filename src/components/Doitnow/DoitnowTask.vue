@@ -818,7 +818,7 @@ export default {
       this.$emit('changeValue', { comment: text })
     },
     getByNameOrEmail (employees) {
-      return employees[this.task.uid_customer]?.name || employees[this.task.uid_customer]?.email
+      return employees[this.task.uid_customer]?.name || this.task?.email_customer
     },
     _linkify (text) {
       return text.replace(/(lt?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
