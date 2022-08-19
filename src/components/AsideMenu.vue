@@ -302,6 +302,7 @@ export default {
       if (this.checkOnWhichTab(item)) {
         return
       }
+      this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.dateToday = new Date()
@@ -438,6 +439,7 @@ export default {
       if (this.checkOnWhichDay(day)) {
         return
       }
+      this.userParentId = null
       this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
@@ -457,7 +459,7 @@ export default {
       if (this.checkOnWhichTab(board)) {
         return
       }
-
+      this.userParentId = null
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -501,7 +503,7 @@ export default {
       if (this.checkOnWhichTab(project)) {
         return
       }
-
+      this.userParentId = null
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
