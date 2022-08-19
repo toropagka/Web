@@ -24,9 +24,9 @@ export default {
       </p>
     </div>
     <svg
-      width="9"
+      width="13"
       class="cursor-pointer"
-      height="9"
+      height="13"
       viewBox="0 0 9 9"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
