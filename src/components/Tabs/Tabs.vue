@@ -11,13 +11,14 @@
           class="mr-2 cursor-pointer"
           @click="switchTab(tab)"
         >
-          <p
-            href="#"
-            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[150px] 2xl:w-[200px] active border-t-orange-400"
-            :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
+          <router-link
+            :to="'/' + tab.code"
+            active-class="active-class-tab-router"
+            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[150px] 2xl:w-[200px] active border-t-orange-400 hover:bg-[#ff912350]"
+            :class="{'bg-white': tab.code !== lastTab}"
           >
             {{ tab.name }}
-          </p>
+          </router-link>
         </li>
         <button
           class="bg-[#424242] px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989]"
@@ -325,10 +326,8 @@ export default {
       }
       switch (tab.code) {
         case 'doitnow':
-          this.$router.push('/doitnow')
           break
         case 'tasks':
-          this.$router.push('/tasks')
           this.$store.dispatch(UID_TO_ACTION['901841d9-0016-491d-ad66-8ee42d2b496b'])
           // asidemenu logic
           this.$store.commit('updateStackWithInitValue', {
@@ -342,7 +341,6 @@ export default {
           this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
           break
         case 'directory':
-          this.$router.push('/directory')
           // asidemenu logic
           this.$store.commit('updateStackWithInitValue', {
             name: 'Регламенты',
@@ -353,9 +351,6 @@ export default {
           this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
           this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
           this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-          break
-        case 'clients':
-          this.$router.push('/clients')
           break
         case 'settings':
           this.$router.push('/settings')
@@ -463,3 +458,8 @@ export default {
   }
 }
 </script>
+<style>
+.active-class-tab-router{
+  background: #FF912380;
+}
+</style>
