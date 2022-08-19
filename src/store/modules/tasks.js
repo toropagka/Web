@@ -1461,8 +1461,10 @@ const mutations = {
   },
   [TASK.GET_INSPECTABLE_TASKS]: (state, uids) => {
     for (const uid of uids) {
-      state.newtasks[uid].info.is_inspectable = true
-      state.newtasks[uid].info.has_msgs = true
+      if (state.newtasks[uid]?.info) {
+        state.newtasks[uid].info.is_inspectable = true
+        state.newtasks[uid].info.has_msgs = true
+      }
     }
   },
   initDoitnowAbortController (state, controller) {
