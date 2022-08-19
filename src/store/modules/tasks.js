@@ -1099,6 +1099,18 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [TASK.SELECT_NEXT_TASK]: ({ dispatch, commit }, payload) => {
+    return new Promise((resolve, reject) => {
+      const tasksKeyArray = Object.keys(payload.tasks)
+      const currentSelectedTaskIndex = tasksKeyArray.reverse().indexOf(payload.prevTaskUid)
+      const nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+      const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
+      const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
+
+      commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
+      resolve({ uid: nextSelectedTaskUid, data: nextSelectedTaskData })
+    })
   }
 }
 
