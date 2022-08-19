@@ -1117,7 +1117,6 @@ export default {
       this.storeTasks[node.dragged.node.id].parent = parentUid ?? '00000000-0000-0000-0000-000000000000'
       this.storeTasks[node.dragged.node.id].info.uid_parent = parentUid ?? '00000000-0000-0000-0000-000000000000'
       this.$store.state.tasks.selectedTask = this.storeTasks[node.dragged.node.id].info
-      debugger
       this.$store.dispatch(
         TASK.CHANGE_TASK_PARENT_AND_ORDER,
         {
