@@ -1108,7 +1108,9 @@ const actions = {
       const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
       const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
 
-      commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
+      if (nextSelectedTaskData?.info) {
+        commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
+      }
       resolve({ uid: nextSelectedTaskUid, data: nextSelectedTaskData })
     })
   }
