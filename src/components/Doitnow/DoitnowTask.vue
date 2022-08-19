@@ -296,9 +296,10 @@
             @readTask="readTask"
             @removeAnswerHint="removeAnswerHint"
           />
+          <MessageSkeleton v-if="isTaskMessagesLoading" />
           <!-- chat -->
           <TaskPropsChatMessages
-            v-if="taskMessages?.length"
+            v-else-if="taskMessages?.length"
             id="content"
             class="mt-3"
             :task="task"
@@ -435,6 +436,7 @@ import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.v
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
+import MessageSkeleton from '../TaskProperties/MessageSkeleton.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -482,7 +484,8 @@ export default {
     contenteditable,
     Popper,
     TaskStatus,
-    SlideBody
+    SlideBody,
+    MessageSkeleton
   },
   directives: {
     linkify
@@ -527,6 +530,10 @@ export default {
     tasksCount: {
       type: Number,
       default: () => 0
+    },
+    isTaskMessagesLoading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['clickTask', 'nextTask', 'changeValue', 'readTask'],
