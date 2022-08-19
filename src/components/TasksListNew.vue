@@ -279,6 +279,7 @@
             <!-- canmove props.node.id === lastSelectedTaskUid -->
             <!-- props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id -->
             <TaskListActionHoverPanel
+              v-if="props.node.info.name"
               :id="`hover-panel-${props.node.id}`"
               class="absolute right-[8px] top-[calc(50%-18px)] invisible group-hover:visible"
               :is-my-task="props.node.info.uid_customer == currentUserUid"

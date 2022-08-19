@@ -31,6 +31,7 @@
         :href="fileURL"
         target="_blank"
         :download="fileName"
+        style="word-break: break-word"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
       >
         {{ fileName }}
