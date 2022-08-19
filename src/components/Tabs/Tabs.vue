@@ -11,13 +11,14 @@
           class="mr-2 cursor-pointer"
           @click="switchTab(tab)"
         >
-          <p
-            href="#"
-            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[150px] 2xl:w-[200px] active border-t-orange-400"
-            :class="tab.code == lastTab ? 'bg-[#FF912380]': 'bg-white'"
+          <router-link
+            :to="'/' + tab.code"
+            active-class="active-class-tab-router"
+            class="inline-block py-2 px-5 text-black rounded-t-[10px] w-[150px] 2xl:w-[200px] active border-t-orange-400 hover:bg-[#ff912350]"
+            :class="{'bg-white': tab.code !== lastTab}"
           >
             {{ tab.name }}
-          </p>
+          </router-link>
         </li>
         <button
           class="bg-[#424242] px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989]"
@@ -314,7 +315,7 @@ export default {
   },
   methods: {
     switchTab (tab) {
-      // this.$store.dispatch(SWITCH_TAB, tab)
+      // this.$store.dispatch(SWITCH_TAB, tab
     },
     shouldShowInspector () {
       if (this.$store.state.user.user.tarif !== 'alpha' && this.$store.state.user.user.tarif !== 'trial') {
@@ -401,3 +402,8 @@ export default {
   }
 }
 </script>
+<style>
+.active-class-tab-router{
+  background: #FF912380;
+}
+</style>
