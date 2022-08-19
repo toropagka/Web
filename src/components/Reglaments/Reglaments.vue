@@ -139,6 +139,7 @@ import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
 import * as REGLAMENTS from '@/store/actions/reglaments'
+import * as SLIDES from '@/store/actions/slides.js'
 
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
@@ -324,6 +325,7 @@ export default {
 
         this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_REQUEST, reglament).then(() => {
           reglament.needStartEdit = true
+          this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_REGLAMENT, reglament)
           this.gotoReglamentContent(reglament)
         })
