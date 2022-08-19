@@ -103,8 +103,7 @@ export default {
   data () {
     return {
       fileURL: '',
-      fileIsDownloaded: false,
-      fileLink: null
+      fileIsDownloaded: false
     }
   },
 
@@ -116,7 +115,7 @@ export default {
         this.fileURL = urlCreator.createObjectURL(imageBlob)
         this.fileIsDownloaded = true
         this.$nextTick(() => {
-          this.fileLink.click()
+          this.$refs.fileLink.click()
         })
       })
     }

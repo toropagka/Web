@@ -279,6 +279,7 @@
             <!-- canmove props.node.id === lastSelectedTaskUid -->
             <!-- props.node.info.uid_customer === user.current_user_uid && lastSelectedTaskUid === props.node.id -->
             <TaskListActionHoverPanel
+              v-if="props.node.info.name"
               :id="`hover-panel-${props.node.id}`"
               class="absolute right-[8px] top-[calc(50%-18px)] invisible group-hover:visible"
               :is-my-task="props.node.info.uid_customer == currentUserUid"
@@ -295,7 +296,7 @@
               @cut="cutTask(props.node.info)"
               @changeTaskPosition="changeTaskPosition"
               @paste="pasteCopiedTasks(props.node.id)"
-              @delete="clickDeleteTask(props.node.id)"
+              @delete="clickDeleteTask(props.node.info)"
             />
           </div>
         </template>
@@ -991,7 +992,7 @@ export default {
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
-      this.lastSelectedTaskUid = uid
+      this.$store.commit(TASK.SELECT_TASK, uid)
     },
     addSubtask (parent) {
       this.orderNewSubtask = this.orderNewSubtask - 1
@@ -1050,8 +1051,6 @@ export default {
       }
 
       if (this.lastSelectedTaskUid !== arg.id) {
-        this.lastSelectedTaskUid = arg.id
-
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
@@ -1141,8 +1140,8 @@ export default {
       if (backColor && backColor !== '#A998B6') return backColor
       return ''
     },
-    clickDeleteTask (uid) {
-      this.lastSelectedTaskUid = uid
+    clickDeleteTask (task) {
+      this.$store.commit(TASK.SELECT_TASK, task)
       this.showConfirm = true
     },
     onChangeStatus (status, task) {
@@ -1153,13 +1152,13 @@ export default {
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
             this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           })
-          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(({ uid, data }) => {
-            if (!uid || !data) {
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(data => {
+            if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
               return
             }
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(uid || uid - 1).focus({ preventScroll: false })
+            document.getElementById(data.id).focus({ preventScroll: false })
           })
         }
       })

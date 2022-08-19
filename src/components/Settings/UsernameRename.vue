@@ -15,13 +15,15 @@
         @keyup.enter="onSave"
         @keyup.esc="onCancel"
       >
+      <div class="mt-1">
+        Осталось символов: {{ symbolsRemain }}
+      </div>
       <p
         v-if="showError"
-        class="mt-2 mb-[-15px] text-red-500"
+        class="mb-[-15px] text-red-500"
       >
         Поле не должно быть пустым
       </p>
-      <div>Осталось символов: {{ symbolsRemain }}</div>
     </div>
   </ModalBox>
 </template>
