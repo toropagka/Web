@@ -1,41 +1,3 @@
-<script setup>
-import { ref, nextTick } from 'vue'
-import { useStore } from 'vuex'
-import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
-
-import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
-
-defineEmits(['onQuoteMessage', 'onDeleteMessage'])
-const props = defineProps({
-  fileUid: String,
-  fileName: String,
-  fileExtension: String,
-  fileSize: String,
-  fileDateCreate: String,
-  canDelete: {
-    type: Boolean,
-    default: true
-  }
-})
-
-const store = useStore()
-const fileURL = ref('')
-const fileIsDownloaded = ref(false)
-const fileLink = ref(null)
-
-const loadFileFromInternet = () => {
-  store.dispatch(FILE_REQUEST, props.fileUid).then((resp) => {
-    const imageBlob = new Blob([resp.data], { type: 'text/plain' })
-    const urlCreator = window.URL || window.webkitURL
-    fileURL.value = urlCreator.createObjectURL(imageBlob)
-    fileIsDownloaded.value = true
-    nextTick(() => {
-      fileLink.value.click()
-    })
-  })
-}
-
-</script>
 <template>
   <div class="flex space-x-[11px]">
     <svg
@@ -61,31 +23,31 @@ const loadFileFromInternet = () => {
         style="word-break: break-word"
         @click.stop="loadFileFromInternet"
       >
-        {{ props.fileName }}
+        {{ fileName }}
       </p>
       <a
         v-if="fileIsDownloaded"
         ref="fileLink"
         :href="fileURL"
         target="_blank"
-        :download="props.fileName"
+        :download="fileName"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
       >
-        {{ props.fileName }}
+        {{ fileName }}
       </a>
       <div class="flex justify-between items-center">
         <p class="text-[#7E7E80] text-[12px] leading-[14px] font-[400]">
-          {{ props.fileSize }}
+          {{ fileSize }}
         </p>
         <p
           class="font-[700] ml-2 text-[11px] leading-[13px] group-hover:hidden min-w-[30px]"
           style="color: rgba(0, 0, 0, 0.4);"
         >
-          {{ props.fileDateCreate }}
+          {{ fileDateCreate }}
         </p>
         <div class="group-hover:flex hidden justify-end">
           <card-chat-message-options-pop-menu
-            :can-delete="props.canDelete"
+            :can-delete="canDelete"
             @onQuoteMessage="$emit('onQuoteMessage')"
             @onDeleteMessage="$emit('onDeleteMessage')"
           >
@@ -118,3 +80,46 @@ const loadFileFromInternet = () => {
     </div>
   </div>
 </template>
+<script>
+import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
+
+import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+
+export default {
+  components: {
+    CardChatMessageOptionsPopMenu
+  },
+  props: {
+    fileUid: String,
+    fileName: String,
+    fileExtension: String,
+    fileSize: String,
+    fileDateCreate: String,
+    canDelete: {
+      type: Boolean,
+      default: true
+    }
+  },
+  emits: ['onQuoteMessage', 'onDeleteMessage'],
+  data () {
+    return {
+      fileURL: '',
+      fileIsDownloaded: false,
+      fileLink: null
+    }
+  },
+  methods: {
+    loadFileFromInternet () {
+      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+        const imageBlob = new Blob([resp.data], { type: 'text/plain' })
+        const urlCreator = window.URL || window.webkitURL
+        this.fileURL = urlCreator.createObjectURL(imageBlob)
+        this.fileIsDownloaded = true
+        this.$nextTick(() => {
+          this.fileLink.click()
+        })
+      })
+    }
+  }
+}
+</script>
