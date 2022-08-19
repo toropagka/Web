@@ -160,8 +160,16 @@ export default {
     user () {
       return this.$store.state.user.user
     },
+    storeSound () {
+      return this.$store.state.inspector.is_notification_sound_on
+    },
     settings () {
       return this.$store.state.navigator?.navigator?.settings
+    }
+  },
+  watch: {
+    storeSound (newval, oldval) {
+      this.isNotificationSoundOn = this.$store.state.inspector.is_notification_sound_on
     }
   },
   methods: {

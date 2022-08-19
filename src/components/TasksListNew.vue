@@ -377,7 +377,6 @@ export default {
   data () {
     return {
       createTaskText: '',
-      lastSelectedTaskUid: '',
       lastSelectedTask: {},
       orderNewSubtask: 0,
       /* steps: [
@@ -547,6 +546,9 @@ export default {
     },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
+    },
+    lastSelectedTaskUid () {
+      return this.$store.state.tasks.selectedTask?.uid || ''
     }
   },
   watch: {
@@ -1147,26 +1149,17 @@ export default {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
-          // получаем массив ключей и переворачиваем, чтобы получить текущий
-          const tasksKeyArray = Object.keys(this?.storeTasks)
-          const currentSelectedTaskIndex = tasksKeyArray.reverse().indexOf(task.uid)
-          const nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
-
+          const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            this.$store.commit(TASK.REMOVE_TASK, task.uid)
             this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-            // получаем юид и его дату
-            const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
-            const nextSelectedTaskData = this.storeTasks[nextSelectedTaskUid]
-
-            if (!nextSelectedTaskUid || !nextSelectedTaskData) {
+          })
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(data => {
+            if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
               return
             }
             // фокусим следующий итем и открываем его свойства
-            document.getElementById(nextSelectedTaskUid || nextSelectedTaskUid - 1).focus({ preventScroll: false })
-            this.nodeSelected({ id: nextSelectedTaskData.id, info: nextSelectedTaskData.info })
-            this.lastSelectedTaskUid = nextSelectedTaskUid
+            document.getElementById(data.id).focus({ preventScroll: false })
           })
         }
       })
