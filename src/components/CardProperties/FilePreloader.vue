@@ -116,7 +116,7 @@ export default {
         this.fileURL = urlCreator.createObjectURL(imageBlob)
         this.fileIsDownloaded = true
         this.$nextTick(() => {
-          this.fileLink.value.click()
+          this.fileLink.click()
         })
       })
     }
