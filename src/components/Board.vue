@@ -479,9 +479,6 @@ export default {
       }
     }
   },
-  mounted () {
-    this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
-  },
   unmounted () {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
   },
@@ -691,6 +688,7 @@ export default {
       this.$store.commit(REFRESH_FILES)
       this.$store.commit(CARD.SELECT_CARD, card)
       this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+      this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
       this.$store.dispatch('asidePropertiesToggle', true)
     },
     closeProperties () {
