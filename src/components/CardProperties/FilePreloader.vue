@@ -22,10 +22,7 @@
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer"
         @click.stop="loadFileFromInternet"
       >
-        {{ fileName.length > 22
-          ? fileName.substring(0,22)
-          : fileName
-        }}
+        {{ correctFileName }}
       </p>
       <a
         v-if="fileIsDownloaded"
@@ -35,10 +32,7 @@
         :download="fileName"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
       >
-        {{ fileName.length > 22
-          ? fileName.substring(0,22)
-          : fileName
-        }}
+        {{ correctFileName }}
       </a>
       <div class="flex justify-between items-center">
         <p class="text-[#7E7E80] text-[12px] leading-[14px] font-[400]">
@@ -109,7 +103,16 @@ export default {
   data () {
     return {
       fileURL: '',
-      fileIsDownloaded: false
+      fileIsDownloaded: false,
+      fileExtension: this.fileName.split('.')
+    }
+  },
+
+  computed: {
+    correctFileName () {
+      return this.fileName.length > 15
+        ? this.fileName.substring(0, 15) + '..' + this.fileExtension[this.fileExtension.length - 1]
+        : this.fileName
     }
   },
 
