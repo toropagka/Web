@@ -19,7 +19,6 @@
         <div
           v-if="!pics.includes(fileName.split('.').pop())"
           class="mt-2 text-right font-medium mb-2 flex relative flex-row"
-          style="word-break: break-word"
         >
           <div class="float-left">
             <FileMessage
@@ -36,6 +35,7 @@
               :href="currentlocation + 'taskfile/' + file.uid + '?type=video&format=' + file.file_name.split('.').pop()"
               target="_blank"
               class="table font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
+              style="word-break: break-word"
             >
               {{ fileName }}
             </a>
@@ -45,6 +45,7 @@
               :src="isAudio ? fileUrl : null"
               :download="fileName"
               class="flex w-full font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
+              style="word-break: break-word"
             >
               {{ fileName }}
             </a>
