@@ -21,7 +21,6 @@ const actions = {
     if (store.state.isPropertiesMobileExpanded) {
       store.dispatch('asidePropertiesToggle', false)
     }
-    alert()
     switch (tab.code) {
       case 'doitnow':
         break
@@ -46,6 +45,7 @@ const actions = {
           greedPath: 'reglaments',
           value: getters.storeNavigator.reglaments?.items
         })
+        alert()
         store.commit('basic', { key: 'greedSource', value: getters.storeNavigator.reglaments?.items })
         store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         store.commit('basic', { key: 'greedPath', value: 'reglaments' })

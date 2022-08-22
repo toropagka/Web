@@ -54,22 +54,22 @@
       @closeSubMenu="closeSubMenu"
     >
       <DirectorySubmenu
-        v-if="lastPath === 'directory'"
+        v-if="lastTab === 'directory'"
         :menu="menu"
       />
       <TasksSubmenu
-        v-if="lastPath === 'tasks'"
+        v-if="lastTab === 'tasks'"
         :menu="menu"
         @closeSubMenu="closeSubMenu"
       />
       <BoardsSubmenu
-        v-if="lastPath === 'new_private_boards'"
-        :items="storeNavigator[lastPath]"
+        v-if="lastTab === 'new_private_boards'"
+        :items="storeNavigator[lastTab]"
         @closeSubMenu="closeSubMenu"
       />
       <ProjectsSubmenu
-        v-if="lastPath === 'new_private_projects'"
-        :items="storeNavigator[lastPath]"
+        v-if="lastTab === 'new_private_projects'"
+        :items="storeNavigator[lastTab]"
         @closeSubMenu="closeSubMenu"
       />
     </SubMenu>
@@ -252,8 +252,8 @@ export default {
     isSubMenuActive () {
       return this.$store.state.navigator.submenu.status
     },
-    lastPath () {
-      return this.$store.state.navigator.submenu.path
+    lastTab () {
+      return this.$store.state.navigator.lastTab
     },
     greedPath () {
       return this.$store.state.greedPath
