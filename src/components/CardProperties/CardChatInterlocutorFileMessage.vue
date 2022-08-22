@@ -43,6 +43,15 @@ const FileIsImage = computed(() => ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].i
 const FileIsMovie = computed(() => ['mov', 'mp4'].includes(fileExtension.value))
 const FileIsDoc = computed(() => ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'].includes(fileExtension.value))
 const FileIsAudio = computed(() => ['mp3', 'wav', 'm4a'].includes(fileExtension.value))
+// сейчас для doc и file компонента
+const correctShortFileMessage = computed(() => {
+  const fileMessageSplitForExtesion = props.message.file_name.split('.')
+  const shortName = props.message.file_name.substring(0, 20) + '..' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
+
+  return props.message.file_name.length > 20
+    ? shortName
+    : props.message.file_name
+})
 </script>
 
 <template>
@@ -72,7 +81,7 @@ const FileIsAudio = computed(() => ['mp3', 'wav', 'm4a'].includes(fileExtension.
     <doc-preloader
       v-else-if="FileIsDoc"
       :file-uid="props.message.uid"
-      :file-name="props.message.file_name"
+      :file-name="correctShortFileMessage"
       :file-extension="fileExtension"
       :file-size="formatBytes(props.message.file_size)"
       :file-date-create="getMessageTimeString(props.message.date_create)"
@@ -92,7 +101,7 @@ const FileIsAudio = computed(() => ['mp3', 'wav', 'm4a'].includes(fileExtension.
     <file-preloader
       v-else
       :file-uid="props.message.uid"
-      :file-name="props.message.file_name"
+      :file-name="correctShortFileMessage"
       :file-extension="fileExtension"
       :file-size="formatBytes(props.message.file_size)"
       :file-date-create="getMessageTimeString(props.message.date_create)"
