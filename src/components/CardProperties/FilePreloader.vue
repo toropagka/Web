@@ -22,7 +22,10 @@
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer"
         @click.stop="loadFileFromInternet"
       >
-        {{ fileName }}
+        {{ fileName.length > 22
+          ? fileName.substring(0,22)
+          : fileName
+        }}
       </p>
       <a
         v-if="fileIsDownloaded"
@@ -32,7 +35,10 @@
         :download="fileName"
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
       >
-        {{ fileName }}
+        {{ fileName.length > 22
+          ? fileName.substring(0,22)
+          : fileName
+        }}
       </a>
       <div class="flex justify-between items-center">
         <p class="text-[#7E7E80] text-[12px] leading-[14px] font-[400]">
