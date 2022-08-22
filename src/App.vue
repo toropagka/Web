@@ -1,8 +1,6 @@
 <script>
 import Tabs from '@/components/Tabs/Tabs.vue'
 
-import { LOCALIZATION_REQUEST } from '@/store/actions/localization'
-
 // очищаем консоль - по идее выше ошибки которые
 // мы не можем поправить из fm.websync и fm.min
 // по этому консоль очищаем
@@ -29,7 +27,6 @@ export default {
   },
   mounted () {
     console.clear()
-    this.$store.dispatch(LOCALIZATION_REQUEST)
     const fm = document.createElement('script')
     fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
     fm.onload = () => {
