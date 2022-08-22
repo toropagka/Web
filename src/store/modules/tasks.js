@@ -1114,7 +1114,7 @@ const actions = {
         const currentTaskIndex = parentItem.children.indexOf(payload.prevTaskUid)
         nextSelectedTaskIndex = currentTaskIndex === parentItem.children.length - 1 ? currentSelectedTaskIndex - 1 : currentSelectedTaskIndex + 1
       } else {
-        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex - 1] ? currentSelectedTaskIndex - 1 : currentSelectedTaskIndex + 1
       }
       const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
       const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
