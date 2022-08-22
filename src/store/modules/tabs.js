@@ -21,6 +21,7 @@ const actions = {
     if (store.state.isPropertiesMobileExpanded) {
       store.dispatch('asidePropertiesToggle', false)
     }
+    alert()
     switch (tab.code) {
       case 'doitnow':
         break
@@ -60,6 +61,8 @@ const actions = {
         })
         store.commit('basic', { key: 'mainSectionState', value: 'settings' })
         store.state.navigator.currentSettingsTab = 'account'
+        break
+      default:
         break
     }
     store.state.navigator.lastTab = localStorage.getItem('lastTab')

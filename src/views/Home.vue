@@ -44,16 +44,24 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
-    <AsideMenu
+    <MainMenu
       v-if="!isFileRedirect"
       class="fixed"
-      :menu="menu"
     />
     <SubMenu
       v-if="isSubMenuActive"
       class="pt-[45px]"
       @closeSubMenu="closeSubMenu"
     >
+      <DirectorySubmenu
+        v-if="lastPath === 'directory'"
+        :menu="menu"
+      />
+      <TasksSubmenu
+        v-if="lastPath === 'tasks'"
+        :menu="menu"
+        @closeSubMenu="closeSubMenu"
+      />
       <BoardsSubmenu
         v-if="lastPath === 'new_private_boards'"
         :items="storeNavigator[lastPath]"
@@ -155,7 +163,7 @@
 
 <script>
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
-import AsideMenu from '@/components/AsideMenu.vue'
+import MainMenu from '@/components/MainMenu.vue'
 import NavBar from '@/components/NavBar.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
@@ -166,6 +174,8 @@ import ModalBox from '@/components/modals/ModalBox.vue'
 
 import SubMenu from '@/components/Menu/SubMenu.vue'
 import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
+import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
+import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
 import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
@@ -199,7 +209,9 @@ export default {
   components: {
     ModalBoxNotificationInstruction,
     MainSection,
-    AsideMenu,
+    MainMenu,
+    TasksSubmenu,
+    DirectorySubmenu,
     Overlay,
     ProjectsSubmenu,
     SubMenu,
