@@ -46,9 +46,9 @@ const FileIsAudio = computed(() => ['mp3', 'wav', 'm4a'].includes(fileExtension.
 // сейчас для doc и file компонента
 const correctShortFileMessage = computed(() => {
   const fileMessageSplitForExtesion = props.message.file_name.split('.')
-  const shortName = props.message.file_name.substring(0, 20) + '..' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
+  const shortName = props.message.file_name.substring(0, 18) + '.. .' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
 
-  return props.message.file_name.length > 20
+  return props.message.file_name.length > 18
     ? shortName
     : props.message.file_name
 })

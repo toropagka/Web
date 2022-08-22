@@ -34,9 +34,9 @@ export default {
     FileIsAudio () { return ['mp3', 'wav', 'm4a'].includes(this.fileExtension) },
     correctShortFileMessage () {
       const fileMessageSplitForExtesion = this.message.file_name.split('.')
-      const shortName = this.message.file_name.substring(0, 20) + '..' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
+      const shortName = this.message.file_name.substring(0, 18) + '.. .' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
 
-      return this.message.file_name.length > 20
+      return this.message.file_name.length > 18
         ? shortName
         : this.message.file_name
     }
