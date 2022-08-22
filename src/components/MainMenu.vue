@@ -408,7 +408,9 @@ export default {
   methods: {
     changeTab (tab) {
       this.$store.state.navigator.submenu.status = true
-      this.switchTab(tab)
+      if (!tab.uid) {
+        this.switchTab(tab)
+      }
     },
     switchTab (tab) {
       this.$store.dispatch(SWITCH_TAB, tab)
