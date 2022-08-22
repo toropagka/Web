@@ -582,6 +582,7 @@ export default {
     window.getSelection().removeAllRanges()
     // не удалять, без объявление сторы через useStore не работает закрытие на escape
     const store = useStore()
+    this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
     document.addEventListener('keyup', function (evt) {
       if (evt.keyCode === 27) {
         store.dispatch('asidePropertiesToggle', false)
@@ -1052,7 +1053,6 @@ export default {
 
       if (this.lastSelectedTaskUid !== arg.id) {
         this.$nextTick(() => {
-          this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
             .then(() => {
               setTimeout(() => {
