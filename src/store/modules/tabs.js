@@ -61,6 +61,8 @@ const actions = {
         store.commit('basic', { key: 'mainSectionState', value: 'settings' })
         store.state.navigator.currentSettingsTab = 'account'
         break
+      default:
+        break
     }
     store.state.navigator.lastTab = localStorage.getItem('lastTab')
     store.state.navigator.menu = []

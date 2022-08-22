@@ -9,97 +9,11 @@
     @cancel="showEditLimit = false"
     @ok="showEditLimit = false"
   />
-  <div
+  <ReglamentContentEditor
     v-if="isEditing"
-  >
-    <div class="w-full sticky top-[45px] left-0 right-0 z-[6]">
-      <div class="top-0 bg-[#f4f5f7] pt-[5px] pb-[15px]">
-        <div
-          class="flex justify-end gap-[8px] mr-3"
-        >
-          <PopMenu v-if="!editorsCanEdit">
-            <ReglamentSmallButton>
-              Добавить редактора
-            </ReglamentSmallButton>
-            <template #menu>
-              <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-                <BoardPropsMenuItemUser
-                  v-for="editor in usersCanAddToAccess"
-                  :key="editor.email"
-                  :show-check-mark="checkEditor(editor.email)"
-                  :user-email="editor.email"
-                  @click="addReglamentEditor(editor.email)"
-                />
-              </div>
-            </template>
-          </PopMenu>
-          <PopMenu>
-            <ReglamentSmallButton>
-              {{ currDepTitle }}
-            </ReglamentSmallButton>
-            <template #menu>
-              <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-                <PopMenuItem
-                  @click="currDep = ''"
-                >
-                  Общий для всех отделов
-                </PopMenuItem>
-                <PopMenuItem
-                  v-for="dep in allDepartments"
-                  :key="dep.uid"
-                  @click="currDep = dep.uid"
-                >
-                  {{ dep.name }}
-                </PopMenuItem>
-              </div>
-            </template>
-          </PopMenu>
-          <ReglamentSmallButton
-            :icon="shouldClear ? 'check' : 'uncheck'"
-            @click="shouldClear = !shouldClear"
-          >
-            Очистить сотрудников, прошедших регламент
-          </ReglamentSmallButton>
-          <ReglamentSmallButton
-            class="w-[224px]"
-            icon="edit"
-            @click="onSaveReglamentButtonClick"
-          >
-            {{ saveButtonText }}
-          </ReglamentSmallButton>
-          <ReglamentSmallButton
-            class="w-[224px]"
-            icon="edit"
-            @click="setEdit"
-          >
-            {{ editButtonText }}
-          </ReglamentSmallButton>
-        </div>
-      </div>
-    </div>
-    <div
-      class="bg-white p-3 rounded mb-3"
-    >
-      <input
-        v-model="currName"
-        type="text"
-        placeholder="Наименование"
-        class="p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
-      >
-    </div>
-    <QuillEditor
-      v-model:content="currText"
-      content-type="html"
-      :toolbar="'full'"
-      class="h-auto mb-5 bg-white"
-      @paste="pasteEvent"
-    />
-    <div
-      class="flex font-['Roboto'] text-[#7E7E80] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium"
-    >
-      В тесте будут представлены следующие вопросы:
-    </div>
-  </div>
+    :reglament="reglament"
+    @exitEditMode="isEditing = false"
+  />
   <div v-else>
     <div
       class="flex justify-end mb-2 h-[30px]"
@@ -110,7 +24,7 @@
         icon="edit"
         @click="setEdit"
       >
-        {{ editButtonText }}
+        Редактировать
       </ReglamentSmallButton>
       <div class="rounded-[6px] hover:bg-[#f4f5f7] bg-white flex justify-center items-center ml-[8px] px-[5px]">
         <NavBarButtonsReglament
@@ -134,36 +48,23 @@
       :toolbar="['']"
       class="h-auto mb-5 bg-white"
     />
+    <div
+      v-if="(isTesting || isEditing) && !showCompleteMessage"
+    >
+      <template
+        v-for="(question , index) in questions"
+        :key="index"
+      >
+        <ReglamentQuestion
+          :ref="question.uid"
+          :question="question"
+          :reglament="reglament"
+          @selectAnswer="selectAnswer"
+        />
+      </template>
+    </div>
   </div>
 
-  <div
-    v-if="(isTesting || isEditing) && !showCompleteMessage"
-  >
-    <template
-      v-for="(question , index) in questions"
-      :key="index"
-    >
-      <ReglamentQuestion
-        :ref="question.uid"
-        :is-editing="isEditing"
-        :question="question"
-        :reglament="reglament"
-        @deleteQuestion="onDeleteQuestion"
-        @deleteAnswer="deleteAnswer"
-        @addQuestion="onAddQuestion"
-        @updateQuestionName="updateQuestionName"
-        @updateAnswerName="updateAnswerName"
-        @pushAnswer="pushAnswer"
-        @selectAnswer="selectAnswer"
-        @setRightAnswer="setRightAnswer"
-      />
-    </template>
-  </div>
-  <ListBlocAdd
-    v-if="canEdit && isEditing"
-    class="mt-5 w-full mb-5"
-    @click.stop="onAddQuestion"
-  />
   <div
     v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
     class="flex justify-end"
@@ -215,37 +116,31 @@
 <script>
 import { QuillEditor } from '@vueup/vue-quill'
 import * as REGLAMENTS from '@/store/actions/reglaments.js'
-import * as QUESTIONS from '@/store/actions/reglament_questions.js'
-import * as ANSWER from '@/store/actions/reglament_answers.js'
 
 import ReglamentWrong from '@/components/Reglaments/ReglamentWrong.vue'
 import ReglamentInfo from '@/components/Reglaments/ReglamentInfo.vue'
 import ReglamentTestLimit from '@/components/Reglaments/ReglamentTestLimit.vue'
 import ReglamentEditLimit from '@/components/Reglaments/ReglamentEditLimit.vue'
-import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ReglamentQuestion from './ReglamentQuestion.vue'
 import ReglamentCompleteMessage from './ReglamentCompleteMessage.vue'
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
-import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
-import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 
+import * as SLIDES from '@/store/actions/slides.js'
+import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEditor'
+
 export default {
   components: {
+    ReglamentContentEditor,
     NavBarButtonsReglament,
     QuillEditor,
-    ListBlocAdd,
     ReglamentQuestion,
     ReglamentInfo,
     ReglamentCompleteMessage,
     ReglamentWrong,
     ReglamentSmallButton,
-    PopMenu,
-    PopMenuItem,
-    BoardPropsMenuItemUser,
     ReglamentEditLimit,
     ReglamentTestLimit
   },
@@ -257,22 +152,13 @@ export default {
   },
   data () {
     return {
-      currEditors: [],
-      currName: '',
-      currDep: '',
-      currText: '',
-      //
       showTestLimit: false,
       isEditing: false,
       showEditLimit: false,
       isTesting: false,
-      saveContentStatus: 1, // 1 - is saved, 2 error, 0 request processing
-      buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
       showCompleteMessage: false,
       isPassed: 0,
-      shouldClear: false,
       showCheckMark: false,
-      isFormInvalid: false,
       disableButton: false,
       completeText: 'Завершить',
       firstInvalidQuestionUid: null
@@ -326,28 +212,6 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    editButtonText () {
-      if (this.isEditing && this.saveContentStatus === 1) {
-        return 'Завершить редактирование'
-      } else if (!this.isEditing && this.saveContentStatus === 1) {
-        return 'Редактировать'
-      } else if (this.saveContentStatus === 2) {
-        return 'Ошибка сохранения регламента'
-      } else if (this.saveContentStatus === 0) {
-        return 'Сохраняется'
-      }
-      return 'Сохраняется'
-    },
-    saveButtonText () {
-      if (this.isEditing && this.buttonSaveReglament === 1) {
-        return 'Сохранить'
-      } else if (this.buttonSaveReglament === 2) {
-        return 'Ошибка сохранения регламента'
-      } else if (this.buttonSaveReglament === 0) {
-        return 'Сохраняется'
-      }
-      return 'Сохраняется'
-    },
     shouldShowButton () {
       let hasRightAnswers = false
       for (let i = 0; i < this.questions.length; i++) {
@@ -359,39 +223,6 @@ export default {
         }
       }
       return hasRightAnswers
-    },
-    usersCanAddToAccess () {
-      const users = []
-      const employees = Object.values(this.$store.state.employees.employees)
-      const creator = this.reglamentCreatorEmail.toLowerCase()
-      for (const emp of employees) {
-        if (emp.email.toLowerCase() !== creator) {
-          users.push({
-            uid: emp.uid,
-            email: emp.email
-          })
-        }
-      }
-      return users
-    },
-    currDepTitle () {
-      const dep = this.$store.state.departments.deps[this.currDep]
-      return dep?.name || 'Общий для всех отделов'
-    },
-    allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      if (this.showAllReglaments) return deps
-      const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-      return deps.filter(dep => dep.emails.find(email => email.toLowerCase() === currentUserEmail))
     },
     showAllReglaments () {
       return this.$store.state.reglaments.showAll
@@ -442,14 +273,6 @@ export default {
     } catch (e) {}
   },
   methods: {
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     confirm (val) {
       if (this.$store.state.reglaments.returnDoitnow === true) {
         this.$store.state.navigator.lastTab = 'doitnow'
@@ -469,91 +292,8 @@ export default {
       // обнуляем значение selected
       this.$store.commit(REGLAMENTS.REGLAMENT_RESTORE_SELECTED)
     },
-    updateQuestionName (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_UPDATE_QUESTION_NAME, data)
-    },
-    gotoNode (uid) {
-      this.$refs[uid][0].onFocus()
-    },
-    deleteAnswer (uid) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_DELETE_ANSWER, uid)
-    },
-    pushAnswer (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_PUSH_ANSWER, data)
-    },
-    updateAnswerName (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_UPDATE_ANSWER_NAME, data)
-    },
     selectAnswer (data) {
       this.$store.commit(REGLAMENTS.REGLAMENT_SELECT_ANSWER, data)
-    },
-    setRightAnswer (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_SET_RIGHT_ANSWER, data)
-    },
-    onAddQuestion () {
-      const question = {
-        uid: this.uuidv4(),
-        name: '',
-        uid_reglament: this.currReglament.uid
-      }
-      const answer = {
-        uid: this.uuidv4(),
-        uid_question: question.uid,
-        name: '',
-        is_right: 0,
-        needToCreate: true,
-        needToUpdate: false
-      }
-
-      const questionToPush = {
-        uid: question.uid,
-        name: question.name,
-        uid_reglament: question.uid_reglament,
-        needToCreate: true,
-        needToUpdate: false,
-        answers: [answer]
-      }
-      this.$store.commit(REGLAMENTS.REGLAMENT_PUSH_QUESTION, questionToPush)
-      this.$nextTick(() => {
-        this.gotoNode(questionToPush.uid)
-      })
-    },
-    onSaveReglamentButtonClick () {
-      if (this.isEditing) {
-        const reglament = { ...this.currReglament }
-        reglament.content = this.currText
-        reglament.name = this.currName.trim()
-        reglament.department_uid = this.currDep
-        reglament.editors = [...this.currEditors]
-
-        this.isFormInvalid = false
-        this.firstInvalidQuestionUid = null
-        this.validateReglamentQuestions()
-        if (this.isFormInvalid && this.firstInvalidQuestionUid) {
-          this.gotoNode(this.firstInvalidQuestionUid)
-          return
-        }
-
-        this.buttonSaveReglament = 0
-        this.saveReglament(reglament).then(() => {
-          if (this.shouldClear) {
-            this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, reglament.uid)
-            this.shouldClear = false
-          }
-          this.buttonSaveReglament = 1
-          // обновляем регламент в сторе
-          // надо бы сделать по нормальному через мутацию
-          const reglaments = this.$store.state.navigator.navigator.reglaments
-          const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
-          if (index !== -1) reglaments.items[index] = reglament
-        }).catch(() => {
-          this.buttonSaveReglament = 2
-        })
-      }
-    },
-    onDeleteQuestion (uid) {
-      this.showDeleteQuestion = false
-      this.$store.commit(REGLAMENTS.REGLAMENT_DELETE_QUESTION, uid)
     },
     setEdit () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
@@ -561,126 +301,7 @@ export default {
         return
       }
 
-      const reglament = { ...this.currReglament }
-      reglament.content = this.currText
-      reglament.name = this.currName.trim()
-      reglament.department_uid = this.currDep
-      reglament.editors = [...this.currEditors]
-
-      if (this.isEditing) {
-        this.saveContentStatus = 0
-        this.isFormInvalid = false
-        this.firstInvalidQuestionUid = null
-        this.validateReglamentQuestions()
-        if (this.isFormInvalid && this.firstInvalidQuestionUid) {
-          this.gotoNode(this.firstInvalidQuestionUid)
-          return
-        }
-
-        this.saveReglament(reglament).then(() => {
-          if (this.shouldClear) {
-            this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, reglament.uid)
-            this.shouldClear = false
-          }
-          this.isEditing = !this.isEditing
-          this.saveContentStatus = 1
-          // обновляем регламент в сторе
-          // надо бы сделать по нормальному через мутацию
-          const reglaments = this.$store.state.navigator.navigator.reglaments
-          const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
-          if (index !== -1) reglaments.items[index] = reglament
-        }).catch(() => {
-          this.saveContentStatus = 2
-        })
-      } else if (this.canEdit) {
-        this.isEditing = true
-        this.currName = this.reglamentTitle
-        this.currText = this.reglamentContent
-        this.currEditors = [...this.reglamentEditors]
-        this.currDep = this.reglamentDep
-      }
-    },
-    validateReglamentQuestions () {
-      for (const question of this.questions) {
-        question.invalid = question.name === ''
-
-        if (!this.isFormInvalid && question.name === '') {
-          this.isFormInvalid = true
-          this.firstInvalidQuestionUid = question.uid
-        }
-
-        for (const answer of question.answers) {
-          answer.invalid = answer.name === ''
-
-          if (!this.isFormInvalid && answer.name === '') {
-            this.isFormInvalid = true
-            this.firstInvalidQuestionUid = question.uid
-          }
-        }
-      }
-    },
-    saveReglament (reglament) {
-      if (!reglament.name.length) {
-        reglament.name = 'Регламент без названия'
-      }
-
-      for (const question of this.questions) {
-        if (question.needToCreate || question.needToUpdate) {
-          const questionData = {
-            name: question.name,
-            uid: question.uid,
-            uid_reglament: question.uid_reglament
-          }
-          Promise.resolve().then(() => {
-            if (question.needToCreate) {
-              return this.$store.dispatch(QUESTIONS.CREATE_REGLAMENT_QUESTION_REQUEST, questionData)
-            } else if (question.needToUpdate) {
-              return this.$store.dispatch(QUESTIONS.UPDATE_REGLAMENT_QUESTION_REQUEST, questionData)
-            }
-          })
-            .then(() => {
-              question.needToCreate = false
-              question.needToUpdate = false
-            })
-        }
-
-        for (const answer of question.answers) {
-          if (answer.needToCreate || answer.needToUpdate) {
-            const answerData = {
-              uid: answer.uid,
-              uid_question: answer.uid_question,
-              name: answer.name,
-              is_right: answer.is_right
-            }
-
-            Promise.resolve().then(() => {
-              if (answer.needToCreate) {
-                return this.$store.dispatch(ANSWER.CREATE_REGLAMENT_ANSWER_REQUEST, answerData)
-              } else if (answer.needToUpdate) {
-                return this.$store.dispatch(ANSWER.UPDATE_REGLAMENT_ANSWER_REQUEST, answerData)
-              }
-            })
-              .then(() => {
-                answer.needToCreate = false
-                answer.needToUpdate = false
-              })
-          }
-        }
-      }
-
-      this.$store.state.reglaments.answersToDelete.forEach((uid, index) => {
-        this.$store.dispatch(ANSWER.DELETE_REGLAMENT_ANSWER_REQUEST, uid).then(() => {
-          this.$store.state.reglaments.answersToDelete.splice(index, 1)
-        })
-      })
-
-      this.$store.state.reglaments.questionsToDelete.forEach((uid, index) => {
-        this.$store.dispatch(QUESTIONS.DELETE_REGLAMENT_QUESTION_REQUEST, uid).then(() => {
-          this.$store.state.reglaments.questionsToDelete.splice(index, 1)
-        })
-      })
-
-      return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
+      this.isEditing = true
     },
     clickComplete () {
       const data = {
@@ -698,18 +319,8 @@ export default {
         this.isPassed = resp.data.is_passed
         this.disableButton = false
         this.completeText = 'Завершить'
+        this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
       })
-    },
-    addReglamentEditor (email) {
-      const index = this.currEditors.findIndex(editor => editor.toLowerCase() === email.toLowerCase())
-      if (index !== -1) {
-        this.currEditors.splice(index, 1)
-      } else {
-        this.currEditors.push(email)
-      }
-    },
-    checkEditor (email) {
-      return this.currEditors.includes(email)
     },
     startTheReglament () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
@@ -718,12 +329,6 @@ export default {
       }
       this.isTesting = true
       window.scrollTo(0, 0)
-    },
-    pasteEvent (e) {
-      const node = e.target.parentNode.classList.contains('ql-editor') ? e.target : e.target.parentNode
-      setTimeout(() => {
-        node.scrollIntoView({ block: 'center' })
-      }, 1)
     }
   }
 }
@@ -733,15 +338,9 @@ export default {
   @apply z-30
 }
 .ql-snow .ql-tooltip[data-mode=link]::before {
-    content: "Введите ссылку:";
+  content: "Введите ссылку:";
 }
 .ql-snow .ql-tooltip[data-mode=video]::before {
-    content: "Введите ссылку:";
-}
-.ql-clipboard {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 0;
+  content: "Введите ссылку:";
 }
 </style>

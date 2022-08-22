@@ -1152,9 +1152,8 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
-          this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          })
+          this.$store.commit(TASK.REMOVE_TASK, task.uid)
+          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(data => {
             if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)

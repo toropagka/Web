@@ -578,6 +578,7 @@ export default {
     },
     onRenameColumn (name) {
       this.showRenameColumn = false
+      if (this.selectedColumn.Name === name) return
       const title = name.trim()
       if (title) {
         this.$store
