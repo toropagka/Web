@@ -1102,12 +1102,22 @@ const actions = {
   },
   [TASK.SELECT_NEXT_TASK]: ({ dispatch, commit }, payload) => {
     return new Promise((resolve, reject) => {
+      let nextSelectedTaskIndex = null
+      const tasksArray = payload.tasks
       const tasksKeyArray = Object.keys(payload.tasks)
-      const currentSelectedTaskIndex = tasksKeyArray.reverse().indexOf(payload.prevTaskUid)
-      const nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+      const currentSelectedTaskIndex = tasksKeyArray.indexOf(payload.prevTaskUid)
+      const currentTask = tasksArray[payload.prevTaskUid]
+      if (currentTask?.children?.length > 0) {
+        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + currentTask.children.length + 1] ? currentSelectedTaskIndex + currentTask.children.length + 1 : currentSelectedTaskIndex - 1
+      } else if (currentTask?.parent) {
+        const parentItem = tasksArray[currentTask.parent]
+        const currentTaskIndex = parentItem.children.indexOf(payload.prevTaskUid)
+        nextSelectedTaskIndex = currentTaskIndex === parentItem.children.length - 1 ? currentSelectedTaskIndex - 1 : currentSelectedTaskIndex + 1
+      } else {
+        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+      }
       const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
       const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
-
       if (nextSelectedTaskData?.info) {
         commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
       }
