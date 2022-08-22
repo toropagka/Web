@@ -286,7 +286,7 @@ export default {
             } catch (e) {}
           }).then(() => {
             this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-              this.notifiesCopy = this.notifies
+              this.notifiesCopy = [...this.notifies]
             })
           })
         })
@@ -294,7 +294,7 @@ export default {
     }
     if (userLoaded && navLoaded) {
       this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-        this.notifiesCopy = this.notifies
+        this.notifiesCopy = [...this.notifies]
       })
     }
     if (this.justRegistered) {
