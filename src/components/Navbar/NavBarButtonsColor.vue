@@ -41,7 +41,7 @@ import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 
-import { SELECT_COLOR, REMOVE_COLOR_REQUEST } from '@/store/actions/colors'
+import { SELECT_COLOR, REMOVE_MYCOLOR_REQUEST, REMOVE_COLOR_REQUEST } from '@/store/actions/colors'
 import { NAVIGATOR_REMOVE_COLOR } from '@/store/actions/navigator'
 
 export default {
@@ -97,7 +97,7 @@ export default {
           //
           this.$store.commit(NAVIGATOR_REMOVE_COLOR, this.color)
           // для актуального значения количества цветов
-          this.$store.commit(REMOVE_COLOR_REQUEST, this.colorUid)
+          this.$store.commit(REMOVE_MYCOLOR_REQUEST, this.colorUid)
           //
           this.$emit('popNavBar')
         })
