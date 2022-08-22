@@ -38,7 +38,7 @@
               class="table font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
               style="word-break: break-word"
             >
-              {{ fileName }}
+              {{ correctShortFileMessage }}
             </a>
             <a
               v-else
@@ -48,7 +48,7 @@
               class="flex w-full font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
               style="word-break: break-word"
             >
-              {{ fileName }}
+              {{ correctShortFileMessage }}
             </a>
             <div
               v-if="time && size"
@@ -166,7 +166,7 @@
             @setLink="setLink"
           />
 
-          <span>{{ fileName }}</span>
+          <span>{{ correctShortFileMessage }}</span>
           <div
             v-if="time && size"
             class="group flex justify-between w-full text-[#7E7E80] dark:text-gray-300 "
@@ -388,6 +388,14 @@ export default {
       text = text.replaceAll('&lt;', '<')
       text = text.replaceAll('&gt;', '>')
       return text
+    },
+    correctShortFileMessage () {
+      const fileMessageSplitForExtesion = this.fileName.split('.')
+      const shortName = this.fileName.substring(0, 18) + '.. .' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
+
+      return this.fileName.length > 18
+        ? shortName
+        : this.fileName
     }
   },
   methods: {
