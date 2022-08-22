@@ -31,7 +31,15 @@ export default {
     FileIsImage () { return ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].includes(this.fileExtension) },
     FileIsMovie () { return ['mov', 'mp4'].includes(this.fileExtension) },
     FileIsDoc () { return ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'].includes(this.fileExtension) },
-    FileIsAudio () { return ['mp3', 'wav', 'm4a'].includes(this.fileExtension) }
+    FileIsAudio () { return ['mp3', 'wav', 'm4a'].includes(this.fileExtension) },
+    correctShortFileMessage () {
+      const fileMessageSplitForExtesion = this.message.file_name.split('.')
+      const shortName = this.message.file_name.substring(0, 20) + '..' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
+
+      return this.message.file_name.length > 20
+        ? shortName
+        : this.message.file_name
+    }
   },
   methods: {
     setCurrentQuote () {
@@ -90,7 +98,7 @@ export default {
     <doc-preloader
       v-else-if="FileIsDoc"
       :file-uid="message.uid"
-      :file-name="message.file_name"
+      :file-name="correctShortFileMessage"
       :file-extension="fileExtension"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
@@ -111,7 +119,7 @@ export default {
       v-else
       :file-uid="message.uid"
       :file-extension="fileExtension"
-      :file-name="message.file_name"
+      :file-name="correctShortFileMessage"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
       @onQuoteMessage="setCurrentQuote"

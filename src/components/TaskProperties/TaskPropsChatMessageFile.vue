@@ -18,7 +18,8 @@
       >
         <div
           v-if="!pics.includes(fileName.split('.').pop())"
-          class="mt-2 text-right font-medium mb-2 flex relative flex-row"
+          class="mt-2 text-right font-medium mb-2 flex relative"
+          :class="{'flex-col': isAudio}"
         >
           <div class="float-left">
             <FileMessage
