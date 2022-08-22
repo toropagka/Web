@@ -6,7 +6,7 @@
       :class="{ 'flex-row-reverse': isMyFile }"
     >
       <p
-        class="text-[13px] text-[#7E7E80] font-medium dark:text-gray-100"
+        class="text-[13px] text-[#7E7E80] font-medium dark:text-gray-100 truncate"
       >
         {{ creatorName }}
       </p>
