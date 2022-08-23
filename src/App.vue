@@ -1,5 +1,4 @@
 <script>
-import Tabs from '@/components/Tabs/Tabs.vue'
 import MainMenu from '@/components/MainMenu.vue'
 import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
 import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
@@ -21,8 +20,7 @@ export default {
     Overlay,
     ProjectsSubmenu,
     SubMenu,
-    BoardsSubmenu,
-    Tabs
+    BoardsSubmenu
   },
   computed: {
     menu () {
@@ -71,7 +69,7 @@ export default {
   />
   <SubMenu
     v-if="isSubMenuActive"
-    class="pt-[45px]"
+    class="pt-[20px]"
     @closeSubMenu="closeSubMenu"
   >
     <SettingsSubmenu
@@ -102,10 +100,6 @@ export default {
     v-show="isSubMenuActive"
     :z-index="'z-20'"
     @overlay-click="closeSubMenu"
-  />
-  <Tabs
-    v-if="$store.state.auth.token && !isFileRedirect"
-    class="fixed left-0 top-0 z-[50] ml-3"
   />
   <router-view />
 </template>

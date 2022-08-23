@@ -13,7 +13,7 @@
   <aside
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 pt-[60px] z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 pt-[15px] z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
     <div
       class="flex items-center px-3 pb-3 hover:cursor-pointer"
@@ -28,11 +28,11 @@
     </div>
     <div class="flex px-3">
       <span
-        class="bg-[#424242] px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989] hover:cursor-pointer flex items-center"
+        class="bg-[#424242] w-full justify-center px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989] hover:cursor-pointer flex items-center"
         @click="shouldShowInspector"
       >Добавить задачу</span>
     </div>
-    <ul>
+    <ul class="mt-[20px]">
       <template
         v-for="(tab, index) in tabs"
         :key="index"
@@ -370,15 +370,23 @@ export default {
       this.showInspector = true
     },
     changeTab (tab) {
-      this.$store.state.navigator.submenu.status = true
-      this.switchTab(tab)
+      if (tab.code === 'doitnow') {
+        this.$store.state.navigator.submenu.status = false
+      } else {
+        this.$store.state.navigator.submenu.status = true
+      }
+      if (this.lastTab !== tab.code) {
+        this.switchTab(tab)
+      }
     },
     switchTab (tab) {
       this.$store.dispatch(SWITCH_TAB, tab)
         .then(() => {
-          if (tab?.code !== 'new_private_boards' && tab?.code !== 'new_private_projects') {
-            this.$router.push(tab?.code)
+          if (tab?.code === 'new_private_boards' || tab?.code === 'new_private_projects') {
+            this.$router.push('/tasks')
+            return
           }
+          this.$router.push(tab?.code)
         })
     },
     checkOnWhichTab (item) {
