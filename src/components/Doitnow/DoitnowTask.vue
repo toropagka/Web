@@ -615,6 +615,9 @@ export default {
     }
   },
   computed: {
+    currentLocation () {
+      return window.location.origin
+    },
     taskMessagesAndFiles () {
       return this.$store.state.taskfilesandmessages.messages
     },
