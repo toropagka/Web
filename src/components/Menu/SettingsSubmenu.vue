@@ -36,6 +36,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubMenu'],
   computed: {
     currentSettingsTab () {
       return this.$store.state.navigator.currentSettingsTab
@@ -55,6 +56,7 @@ export default {
       }
       localStorage.setItem('currentSettingsTab', item.type)
       this.$store.commit('updateStackWithInitValue', navElem)
+      this.$emit('closeSubMenu')
     }
   }
 }

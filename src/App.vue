@@ -75,6 +75,7 @@ export default {
     <SettingsSubmenu
       v-if="lastTab === 'settings'"
       :menu="menu"
+      @closeSubMenu="closeSubMenu"
     />
     <DirectorySubmenu
       v-if="lastTab === 'directory'"
