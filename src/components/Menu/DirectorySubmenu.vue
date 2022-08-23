@@ -158,6 +158,8 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
+      console.log('directory', item)
+
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return

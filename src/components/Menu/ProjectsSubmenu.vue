@@ -172,6 +172,7 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
+      localStorage.setItem('lastTab', 'new_private_projects')
       this.$emit('closeSubMenu')
     }
   }
