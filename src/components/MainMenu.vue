@@ -384,6 +384,9 @@ export default {
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
+    },
     favoriteBoards () {
       const arr = []
       const boards = this.$store.state.boards.boards

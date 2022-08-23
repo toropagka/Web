@@ -74,6 +74,9 @@ export default {
     },
     user () {
       return this.$store.state.user.user
+    },
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
     }
   },
   methods: {
@@ -147,6 +150,9 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_private_boards?.items })
     },
     gotoChildren (board) {
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
       this.mainStateUpdate()
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
       this.$store.commit('basic', {
