@@ -64,6 +64,7 @@
     >
       <a
         class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+        :class="{'not-active': !canEdit}"
       >
         <svg
           v-if="tags[key] && tags[key].back_color !== '#A998B6'"
@@ -191,8 +192,6 @@
     </template>
     <button
       class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100"
-      :class="canEdit ? 'cursor-pointer' : 'cursor-default'"
-      style="cursor:default !important"
     >
       <svg
         width="24"
