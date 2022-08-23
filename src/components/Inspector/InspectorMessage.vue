@@ -1,365 +1,3 @@
-<script setup>
-import { computed, inject } from 'vue'
-import { useStore } from 'vuex'
-import Icon from '@/components/Icon.vue'
-import projectIcon from '@/icons/project.js'
-import tagIcon from '@/icons/tag.js'
-import colorIcon from '@/icons/color.js'
-
-const store = useStore()
-const employees = computed(() => store.state.employees.employees)
-const currentUserUid = computed(() => store.state.user.user?.current_user_uid)
-const projects = computed(() => store.state.projects.projects)
-const tags = computed(() => store.state.tasks.tags)
-const colors = computed(() => store.state.colors.colors)
-const inputMessage = inject('inputMessage')
-const currentState = inject('currentState')
-const props = defineProps({
-  message: {
-    type: String,
-    default: ''
-  },
-  date: {
-    type: String,
-    default: ''
-  },
-  type: {
-    type: String,
-    default: ''
-  },
-  selectEmployee: {
-    type: Function,
-    default: () => {}
-  },
-  selectProject: {
-    type: Function,
-    default: () => {}
-  },
-  selectTag: {
-    type: Function,
-    default: () => {}
-  },
-  selectColor: {
-    type: Function,
-    default: () => {}
-  },
-  selectAccess: {
-    type: Function,
-    default: () => {}
-  },
-  selectTime: {
-    type: Function,
-    default: () => {}
-  },
-  actionConfirmNewParams: {
-    type: Function,
-    default: () => {}
-  },
-  actionConfirmDelegate: {
-    type: Function,
-    default: () => {}
-  },
-  lastSelected: {
-    type: Function,
-    default: () => {}
-  }
-})
-
-const getMessageTimeString = (dateCreate) => {
-  const date = new Date(dateCreate)
-  return date.toLocaleString('default', {
-    hour: 'numeric',
-    minute: 'numeric'
-  })
-}
-
-const noSetObj = {
-  uid: 'no_set',
-  name: 'Не устанавливать',
-  comment: 'Нет'
-}
-
-const computedColors = computed(() => {
-  if (currentState.value !== 'colorSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newColors = {}
-  if (
-    noSetObj.name.toLowerCase().includes(inputLowerCase) ||
-    noSetObj.comment.toLowerCase().includes(inputLowerCase)
-  ) {
-    newColors[noSetObj.uid] = noSetObj
-  }
-  for (const colorUid in colors.value) {
-    if (
-      colors.value[colorUid].parentID &&
-      colors.value[colorUid].name.toLowerCase().includes(inputLowerCase)
-    ) {
-      newColors[colorUid] = colors.value[colorUid]
-    }
-  }
-  //
-  const selectArr = Object.values(newColors)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newColors
-})
-const computedTags = computed(() => {
-  if (currentState.value !== 'tagSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newTags = {}
-  if (
-    noSetObj.name.toLowerCase().includes(inputLowerCase) ||
-    noSetObj.comment.toLowerCase().includes(inputLowerCase)
-  ) {
-    newTags[noSetObj.uid] = noSetObj
-  }
-  for (const key in tags.value) {
-    if (tags.value[key].name.toLowerCase().includes(inputLowerCase)) {
-      newTags[key] = tags.value[key]
-    }
-  }
-  //
-  const selectArr = Object.values(newTags)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newTags
-})
-
-function includesWord (src, value) {
-  // транслитирируем русские буквы и пытаемся найти английский
-  let valueTranslit = ''
-  const converter = {
-    а: 'a',
-    б: 'b',
-    в: 'v',
-    г: 'g',
-    д: 'd',
-    е: 'e',
-    ё: 'e',
-    ж: 'zh',
-    з: 'z',
-    и: 'i',
-    й: 'y',
-    к: 'k',
-    л: 'l',
-    м: 'm',
-    н: 'n',
-    о: 'o',
-    п: 'p',
-    р: 'r',
-    с: 's',
-    т: 't',
-    у: 'u',
-    ф: 'f',
-    х: 'h',
-    ц: 'c',
-    ч: 'ch',
-    ш: 'sh',
-    щ: 'sch',
-    ь: '',
-    ы: 'y',
-    ъ: '',
-    э: 'e',
-    ю: 'yu',
-    я: 'ya'
-  }
-  for (let i = 0; i < value.length; ++i) {
-    const convertedChar = converter[value[i]]
-    if (convertedChar === undefined) {
-      valueTranslit += value[i]
-    } else {
-      valueTranslit += convertedChar
-    }
-  }
-  const searchSrc = src.toLowerCase()
-  return searchSrc.includes(value) || searchSrc.includes(valueTranslit)
-}
-
-const computedEmployees = computed(() => {
-  if (currentState.value !== 'employeeSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newEmployees = {}
-  for (const empUid in employees.value) {
-    if (
-      empUid !== currentUserUid.value &&
-      includesWord(employees.value[empUid].name, inputLowerCase)
-    ) {
-      newEmployees[empUid] = employees.value[empUid]
-    }
-  }
-  //
-  const selectArr = Object.values(newEmployees)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newEmployees
-})
-
-const computedAccessEmployees = computed(() => {
-  if (currentState.value !== 'accessSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newEmployees = {}
-  if (
-    noSetObj.name.toLowerCase().includes(inputLowerCase) ||
-    noSetObj.comment.toLowerCase().includes(inputLowerCase)
-  ) {
-    newEmployees[noSetObj.uid] = noSetObj
-  }
-  for (const empUid in employees.value) {
-    if (
-      empUid !== currentUserUid.value &&
-      includesWord(employees.value[empUid].name, inputLowerCase)
-    ) {
-      newEmployees[empUid] = employees.value[empUid]
-    }
-  }
-  //
-  const selectArr = Object.values(newEmployees)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newEmployees
-})
-
-const computedProjects = computed(() => {
-  if (currentState.value !== 'projectSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newProjects = {}
-  if (
-    noSetObj.name.toLowerCase().includes(inputLowerCase) ||
-    noSetObj.comment.toLowerCase().includes(inputLowerCase)
-  ) {
-    newProjects[noSetObj.uid] = noSetObj
-  }
-  for (const key in projects.value) {
-    if (projects.value[key].name.toLowerCase().includes(inputLowerCase)) {
-      newProjects[key] = projects.value[key]
-    }
-  }
-  //
-  const selectArr = Object.values(newProjects)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newProjects
-})
-
-const computedСonfirmParams = computed(() => {
-  if (currentState.value !== 'confirmParams') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newСonfirmParams = {}
-  const сonfirmParams = {
-    true: { uid: 'true', name: 'Да', value: true },
-    false: { uid: 'false', name: 'Нет', value: false }
-  }
-  for (const key in сonfirmParams) {
-    if (сonfirmParams[key].name.toLowerCase().includes(inputLowerCase)) {
-      newСonfirmParams[key] = сonfirmParams[key]
-    }
-  }
-  //
-  const selectArr = Object.values(newСonfirmParams)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newСonfirmParams
-})
-
-const computedСonfirmDelegate = computed(() => {
-  if (currentState.value !== 'confirmDelegate') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const newСonfirmParams = {}
-  const сonfirmParams = {
-    true: { uid: 'true', name: 'Да', value: true },
-    false: { uid: 'false', name: 'Нет', value: false }
-  }
-  for (const key in сonfirmParams) {
-    if (сonfirmParams[key].name.toLowerCase().includes(inputLowerCase)) {
-      newСonfirmParams[key] = сonfirmParams[key]
-    }
-  }
-  //
-  const selectArr = Object.values(newСonfirmParams)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newСonfirmParams
-})
-
-const getNearestDay = (d, weekDay) => { // weekDay is an int 1 - Monday, 2 - Tuesday etc
-  return new Date(d.setDate(d.getDate() + (((weekDay + 7 - d.getDay()) % 7) || 7)))
-}
-
-const russianMonths = {
-  Января: 0,
-  Февраля: 1,
-  Марта: 2,
-  Апреля: 3,
-  Мая: 4,
-  Июня: 5,
-  Июля: 6,
-  Августа: 7,
-  Сентября: 8,
-  Октября: 9,
-  Ноября: 10,
-  Декабря: 11
-}
-
-const computedTimes = computed(() => {
-  if (currentState.value !== 'timeSelection') return {}
-  const inputLowerCase = inputMessage.value.toLowerCase()
-  const re = /([0-9]){1,2} +/g
-  const newTimes = {}
-  const times = {
-    today: { uid: 'today', name: 'Сегодня', value: new Date() },
-    tomorrow: { uid: 'tomorrow', name: 'Завтра', value: new Date(new Date().setDate(new Date().getDate() + 1)) },
-    monday: { uid: 'monday', name: 'Понедельник', value: getNearestDay(new Date(), 1) },
-    tuesday: { uid: 'tuesday', name: 'Вторник', value: getNearestDay(new Date(), 2) },
-    wednesday: { uid: 'wednesday', name: 'Среда', value: getNearestDay(new Date(), 3) },
-    thursday: { uid: 'thursday', name: 'Четверг', value: getNearestDay(new Date(), 4) },
-    friday: { uid: 'friday', name: 'Пятница', value: getNearestDay(new Date(), 5) },
-    saturday: { uid: 'saturday', name: 'Суббота', value: getNearestDay(new Date(), 6) },
-    sunday: { uid: 'sunday', name: 'Воскресенье', value: getNearestDay(new Date(), 7) }
-  }
-
-  if (re.test(inputLowerCase) && parseInt(inputMessage.value.split(' ')[0]) <= 31) {
-    for (const key in russianMonths) {
-      const dayNumber = inputMessage.value.split(' ')[0]
-      times[key + dayNumber] = { uid: key + dayNumber, name: dayNumber + ' ' + key, value: new Date(2022, russianMonths[key], parseInt(dayNumber)) }
-    }
-  }
-  let foundExact = false
-  for (const key in times) {
-    if (times[key].name.toLowerCase() === inputLowerCase) {
-      newTimes[key] = times[key]
-      foundExact = true
-    }
-    if (times[key].name.toLowerCase().includes(inputLowerCase) && !foundExact) {
-      newTimes[key] = times[key]
-    }
-  }
-  //
-  const selectArr = Object.values(newTimes)
-  props.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-  //
-  return newTimes
-})
-const getContrastYIQ = function (hexcolor) {
-  if (!hexcolor) return null
-  hexcolor = hexcolor.replace('#', '')
-  const r = parseInt(hexcolor.substr(0, 2), 16)
-  const g = parseInt(hexcolor.substr(2, 2), 16)
-  const b = parseInt(hexcolor.substr(4, 2), 16)
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000
-  return yiq >= 128 ? '#4C4C4D' : 'white'
-}
-
-const getValidForeColor = function (foreColor) {
-  if (foreColor && foreColor !== '#A998B6') return foreColor
-  return '#4c4c4d'
-}
-
-const getValidBackColor = function (backColor) {
-  if (backColor && backColor !== '#A998B6') return backColor
-  return '#f4f5f7'
-}
-</script>
-
 <template>
   <Transition name="slide-fade">
     <div
@@ -378,19 +16,19 @@ const getValidBackColor = function (backColor) {
           <p
             class="text-left font-[400] text-[14px] leading-[19px] text-[#4C4C4D] clamp"
           >
-            {{ props.message }}
+            {{ message }}
           </p>
           <span
             class="font-[700] text-[11px] leading-[13px] float-right"
             style="color: rgba(0, 0, 0, 0.4);"
           >
-            {{ getMessageTimeString(props.date) }}
+            {{ getMessageTimeString(date) }}
           </span>
         </div>
 
         <!-- Select employee -->
         <div
-          v-if="currentState === 'employeeSelection' && props.type === 'employeeSelection'"
+          v-if="currentState.value === 'employeeSelection' && type === 'employeeSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -403,7 +41,7 @@ const getValidBackColor = function (backColor) {
               class="flex items-center bg-[#F4F5F7] rounded-[4px]"
               :class="[`inspector-option-item${key + 1}`]"
               style="padding: 4px 7px 4px 6px;"
-              @click="props.selectEmployee(employee)"
+              @click="selectEmployee(employee)"
             >
               <img
                 :src="employee.fotolink"
@@ -427,7 +65,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Select access employee -->
         <div
-          v-if="currentState === 'accessSelection' && props.type === 'accessSelection'"
+          v-if="currentState.value === 'accessSelection' && type === 'accessSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -440,7 +78,7 @@ const getValidBackColor = function (backColor) {
               class="flex items-center bg-[#F4F5F7] rounded-[4px] min-h-[28px]"
               :class="[`inspector-option-item${index + 1}`]"
               style="padding: 4px 7px 4px 6px;"
-              @click="props.selectAccess(employee)"
+              @click="selectAccess(employee)"
             >
               <img
                 v-if="employee.uid !== 'no_set'"
@@ -462,7 +100,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Select projects -->
         <div
-          v-if="currentState === 'projectSelection' && props.type === 'projectSelection'"
+          v-if="currentState.value === 'projectSelection' && type === 'projectSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -475,7 +113,7 @@ const getValidBackColor = function (backColor) {
               class="flex items-center bg-[#F4F5F7] rounded-[4px] min-h-[28px]"
               :class="[`inspector-option-item${key + 1}`]"
               style="padding: 4px 7px 4px 6px;"
-              @click="props.selectProject(project)"
+              @click="selectProject(project)"
             >
               <icon
                 v-if="project.uid !== 'no_set'"
@@ -505,7 +143,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Select tags -->
         <div
-          v-if="currentState === 'tagSelection' && props.type === 'tagSelection'"
+          v-if="currentState.value === 'tagSelection' && type === 'tagSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -519,7 +157,7 @@ const getValidBackColor = function (backColor) {
               class="flex items-center bg-[#F4F5F7] rounded-[4px] min-h-[28px]"
               :class="[`inspector-option-item${key + 1}`]"
               style="padding: 4px 7px 4px 6px;"
-              @click="props.selectTag(tag)"
+              @click="selectTag(tag)"
             >
               <icon
                 v-if="tag.uid !== 'no_set'"
@@ -549,7 +187,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Select Colors -->
         <div
-          v-if="currentState === 'colorSelection' && props.type === 'colorSelection'"
+          v-if="currentState.value === 'colorSelection' && type === 'colorSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -563,7 +201,7 @@ const getValidBackColor = function (backColor) {
               :class="[`inspector-option-item${index + 1}`]"
               style="padding: 4px 7px 4px 6px;"
               :style="{ 'background-color': getValidBackColor(color.back_color) }"
-              @click="props.selectColor(color)"
+              @click="selectColor(color)"
             >
               <icon
                 v-if="color.uid !== 'no_set'"
@@ -594,7 +232,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Select time -->
         <div
-          v-if="currentState === 'timeSelection' && props.type === 'timeSelection'"
+          v-if="currentState.value === 'timeSelection' && type === 'timeSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -606,7 +244,7 @@ const getValidBackColor = function (backColor) {
               class="flex items-center bg-[#F4F5F7] rounded-[4px] space-x-[6px] cursor-pointer"
               :class="[`inspector-option-item${index + 1}`]"
               style="padding: 4px 7px 4px 6px;"
-              @click="props.selectTime({ name: time.name, date: time.value.toISOString() })"
+              @click="selectTime({ name: time.name, date: time.value.toISOString() })"
             >
               <svg
                 width="16"
@@ -716,7 +354,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Confirm adding additional params -->
         <div
-          v-if="currentState === 'confirmParams' && props.type === 'confirmParams'"
+          v-if="currentState.value === 'confirmParams' && type === 'confirmParams'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -724,7 +362,7 @@ const getValidBackColor = function (backColor) {
             :key="index"
             class="flex items-center bg-[#F4F5F7] rounded-[4px] py-[10px] px-[14px] cursor-pointer"
             :class="[`inspector-option-item${index + 1}`]"
-            @click="props.actionConfirmNewParams(confirm.value)"
+            @click="actionConfirmNewParams(confirm.value)"
           >
             <span class="text-[#4C4C4D] font-[500] text-[13px] leading-[15px]">{{ confirm.name }}</span>
           </div>
@@ -737,7 +375,7 @@ const getValidBackColor = function (backColor) {
 
         <!-- Confirm delegate the task -->
         <div
-          v-if="currentState === 'confirmDelegate' && props.type === 'confirmDelegate'"
+          v-if="currentState.value === 'confirmDelegate' && type === 'confirmDelegate'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -745,7 +383,7 @@ const getValidBackColor = function (backColor) {
             :key="index"
             class="flex items-center bg-[#F4F5F7] rounded-[4px] py-[10px] px-[14px] cursor-pointer"
             :class="[`inspector-option-item${index + 1}`]"
-            @click="props.actionConfirmDelegate(confirm.value)"
+            @click="actionConfirmDelegate(confirm.value)"
           >
             <span class="text-[#4C4C4D] font-[500] text-[13px] leading-[15px]"> {{ confirm.name }} </span>
           </div>
@@ -759,6 +397,391 @@ const getValidBackColor = function (backColor) {
     </div>
   </Transition>
 </template>
+
+<script>
+import Icon from '@/components/Icon.vue'
+import projectIcon from '@/icons/project.js'
+import tagIcon from '@/icons/tag.js'
+import colorIcon from '@/icons/color.js'
+
+export default {
+  components: {
+    Icon
+  },
+  inject: ['inputMessage', 'currentState'],
+
+  props: {
+    message: {
+      type: String,
+      default: ''
+    },
+    date: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String,
+      default: ''
+    },
+    selectEmployee: {
+      type: Function,
+      default: () => {}
+    },
+    selectProject: {
+      type: Function,
+      default: () => {}
+    },
+    selectTag: {
+      type: Function,
+      default: () => {}
+    },
+    selectColor: {
+      type: Function,
+      default: () => {}
+    },
+    selectAccess: {
+      type: Function,
+      default: () => {}
+    },
+    selectTime: {
+      type: Function,
+      default: () => {}
+    },
+    actionConfirmNewParams: {
+      type: Function,
+      default: () => {}
+    },
+    actionConfirmDelegate: {
+      type: Function,
+      default: () => {}
+    },
+    lastSelected: {
+      type: Function,
+      default: () => {}
+    }
+  },
+  data () {
+    return {
+    // icons
+      projectIcon,
+      tagIcon,
+      colorIcon,
+
+      noSetObj: {
+        uid: 'no_set',
+        name: 'Не устанавливать',
+        comment: 'Нет'
+      },
+      russianMonths: {
+        Января: 0,
+        Февраля: 1,
+        Марта: 2,
+        Апреля: 3,
+        Мая: 4,
+        Июня: 5,
+        Июля: 6,
+        Августа: 7,
+        Сентября: 8,
+        Октября: 9,
+        Ноября: 10,
+        Декабря: 11
+      }
+    }
+  },
+  computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    },
+    currentUserUid () {
+      return this.$store.state.user.user?.current_user_uid
+    },
+    projects () {
+      return this.$store.state.projects.projects
+    },
+    tags () {
+      return this.$store.state.tasks.tags
+    },
+    colors () {
+      return this.$store.state.colors.colors
+    },
+
+    computedColors () {
+      if (this.currentState.value !== 'colorSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newColors = {}
+      if (
+        this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
+    this.noSetObj.comment.toLowerCase().includes(inputLowerCase)
+      ) {
+        newColors[this.noSetObj.uid] = this.noSetObj
+      }
+      for (const colorUid in this.colors) {
+        if (
+          this.colors[colorUid].parentID &&
+      this.colors[colorUid].name.toLowerCase().includes(inputLowerCase)
+        ) {
+          newColors[colorUid] = this.colors[colorUid]
+        }
+      }
+      //
+      const selectArr = Object.values(newColors)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newColors
+    },
+
+    computedTags () {
+      if (this.currentState.value !== 'tagSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newTags = {}
+      if (
+        this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
+    this.noSetObj.comment.toLowerCase().includes(inputLowerCase)
+      ) {
+        newTags[this.noSetObj.uid] = this.noSetObj
+      }
+      for (const key in this.tags) {
+        if (this.tags[key].name.toLowerCase().includes(inputLowerCase)) {
+          newTags[key] = this.tags[key]
+        }
+      }
+      //
+      const selectArr = Object.values(newTags)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newTags
+    },
+
+    computedEmployees () {
+      if (this.currentState.value !== 'employeeSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newEmployees = {}
+      for (const empUid in this.employees) {
+        if (
+          empUid !== this.currentUserUid &&
+      this.includesWord(this.employees[empUid].name, inputLowerCase)
+        ) {
+          newEmployees[empUid] = this.employees[empUid]
+        }
+      }
+      //
+      const selectArr = Object.values(newEmployees)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newEmployees
+    },
+
+    computedAccessEmployees () {
+      if (this.currentState.value !== 'accessSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newEmployees = {}
+      if (
+        this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
+    this.noSetObj.comment.toLowerCase().includes(inputLowerCase)
+      ) {
+        newEmployees[this.noSetObj.uid] = this.noSetObj
+      }
+      for (const empUid in this.employees) {
+        if (
+          empUid !== this.currentUserUid &&
+      this.includesWord(this.employees[empUid].name, inputLowerCase)
+        ) {
+          newEmployees[empUid] = this.employees[empUid]
+        }
+      }
+      //
+      const selectArr = Object.values(newEmployees)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newEmployees
+    },
+
+    computedProjects () {
+      if (this.currentState.value !== 'projectSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newProjects = {}
+      if (
+        this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
+    this.noSetObj.comment.toLowerCase().includes(inputLowerCase)
+      ) {
+        newProjects[this.noSetObj.uid] = this.noSetObj
+      }
+      for (const key in this.projects) {
+        if (this.projects[key].name.toLowerCase().includes(inputLowerCase)) {
+          newProjects[key] = this.projects[key]
+        }
+      }
+      //
+      const selectArr = Object.values(newProjects)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newProjects
+    },
+
+    computedСonfirmParams () {
+      if (this.currentState.value !== 'confirmParams') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newСonfirmParams = {}
+      const сonfirmParams = {
+        true: { uid: 'true', name: 'Да', value: true },
+        false: { uid: 'false', name: 'Нет', value: false }
+      }
+      for (const key in сonfirmParams) {
+        if (сonfirmParams[key].name.toLowerCase().includes(inputLowerCase)) {
+          newСonfirmParams[key] = сonfirmParams[key]
+        }
+      }
+      //
+      const selectArr = Object.values(newСonfirmParams)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newСonfirmParams
+    },
+
+    computedСonfirmDelegate () {
+      if (this.currentState.value !== 'confirmDelegate') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const newСonfirmParams = {}
+      const сonfirmParams = {
+        true: { uid: 'true', name: 'Да', value: true },
+        false: { uid: 'false', name: 'Нет', value: false }
+      }
+      for (const key in сonfirmParams) {
+        if (сonfirmParams[key].name.toLowerCase().includes(inputLowerCase)) {
+          newСonfirmParams[key] = сonfirmParams[key]
+        }
+      }
+      //
+      const selectArr = Object.values(newСonfirmParams)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newСonfirmParams
+    },
+    computedTimes () {
+      if (this.currentState.value !== 'timeSelection') return {}
+      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      const re = /([0-9]){1,2} +/g
+      const newTimes = {}
+      const times = {
+        today: { uid: 'today', name: 'Сегодня', value: new Date() },
+        tomorrow: { uid: 'tomorrow', name: 'Завтра', value: new Date(new Date().setDate(new Date().getDate() + 1)) },
+        monday: { uid: 'monday', name: 'Понедельник', value: this.getNearestDay(new Date(), 1) },
+        tuesday: { uid: 'tuesday', name: 'Вторник', value: this.getNearestDay(new Date(), 2) },
+        wednesday: { uid: 'wednesday', name: 'Среда', value: this.getNearestDay(new Date(), 3) },
+        thursday: { uid: 'thursday', name: 'Четверг', value: this.getNearestDay(new Date(), 4) },
+        friday: { uid: 'friday', name: 'Пятница', value: this.getNearestDay(new Date(), 5) },
+        saturday: { uid: 'saturday', name: 'Суббота', value: this.getNearestDay(new Date(), 6) },
+        sunday: { uid: 'sunday', name: 'Воскресенье', value: this.getNearestDay(new Date(), 7) }
+      }
+
+      if (re.test(inputLowerCase) && parseInt(this.inputMessage.value.split(' ')[0]) <= 31) {
+        for (const key in this.russianMonths) {
+          const dayNumber = this.inputMessage.value.split(' ')[0]
+          times[key + dayNumber] = { uid: key + dayNumber, name: dayNumber + ' ' + key, value: new Date(2022, this.russianMonths[key], parseInt(dayNumber)) }
+        }
+      }
+      let foundExact = false
+      for (const key in times) {
+        if (times[key].name.toLowerCase() === inputLowerCase) {
+          newTimes[key] = times[key]
+          foundExact = true
+        }
+        if (times[key].name.toLowerCase().includes(inputLowerCase) && !foundExact) {
+          newTimes[key] = times[key]
+        }
+      }
+      //
+      const selectArr = Object.values(newTimes)
+      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
+      //
+      return newTimes
+    }
+  },
+  methods: {
+    getMessageTimeString (dateCreate) {
+      const date = new Date(dateCreate)
+      return date.toLocaleString('default', {
+        hour: 'numeric',
+        minute: 'numeric'
+      })
+    },
+
+    includesWord (src, value) {
+      // транслитирируем русские буквы и пытаемся найти английский
+      let valueTranslit = ''
+      const converter = {
+        а: 'a',
+        б: 'b',
+        в: 'v',
+        г: 'g',
+        д: 'd',
+        е: 'e',
+        ё: 'e',
+        ж: 'zh',
+        з: 'z',
+        и: 'i',
+        й: 'y',
+        к: 'k',
+        л: 'l',
+        м: 'm',
+        н: 'n',
+        о: 'o',
+        п: 'p',
+        р: 'r',
+        с: 's',
+        т: 't',
+        у: 'u',
+        ф: 'f',
+        х: 'h',
+        ц: 'c',
+        ч: 'ch',
+        ш: 'sh',
+        щ: 'sch',
+        ь: '',
+        ы: 'y',
+        ъ: '',
+        э: 'e',
+        ю: 'yu',
+        я: 'ya'
+      }
+      for (let i = 0; i < value.length; ++i) {
+        const convertedChar = converter[value[i]]
+        if (convertedChar === undefined) {
+          valueTranslit += value[i]
+        } else {
+          valueTranslit += convertedChar
+        }
+      }
+      const searchSrc = src.toLowerCase()
+      return searchSrc.includes(value) || searchSrc.includes(valueTranslit)
+    },
+
+    getNearestDay (d, weekDay) { // weekDay is an int 1 - Monday, 2 - Tuesday etc
+      return new Date(d.setDate(d.getDate() + (((weekDay + 7 - d.getDay()) % 7) || 7)))
+    },
+
+    getContrastYIQ (hexcolor) {
+      if (!hexcolor) return null
+      hexcolor = hexcolor.replace('#', '')
+      const r = parseInt(hexcolor.substr(0, 2), 16)
+      const g = parseInt(hexcolor.substr(2, 2), 16)
+      const b = parseInt(hexcolor.substr(4, 2), 16)
+      const yiq = (r * 299 + g * 587 + b * 114) / 1000
+      return yiq >= 128 ? '#4C4C4D' : 'white'
+    },
+
+    getValidForeColor (foreColor) {
+      if (foreColor && foreColor !== '#A998B6') return foreColor
+      return '#4c4c4d'
+    },
+
+    getValidBackColor (backColor) {
+      if (backColor && backColor !== '#A998B6') return backColor
+      return '#f4f5f7'
+    }
+  }
+}
+</script>
 
 <style scoped>
 .slide-fade-enter-active {

@@ -12,6 +12,8 @@
       @header-icon-click="cancel"
     >
       <div class="items-center justify-center">
+        <pre>{{ currentState }}</pre>
+        <pre>{{ inputValue }}</pre>
         <InspectorContent
           :messages="messages"
           :select-employee="selectEmployee"
@@ -272,13 +274,13 @@ export default {
     },
     onMessageAddParams (message) {
       if (this.lastSelectedObj) {
-        this.actionConfirmNewParams(this.lastSelectedObj)
+        this.actionConfirmNewParams(this.lastSelectedObj.value)
         this.clearInputMessageAndFocus()
       }
     },
     onMessageConfirm (message) {
       if (this.lastSelectedObj) {
-        this.actionConfirmDelegate(this.lastSelectedObj)
+        this.actionConfirmDelegate(this.lastSelectedObj.value)
         this.clearInputMessageAndFocus()
       }
     },
