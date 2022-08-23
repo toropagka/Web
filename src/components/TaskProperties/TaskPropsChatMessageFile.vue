@@ -312,7 +312,6 @@
 import FileMessage from '@/components/TaskProperties/FileMessage.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
-import { ref } from 'vue'
 import { copyText } from 'vue3-clipboard'
 
 export default {
@@ -360,25 +359,14 @@ export default {
     }
   },
   emits: ['answer', 'deleteFiles', 'PasteEvent'],
-  setup () {
-    const isTaskHoverPopperActive = ref(false)
-    const fileUrl = ref('')
-    const isAudio = ref(false)
-    const pics = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'PNG', 'JPG', 'JPEG', 'BMP', 'GIF']
-    const toggleTaskHoverPopper = (val) => {
-      isTaskHoverPopperActive.value = val
-    }
-    return {
-      toggleTaskHoverPopper,
-      pics,
-      fileUrl,
-      isAudio
-    }
-  },
   data () {
     return {
       movies: ['mov', 'mp4', 'wmv', 'avi', 'avchd', 'mkv', 'webm', 'mpeg-2'],
-      currentlocation: window.location.href
+      pics: ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'PNG', 'JPG', 'JPEG', 'BMP', 'GIF'],
+      currentlocation: window.location.href,
+      isTaskHoverPopperActive: false,
+      fileUrl: '',
+      isAudio: false
     }
   },
   computed: {
@@ -422,6 +410,9 @@ export default {
     },
     PasteEvent () {
       this.$emit('PasteEvent')
+    },
+    toggleTaskHoverPopper (val) {
+      this.isTaskHoverPopperActive = val
     }
   }
 }
