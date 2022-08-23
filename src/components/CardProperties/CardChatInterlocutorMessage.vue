@@ -1,31 +1,9 @@
-<script setup>
-import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
-import CardChatDeletedMessageContent from '@/components/CardProperties/CardChatDeletedMessageContent.vue'
-defineEmits(['onQuoteMessage'])
-const props = defineProps({
-  message: Object
-})
-
-const getMessageTimeString = (dateCreate) => {
-  if (!dateCreate) return ''
-  // добавляем Z в конец, чтобы он посчитал что это UTC время
-  if (dateCreate[dateCreate.length - 1] !== 'Z') {
-    dateCreate += 'Z'
-  }
-  const date = new Date(dateCreate)
-  return date.toLocaleString('default', {
-    hour: 'numeric',
-    minute: 'numeric'
-  })
-}
-</script>
-
 <template>
   <div
     class="py-[10px] px-[15px] rounded-t-[12px] rounded-br-[12px] mb-[5px] float-left max-w-[300px] group"
-    :class="{ 'bg-[#FCEBEB]': props.message.deleted === 0, 'bg-[#F4F5F7]': props.message.deleted === 1 }"
+    :class="{ 'bg-[#FCEBEB]': message.deleted === 0, 'bg-[#F4F5F7]': message.deleted === 1 }"
   >
-    <card-chat-deleted-message-content v-if="props.message.deleted" />
+    <CardChatDeletedMessageContent v-if="message.deleted" />
     <div
       v-else
       class="flex"
@@ -34,7 +12,7 @@ const getMessageTimeString = (dateCreate) => {
         v-linkified:options="{ className: 'text-blue-600', tagName: 'a' }"
         class="mr-[8px] font-[400] text-[14px] text-[#4C4C4D] leading-[19px] break-words max-w-[230px]"
       >
-        {{ props.message.msg }}
+        {{ message.msg }}
       </span>
       <p
         class="text-right font-[700] leading-[14px] text-[11px] self-end group-hover:hidden min-w-[30px]"
@@ -43,9 +21,9 @@ const getMessageTimeString = (dateCreate) => {
         {{ getMessageTimeString(message.date_create) }}
       </p>
       <div class="self-end group-hover:flex hidden">
-        <card-chat-message-options-pop-menu
+        <CardChatMessageOptionsPopMenu
           :can-delete="false"
-          @onQuoteMessage="$emit('onQuoteMessage', props.message)"
+          @onQuoteMessage="onQuoteMessage"
         >
           <div class="min-w-[30px] min-h-[16px] flex cursor-pointer items-end justify-center w-full">
             <svg
@@ -70,8 +48,44 @@ const getMessageTimeString = (dateCreate) => {
               />
             </svg>
           </div>
-        </card-chat-message-options-pop-menu>
+        </CardChatMessageOptionsPopMenu>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+import CardChatDeletedMessageContent from '@/components/CardProperties/CardChatDeletedMessageContent.vue'
+
+export default {
+  components: {
+    CardChatMessageOptionsPopMenu,
+    CardChatDeletedMessageContent
+  },
+  props: {
+    message: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  emits: ['onQuoteMessage'],
+  methods: {
+    getMessageTimeString (dateCreate) {
+      if (!dateCreate) return ''
+      // добавляем Z в конец, чтобы он посчитал что это UTC время
+      if (dateCreate[dateCreate.length - 1] !== 'Z') {
+        dateCreate += 'Z'
+      }
+      const date = new Date(dateCreate)
+      return date.toLocaleString('default', {
+        hour: 'numeric',
+        minute: 'numeric'
+      })
+    },
+    onQuoteMessage () {
+      this.$emit('onQuoteMessage', this.message)
+    }
+  }
+}
+</script>
