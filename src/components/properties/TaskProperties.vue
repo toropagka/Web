@@ -190,7 +190,7 @@
       </div>
       <!-- Checklist -->
       <TaskPropsChecklist
-        v-if="selectedTask.checklist || checklistshow || checklistSavedNow"
+        v-if="selectedTask?.checklist || checklistshow || checklistSavedNow"
         class="mb-[20px] checklist-custom"
         :checklist="selectedTask.checklist"
         :can-edit="canEditChecklist"
@@ -201,7 +201,7 @@
       />
       <!-- Comment -->
       <TaskPropsCommentEditor
-        v-if="canEditComment || selectedTask.comment.length > 0"
+        v-if="canEditComment || selectedTask?.comment?.length > 0"
         :comment="selectedTask.comment ?? ''"
         :can-edit="canEditComment"
         @changeComment="onChangeComment"
@@ -601,7 +601,7 @@ export default {
       this.checklistshow = true
     },
     getFixedCommentName () {
-      return this.selectedTask.name.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>')
+      return this.selectedTask?.name ? this.selectedTask.name.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\n', '<br/>') : ''
     },
     print (value) {
       console.log(value)
