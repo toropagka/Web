@@ -170,7 +170,7 @@ export default {
       ],
       movies: ['mov', 'mp4', 'wmv', 'avi', 'avchd', 'mkv', 'webm', 'mpeg-2'],
       docs: ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'],
-      audio: ['mp3', 'wav', 'm4a'],
+      audio: ['mp3', 'wav'],
       isImageLoaded: false
     }
   },
