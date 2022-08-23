@@ -370,10 +370,14 @@ export default {
       this.showInspector = true
     },
     changeTab (tab) {
-      if (tab.code !== 'doitnow') {
+      if (tab.code === 'doitnow') {
+        this.$store.state.navigator.submenu.status = false
+      } else {
         this.$store.state.navigator.submenu.status = true
       }
-      this.switchTab(tab)
+      if (this.lastTab !== tab.code) {
+        this.switchTab(tab)
+      }
     },
     switchTab (tab) {
       this.$store.dispatch(SWITCH_TAB, tab)
