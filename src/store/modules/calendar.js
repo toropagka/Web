@@ -4,6 +4,10 @@ const state = {
     highlight: { fillMode: 'outline', class: 'today' },
     dates: new Date()
   },
+  lastVisitedAttribute: {
+    highlight: { color: 'orange', class: 'vc-highlight' },
+    dates: new Date(localStorage.getItem('lastVisitedDate')) ? new Date(localStorage.getItem('lastVisitedDate')) : 0
+  },
   dotsAttribute: {
     order: 1,
     dates: [],
@@ -12,7 +16,7 @@ const state = {
 }
 
 const getters = {
-  attrsCalendar: (state) => [state.todayAttribute, state.dotsAttribute]
+  attrsCalendar: (state) => [state.todayAttribute, state.lastVisitedAttribute, state.dotsAttribute]
 }
 
 const actions = {
@@ -33,6 +37,10 @@ const actions = {
 const mutations = {
   updateCalendarToday (state) {
     state.todayAttribute.dates = new Date()
+  },
+  updateCalendarLastVisited (state, date) {
+    localStorage.setItem('lastVisitedDate', date)
+    state.lastVisitedAttribute.dates = new Date(date)
   },
   setDotsDates (state, dates) {
     state.dotsAttribute.dates = dates
