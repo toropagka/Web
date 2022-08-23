@@ -1,9 +1,26 @@
 <template>
+  <InspectorLimit
+    v-if="showFreeModal"
+    @cancel="showFreeModal = false"
+  />
+  <InspectorModalBox
+    v-model="showInspector"
+    button="warning"
+    has-button
+    has-cancel
+    button-label="Delete"
+  />
   <aside
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
     class="w-[292px] fixed top-0 pt-[60px] z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
+    <div class="flex px-6">
+      <span
+        class="bg-[#424242] px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989] hover:cursor-pointer flex items-center"
+        @click="shouldShowInspector"
+      >Добавить задачу</span>
+    </div>
     <ul>
       <template
         v-for="(tab, index) in tabs"
@@ -30,10 +47,14 @@
 <script>
 import { SWITCH_TAB } from '@/store/actions/tabs.js'
 
+import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import Icon from '@/components/Icon.vue'
 export default {
   components: {
-    Icon
+    Icon,
+    InspectorLimit,
+    InspectorModalBox
   },
   data () {
     return {
@@ -233,7 +254,9 @@ export default {
           height: 30,
           code: 'new_private_projects'
         }
-      ]
+      ],
+      showFreeModal: false,
+      showInspector: false
     }
   },
   computed: {
@@ -248,6 +271,13 @@ export default {
     }
   },
   methods: {
+    shouldShowInspector () {
+      if (this.$store.state.user.user.tarif !== 'alpha' && this.$store.state.user.user.tarif !== 'trial') {
+        this.showFreeModal = true
+        return
+      }
+      this.showInspector = true
+    },
     changeTab (tab) {
       this.$store.state.navigator.submenu.status = true
       this.switchTab(tab)

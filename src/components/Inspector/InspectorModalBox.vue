@@ -12,8 +12,6 @@
       @header-icon-click="cancel"
     >
       <div class="items-center justify-center">
-        <pre>{{ currentState }}</pre>
-        <pre>{{ inputValue }}</pre>
         <InspectorContent
           :messages="messages"
           :select-employee="selectEmployee"
