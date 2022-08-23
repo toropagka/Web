@@ -840,6 +840,13 @@ const mutations = {
   },
   [RESET_STATE_NAVIGATOR]: (state) => {
     Object.assign(state, getDefaultState())
+  },
+  initInviteMe (state, data) {
+    if (!('invite_me' in state.navigator)) state.navigator.invite_me = {}
+
+    state.navigator.invite_me.uid = data.uid
+    state.navigator.invite_me.uid_owner_org = data.uid_org
+    state.navigator.invite_me.name_owner_org = data.director_name
   }
 }
 
