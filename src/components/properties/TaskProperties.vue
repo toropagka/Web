@@ -298,6 +298,8 @@ import { CREATE_MESSAGE_REQUEST, DELETE_MESSAGE_REQUEST } from '@/store/actions/
 import { CREATE_FILES_REQUEST, DELETE_FILE_REQUEST } from '@/store/actions/taskfiles'
 import * as TASK from '@/store/actions/tasks'
 import * as INSPECTOR from '@/store/actions/inspector'
+
+import { TASK_STATUS } from '@/constants'
 import { copyText } from 'vue3-clipboard'
 
 import linkify from 'vue-linkify'
@@ -485,14 +487,14 @@ export default {
       this.$store.dispatch(CREATE_FILES_REQUEST, data).then(
         resp => {
           if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
-            if ([1, 5, 7, 8].includes(this.selectedTask.status)) {
-              this.selectedTask.status = 9
+            if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
+              this.selectedTask.status = TASK_STATUS.TASK_REFINE
             }
           }
           this.selectedTask.has_files = true
-          if (this.selectedTask.uid_customer === this.user.current_user_uid && (this.selectedTask.status === 5 || this.selectedTask.status === 7)) {
+          if (this.selectedTask.uid_customer === this.user.current_user_uid && (this.selectedTask.status === TASK_STATUS.TASK_READY || this.selectedTask.status === TASK_STATUS.TASK_CANCELLED)) {
             // to refine
-            this.selectedTask.status = 9
+            this.selectedTask.status = TASK_STATUS.TASK_REFINE
           }
         })
       this.infoComplete = true
@@ -659,9 +661,12 @@ export default {
             }
             this.selectedTask.has_msgs = true
             if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
-              if ([1, 5, 7, 8].includes(this.selectedTask.status)) {
-                if (((this.selectedTask.uid_customer === this.user?.current_user_uid) && ((this.selectedTask.status === 1) || (this.selectedTask.status === 5)))) {
-                  this.selectedTask.status = 9
+              if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
+                if (
+                  (this.selectedTask.uid_customer === this.user?.current_user_uid) &&
+                  ((this.selectedTask.status === TASK_STATUS.TASK_COMPLETED))
+                ) {
+                  this.selectedTask.status = TASK_STATUS.TASK_REFINE
                 }
               }
               this.selectedTask.msg = decodeURIComponent(this.taskMsg)
@@ -694,9 +699,9 @@ export default {
             resp => {
               // ставим статус "на доработку" когда прикладываем файл
               if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
-                if ([1, 5, 7, 8].includes(this.selectedTask.status)) {
-                  if (((this.selectedTask.uid_customer === this.user?.current_user_uid) && ((this.selectedTask.status === 1) || (this.selectedTask.status === 5)))) {
-                    this.selectedTask.status = 9
+                if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
+                  if (((this.selectedTask.uid_customer === this.user?.current_user_uid) && ((this.selectedTask.status === TASK_STATUS.TASK_COMPLETED)))) {
+                    this.selectedTask.status = TASK_STATUS.TASK_REFINE
                   }
                 }
               }
