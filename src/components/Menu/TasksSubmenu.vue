@@ -301,6 +301,7 @@ export default {
       if (this.checkOnWhichTab(item)) {
         return
       }
+      localStorage.setItem('lastTab', 'tasks')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
