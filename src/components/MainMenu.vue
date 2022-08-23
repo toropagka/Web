@@ -250,7 +250,6 @@ export default {
   methods: {
     changeTab (tab) {
       this.$store.state.navigator.submenu.status = true
-      this.$store.state.navigator.lastTab = tab.code
       this.switchTab(tab)
     },
     switchTab (tab) {
