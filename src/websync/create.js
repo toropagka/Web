@@ -50,7 +50,7 @@ export default function processCreate (obj) {
             obj: obj,
             text: obj.obj.name
           },
-          isNotificationSoundOn.value
+          isNotificationSoundOn()
         )
       }
       createProject(obj)
@@ -68,7 +68,7 @@ export default function processCreate (obj) {
             obj: obj,
             text: obj.obj.name
           },
-          isNotificationSoundOn.value
+          isNotificationSoundOn()
         )
       }
       createTask(obj)
