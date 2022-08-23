@@ -1,7 +1,7 @@
 <template>
   <div
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 pt-[60px] z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 pt-[15px] z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">

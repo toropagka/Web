@@ -37,7 +37,7 @@
   </div>
   <div
     v-else-if="tasksCount && !isLoading && isNotifiesLoaded"
-    class="flex items-center pt-[70px] mb-5 justify-between"
+    class="flex items-center pt-[35px] mb-5 justify-between"
   >
     <!-- header -->
     <div class="flex items-center" />
@@ -55,7 +55,7 @@
     </button>
   </div>
   <transition :name="taskTransition">
-    <div>
+    <div class="ml-[300px]">
       <DoitnowTask
         v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
         :key="firstTask.uid"
