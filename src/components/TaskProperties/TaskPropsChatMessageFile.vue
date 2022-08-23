@@ -312,7 +312,6 @@
 import FileMessage from '@/components/TaskProperties/FileMessage.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
-import { copyText } from 'vue3-clipboard'
 
 export default {
   components: {
@@ -387,16 +386,6 @@ export default {
     }
   },
   methods: {
-    copyFile (file) {
-      copyText(file, undefined, (error, event) => {
-        // copyText('lt://planning?{' + selectedTask.value.uid.toUpperCase() + '}', undefined, (error, event) => {
-        if (error) {
-          console.log(error)
-        } else {
-          console.log(event)
-        }
-      })
-    },
     setLink (payload) {
       const [url, isAudio] = payload
       this.fileUrl = url
