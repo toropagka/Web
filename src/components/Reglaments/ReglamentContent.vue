@@ -95,7 +95,10 @@
           />
         </div>
       </div>
-      <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
+      <div
+        v-if="reglamentEditors.length"
+        class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+      >
         <span class="font-medium pr-3">Редакторы:</span>
         <EmployeeProfile
           v-for="editor in reglamentEditors"
@@ -119,7 +122,7 @@
       class="mt-5"
     >
       <button
-        class="flex items-center font-['Roboto'] text-[#6a6a6b] mt-1 mb-1 dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium hover:text-black transition"
+        class="flex items-center font-['Roboto'] text-[#424242] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium hover:text-black transition"
         @click="showEmployees = !showEmployees"
       >
         <span class="mr-1.5">Сотрудники, прошедшие регламент</span>
@@ -143,6 +146,7 @@
         class="flex items-center mt-2.5"
       >
         <button
+          v-if="canEdit"
           class="flex items-center h-[30px] mr-3 px-[10px] py-[5px] bc-none border-none text-xs text-[#4C4C4D]"
           @click="clearContributors"
         >
