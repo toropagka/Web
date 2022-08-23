@@ -1147,15 +1147,15 @@ export default {
       this.$store.commit(TASK.SELECT_TASK, task)
       this.showConfirm = true
     },
-    sortTasks (task, result) {
-      result[task.id] = task
+    sortTasks (task, restoredTasksArray) {
+      restoredTasksArray[task.id] = task
       if (task.state.opened) {
         task.children.forEach((item) => {
           const child = this.storeTasks[item]
           if (child?.children?.length !== 0) {
-            this.sortTasks(child, result)
+            this.sortTasks(child, restoredTasksArray)
           }
-          result[item] = this.storeTasks[item]
+          restoredTasksArray[item] = this.storeTasks[item]
         })
       }
     },
@@ -1164,18 +1164,18 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
-          const result = []
+          const restoredTasksArray = []
           Object.values(prevTasksArray).forEach((item) => {
             if (item.children.length !== 0) {
-              this.sortTasks(item, result)
+              this.sortTasks(item, restoredTasksArray)
             } else if (this.newConfig.roots.includes(item.id)) {
-              result[item.id] = item
+              restoredTasksArray[item.id] = item
             }
           })
           this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
             this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           })
-          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: result }).then(data => {
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: restoredTasksArray }).then(data => {
             if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
               return
