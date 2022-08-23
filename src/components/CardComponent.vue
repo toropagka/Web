@@ -1,79 +1,3 @@
-<script setup>
-import { mdiCog } from '@mdi/js'
-import { computed, ref } from 'vue'
-import Icon from '@/components/Icon.vue'
-import AccKarmaLimit from '@/components/AccKarmaLimit'
-import { useStore } from 'vuex'
-
-const props = defineProps({
-  title: {
-    type: String,
-    default: null
-  },
-  icon: {
-    type: String,
-    default: null
-  },
-  headerIcon: {
-    type: String,
-    default: null
-  },
-  rounded: {
-    type: String,
-    default: 'rounded-[20px]'
-  },
-  hasTable: Boolean,
-  accMod: Boolean,
-  empty: Boolean,
-  form: Boolean,
-  hoverable: Boolean
-})
-
-const emit = defineEmits(['header-icon-click', 'submit', 'tab'])
-
-const is = computed(() => props.form ? 'form' : 'div')
-
-const showFreeModal = ref(false)
-
-const currentTab = ref('account')
-
-const user = computed(() => store.state.user.user)
-
-const store = useStore()
-
-const licenseType = computed(() => store.state.user.user?.license_type ?? 0)
-
-const componentClass = computed(() => {
-  const base = [
-    props.rounded
-  ]
-
-  if (props.hoverable) {
-    base.push('hover:shadow-lg transition-shadow duration-500')
-  }
-
-  return base
-})
-
-const computedHeaderIcon = computed(() => props.headerIcon ?? mdiCog)
-const changeSettingsTab = (tabName) => {
-  currentTab.value = tabName
-  emit('tab', tabName)
-  if (user.value.tarif !== 'alpha' && user.value.tarif !== 'trial' && currentTab.value === 'karma') {
-    showFreeModal.value = true
-    currentTab.value = 'tarif'
-    emit('tab', 'tarif')
-  }
-}
-
-const headerIconClick = () => {
-  emit('header-icon-click')
-}
-const submit = e => {
-  emit('submit', e)
-}
-</script>
-
 <template>
   <component
     :is="is"
@@ -343,6 +267,90 @@ const submit = e => {
     </fieldset>
   </component>
 </template>
+
+<script>
+import { mdiCog } from '@mdi/js'
+import Icon from '@/components/Icon.vue'
+import AccKarmaLimit from '@/components/AccKarmaLimit'
+
+export default {
+  components: {
+    Icon,
+    AccKarmaLimit
+  },
+  props: {
+    title: {
+      type: String,
+      default: null
+    },
+    icon: {
+      type: String,
+      default: null
+    },
+    headerIcon: {
+      type: String,
+      default: null
+    },
+    rounded: {
+      type: String,
+      default: 'rounded-[20px]'
+    },
+    hasTable: Boolean,
+    accMod: Boolean,
+    empty: Boolean,
+    form: Boolean,
+    hoverable: Boolean
+  },
+  emits: ['header-icon-click', 'submit', 'tab'],
+  data () {
+    return {
+      showFreeModal: false,
+      currentTab: 'account'
+    }
+  },
+  computed: {
+    is () {
+      return this.form ? 'form' : 'div'
+    },
+    user () {
+      return this.$store.state.user.user
+    },
+    licenceType () {
+      return this.$store.state.user.user?.license_type ?? 0
+    },
+    componentClass () {
+      const base = [
+        this.rounded
+      ]
+      if (this.hoverable) {
+        base.push('hover:shadow-lg transition-shadow duration-500')
+      }
+      return base
+    },
+    computedHeaderIcon () {
+      return this.headerIcon ?? mdiCog
+    }
+  },
+  methods: {
+    changeSettingsTab (tabName) {
+      this.currentTab = tabName
+      this.$emit('tab', tabName)
+      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial' && this.currentTab === 'karma') {
+        this.showFreeModal = true
+        this.currentTab = 'tarif'
+        this.$emit('tab', 'tarif')
+      }
+    },
+    headerIconClick () {
+      this.$emit('header-icon-click')
+    },
+    submit (e) {
+      this.$emit('submit', e)
+    }
+  }
+}
+</script>
+
 <style scoped>
 .follow-us {
   width: auto !important;
