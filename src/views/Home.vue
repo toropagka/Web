@@ -79,9 +79,6 @@
       <doitnow
         v-if="greedPath === 'doitnow'"
       />
-      <dashboard
-        v-if="greedPath === 'dashboard'"
-      />
       <clients
         v-if="greedPath === 'clients'"
       />
@@ -151,7 +148,6 @@ import Tags from '@/components/Tags/Tags.vue'
 import Colors from '@/components/Colors.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
-import Dashboard from '@/components/Dashboard.vue'
 import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
@@ -180,7 +176,6 @@ export default {
     Clients,
     Boards,
     Doitnow,
-    Dashboard,
     Other,
     Tags,
     TagWithChildren,
@@ -511,16 +506,7 @@ export default {
       if (this.navStack.length && this.navStack.length > 0) {
         if (this.navStack[this.navStack.length - 1].key === 'greedSource') {
           const navStackUid = this.navStack[this.navStack.length - 1]?.uid
-          if (navStackUid === '2bad1413-a373-4926-8a3c-58677a680714') {
-            this.$store.commit('basic', {
-              key: 'mainSectionState',
-              value: 'greed'
-            })
-            this.$store.commit('basic', {
-              key: 'greedPath',
-              value: 'dashboard'
-            })
-          } else if (navStackUid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
+          if (navStackUid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
             this.$store.commit('basic', {
               key: 'mainSectionState',
               value: 'greed'
