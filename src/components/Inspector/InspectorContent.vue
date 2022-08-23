@@ -76,7 +76,6 @@ export default {
   watch: {
     messages: {
       handler: function (oldVal, newVal) {
-        alert()
         this.$nextTick(() => {
           this.$refs.chat.scrollTo(0, this.$refs.chat.scrollHeight)
         })
