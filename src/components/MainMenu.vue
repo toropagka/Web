@@ -410,6 +410,8 @@ export default {
       this.$store.state.navigator.submenu.status = true
       if (!tab.uid) {
         this.switchTab(tab)
+      } else {
+        this.$store.state.navigator.lastTab = tab.code
       }
     },
     switchTab (tab) {
