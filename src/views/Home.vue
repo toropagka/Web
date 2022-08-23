@@ -44,40 +44,6 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
-    <MainMenu
-      v-if="!isFileRedirect"
-      class="fixed"
-    />
-    <SubMenu
-      v-if="isSubMenuActive"
-      class="pt-[45px]"
-      @closeSubMenu="closeSubMenu"
-    >
-      <DirectorySubmenu
-        v-if="lastTab === 'directory'"
-        :menu="menu"
-      />
-      <TasksSubmenu
-        v-if="lastTab === 'tasks'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
-      />
-      <BoardsSubmenu
-        v-if="lastTab === 'new_private_boards'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-      <ProjectsSubmenu
-        v-if="lastTab === 'new_private_projects'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-    </SubMenu>
-    <overlay
-      v-show="isSubMenuActive"
-      :z-index="'z-20'"
-      @overlay-click="submenuOverlayClick"
-    />
     <overlay
       v-if="!isFileRedirect"
       v-show="isAsideLgActive"
@@ -163,7 +129,6 @@
 
 <script>
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
-import MainMenu from '@/components/MainMenu.vue'
 import NavBar from '@/components/NavBar.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
@@ -171,12 +136,6 @@ import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
-
-import SubMenu from '@/components/Menu/SubMenu.vue'
-import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
-import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
-import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
-import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
@@ -209,17 +168,11 @@ export default {
   components: {
     ModalBoxNotificationInstruction,
     MainSection,
-    MainMenu,
-    TasksSubmenu,
-    DirectorySubmenu,
     Overlay,
-    ProjectsSubmenu,
-    SubMenu,
     NavBar,
     PropertiesRight,
     ErrorNotification,
     Notification,
-    BoardsSubmenu,
     InspectorNotification,
     TasksListNew,
     Projects,
@@ -304,12 +257,6 @@ export default {
     }
   },
   methods: {
-    closeSubMenu () {
-      this.$store.state.navigator.submenu.status = false
-    },
-    submenuOverlayClick () {
-      this.$store.state.navigator.submenu.status = false
-    },
     getNavigator () {
       if (this.$store.state.auth.token) {
         const data = {

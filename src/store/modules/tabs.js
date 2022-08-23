@@ -15,9 +15,24 @@ const actions = {
     if (tab.code === getters.lastTab) {
       return
     }
-    console.log(tab.code)
+    localStorage.setItem('lastTab', tab.code)
     if (store.state.isPropertiesMobileExpanded) {
       store.dispatch('asidePropertiesToggle', false)
+    }
+
+    switch (tab.code) {
+      case 'settings':
+        store.commit('updateStackWithInitValue', {
+          name: 'Аккаунт',
+          value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
+          typeVal: new Date(),
+          type: 'account'
+        })
+        store.commit('basic', { key: 'mainSectionState', value: 'settings' })
+        store.state.navigator.currentSettingsTab = 'account'
+        break
+      default:
+        break
     }
     store.state.navigator.lastTab = tab.code
     store.state.navigator.menu = []

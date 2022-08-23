@@ -1,5 +1,4 @@
 <template>
-  <AsideMenu :menu="menu" />
   <div>
     <Account
       v-if="currentSettingsTab === 'account'"
@@ -26,7 +25,6 @@ import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Account from '@/components/Settings/Account.vue'
 import Support from '@/components/Settings/Support.vue'
-import AsideMenu from '@/components/AsideMenu.vue'
 
 import { USER_REQUEST } from '@/store/actions/user'
 import { AUTH_LOGOUT } from '@/store/actions/auth'
@@ -39,7 +37,6 @@ import initInspectorSocket from '@/inspector/index.js'
 export default {
   components: {
     AccKarma,
-    AsideMenu,
     Tarif,
     Options,
     Account,
