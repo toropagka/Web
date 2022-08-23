@@ -1,14 +1,3 @@
-<script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
-
-const store = useStore()
-
-const isFullScreen = computed(() => store.state.isFullScreen)
-
-const lastTab = computed(() => store.state.navigator.lastTab)
-</script>
-
 <template>
   <section
     class="px-0 md:px-3"
@@ -17,3 +6,16 @@ const lastTab = computed(() => store.state.navigator.lastTab)
     <slot />
   </section>
 </template>
+
+<script>
+export default {
+  computed: {
+    isFullScreen () {
+      return this.$store.state.isFullScreen
+    },
+    lastTab () {
+      return this.$store.state.navigator.lastTab
+    }
+  }
+}
+</script>
