@@ -1,7 +1,7 @@
 <template>
-  <div v-show="renderedChecklist.checklist[0].text.length">
+  <div v-if="renderedChecklist?.checklist">
     <div
-      v-for="check, index of renderedChecklist.checklist"
+      v-for="check, index of renderedChecklist?.checklist"
       :key="index"
     >
       <div
@@ -101,7 +101,7 @@ export default {
       close,
       processedChecklist: null,
       shouldUpdate: false,
-      renderedChecklist: this.computedChecklist
+      renderedChecklist: []
     }
   },
   computed: {
@@ -128,17 +128,18 @@ export default {
     computedChecklist (oldValue, newValue) {
       if (this.shouldUpdate) {
         this.renderedChecklist.checklist = oldValue
-        this.shouldUpdate.value = false
+        this.shouldUpdate = false
       }
     }
   },
-  mounted () {
-    document.getElementById('check_0').focus()
-    for (let i = 0; i < this.renderedChecklist.checklist; i++) {
-      if (!this.renderedChecklist.checklist[i].text.length) {
-        this.renderedChecklist.checklist.splice(i, 1)
-      }
-    }
+  created () {
+    this.renderedChecklist = this.computedChecklist
+    console.log(this.renderedChecklist, 'created')
+  },
+  mounted: function () {
+    this.$nextTick(() => {
+      document.getElementById('check_0').focus()
+    })
   },
   methods: {
     processChecklist () {
