@@ -265,7 +265,7 @@ export default {
       if (this.lastSelectedObj) {
         this.selectTime({
           name: this.lastSelectedObj.name,
-          date: this.lastSelectedObj.toISOString()
+          date: this.lastSelectedObj.value.toISOString()
         })
         this.clearInputMessageAndFocus()
       }
