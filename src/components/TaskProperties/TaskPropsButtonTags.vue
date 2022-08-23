@@ -13,7 +13,7 @@
     @open:popper="onShowSelectTags"
   >
     <template
-      v-if="selectedTags.length"
+      v-if="selectedTags.length && canEdit"
       #content="{ close }"
       class="bottom"
     >
@@ -64,6 +64,7 @@
     >
       <a
         class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+        :class="{'not-active': !canEdit}"
       >
         <svg
           v-if="tags[key] && tags[key].back_color !== '#A998B6'"
@@ -107,6 +108,7 @@
           tags[key]?.name ?? '???'
         }}</span>
         <button
+          v-if="canEdit"
           class="btn-close-popover"
           @click.stop="removeTag(key)"
         >
@@ -138,6 +140,7 @@
       placement: 'bottom',
       modifiers: { offset: { offset: '0,10px' } }
     }"
+    :disabled="!canEdit"
     @open:popper="onShowSelectTags"
   >
     <template
@@ -187,7 +190,9 @@
         </div>
       </div>
     </template>
-    <button class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100">
+    <button
+      class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100"
+    >
       <svg
         width="24"
         height="24"
@@ -224,6 +229,10 @@ export default {
     selectedTags: {
       type: Array,
       default: () => []
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['changeTags'],

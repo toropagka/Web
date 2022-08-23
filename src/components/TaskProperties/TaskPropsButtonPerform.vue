@@ -201,9 +201,10 @@
                     fill="#979899"
                   />
                 </svg>
-                <label class="employee-name-custom">
-                  {{ emp.name }}
-                  <div class="popover-employee-email">{{ emp.email }}</div>
+                <label class="employee-name-custom truncate ...">
+                  <!-- 30 -->
+                  {{ emp.name}}
+                  <div class="popover-employee-email truncate ...">{{ emp.email}}</div>
                 </label>
                 <span
                   v-if="isCurrentPerformerEmail(emp.email)"

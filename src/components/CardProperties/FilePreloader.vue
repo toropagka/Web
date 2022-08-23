@@ -103,7 +103,8 @@ export default {
   data () {
     return {
       fileURL: '',
-      fileIsDownloaded: false
+      fileIsDownloaded: false,
+      fileExtension: this.fileName.split('.')
     }
   },
 

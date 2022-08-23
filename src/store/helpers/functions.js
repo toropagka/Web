@@ -12,7 +12,7 @@ export function visitChildren (arr, callback) {
   }
 }
 
-export function showNotify (notification, notificationSound = true) {
+export function showNotify (notification, notificationSound) {
   if (['denied', 'default'].includes(Notification.permission)) {
     notify(notification, 30000)
     if (notificationSound) {

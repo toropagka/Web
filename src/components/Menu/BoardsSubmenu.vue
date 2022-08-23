@@ -74,6 +74,9 @@ export default {
     },
     user () {
       return this.$store.state.user.user
+    },
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
     }
   },
   methods: {
@@ -99,7 +102,7 @@ export default {
       if (title) {
         // добавляем новую доску и переходим в неё
         const maxOrder =
-          this.boards[0]?.items?.reduce(
+          this.items[0]?.items?.reduce(
             (maxOrder, child) =>
               child.order > maxOrder ? child.order : maxOrder,
             0
@@ -134,20 +137,21 @@ export default {
         })
       }
     },
-    mainStateUpdate () {
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_boards' })
-      const navElem = {
-        name: 'Доски',
-        key: 'greedSource',
-        greedPath: 'new_private_boards',
-        value: this.storeNavigator.new_private_boards?.items
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_private_boards?.items })
-    },
     gotoChildren (board) {
-      this.mainStateUpdate()
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
+
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      const path = 'new_private_boards'
+      const el = {
+        greedPath: path,
+        key: 'greedSource',
+        name: 'Доски',
+        value: this.storeNavigator[path]
+      }
+      this.$store.commit('updateStackWithInitValue', el)
+
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
       this.$store.commit('basic', {
         key: 'cardSource',
@@ -169,6 +173,7 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
+      localStorage.setItem('lastTab', 'new_private_boards')
       this.$emit('closeSubMenu')
     }
   }

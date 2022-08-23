@@ -5,6 +5,7 @@ import {
   USER_ERROR, USER_INVITE_ME, USER_REQUEST,
   USER_SUCCESS
 } from '../actions/user'
+import * as SLIDES from '@/store/actions/slides.js'
 
 const state = {
   user: null,
@@ -22,6 +23,9 @@ const actions = {
         .then((resp) => {
           commit('ChangeCurrentUserObj', resp.data)
           commit(USER_SUCCESS, resp)
+          if (state.user.current_user_email !== state.user.owner_email) {
+            commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: false })
+          }
           resolve(resp)
         })
         .catch((err) => {

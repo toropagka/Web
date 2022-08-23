@@ -54,7 +54,7 @@ input:focus {outline: 0;}
   color:white;
   cursor:pointer;
 }
-.tags-custom:hover, .tags-custom:hover svg
+.tags-custom:not(.not-active):hover, .tags-custom:not(.not-active):hover svg
 {
   cursor:pointer;
 }

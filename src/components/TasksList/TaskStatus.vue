@@ -26,7 +26,6 @@ export default {
     }
   },
   emits: ['changeStatus'],
-
   data () {
     return {
       readyStatus,
@@ -71,7 +70,11 @@ export default {
       ]
     }
   },
-
+  computed: {
+    notAllowedTaskStatus () {
+      return !this.task?.name && this.task?.uid_parent !== '00000000-0000-0000-0000-000000000000'
+    }
+  },
   methods: {
     showStatusOrNot (type, status) {
       if (type === 1 && [0, 1, 3, 4, 6, 7].includes(status)) {
@@ -94,7 +97,7 @@ export default {
 
 <template>
   <PopMenu
-    :disabled="task.type === 4 || task.type === 5"
+    :disabled="task.type === 4 || task.type === 5 || notAllowedTaskStatus"
     placement="left"
   >
     <template #menu>
@@ -125,7 +128,7 @@ export default {
     </template>
     <div
       class="border-2 relative border-gray-300 rounded-md bg-white flex items-center justify-center"
-      :class="{ 'cursor-pointer': [1, 2, 3].includes(task.type), 'cursor-not-allowed': task.type == 4 }"
+      :class="{ 'cursor-pointer': [1, 2, 3].includes(task.type), 'cursor-not-allowed': task.type === 4 || notAllowedTaskStatus }"
       style="min-width:20px; min-height: 20px;"
     >
       <Icon
