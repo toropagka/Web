@@ -1147,14 +1147,35 @@ export default {
       this.$store.commit(TASK.SELECT_TASK, task)
       this.showConfirm = true
     },
+    sortTasks (task, restoredTasksArray) {
+      restoredTasksArray[task.id] = task
+      if (task.state.opened) {
+        task.children.forEach((item) => {
+          const child = this.storeTasks[item]
+          if (child?.children?.length !== 0) {
+            this.sortTasks(child, restoredTasksArray)
+          }
+          restoredTasksArray[item] = this.storeTasks[item]
+        })
+      }
+    },
     onChangeStatus (status, task) {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
         if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
-          this.$store.commit(TASK.REMOVE_TASK, task.uid)
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: prevTasksArray }).then(data => {
+          const restoredTasksArray = []
+          Object.values(prevTasksArray).forEach((item) => {
+            if (item.children.length !== 0) {
+              this.sortTasks(item, restoredTasksArray)
+            } else if (this.newConfig.roots.includes(item.id)) {
+              restoredTasksArray[item.id] = item
+            }
+          })
+          this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
+            this.$store.dispatch(TASK.DAYS_WITH_TASKS)
+          })
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: restoredTasksArray }).then(data => {
             if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
               return
