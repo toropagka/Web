@@ -415,7 +415,7 @@ export default {
       if (!this.currentAnswerMessageUid) return ''
       const quotedMessage = this.taskMessages.find(message => message.uid === this.currentAnswerMessageUid)
       if (!quotedMessage) return ''
-      return this.employees[quotedMessage.uid_creator]?.name ?? '???'
+      return this.employees[quotedMessage.uid_creator]?.name ?? this.employees[quotedMessage.uid_creator]?.email
     },
     messageQuoteString () {
       if (!this.currentAnswerMessageUid) return ''

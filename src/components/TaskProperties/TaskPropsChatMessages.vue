@@ -33,7 +33,7 @@
           :show-loader="uploadStarted && message.loading"
           :quote="message.deleted ? '' : getMessageQuoteString(message.uid_quote)"
           :quote-user="message.deleted ? '' : getMessageQuoteUser(message.uid_quote)"
-          :creator-name="employees[message.uid_creator]?.name ?? '???'"
+          :creator-name="employees[message.uid_creator]?.name ?? employees[message.uid_creator]?.email"
           :message="message.msg"
           :time="getMessageTimeString(message.date_create)"
           @answer="answerMessage(message.uid)"
@@ -131,7 +131,7 @@
             v-if="message.isFile"
             :is-my-file="message.isMyMessage"
             :show-creator="isChangeCreator(index)"
-            :creator-name="employees[message.uid_creator]?.name ?? '???'"
+            :creator-name="employees[message.uid_creator]?.name ?? employees[message.uid_creator]?.email"
             :file-name="message.msg"
             :time="getMessageTimeString(message.date_create)"
             :quote="getFileQuoteString(message.uid_quote)"
@@ -337,7 +337,7 @@ export default {
       if (!uidQuote || uidQuote === '00000000-0000-0000-0000-000000000000') return ''
       const quotedMessage = this.messages.find(message => message.uid === uidQuote)
       if (!quotedMessage) return ''
-      return this.employees[quotedMessage.uid_creator]?.name ?? '???'
+      return this.employees[quotedMessage.uid_creator]?.name ?? this.employees[quotedMessage.uid_creator]?.email
     },
     answerMessage (uid) {
       this.$emit('answerMessage', uid)
