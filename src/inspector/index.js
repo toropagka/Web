@@ -10,10 +10,12 @@ import processRemove from '@/websync/remove.js'
 import processUpdate from '@/websync/update.js'
 
 const user = computed(() => store.state.user.user)
-const isNotificationSoundOn = computed(
-  () => store.state.inspector.is_notification_sound_on
-)
+
 const employees = computed(() => store.state.employees.employees)
+
+function isNotificationSoundOn () {
+  return store?.state?.inspector?.is_notification_sound_on
+}
 
 function parseObject (obj) {
   switch (obj.operation) {
@@ -31,7 +33,6 @@ function parseObject (obj) {
       break
   }
 }
-
 export default function initInspectorSocket () {
   const socket = new WebSocket(process.env.VUE_APP_INSPECTOR_WS)
   socket.onopen = function (event) {
@@ -80,7 +81,7 @@ function createNotificationAndInspectorMessage (parsedData) {
       text: getInspectorMessage(parsedData.message, parsedData.task.taskJson),
       task: parsedData.task.taskJson
     },
-    isNotificationSoundOn.value
+    isNotificationSoundOn()
   )
 
   // Creating inspector message from notification

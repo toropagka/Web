@@ -44,40 +44,6 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
-    <MainMenu
-      v-if="!isFileRedirect"
-      class="fixed"
-    />
-    <SubMenu
-      v-if="isSubMenuActive"
-      class="pt-[45px]"
-      @closeSubMenu="closeSubMenu"
-    >
-      <DirectorySubmenu
-        v-if="lastTab === 'directory'"
-        :menu="menu"
-      />
-      <TasksSubmenu
-        v-if="lastTab === 'tasks'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
-      />
-      <BoardsSubmenu
-        v-if="lastTab === 'new_private_boards'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-      <ProjectsSubmenu
-        v-if="lastTab === 'new_private_projects'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-    </SubMenu>
-    <overlay
-      v-show="isSubMenuActive"
-      :z-index="'z-20'"
-      @overlay-click="submenuOverlayClick"
-    />
     <overlay
       v-if="!isFileRedirect"
       v-show="isAsideLgActive"
@@ -112,9 +78,6 @@
       />
       <doitnow
         v-if="greedPath === 'doitnow'"
-      />
-      <dashboard
-        v-if="greedPath === 'dashboard'"
       />
       <clients
         v-if="greedPath === 'clients'"
@@ -163,7 +126,6 @@
 
 <script>
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
-import MainMenu from '@/components/MainMenu.vue'
 import NavBar from '@/components/NavBar.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
@@ -171,12 +133,6 @@ import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
-
-import SubMenu from '@/components/Menu/SubMenu.vue'
-import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
-import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
-import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
-import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
 
 import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
@@ -192,7 +148,6 @@ import Tags from '@/components/Tags/Tags.vue'
 import Colors from '@/components/Colors.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
-import Dashboard from '@/components/Dashboard.vue'
 import Other from '@/components/Other.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
@@ -209,17 +164,11 @@ export default {
   components: {
     ModalBoxNotificationInstruction,
     MainSection,
-    MainMenu,
-    TasksSubmenu,
-    DirectorySubmenu,
     Overlay,
-    ProjectsSubmenu,
-    SubMenu,
     NavBar,
     PropertiesRight,
     ErrorNotification,
     Notification,
-    BoardsSubmenu,
     InspectorNotification,
     TasksListNew,
     Projects,
@@ -227,7 +176,6 @@ export default {
     Clients,
     Boards,
     Doitnow,
-    Dashboard,
     Other,
     Tags,
     TagWithChildren,
@@ -304,12 +252,6 @@ export default {
     }
   },
   methods: {
-    closeSubMenu () {
-      this.$store.state.navigator.submenu.status = false
-    },
-    submenuOverlayClick () {
-      this.$store.state.navigator.submenu.status = false
-    },
     getNavigator () {
       if (this.$store.state.auth.token) {
         const data = {
@@ -564,16 +506,7 @@ export default {
       if (this.navStack.length && this.navStack.length > 0) {
         if (this.navStack[this.navStack.length - 1].key === 'greedSource') {
           const navStackUid = this.navStack[this.navStack.length - 1]?.uid
-          if (navStackUid === '2bad1413-a373-4926-8a3c-58677a680714') {
-            this.$store.commit('basic', {
-              key: 'mainSectionState',
-              value: 'greed'
-            })
-            this.$store.commit('basic', {
-              key: 'greedPath',
-              value: 'dashboard'
-            })
-          } else if (navStackUid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
+          if (navStackUid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
             this.$store.commit('basic', {
               key: 'mainSectionState',
               value: 'greed'

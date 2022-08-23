@@ -1,47 +1,3 @@
-<script setup>
-import { computed } from 'vue'
-import JbButton from '@/components/JbButton.vue'
-import CardComponent from '@/components/CardComponent.vue'
-import Overlay from '@/components/modals/Overlay.vue'
-
-const props = defineProps({
-  title: {
-    type: String,
-    default: null
-  },
-  button: {
-    type: String,
-    default: 'white'
-  },
-  buttonLabel: {
-    type: String,
-    default: 'Done'
-  },
-  hasCancel: Boolean,
-  modelValue: {
-    type: [String, Number, Boolean],
-    default: null
-  },
-  hasButton: Boolean
-})
-
-const emit = defineEmits(['update:modelValue', 'cancel', 'confirm'])
-
-const value = computed({
-  get: () => props.modelValue,
-  set: value => emit('update:modelValue', value)
-})
-
-const confirmCancel = mode => {
-  value.value = false
-  emit(mode)
-}
-
-const confirm = () => confirmCancel('confirm')
-const cancel = () => confirmCancel('cancel')
-
-</script>
-
 <template>
   <overlay
     v-show="value"
@@ -80,3 +36,60 @@ const cancel = () => confirmCancel('cancel')
     </card-component>
   </overlay>
 </template>
+
+<script>
+import JbButton from '@/components/JbButton.vue'
+import CardComponent from '@/components/CardComponent.vue'
+import Overlay from '@/components/modals/Overlay.vue'
+
+export default {
+  components: {
+    JbButton,
+    CardComponent,
+    Overlay
+  },
+  props: {
+    title: {
+      type: String,
+      default: null
+    },
+    button: {
+      type: String,
+      default: 'white'
+    },
+    buttonLabel: {
+      type: String,
+      default: 'Done'
+    },
+    hasCancel: Boolean,
+    modelValue: {
+      type: [String, Number, Boolean],
+      default: null
+    },
+    hasButton: Boolean
+  },
+  emits: ['update:modelValue', 'cancel', 'confirm'],
+  computed: {
+    value: {
+      get () {
+        return this.modelValue
+      },
+      set (value) {
+        return this.$emit('update:modelValue', value)
+      }
+    }
+  },
+  methods: {
+    confirmCancel (mode) {
+      this.value = false
+      this.$emit(mode)
+    },
+    confirm () {
+      this.confirmCancel('confirm')
+    },
+    cancel () {
+      this.confirmCancel('cancel')
+    }
+  }
+}
+</script>

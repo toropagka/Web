@@ -1,16 +1,33 @@
 <script>
-import Tabs from '@/components/Tabs/Tabs.vue'
+import MainMenu from '@/components/MainMenu.vue'
+import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
+import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
+import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
+import SubMenu from '@/components/Menu/SubMenu.vue'
+import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
+import SettingsSubmenu from '@/components/Menu/SettingsSubmenu.vue'
+import Overlay from '@/components/modals/Overlay.vue'
 
 // очищаем консоль - по идее выше ошибки которые
 // мы не можем поправить из fm.websync и fm.min
 // по этому консоль очищаем
 export default {
   components: {
-    Tabs
+    MainMenu,
+    TasksSubmenu,
+    SettingsSubmenu,
+    DirectorySubmenu,
+    Overlay,
+    ProjectsSubmenu,
+    SubMenu,
+    BoardsSubmenu
   },
   computed: {
     menu () {
       return this.$store.state.navigator.menu
+    },
+    isSubMenuActive () {
+      return this.$store.state.navigator.submenu.status
     },
     lastTab () {
       return this.$store.state.navigator.lastTab
@@ -35,15 +52,54 @@ export default {
       document.head.appendChild(websync)
     }
     document.head.appendChild(fm)
+  },
+  methods: {
+    closeSubMenu () {
+      this.$store.state.navigator.submenu.status = false
+    }
   }
 }
 
 </script>
 
 <template>
-  <Tabs
-    v-if="$store.state.auth.token && !isFileRedirect"
-    class="fixed left-0 top-0 z-[50] ml-3"
+  <MainMenu
+    v-if="!isFileRedirect && $store.state.auth.token"
+    class="fixed"
+  />
+  <SubMenu
+    v-if="isSubMenuActive"
+    class="pt-[20px]"
+    @closeSubMenu="closeSubMenu"
+  >
+    <SettingsSubmenu
+      v-if="lastTab === 'settings'"
+      :menu="menu"
+    />
+    <DirectorySubmenu
+      v-if="lastTab === 'directory'"
+      :menu="menu"
+    />
+    <TasksSubmenu
+      v-if="lastTab === 'tasks'"
+      :menu="menu"
+      @closeSubMenu="closeSubMenu"
+    />
+    <BoardsSubmenu
+      v-if="lastTab === 'new_private_boards'"
+      :items="storeNavigator[lastTab]"
+      @closeSubMenu="closeSubMenu"
+    />
+    <ProjectsSubmenu
+      v-if="lastTab === 'new_private_projects'"
+      :items="storeNavigator[lastTab]"
+      @closeSubMenu="closeSubMenu"
+    />
+  </SubMenu>
+  <overlay
+    v-show="isSubMenuActive"
+    :z-index="'z-20'"
+    @overlay-click="closeSubMenu"
   />
   <router-view />
 </template>

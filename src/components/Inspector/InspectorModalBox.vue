@@ -265,20 +265,20 @@ export default {
       if (this.lastSelectedObj) {
         this.selectTime({
           name: this.lastSelectedObj.name,
-          date: this.lastSelectedObj.toISOString()
+          date: this.lastSelectedObj.value.toISOString()
         })
         this.clearInputMessageAndFocus()
       }
     },
     onMessageAddParams (message) {
       if (this.lastSelectedObj) {
-        this.actionConfirmNewParams(this.lastSelectedObj)
+        this.actionConfirmNewParams(this.lastSelectedObj.value)
         this.clearInputMessageAndFocus()
       }
     },
     onMessageConfirm (message) {
       if (this.lastSelectedObj) {
-        this.actionConfirmDelegate(this.lastSelectedObj)
+        this.actionConfirmDelegate(this.lastSelectedObj.value)
         this.clearInputMessageAndFocus()
       }
     },

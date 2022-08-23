@@ -11,6 +11,7 @@ import { createProject } from '@/websync/project.js'
 import { createTag } from '@/websync/tag.js'
 import { createTask } from '@/websync/task.js'
 import { createTaskMessage } from '@/websync/task_message.js'
+import { createInvite } from '@/websync/invite.js'
 import * as TYPES from '@/websync/types.js'
 import { createDepartment } from '@/websync/departments'
 
@@ -50,7 +51,7 @@ export default function processCreate (obj) {
             obj: obj,
             text: obj.obj.name
           },
-          isNotificationSoundOn.value
+          isNotificationSoundOn()
         )
       }
       createProject(obj)
@@ -68,7 +69,7 @@ export default function processCreate (obj) {
             obj: obj,
             text: obj.obj.name
           },
-          isNotificationSoundOn.value
+          isNotificationSoundOn()
         )
       }
       createTask(obj)
@@ -117,6 +118,7 @@ export default function processCreate (obj) {
       createDepartment(obj)
       break
     case TYPES.TYPE_OBJECT_INVITE:
+      createInvite(obj)
       break
     case TYPES.TYPE_OBJECT_NOTIFICATION:
       break
