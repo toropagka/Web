@@ -295,7 +295,7 @@ export default {
   },
   computed: {
     navStack () { return this.$store.state.navbar.navStack },
-    navStackLastPath () { return this.navStack[this.navStack.length - 1].greedPath },
+    navStackLastPath () { return this.navStack[this.navStack.length - 1]?.greedPath },
     shouldShowEmptyPics () {
       const lastNavStackElement = this.navStack[this.navStack.length - 1]
       if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement.value.param).toDateString() === new Date().toDateString()) {
