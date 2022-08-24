@@ -148,6 +148,9 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_private_projects?.items })
     },
     gotoChildren (project) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
+
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }

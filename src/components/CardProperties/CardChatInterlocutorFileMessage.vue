@@ -85,7 +85,6 @@ export default {
       return splittedValue[splittedValue.length - 1].toLowerCase()
     },
     FileIsImage () {
-      console.log(this.fileExtension)
       return ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].includes(
         this.fileExtension
       )
@@ -99,7 +98,7 @@ export default {
       )
     },
     FileIsAudio () {
-      return ['mp3', 'wav', 'm4a'].includes(this.fileExtension)
+      return ['mp3', 'wav'].includes(this.fileExtension)
     },
     correctShortFileMessage () {
       const fileMessageSplitForExtesion = this.message.file_name.split('.')

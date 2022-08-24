@@ -1,13 +1,14 @@
 <template>
-  <div
+  <aside
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="mt-[20px]">
+      <div class="mt-[60px]">
         <DatePicker
           v-if="lastTab === 'tasks'"
           id="step4"
@@ -166,13 +167,13 @@
         </ul>
       </div>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script>
 import { DatePicker } from 'v-calendar'
-import AsideMenuList from '@/components/AsideMenuList.vue'
-import AsideMenuSkeleton from '@/components/AsideMenuSkeleton.vue'
+import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
+import AsideMenuSkeleton from './AsideMenuSkeleton.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -194,7 +195,6 @@ export default {
       default: () => []
     }
   },
-  emits: ['closeSubMenu'],
   data () {
     return {
       newDayTimerID: 0,
@@ -302,8 +302,6 @@ export default {
       if (this.checkOnWhichTab(item)) {
         return
       }
-      this.$emit('closeSubMenu')
-      localStorage.setItem('lastTab', 'tasks')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
@@ -500,7 +498,6 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
-      this.$emit('closeSubMenu')
     },
     goToProject (project) {
       if (this.checkOnWhichTab(project)) {
@@ -544,7 +541,6 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
-      this.$emit('closeSubMenu')
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
@@ -595,8 +591,6 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
       this.userParentId = user.parentID
-
-      this.$emit('closeSubMenu')
     }
   }
 }

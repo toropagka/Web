@@ -31,7 +31,7 @@ export default {
     FileIsImage () { return ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].includes(this.fileExtension) },
     FileIsMovie () { return ['mov', 'mp4'].includes(this.fileExtension) },
     FileIsDoc () { return ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'].includes(this.fileExtension) },
-    FileIsAudio () { return ['mp3', 'wav', 'm4a'].includes(this.fileExtension) },
+    FileIsAudio () { return ['mp3', 'wav'].includes(this.fileExtension) },
     correctShortFileMessage () {
       const fileMessageSplitForExtesion = this.message.file_name.split('.')
       const shortName = this.message.file_name.substring(0, 18) + '.. .' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]

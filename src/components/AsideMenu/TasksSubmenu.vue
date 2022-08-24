@@ -1,14 +1,13 @@
 <template>
-  <aside
+  <div
     v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-    :class="[ isAsideMobileExpanded ? 'left-0' : '-left-[292px]', isAsideMobileExpanded ? 'left-0' : 'lg:hidden xl:block -left-[292px]' ]"
+    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="mt-[60px]">
+      <div class="mt-[20px]">
         <DatePicker
           v-if="lastTab === 'tasks'"
           id="step4"
@@ -167,13 +166,13 @@
         </ul>
       </div>
     </div>
-  </aside>
+  </div>
 </template>
 
 <script>
 import { DatePicker } from 'v-calendar'
-import AsideMenuList from '@/components/AsideMenuList.vue'
-import AsideMenuSkeleton from './AsideMenuSkeleton.vue'
+import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
+import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -195,6 +194,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubMenu'],
   data () {
     return {
       newDayTimerID: 0,
@@ -293,15 +293,14 @@ export default {
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     },
-    asideLgClose () {
-      this.$store.dispatch('asideLgToggle', false)
-    },
     // TODO: clean up messy logic
     menuClick (event, item) {
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return
       }
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
@@ -316,15 +315,6 @@ export default {
         this.$store.state.navigator.submenu.status = false
       }
 
-      console.log(item)
-      // скрывать навбар при онбординге
-      // if (this.$store.state.onboarding.visitedModals) {
-      //   this.$store.state.onboarding.hideNavBar = false
-      //   if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
-      //     console.log('hide')
-      //     this.$store.state.onboarding.hideNavBar = true
-      //   }
-      // }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -436,6 +426,8 @@ export default {
       }
     },
     onDayClick (day) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       if (this.checkOnWhichDay(day)) {
         return
       }
@@ -498,6 +490,7 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
+      this.$emit('closeSubMenu')
     },
     goToProject (project) {
       if (this.checkOnWhichTab(project)) {
@@ -541,6 +534,7 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
+      this.$emit('closeSubMenu')
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
@@ -563,7 +557,6 @@ export default {
     },
     onNewDay () {
       this.$store.commit('updateCalendarToday')
-      //
     },
     assigmentsClick (user) {
       if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
@@ -591,6 +584,8 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
       this.userParentId = user.parentID
+
+      this.$emit('closeSubMenu')
     }
   }
 }

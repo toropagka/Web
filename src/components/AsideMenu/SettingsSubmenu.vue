@@ -12,9 +12,7 @@
         >
           <AsideMenuList
             :menu="menuGroup"
-            :assigments="assigments"
             @menu-click="menuClick"
-            @assigments-click="assigmentsClick"
           />
         </template>
       </div>
@@ -22,8 +20,8 @@
   </div>
 </template>
 <script>
-import AsideMenuSkeleton from '@/components/AsideMenuSkeleton.vue'
-import AsideMenuList from '@/components/AsideMenuList.vue'
+import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
+import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
 
 export default {
   components: {
@@ -55,6 +53,7 @@ export default {
         greedPath: item.type
       }
       localStorage.setItem('currentSettingsTab', item.type)
+      localStorage.setItem('lastTab', 'settings')
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$emit('closeSubMenu')
     }
