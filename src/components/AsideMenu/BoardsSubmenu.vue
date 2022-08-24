@@ -4,8 +4,11 @@
     @cancel="showBoardsLimit = false"
     @ok="showBoardsLimit = false"
   />
-  <div class="px-3 flex flex-col">
-    <span class="font-['Roboto'] text-[14px] leading-[22px] font-medium text-[#606061]">
+  <div class="px-3 pt-[20px] flex flex-col">
+    <span
+      v-if="favoriteBoards.length"
+      class="font-['Roboto'] text-[14px] leading-[22px] font-medium text-[#606061]"
+    >
       Избранные доски
     </span>
     <template
@@ -21,7 +24,7 @@
       v-for="(value, index) in items"
       :key="index"
     >
-      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[20px] font-medium text-[#606061]">
+      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[8px] font-medium text-[#606061]">
         {{ value.dep }}
       </span>
       <div

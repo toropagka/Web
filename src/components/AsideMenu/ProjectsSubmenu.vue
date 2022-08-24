@@ -4,8 +4,11 @@
     @cancel="showProjectsLimit = false"
     @ok="showProjectsLimit = false"
   />
-  <div class="px-3">
-    <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[20px] font-medium text-[#606061]">
+  <div class="px-3 pt-[25px]">
+    <span
+      v-if="favoriteProjects.length"
+      class="font-['Roboto'] text-[14px] leading-[22px] font-medium text-[#606061]"
+    >
       Избранные проекты
     </span>
     <template
@@ -21,7 +24,7 @@
       v-for="(value, index) in items"
       :key="index"
     >
-      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[20px] font-medium text-[#606061]">
+      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[8px] font-medium text-[#606061]">
         {{ value.dep }}
       </span>
       <div
