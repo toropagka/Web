@@ -17,6 +17,7 @@
   >
     <div class="px-[16px]">
       <AsideMenuListItem
+        class="mb-[16px]"
         :selected="lastTab === 'settings'"
         :title="user?.current_user_name"
         @click="gotoSettings"
@@ -124,14 +125,11 @@
           />
         </svg>
       </AsideMenuListItem>
-      <div class="flex px-3">
-        <span
-          class="bg-[#424242] w-full justify-center px-5 h-[34px] rounded-[8px] text-[#FFFFFF] text-sm mr-[7px] hover:bg-[#8c8989] hover:cursor-pointer flex items-center"
-          @click="shouldShowInspector"
-        >
-          Добавить задачу
-        </span>
-      </div>
+      <AsideMenuListButton
+        class="px-[12px] my-[16px]"
+        title="Добавить задачу"
+        @click="shouldShowInspector"
+      />
     </div>
   </aside>
 </template>
@@ -141,12 +139,14 @@ import { SWITCH_TAB } from '@/store/actions/tabs.js'
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
+import AsideMenuListButton from '@/components/AsideMenu/AsideMenuListButton.vue'
 
 export default {
   components: {
     InspectorLimit,
     InspectorModalBox,
-    AsideMenuListItem
+    AsideMenuListItem,
+    AsideMenuListButton
   },
   computed: {
     lastTab () {
