@@ -120,7 +120,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="isContentLoaded">
+  <template v-if="isContentLoaded">
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
       class="fixed"
@@ -160,7 +160,7 @@ export default {
       @overlay-click="closeSubMenu"
     />
     <router-view />
-  </div>
+  </template>
   <AsideMenuSkeleton
     v-else
   />
