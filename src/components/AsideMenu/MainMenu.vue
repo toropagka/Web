@@ -16,7 +16,7 @@
     class="w-[292px] fixed top-0 pt-[15px] z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
     <div
-      class="flex items-center px-3 pb-3 hover:cursor-pointer"
+      class="h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px] px-[10px]"
       :class="{ 'bg-white rounded-[10px]' : lastTab === 'settings'}"
       @click="gotoSettings"
     >
@@ -24,7 +24,7 @@
         class="rounded-[8px] h-[30px] w-[30px] ml-[5px] mr-[2px] border-2 border-white"
         :src="user?.foto_link"
       >
-      <span>{{ user?.current_user_name }}</span>
+      <span class="font-roboto text-[13px] leading-[15px] font-medium truncate px-3">{{ user?.current_user_name }}</span>
     </div>
     <div class="flex px-3">
       <span
