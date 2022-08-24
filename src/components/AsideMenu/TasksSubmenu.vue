@@ -274,6 +274,7 @@ export default {
   mounted () {
     let currDate = new Date()
     currDate.setHours(0, 0, 0, 0)
+    this.setLastPickedDate()
     this.newDayTimerID = setInterval(() => {
       const newDate = new Date()
       newDate.setHours(0, 0, 0, 0)
@@ -287,6 +288,11 @@ export default {
     clearInterval(this.newDayTimerID)
   },
   methods: {
+    setLastPickedDate () {
+      if (this.navStack[0].value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
+        this.$store.commit('updateCalendarLastPicked', this.navStack[0].value.param)
+      }
+    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
@@ -442,6 +448,7 @@ export default {
         typeVal: new Date(day.date),
         type: 'date'
       }
+      this.$store.commit('updateCalendarLastPicked', day.date)
       this.$store.commit('updateStackWithInitValue', navElem)
       this.lastVisitedDate = new Date() // desktop check
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })

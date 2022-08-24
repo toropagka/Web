@@ -4,7 +4,7 @@ const state = {
     highlight: { fillMode: 'outline', class: 'today' },
     dates: new Date()
   },
-  lastVisitedAttribute: {
+  lastPickedAttribute: {
     highlight: { color: 'orange', class: 'vc-highlight' },
     dates: new Date()
   },
@@ -16,7 +16,7 @@ const state = {
 }
 
 const getters = {
-  attrsCalendar: (state) => [state.todayAttribute, state.lastVisitedAttribute, state.dotsAttribute]
+  attrsCalendar: (state) => [state.todayAttribute, state.lastPickedAttribute, state.dotsAttribute]
 }
 
 const actions = {
@@ -38,8 +38,8 @@ const mutations = {
   updateCalendarToday (state) {
     state.todayAttribute.dates = new Date()
   },
-  updateCalendarLastVisited (state, date) {
-    state.lastVisitedAttribute.dates = new Date(date)
+  updateCalendarLastPicked (state, date) {
+    state.lastPickedAttribute.dates = new Date(date)
   },
   setDotsDates (state, dates) {
     state.dotsAttribute.dates = dates
