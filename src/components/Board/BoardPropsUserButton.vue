@@ -5,7 +5,7 @@
       :src="photo"
       class="flex-none border border-[#7e7e80] rounded-[4px] w-[20px] h-[20px] mr-[7px]"
     >
-    <div class="grow font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px]">
+    <div class="grow w-6/12 font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis">
       {{ name }}
     </div>
     <div class="flex-none">
