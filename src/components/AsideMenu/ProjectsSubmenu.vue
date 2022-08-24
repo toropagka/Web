@@ -14,7 +14,7 @@
     >
       <ProjectBlocItem
         :project="project"
-        @gotoChildren="gotoChildren"
+        @click="gotoChildren(project)"
       />
     </template>
     <template
@@ -33,7 +33,7 @@
         >
           <ProjectBlocItem
             :project="project"
-            @gotoChildren="gotoChildren"
+            @click="gotoChildren(project)"
           />
         </template>
         <InputValue
