@@ -907,6 +907,9 @@ export default {
           if (task._justCreated) {
             task._justCreated = false
             this.$store.dispatch(TASK.CREATE_TASK, task)
+              .then((task) => {
+                this.sortTaskChildren(task.uid_parent)
+              })
               .catch((e) => {
                 if (e.response?.data?.error === 'limit. invalid license.') {
                   this.showTasksLimit = true
@@ -1016,17 +1019,16 @@ export default {
         _isEditable: true,
         _justCreated: true
       }
-      this.$store.dispatch(TASK.SELECT_TASK, newSubtask)
       this.$store.dispatch(TASK.ADD_SUBTASK, newSubtask)
         .then(() => {
           // Don't know the event when I can call edit just created subtask
           // If we don't wait, then we won't focus on just created subtask
           setTimeout(() => {
-            this.sortTaskChildren(parent.uid)
             document.getElementById(newSubtask.uid).parentNode.draggable = false
             this.gotoNode(newSubtask.uid)
           }, 200)
         })
+      this.$store.dispatch(TASK.SELECT_TASK, newSubtask)
       this.lastSelectedTask = newSubtask
     },
     copyTask (task) {
