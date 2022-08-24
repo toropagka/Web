@@ -70,7 +70,6 @@ export default {
   />
   <SubMenu
     v-if="isSubMenuActive"
-    class="pt-[20px]"
     @closeSubMenu="closeSubMenu"
   >
     <SettingsSubmenu

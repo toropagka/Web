@@ -1,9 +1,6 @@
 <template>
-  <div
-    style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 pt-[15px] z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
-  >
-    <AsideMenuSkeleton v-if="status == 'loading'" />
+  <div class="px-[16px] pt-[15px]">
+    <AsideMenuListSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <div class="my-[10px]">
         <template
@@ -22,7 +19,7 @@
 
 <script>
 import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
-import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
+import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -31,7 +28,7 @@ import { mdiMenu } from '@mdi/js'
 
 export default {
   components: {
-    AsideMenuSkeleton,
+    AsideMenuListSkeleton,
     AsideMenuList
   },
   props: {
