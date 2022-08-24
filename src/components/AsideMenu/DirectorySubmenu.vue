@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import AsideMenuList from '@/components/AsideMenuList.vue'
-import AsideMenuSkeleton from '@/components/AsideMenuSkeleton.vue'
+import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
+import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 

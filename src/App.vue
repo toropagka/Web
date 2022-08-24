@@ -1,11 +1,11 @@
 <script>
 import MainMenu from '@/components/MainMenu.vue'
-import TasksSubmenu from '@/components/Menu/TasksSubmenu.vue'
-import DirectorySubmenu from '@/components/Menu/DirectorySubmenu.vue'
-import ProjectsSubmenu from '@/components/Menu/ProjectsSubmenu.vue'
-import SubMenu from '@/components/Menu/SubMenu.vue'
-import BoardsSubmenu from '@/components/Menu/BoardsSubmenu.vue'
-import SettingsSubmenu from '@/components/Menu/SettingsSubmenu.vue'
+import TasksSubmenu from '@/components/AsideMenu/TasksSubmenu.vue'
+import DirectorySubmenu from '@/components/AsideMenu/DirectorySubmenu.vue'
+import ProjectsSubmenu from '@/components/AsideMenu/ProjectsSubmenu.vue'
+import SubMenu from '@/components/AsideMenu/SubMenu.vue'
+import BoardsSubmenu from '@/components/AsideMenu/BoardsSubmenu.vue'
+import SettingsSubmenu from '@/components/AsideMenu/SettingsSubmenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 
 // очищаем консоль - по идее выше ошибки которые
