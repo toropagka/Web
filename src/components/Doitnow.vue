@@ -105,13 +105,9 @@ import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
-import initWebSync from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import { USER_REQUEST } from '@/store/actions/user'
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
 
 export default {
@@ -261,43 +257,9 @@ export default {
     }
   },
   mounted: function () {
-    const navLoaded = this.$store.state.navigator.hasLoadedOnce
-    const userLoaded = this.$store.state.user.hasLoadedOnce
-    // сначала запрашиваем пользователя, потом регламенты, потом навигатор
-    if (!userLoaded || !navLoaded) {
-      this.$store.dispatch(USER_REQUEST).then(() => {
-        // запрос регламентов
-        const data = {
-          organization: this.$store?.state?.user?.user?.owner_email,
-          user_uid: this.$store?.state?.user?.user?.current_user_uid
-        }
-        let reglaments = []
-        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
-          reglaments = resp.data
-        }).finally(() => {
-          // запрос навигатора
-          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
-            this.$store.state.navigator.navigator.reglaments = {
-              uid: 'fake-uid',
-              items: reglaments
-            }
-            try {
-              initWebSync()
-              initInspectorSocket()
-            } catch (e) {}
-          }).then(() => {
-            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-              this.notifiesCopy = [...this.notifies]
-            })
-          })
-        })
-      })
-    }
-    if (userLoaded && navLoaded) {
-      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-        this.notifiesCopy = [...this.notifies]
-      })
-    }
+    this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+      this.notifiesCopy = [...this.notifies]
+    })
     if (this.justRegistered) {
       this.setSlidesCopy()
     }

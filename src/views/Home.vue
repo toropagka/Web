@@ -154,7 +154,7 @@ import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
 import NotificationTasks from '@/components/NotificationTasks.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import { USER_REQUEST, USER_INVITE_ME } from '@/store/actions/user'
+import { USER_INVITE_ME } from '@/store/actions/user'
 import * as TASK from '@/store/actions/tasks'
 
 import initWebSync from '@/websync/index.js'
@@ -233,22 +233,13 @@ export default {
     }
   },
   mounted () {
-    this.requestNotificationPermissionOrShowModalBox()
-    const token = this.$store.state.auth.token
-    const userLoaded = this.$store.state.user.hasLoadedOnce
-    const navLoaded = this.$store.state.navigator.hasLoadedOnce
-    if (token && !userLoaded && !navLoaded) {
-      this.$store.dispatch(USER_REQUEST).then(resp => {
-        this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
-        this.getNavigator()
-        if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-          this.getTask(this.$router.currentRoute.value.params.id)
-        } else {
-          if (localStorage.getItem('lastTab') === 'tasks') {
-            this.getTasks()
-          }
-        }
-      })
+    this.initNavStackGreedView()
+    if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
+      this.getTask(this.$router.currentRoute.value.params.id)
+    } else {
+      if (localStorage.getItem('lastTab') === 'tasks') {
+        this.getTasks()
+      }
     }
   },
   methods: {

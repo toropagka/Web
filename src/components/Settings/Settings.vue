@@ -26,13 +26,7 @@ import Options from '@/components/Settings/Options.vue'
 import Account from '@/components/Settings/Account.vue'
 import Support from '@/components/Settings/Support.vue'
 
-import { USER_REQUEST } from '@/store/actions/user'
 import { AUTH_LOGOUT } from '@/store/actions/auth'
-import { GET_SOUND_SETTING } from '@/store/actions/inspector'
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-
-import initWebSync from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
 
 export default {
   components: {
@@ -54,39 +48,6 @@ export default {
     },
     user () {
       return this.$store.state.user.user
-    }
-  },
-  mounted () {
-    const navLoaded = this.$store.state.navigator.hasLoadedOnce
-    const userLoaded = this.$store.state.user.hasLoadedOnce
-
-    // сначала запрашиваем пользователя, потом регламенты, потом навигатор
-    if (!userLoaded || !navLoaded) {
-      this.$store.commit(NAVIGATOR_REQUEST)
-      this.$store.dispatch(USER_REQUEST).then(() => {
-        this.$store.dispatch(GET_SOUND_SETTING, this.user.current_user_uid)
-        // запрос регламентов
-        const data = {
-          organization: this.$store?.state?.user?.user?.owner_email,
-          user_uid: this.$store?.state?.user?.user?.current_user_uid
-        }
-        let reglaments = []
-        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
-          reglaments = resp.data
-        }).finally(() => {
-          // запрос навигатора
-          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
-            this.$store.state.navigator.navigator.reglaments = {
-              uid: 'fake-uid',
-              items: reglaments
-            }
-            try {
-              initWebSync()
-              initInspectorSocket()
-            } catch (e) {}
-          })
-        })
-      })
     }
   },
   methods: {
