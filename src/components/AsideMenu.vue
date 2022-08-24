@@ -305,7 +305,7 @@ export default {
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-        this.dateToday = new Date()
+        this.dateToDay = localStorage.getItem('lastPickedDate') ? new Date(localStorage.getItem('lastPickedDate')) : new Date()
       }
 
       if (item.path === 'new_private_boards' || item.path === 'new_private_projects') {
@@ -439,6 +439,7 @@ export default {
       if (this.checkOnWhichDay(day)) {
         return
       }
+      localStorage.setItem('lastPickedDate', day.date)
       this.userParentId = null
       this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)

@@ -1,7 +1,7 @@
 <template>
-  <div v-if="renderedChecklist?.checklist">
+  <div v-if="renderedChecklist.checklist[0].text.length">
     <div
-      v-for="check, index of renderedChecklist?.checklist"
+      v-for="check, index of renderedChecklist.checklist"
       :key="index"
     >
       <div
@@ -133,7 +133,12 @@ export default {
     }
   },
   created () {
-    this.renderedChecklist = this.computedChecklist
+    this.renderedChecklist.checklist = this.computedChecklist
+    for (let i = 0; i < this.renderedChecklist.checklist; i++) {
+      if (!this.renderedChecklist.checklist[i].text.length) {
+        this.renderedChecklist.checklist.splice(i, 1)
+      }
+    }
     console.log(this.renderedChecklist, 'created')
   },
   mounted: function () {
@@ -146,16 +151,16 @@ export default {
       this.processedChecklist = ''
       for (const [i, check] of this.renderedChecklist.checklist.entries()) {
         if (!check.text) continue
-        this.processedChecklist.value += (check.checked ? '1' : '0') + '\r\n' + check.text
+        this.processedChecklist += (check.checked ? '1' : '0') + '\r\n' + check.text
         if (i !== this.renderedChecklist.checklist.length - 1) {
-          this.processedChecklist.value += '\r\n\r\n'
+          this.processedChecklist += '\r\n\r\n'
         }
       }
       if (!Object.keys(this.$store.state.tasks.newtasks).includes(this.taskUid)) {
         this.$store.commit(TASK.ADD_TO_NEWTASKS, this.task)
       }
-      this.$store.state.tasks.newtasks[this.taskUid].info.cheklist = this.processedChecklist.value
-      this.$store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: this.taskUid, checklist: this.processedChecklist.value })
+      this.$store.state.tasks.newtasks[this.taskUid].info.cheklist = this.processedChecklist
+      this.$store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: this.taskUid, checklist: this.processedChecklist })
     },
     addEmptyChecklist (index = -1) {
       if (!index && index !== 0) {
