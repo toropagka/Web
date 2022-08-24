@@ -19,6 +19,11 @@
     @cancel="showChangeCardBudget = false"
     @save="changeCardBudget"
   />
+  <TaskPropertiesModalBoxFileSizeLimit
+    v-if="showFileSizeLimit"
+    :files="tooBigFiles"
+    @cancel="showFileSizeLimit = false"
+  />
   <div class="relative min-h-full">
     <div class="flex items-center justify-between mb-[10px]">
       <CardOptions
@@ -115,7 +120,7 @@
       <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
-        @click="showChangeCardBudget = true"
+        @click="clickCardBudget"
         @onWipeBudget="changeCardBudget"
       />
     </div>
@@ -200,6 +205,7 @@ import CardMessagesModalBoxLimit from '../CardProperties/CardMessagesModalBoxLim
 import MessageSkeleton from '@/components/TaskProperties/MessageSkeleton.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import * as CARD from '@/store/actions/cards'
+import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
 
 export default {
   components: {
@@ -219,17 +225,20 @@ export default {
     CardMessageQuoteUnderInput,
     CardMessagesModalBoxLimit,
     MessageSkeleton,
-    PropsButtonClose
+    PropsButtonClose,
+    TaskPropertiesModalBoxFileSizeLimit
   },
   data () {
     return {
       showMessagesLimit: false,
       showChangeCardBudget: false,
       showFilesOnly: false,
+      showFileSizeLimit: false,
       currentQuote: false,
       showDeleteCard: false,
       cardMessageInputValue: '',
-      currentCard: null
+      currentCard: null,
+      tooBigFiles: []
     }
   },
   computed: {
@@ -331,6 +340,10 @@ export default {
       }
       this.$store.dispatch(CHANGE_CARD_NAME, data)
     },
+    clickCardBudget () {
+      if (!this.canEdit) return
+      this.showChangeCardBudget = true
+    },
     changeCardBudget (budget) {
       const data = { cardUid: this.selectedCard?.uid, budget: budget * 100 }
       this.$store.dispatch(CHANGE_CARD_BUDGET, data).then((resp) => {
@@ -364,6 +377,14 @@ export default {
       const formData = new FormData()
       for (let i = 0; i < files?.length; i++) {
         const file = files[i]
+        const fileSizeInMB = file.size / 1024 / 1024
+
+        if (fileSizeInMB > 50) {
+          this.showFileSizeLimit = true
+          this.tooBigFiles.push(file)
+          continue
+        }
+
         formData.append('files[' + i + ']', file)
       }
       const data = {

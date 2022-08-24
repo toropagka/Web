@@ -1,16 +1,16 @@
 <template>
   <div
     v-if="showQuestion"
-    class="bg-white p-3 rounded-[10px] mb-2"
+    class="bg-[#F4F5F7] p-3 rounded-[10px] mb-[10px]"
   >
     <div class="px-1 flex justify-between items-center group">
-      <div class="font-[400] text-[18px] my-3 min-w-[10px] min-h-[10px]">
+      <div class="font-[400] text-[16px] font-[#4C4C4D] my-3 min-w-[10px] min-h-[10px]">
         {{ question.name }}
       </div>
     </div>
     <div
       v-if="correctAnswers.length"
-      class="font-[400] text-[18px] my-3 min-w-[10px] min-h-[10px] px-1"
+      class="font-[400] text-[16px] my-1 min-w-[10px] min-h-[10px] px-1"
     >
       Правильные ответы:
       <ul>

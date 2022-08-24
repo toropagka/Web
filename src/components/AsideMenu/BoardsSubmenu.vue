@@ -4,16 +4,31 @@
     @cancel="showBoardsLimit = false"
     @ok="showBoardsLimit = false"
   />
-  <div class="px-3">
+  <div class="px-3 pt-[20px] flex flex-col">
+    <span
+      v-if="favoriteBoards.length"
+      class="font-['Roboto'] text-[14px] leading-[22px] font-medium text-[#606061]"
+    >
+      Избранные доски
+    </span>
+    <template
+      v-for="board in favoriteBoards"
+      :key="board.uid"
+    >
+      <BoardBlocItem
+        :board="board"
+        @click="gotoChildren(board)"
+      />
+    </template>
     <template
       v-for="(value, index) in items"
       :key="index"
     >
-      <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold py-3 mt-[10px]">
+      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[8px] font-medium text-[#606061]">
         {{ value.dep }}
-      </p>
+      </span>
       <div
-        class="grid gap-2 mt-[5px] grid-cols-1"
+        class="grid gap-2 grid-cols-1 mb-[10px]"
       >
         <template
           v-for="board in value.items"
@@ -21,7 +36,7 @@
         >
           <BoardBlocItem
             :board="board"
-            @click.stop="gotoChildren(board)"
+            @click="gotoChildren(board)"
           />
         </template>
         <BoardInputValue
@@ -40,9 +55,9 @@
   </div>
 </template>
 <script>
-import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
+import BoardBlocItem from '@/components/AsideMenu/BoardBlocItem.vue'
 import BoardInputValue from '@/components/Board/BoardInputValue.vue'
 import * as CARD from '@/store/actions/cards.js'
 import * as BOARD from '@/store/actions/boards'
@@ -50,10 +65,10 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 
 export default {
   components: {
-    BoardBlocItem,
     ListBlocAdd,
     BoardInputValue,
-    BoardModalBoxBoardsLimit
+    BoardModalBoxBoardsLimit,
+    BoardBlocItem
   },
   props: {
     items: {
@@ -77,6 +92,16 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    favoriteBoards () {
+      const arr = []
+      const boards = this.$store.state.boards.boards
+      Object.keys(boards).forEach(key => {
+        if (boards[key].favorite === 1) {
+          arr.push(boards[key])
+        }
+      })
+      return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
     }
   },
   methods: {
@@ -138,6 +163,9 @@ export default {
       }
     },
     gotoChildren (board) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
+
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }

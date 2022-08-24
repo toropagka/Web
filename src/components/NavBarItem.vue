@@ -30,6 +30,10 @@ export default {
       type: String,
       default: 'text-blue-600'
     },
+    isFirstOrLastItem: {
+      type: Boolean,
+      default: false
+    },
     hasDivider: Boolean,
     isDesktopIconOnly: Boolean,
     dropdown: Boolean,
@@ -56,7 +60,6 @@ export default {
         'relative',
         'font-light',
         'text-gray-700',
-        'cursor-pointer',
         'hover:text-blue-500',
         this.active ? this.activeColor : 'text-black dark:text-white dark:hover:text-gray-400'
       ]
@@ -65,10 +68,14 @@ export default {
         base.push('lg:flex')
       }
 
+      if (!this.isFirstOrLastItem) {
+        base.push('cursor-pointer')
+      }
+
       if (!this.dropdown) {
-        base.push('py-2', 'px-3')
+        base.push('px-3')
       } else {
-        base.push('p-0', 'lg:py-2', 'lg:px-3')
+        base.push('p-0', 'lg:px-3')
       }
 
       if (this.hasDivider) {

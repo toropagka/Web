@@ -35,55 +35,56 @@
       </button>
     </div>
   </div>
-  <div
-    v-else-if="tasksCount && !isLoading && isNotifiesLoaded"
-    class="flex items-center pt-[35px] mb-5 justify-between"
-  >
-    <!-- header -->
-    <div class="flex items-center" />
-    <button
-      class="border border-slate-600 py-3 px-4 flex rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
-      @click="nextTask"
+  <div class="pt-[35px] w-full">
+    <div
+      v-if="tasksCount && !isLoading && isNotifiesLoaded && !displayModal"
+      class="flex mb-5 justify-end z-[1]"
     >
-      <span class="pr-2">Следующая задача</span>
-      <Icon
-        :height="arrowForw.height"
-        :width="arrowForw.width"
-        :box="arrowForw.viewBox"
-        :path="arrowForw.path"
-      />
-    </button>
-  </div>
-  <transition :name="taskTransition">
-    <div class="ml-[300px]">
-      <DoitnowTask
-        v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
-        :key="firstTask.uid"
-        :task="firstTask"
-        :childrens="childrens"
-        :sub-tasks="subTasks"
-        :colors="colors"
-        :tags="tags"
-        :user="user"
-        :task-messages="taskMessages.slice().reverse()"
-        :employees="employees"
-        :projects="projects"
-        :tasks-count="tasksCount"
-        :is-task-messages-loading="isTaskMessagesLoading"
-        @clickTask="onClickTask"
-        @nextTask="nextTask"
-        @changeValue="changeValue"
-        @readTask="readTask"
-      />
-      <DoitnowNotificationTasks
-        v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
-        :name="firstTask.name"
-        :uid="firstTask.uid"
-      />
+      <!-- header -->
+      <button
+        class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex  w-[221px] h-[40px] items-center bg-white justify-center"
+        @click="nextTask"
+      >
+        <span class="pr-2">Следующая задача</span>
+        <Icon
+          :height="arrowForw.height"
+          :width="arrowForw.width"
+          :box="arrowForw.viewBox"
+          :path="arrowForw.path"
+        />
+      </button>
     </div>
-  </transition>
+    <transition :name="taskTransition">
+      <div class="ml-[300px] z-[2] mt-[-60px]">
+        <DoitnowTask
+          v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
+          :key="firstTask.uid"
+          :task="firstTask"
+          :childrens="childrens"
+          :sub-tasks="subTasks"
+          :colors="colors"
+          :tags="tags"
+          :user="user"
+          :task-messages="taskMessages.slice().reverse()"
+          :employees="employees"
+          :projects="projects"
+          :tasks-count="tasksCount"
+          :is-task-messages-loading="isTaskMessagesLoading"
+          @clickTask="onClickTask"
+          @nextTask="nextTask"
+          @changeValue="changeValue"
+          @readTask="readTask"
+        />
+        <DoitnowNotificationTasks
+          v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
+          :name="firstTask.name"
+          :uid="firstTask.uid"
+        />
+      </div>
+    </transition>
+  </div>
   <DoitnowSkeleton
-    v-if="isLoading && !isNotifiesLoaded"
+    v-if="isLoading"
     class="mt-20"
   />
   <DoitnowEmpty
@@ -104,13 +105,9 @@ import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
-import initWebSync from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
-import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import { USER_REQUEST } from '@/store/actions/user'
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
 
 export default {
@@ -260,43 +257,9 @@ export default {
     }
   },
   mounted: function () {
-    const navLoaded = this.$store.state.navigator.hasLoadedOnce
-    const userLoaded = this.$store.state.user.hasLoadedOnce
-    // сначала запрашиваем пользователя, потом регламенты, потом навигатор
-    if (!userLoaded || !navLoaded) {
-      this.$store.dispatch(USER_REQUEST).then(() => {
-        // запрос регламентов
-        const data = {
-          organization: this.$store?.state?.user?.user?.owner_email,
-          user_uid: this.$store?.state?.user?.user?.current_user_uid
-        }
-        let reglaments = []
-        this.$store.dispatch('REGLAMENTS_REQUEST', data).then(resp => {
-          reglaments = resp.data
-        }).finally(() => {
-          // запрос навигатора
-          this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
-            this.$store.state.navigator.navigator.reglaments = {
-              uid: 'fake-uid',
-              items: reglaments
-            }
-            try {
-              initWebSync()
-              initInspectorSocket()
-            } catch (e) {}
-          }).then(() => {
-            this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-              this.notifiesCopy = [...this.notifies]
-            })
-          })
-        })
-      })
-    }
-    if (userLoaded && navLoaded) {
-      this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
-        this.notifiesCopy = [...this.notifies]
-      })
-    }
+    this.$store.dispatch('NOTIFICATION_TASKS_GENERATE').then(() => {
+      this.notifiesCopy = [...this.notifies]
+    })
     if (this.justRegistered) {
       this.setSlidesCopy()
     }

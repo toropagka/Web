@@ -1,6 +1,6 @@
 <script>
-import AsideMenuItem from '@/components/AsideMenuItem.vue'
-import AsideMenuAssigments from '@/components/AsideMenuAssigments'
+import AsideMenuItem from '@/components/AsideMenu/AsideMenuItem.vue'
+import AsideMenuAssigments from '@/components/AsideMenu/AsideMenuAssigments'
 
 export default {
   components: {

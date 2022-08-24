@@ -22,6 +22,11 @@
     v-if="showFreeModalPerform"
     @cancel="showFreeModalPerform = false"
   />
+  <TaskPropertiesModalBoxFileSizeLimit
+    v-if="showFileSizeLimit"
+    :files="tooBigFiles"
+    @cancel="showFileSizeLimit = false"
+  />
   <div
     class="break-words relative z-1"
     @mousedown="selectedFalse"
@@ -325,6 +330,7 @@ import ChatLimit from '@/components/properties/ChatLimit'
 import PerformerLimit from '@/components/TaskProperties/PerformerLimit'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput'
 import TaskRepeat from '@/components/TaskProperties/TaskRepeat'
+import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
 
 export default {
   components: {
@@ -346,7 +352,8 @@ export default {
     ModalBoxDelete,
     TaskPropsCommentEditor,
     TaskPropsChecklist,
-    TaskRepeat
+    TaskRepeat,
+    TaskPropertiesModalBoxFileSizeLimit
   },
   directives: {
     linkify,
@@ -362,6 +369,7 @@ export default {
       showFreeModalRepeat: false,
       showFreeModalChat: false,
       showFreeModalPerform: false,
+      showFileSizeLimit: false,
       timeStartActive: false,
       checklistshow: false,
       checklistSavedNow: false,
@@ -373,6 +381,7 @@ export default {
       currentAnswerMessageUid: '',
       taskMsg: '',
       files: [], // replace this with const in function createTaskFiles
+      tooBigFiles: [],
 
       day: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
 
@@ -461,10 +470,19 @@ export default {
         })
     },
     createTaskFile (event) {
+      this.tooBigFiles = []
       this.files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
       for (let i = 0; i < this.files.length; i++) {
         const file = this.files[i]
+        const fileSizeInMB = file.size / 1024 / 1024
+
+        if (fileSizeInMB > 50) {
+          this.showFileSizeLimit = true
+          this.tooBigFiles.push(file)
+          continue
+        }
+
         formData.append('files[' + i + ']', file)
       }
       const data = {

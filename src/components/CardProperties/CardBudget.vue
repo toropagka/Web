@@ -1,10 +1,13 @@
 <template>
-  <div class="flex items-center bg-[#F4F5F7] rounded-[6px] text-[#575758] text-[12px] px-[8px] py-[5px] cursor-pointer font-[500] group">
+  <div
+    class="flex items-center bg-[#F4F5F7] rounded-[6px] text-[#575758] text-[12px] px-[8px] py-[5px] font-[500] group"
+    :class="{'cursor-pointer': canEdit}"
+  >
     <svg
       width="17"
       height="12"
       class="mr-[7px]"
-      :class="{'group-hover:hidden': canEdit && budget }"
+      :class="{'group-hover:hidden': canEdit && budget}"
       viewBox="0 0 17 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +53,6 @@
         />
       </svg>
     </div>
-
     {{ computedBudget ?? 'Бюджет' }}
   </div>
 </template>
