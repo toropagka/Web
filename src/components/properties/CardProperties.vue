@@ -120,7 +120,7 @@
       <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
-        @click="showChangeCardBudget = true"
+        @click="clickCardBudget"
         @onWipeBudget="changeCardBudget"
       />
     </div>
@@ -339,6 +339,10 @@ export default {
         data.name = 'Карточка без названия'
       }
       this.$store.dispatch(CHANGE_CARD_NAME, data)
+    },
+    clickCardBudget () {
+      if (!this.canEdit) return
+      this.showChangeCardBudget = true
     },
     changeCardBudget (budget) {
       const data = { cardUid: this.selectedCard?.uid, budget: budget * 100 }
