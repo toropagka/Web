@@ -1,5 +1,5 @@
 <script>
-import MainMenu from '@/components/MainMenu.vue'
+import MainMenu from '@/components/AsideMenu/MainMenu.vue'
 import TasksSubmenu from '@/components/AsideMenu/TasksSubmenu.vue'
 import DirectorySubmenu from '@/components/AsideMenu/DirectorySubmenu.vue'
 import ProjectsSubmenu from '@/components/AsideMenu/ProjectsSubmenu.vue'
