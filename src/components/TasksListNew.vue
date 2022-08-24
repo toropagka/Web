@@ -1051,7 +1051,6 @@ export default {
       if (!this.isPropertiesMobileExpanded && arg.info.name) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-
       if (this.lastSelectedTaskUid !== arg.id) {
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
