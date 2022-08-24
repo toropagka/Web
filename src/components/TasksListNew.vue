@@ -142,6 +142,7 @@
                 @focusout="clearTaskFocus(props.node.info)"
                 @keydown.enter="updateTask($event, props.node.info); props.node.info._isEditable = false;"
               />
+              {{ props.node.info.uid }}
             </div>
 
             <!-- Tags, Overdue, Customer, Performer -->
@@ -992,7 +993,7 @@ export default {
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
-      this.$store.commit(TASK.SELECT_TASK, uid)
+      this.$store.dispatch(TASK.SELECT_TASK, uid)
     },
     addSubtask (parent) {
       this.orderNewSubtask = this.orderNewSubtask - 1
@@ -1049,7 +1050,6 @@ export default {
       if (!this.isPropertiesMobileExpanded && arg.info.name) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-
       if (this.lastSelectedTaskUid !== arg.id) {
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
