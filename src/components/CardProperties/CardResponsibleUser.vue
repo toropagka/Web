@@ -81,7 +81,7 @@
               width="24"
               height="24"
             >
-            {{ employee.name }}
+            <span class="truncate">{{ employee.name }}</span>
           </div>
         </div>
       </div>
