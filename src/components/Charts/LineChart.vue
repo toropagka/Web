@@ -1,5 +1,8 @@
-<script setup>
-import { ref, watch, computed, onMounted } from 'vue'
+<template>
+  <canvas ref="root" />
+</template>
+
+<script>
 import {
   Chart,
   LineElement,
@@ -9,54 +12,59 @@ import {
   CategoryScale,
   Tooltip
 } from 'chart.js'
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
-
-const root = ref(null)
-
-let chart
+import { shallowRef } from 'vue'
 
 Chart.register(LineElement, PointElement, LineController, LinearScale, CategoryScale, Tooltip)
 
-onMounted(() => {
-  chart = new Chart(root.value, {
-    type: 'line',
-    data: props.data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          display: false
-        },
-        x: {
-          display: true
+export default {
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  data () {
+    return {
+      chart: null
+    }
+  },
+  watch: {
+    data: {
+      handler: function (newValue, oldValue) {
+        if (newValue) {
+          if (this.chart) {
+            this.chart.data = newValue
+            this.chart.update()
+          }
         }
       },
-      plugins: {
-        legend: {
-          display: false
-        }
-      }
+      deep: true
     }
-  })
-})
-
-const chartData = computed(() => props.data)
-
-watch(chartData, data => {
-  if (chart) {
-    chart.data = data
-    chart.update()
+  },
+  mounted () {
+    this.chart = shallowRef(
+      new Chart(this.$refs.root, {
+        type: 'line',
+        data: this.data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              display: false
+            },
+            x: {
+              display: true
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      })
+    )
   }
-})
+}
 </script>
-
-<template>
-  <canvas ref="root" />
-</template>
