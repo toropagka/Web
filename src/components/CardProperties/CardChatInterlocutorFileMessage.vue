@@ -85,7 +85,6 @@ export default {
       return splittedValue[splittedValue.length - 1].toLowerCase()
     },
     FileIsImage () {
-      console.log(this.fileExtension)
       return ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif'].includes(
         this.fileExtension
       )

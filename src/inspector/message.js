@@ -30,8 +30,11 @@ function dateToTimeFormat (date) {
 
 export function getInspectorMessage (type, task) {
   const currentUser = store?.state?.user?.user?.current_user_uid
+  const customer = store?.state?.employees?.employees[task.uid_customer]
   const customerName =
-    store?.state?.employees?.employees[task.uid_customer]?.name ??
+  customer?.name.length > 30
+    ? customer?.name.substring(0, 30) + '...'
+    : customer?.name ??
     '[Удаленный сотрудник]'
   const performerName =
     store?.state?.employees?.employees[task.uid_performer]?.name ??
