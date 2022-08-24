@@ -11,6 +11,7 @@
   />
   <ReglamentContentEditor
     v-if="isEditing"
+    :is-editing="isEditing"
     :reglament="reglament"
     @exitEditMode="isEditing = false"
   />
@@ -24,7 +25,7 @@
         />
       </div>
     </div>
-    <div class="flex justify-between items-center mt-4">
+    <div v-if="!isTesting" class="flex justify-between items-center mt-4">
       <h1 class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
         {{ reglamentTitle }}
       </h1>
@@ -197,7 +198,7 @@
     class="flex justify-end"
   >
     <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
       @click="startTheReglament"
     >
       Пройти тест
@@ -384,10 +385,19 @@ export default {
         setTimeout(() => {
           try {
             const toolBar = document.querySelector('div.ql-toolbar')
-            toolBar.style.position = 'sticky'
+            const editor = document.querySelector('div.ql-editor')
+            const container = document.querySelector('div.ql-container')
+            container.style.background = '#f4f5f7'
+            editor.style.borderTopLeftRadius = '28px'
+            editor.style.borderTopRightRadius = '28px'
+            editor.style.borderTop = '28px solid white'
+            editor.style.background = 'white'
+            toolBar.style.height = '60px'
             toolBar.style.top = '95px'
+            toolBar.style.padding = '8px 8px 8px 0'
             toolBar.style.zIndex = '5'
             toolBar.style.background = '#f4f5f7'
+            toolBar.style.border = 'none'
           } catch (e) {}
         }, 50)
       }
