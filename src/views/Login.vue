@@ -397,7 +397,7 @@ export default {
         this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
       } else if (!this.validateName && this.form.usernameTouched) {
         this.form.showError = true
-        this.form.errorMessage = 'Впишите имя'
+        this.form.errorMessage = 'Поле "имя" не может быть пустым'
       } else if (!this.validatePhone && this.form.phoneTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Некорректный номер телефона'

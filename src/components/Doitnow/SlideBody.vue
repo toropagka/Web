@@ -7,16 +7,15 @@
     button-label="Delete"
     @delegated="showSlide = false"
   />
-  <div
-    class="taskName p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden"
-  >
-    {{ title }}
-  </div>
-  <div
-    class="description-content pl-5 mt-5 flex items-end"
-  >
+  <div class="flex items-center justify-center text-center flex-col">
     <div
-      class="font-[400] text-[14px] leading-[21px] text-[#4C4C4D] w-[50rem]"
+      class="taskName p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-[500px] text-[25px] font-bold"
+    >
+      {{ title }}
+    </div>
+
+    <div
+      class="font-[400] text-[18px] leading-[21px] text-[#4C4C4D] w-[500px] mb-[50px] pl-0"
       v-html="text"
     />
     <button
@@ -34,42 +33,44 @@
       Поручить задачу
     </button>
   </div>
-  <div
-    v-if="video"
-    class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
-  >
-    <iframe
-      width="560"
-      height="315"
-      :src="video"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      class="border rounded-xl"
-    />
-    <button
-      v-if="name === 'addEmployees'"
-      class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
-      @click="clickAddEmployees"
+  <div class="flex items-center justify-center">
+    <div
+      v-if="video"
+      class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
     >
-      Добавить сотрудников
+      <iframe
+        width="560"
+        height="315"
+        :src="video"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        class="border rounded-xl"
+      />
+      <button
+        v-if="name === 'addEmployees'"
+        class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+        @click="clickAddEmployees"
+      >
+        Добавить сотрудников
+      </button>
+    </div>
+    <button
+      v-if="name === 'welcome'"
+      class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      @click="clickSuccess"
+    >
+      Понятно
+    </button>
+    <button
+      v-if="name === 'addAvatar'"
+      class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      @click="clickAddAvatar"
+    >
+      Загрузить
     </button>
   </div>
-  <button
-    v-if="name === 'welcome'"
-    class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
-    @click="clickSuccess"
-  >
-    Понятно
-  </button>
-  <button
-    v-if="name === 'addAvatar'"
-    class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
-    @click="clickAddAvatar"
-  >
-    Загрузить
-  </button>
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'

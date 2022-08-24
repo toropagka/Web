@@ -1,10 +1,38 @@
 <template>
   <div
+    v-show="!isFullScreen"
+    id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 pt-[15px] z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
+      <div class="mt-[20px]">
+        <DatePicker
+          v-if="lastTab === 'tasks'"
+          id="step4"
+          ref="calendarclass"
+          v-model="dateToday"
+          dot="true"
+          class="border-none pl-[22px] pr-[16px] calendar-nav-custom"
+          :style="{ backgroundColor: datePickerBG }"
+          show-weeknumbers="left"
+          days="-1"
+          color="#CCC"
+          week-from-end="6"
+          is-expanded
+          :locale="getNavigatorLanguage"
+          :masks="{ weekdays: 'WWW' }"
+          :attributes="attrs"
+          :is-dark="isDark"
+          mode="single"
+          is-inline
+          in-next-month="true"
+          in-month="true"
+          in-prev-month="true"
+          @dayclick="onDayClick"
+        />
+      </div>
       <div class="my-[10px]">
         <template v-for="(menuGroup, index) in menu">
           <div
@@ -33,8 +61,9 @@
 </template>
 
 <script>
-import AsideMenuList from '@/components/AsideMenuList.vue'
-import AsideMenuSkeleton from '@/components/AsideMenuSkeleton.vue'
+import { DatePicker } from 'v-calendar'
+import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
+import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import 'v-calendar/dist/style.css'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -42,10 +71,10 @@ import warn from '@/icons/warn.js'
 import { mdiMenu } from '@mdi/js'
 
 import * as TASK from '@/store/actions/tasks'
-import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
+    DatePicker,
     AsideMenuSkeleton,
     AsideMenuList
   },
@@ -55,6 +84,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubMenu'],
   data () {
     return {
       newDayTimerID: 0,
@@ -107,26 +137,6 @@ export default {
     getNavigatorLanguage () {
       return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en'
     },
-    favoriteBoards () {
-      const arr = []
-      const boards = this.$store.state.boards.boards
-      Object.keys(boards).forEach(key => {
-        if (boards[key].favorite === 1) {
-          arr.push(boards[key])
-        }
-      })
-      return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
-    },
-    favoriteProjects () {
-      const arr = []
-      const projects = this.$store.state.projects.projects
-      Object.keys(projects).forEach(key => {
-        if (projects[key].favorite === 1) {
-          arr.push(projects[key])
-        }
-      })
-      return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
-    },
     assigments () {
       return { delegate_iam: this.storeNavigator.delegate_iam, delegate_to_me: this.storeNavigator.delegate_to_me }
     }
@@ -134,6 +144,7 @@ export default {
   mounted () {
     let currDate = new Date()
     currDate.setHours(0, 0, 0, 0)
+    this.setLastPickedDate()
     this.newDayTimerID = setInterval(() => {
       const newDate = new Date()
       newDate.setHours(0, 0, 0, 0)
@@ -147,23 +158,25 @@ export default {
     clearInterval(this.newDayTimerID)
   },
   methods: {
+    setLastPickedDate () {
+      if (this.navStack[0].value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
+        this.$store.commit('updateCalendarLastPicked', this.navStack[0].value.param)
+      }
+    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     },
-    asideLgClose () {
-      this.$store.dispatch('asideLgToggle', false)
-    },
     // TODO: clean up messy logic
     menuClick (event, item) {
-      console.log('directory', item)
-
       // Если уже находимся на этой вкладке игнорировать дальнейший код
       if (this.checkOnWhichTab(item)) {
         return
       }
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
@@ -178,15 +191,6 @@ export default {
         this.$store.state.navigator.submenu.status = false
       }
 
-      console.log(item)
-      // скрывать навбар при онбординге
-      // if (this.$store.state.onboarding.visitedModals) {
-      //   this.$store.state.onboarding.hideNavBar = false
-      //   if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
-      //     console.log('hide')
-      //     this.$store.state.onboarding.hideNavBar = true
-      //   }
-      // }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -298,6 +302,8 @@ export default {
       }
     },
     onDayClick (day) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       if (this.checkOnWhichDay(day)) {
         return
       }
@@ -312,97 +318,11 @@ export default {
         typeVal: new Date(day.date),
         type: 'date'
       }
+      this.$store.commit('updateCalendarLastPicked', day.date)
       this.$store.commit('updateStackWithInitValue', navElem)
       this.lastVisitedDate = new Date() // desktop check
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-    },
-    goToBoard (board) {
-      if (this.checkOnWhichTab(board)) {
-        return
-      }
-      this.userParentId = null
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      const path = 'new_private_boards'
-      const el = {
-        greedPath: path,
-        key: 'greedSource',
-        name: 'Доски',
-        value: this.storeNavigator[path]
-      }
-      this.$store.commit('updateStackWithInitValue', el)
-
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
-      })
-
-      const navElem = {
-        name: board.name,
-        key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
-        greedPath: 'boards_children',
-        value: board.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
-    },
-    goToProject (project) {
-      if (this.checkOnWhichTab(project)) {
-        return
-      }
-      this.userParentId = null
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      const path = 'new_private_projects'
-      const el = {
-        name: 'Проекты',
-        key: 'greedSource',
-        greedPath: path,
-        value: this.storeNavigator[path]
-      }
-      this.$store.commit('updateStackWithInitValue', el)
-
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: project.name,
-        key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
-        greedPath: 'projects_children',
-        value: project.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
@@ -425,7 +345,6 @@ export default {
     },
     onNewDay () {
       this.$store.commit('updateCalendarToday')
-      //
     },
     assigmentsClick (user) {
       if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
@@ -453,7 +372,96 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
       this.userParentId = user.parentID
+
+      this.$emit('closeSubMenu')
     }
   }
 }
 </script>
+
+<style>
+.vc-container.calendar-nav-custom
+{
+  @apply font-roboto;
+}
+
+.calendar-nav-custom .vc-weeknumber-content {
+  @apply bg-white rounded-[6px] text-[#8b64bd] not-italic text-[11px] mt-0 mr-[2px] h-[24px] w-[24px];
+}
+
+.calendar-nav-custom .vc-weeks {
+  @apply p-0;
+}
+
+.calendar-nav-custom .vc-arrow {
+  @apply text-[#424242] w-[32px] h-[32px];
+}
+
+.calendar-nav-custom .vc-title {
+  @apply text-[#424242] capitalize text-[15px] font-bold;
+}
+
+.calendar-nav-custom .vc-weekday {
+  @apply text-[#424242] capitalize text-[12px] h-[34px] pt-0 pb-0 flex items-center justify-center font-bold;
+}
+.calendar-nav-custom .vc-weekday:nth-child(7), .vc-weekday:nth-child(8)
+{
+  @apply text-[#e23300];
+}
+
+.calendar-nav-custom .vc-header
+{
+  @apply mb-[2px] h-[32px] p-0;
+}
+
+.calendar-nav-custom .vc-arrows-container
+{
+  @apply h-[32px] p-0;
+}
+
+.calendar-nav-custom .vc-day
+{
+  @apply min-h-[30px] h-[30px] w-[30px];
+}
+
+.calendar-nav-custom .vc-day-content:focus
+{
+  @apply bg-[#ff9123]/70 !important;
+}
+
+.calendar-nav-custom .vc-highlight,
+.calendar-nav-custom .vc-highlight:focus
+{
+  @apply bg-[#ff9123]/50;
+}
+
+.calendar-nav-custom .vc-day-content,
+.calendar-nav-custom .vc-highlight
+{
+  @apply rounded-[8px] w-[30px] h-[30px] border-[#ff9123]/40 text-[#424242] text-[12px] font-medium !important;
+}
+
+.calendar-nav-custom .is-not-in-month .vc-day-content,
+.calendar-nav-custom .is-not-in-month .vc-highlights,
+.calendar-nav-custom .is-not-in-month .vc-day-layer,
+.calendar-nav-custom .is-not-in-month .vc-highlight
+{
+  @apply opacity-100 pointer-events-auto text-black/50 !important;
+}
+
+.calendar-nav-custom .vc-day.weekday-7:not(.is-not-in-month) .vc-day-content,
+.calendar-nav-custom .vc-day.weekday-1:not(.is-not-in-month) .vc-day-content
+{
+  @apply text-red-500 !important;
+}
+
+.calendar-nav-custom .dots-back
+{
+  background-color: #444444!important;
+  height: 3px !important;
+  width: 3px !important;
+  position: relative !important;
+  top: 11px !important;
+  border-radius: 9999px !important;
+}
+</style>

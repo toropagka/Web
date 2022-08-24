@@ -11,6 +11,7 @@
   />
   <ReglamentContentEditor
     v-if="isEditing"
+    :is-editing="isEditing"
     :reglament="reglament"
     @exitEditMode="isEditing = false"
   />
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class="flex justify-between items-center mt-4">
-      <h1 class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
+      <h1 v-if="!isTesting" class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
         {{ reglamentTitle }}
       </h1>
       <div
@@ -175,97 +176,48 @@
         />
       </div>
     </div>
-    <div
-      v-if="(isTesting || isEditing) && !showCompleteMessage"
-    >
-      <template
-        v-for="(question , index) in questions"
-        :key="index"
-      >
-        <ReglamentQuestion
-          :ref="question.uid"
-          :question="question"
-          :reglament="reglament"
-          @selectAnswer="selectAnswer"
-        />
-      </template>
-    </div>
   </div>
+
+  <!-- Режим прохождение теста -->
+  <ReglamentTest
+    v-if="isTesting"
+    :reglament="reglament"
+    @exitTestingMode="isTesting = false"
+  />
 
   <div
     v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
     class="flex justify-end"
   >
     <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
       @click="startTheReglament"
     >
       Пройти тест
     </button>
   </div>
-  <div
-    v-if="!isEditing && isTesting && questions.length > 0 && !showCompleteMessage"
-    class="flex justify-end"
-  >
-    <button
-      class="flex min-w-[175px] justify-center items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-      :class="{ 'bg-[#E7E2E1] hover:bg-[#C5C5C5]': disableButton === true }"
-      :disabled="disableButton"
-      @click="clickComplete"
-    >
-      {{ completeText }}
-    </button>
-  </div>
-  <div
-    v-if="showCompleteMessage && !isPassed"
-    class="py-3 rounded-[10px] mb-2 font-[500] text-[20px] my-3 min-w-[10px] min-h-[10px]"
-  >
-    Вы неправильно ответили на следующие вопросы:
-  </div>
-  <template
-    v-for="question in questions"
-    :key="question.uid"
-  >
-    <ReglamentWrong
-      v-if="showCompleteMessage"
-      :question="question"
-    />
-  </template>
-  <ReglamentCompleteMessage
-    v-if="showCompleteMessage"
-    :is-passed="isPassed"
-    :name="reglament.name"
-    @confirm="confirm"
-  />
-  <div class="h-[20px]" />
 </template>
 
 <script>
 import { QuillEditor } from '@vueup/vue-quill'
 import * as REGLAMENTS from '@/store/actions/reglaments.js'
 
-import ReglamentWrong from '@/components/Reglaments/ReglamentWrong.vue'
 import ReglamentTestLimit from '@/components/Reglaments/ReglamentTestLimit.vue'
 import ReglamentEditLimit from '@/components/Reglaments/ReglamentEditLimit.vue'
-import ReglamentQuestion from './ReglamentQuestion.vue'
-import ReglamentCompleteMessage from './ReglamentCompleteMessage.vue'
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
-
-import * as SLIDES from '@/store/actions/slides.js'
 import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEditor'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
+import ReglamentTest from '@/components/Reglaments/ReglamentTest'
 
 export default {
   components: {
+    ReglamentTest,
     ReglamentContentEditor,
     NavBarButtonsReglament,
     QuillEditor,
-    ReglamentQuestion,
-    ReglamentCompleteMessage,
-    ReglamentWrong,
     ReglamentSmallButton,
     ReglamentEditLimit,
     ReglamentTestLimit,
@@ -286,8 +238,6 @@ export default {
       showCompleteMessage: false,
       isPassed: 0,
       showCheckMark: false,
-      disableButton: false,
-      completeText: 'Завершить',
       firstInvalidQuestionUid: null,
       showEmployees: false
     }
@@ -384,10 +334,19 @@ export default {
         setTimeout(() => {
           try {
             const toolBar = document.querySelector('div.ql-toolbar')
-            toolBar.style.position = 'sticky'
+            const editor = document.querySelector('div.ql-editor')
+            const container = document.querySelector('div.ql-container')
+            container.style.background = '#f4f5f7'
+            editor.style.borderTopLeftRadius = '28px'
+            editor.style.borderTopRightRadius = '28px'
+            editor.style.borderTop = '28px solid white'
+            editor.style.background = 'white'
+            toolBar.style.height = '60px'
             toolBar.style.top = '95px'
+            toolBar.style.padding = '8px 8px 8px 0'
             toolBar.style.zIndex = '5'
             toolBar.style.background = '#f4f5f7'
+            toolBar.style.border = 'none'
           } catch (e) {}
         }, 50)
       }
@@ -417,28 +376,6 @@ export default {
     } catch (e) {}
   },
   methods: {
-    confirm (val) {
-      if (this.$store.state.reglaments.returnDoitnow === true) {
-        this.$store.state.navigator.lastTab = 'doitnow'
-        localStorage.setItem('lastTab', 'doitnow')
-        this.$router.push('/doitnow')
-        this.$store.state.reglaments.returnDoitnow = false
-      }
-      if (val) {
-        this.$store.dispatch('popNavStack')
-        this.$store.dispatch('asidePropertiesToggle', false)
-        return
-      }
-      // обнуляем значения, чтобы юзер ещё раз прочитал регламент
-      this.showCompleteMessage = false
-      this.isEditing = false
-      this.isTesting = false
-      // обнуляем значение selected
-      this.$store.commit(REGLAMENTS.REGLAMENT_RESTORE_SELECTED)
-    },
-    selectAnswer (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_SELECT_ANSWER, data)
-    },
     setEdit () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showEditLimit = true
@@ -446,25 +383,6 @@ export default {
       }
 
       this.isEditing = true
-    },
-    clickComplete () {
-      const data = {
-        uid_user: this.user.current_user_uid,
-        uid_reglament: this.currReglament.uid,
-        answerJson: JSON.stringify(this.questions)
-      }
-      this.disableButton = true
-      this.completeText = 'Завершение...'
-      this.$store.dispatch(REGLAMENTS.CRATE_USER_REGLAMENT_ANSWER, data).then((resp) => {
-        const reglament = { ...this.currReglament }
-        reglament.is_passed = resp.data.is_passed
-        this.$store.commit('NAVIGATOR_UPDATE_REGLAMENT', reglament)
-        this.showCompleteMessage = true
-        this.isPassed = resp.data.is_passed
-        this.disableButton = false
-        this.completeText = 'Завершить'
-        this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
-      })
     },
     startTheReglament () {
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {

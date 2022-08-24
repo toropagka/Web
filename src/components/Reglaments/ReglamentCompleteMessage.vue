@@ -17,16 +17,16 @@ export default {
 </script>
 
 <template>
-  <div class="py-3 rounded-[10px] flex flex-col items-center space-y-4">
+  <div class="py-3 rounded-[10px] flex flex-col items-center space-y-[35px]">
     <p
       v-if="isPassed"
-      class="font-[500] text-[22px]"
+      class="font-[500] text-[16px] leading-[26px] text-center"
     >
       Вы успешно сдали тест регламента {{ name }}!
     </p>
     <p
       v-else
-      class="font-[500] text-[20px]"
+      class="font-[500] text-[16px] leading-[26px] text-center"
     >
       Пожалуйста, еще раз внимательно ознакомьтесь с регламентом и пройдите текст повторно
     </p>

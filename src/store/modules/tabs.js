@@ -15,7 +15,6 @@ const actions = {
     if (tab.code === getters.lastTab) {
       return
     }
-    localStorage.setItem('lastTab', tab.code)
     if (store.state.isPropertiesMobileExpanded) {
       store.dispatch('asidePropertiesToggle', false)
     }
