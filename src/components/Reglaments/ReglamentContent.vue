@@ -25,8 +25,8 @@
         />
       </div>
     </div>
-    <div v-if="!isTesting" class="flex justify-between items-center mt-4">
-      <h1 class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
+    <div class="flex justify-between items-center mt-4">
+      <h1 v-if="!isTesting" class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
         {{ reglamentTitle }}
       </h1>
       <div
