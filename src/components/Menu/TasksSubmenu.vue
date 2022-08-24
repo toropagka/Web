@@ -441,7 +441,6 @@ export default {
       if (this.checkOnWhichDay(day)) {
         return
       }
-      this.$store.commit('updateCalendarLastVisited', day.date)
       this.userParentId = null
       this.resetLastTab()
       this.$store.dispatch('asidePropertiesToggle', false)
