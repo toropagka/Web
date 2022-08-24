@@ -7,7 +7,7 @@
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <div class="mt-[60px]">
+      <div class="mt-[20px]">
         <DatePicker
           v-if="lastTab === 'tasks'"
           id="step4"
@@ -194,6 +194,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubMenu'],
   data () {
     return {
       newDayTimerID: 0,
@@ -301,6 +302,8 @@ export default {
       if (this.checkOnWhichTab(item)) {
         return
       }
+      this.$emit('closeSubMenu')
+      localStorage.setItem('lastTab', 'tasks')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
@@ -498,6 +501,7 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
+      this.$emit('closeSubMenu')
     },
     goToProject (project) {
       if (this.checkOnWhichTab(project)) {
@@ -541,6 +545,7 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
+      this.$emit('closeSubMenu')
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
@@ -591,6 +596,8 @@ export default {
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
       this.userParentId = user.parentID
+
+      this.$emit('closeSubMenu')
     }
   }
 }

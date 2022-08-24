@@ -1,38 +1,10 @@
-<script setup>
-import { computed } from 'vue'
-defineEmits(['onWipeBudget'])
-const props = defineProps({
-  budget: Number,
-  canEdit: Boolean
-})
-
-const budget = computed(() => {
-  if (props.budget > 0) {
-    const fractional = props.budget % 100
-    const value = Math.floor(props.budget / 100)
-    let valString = ''
-    let valueString = value.toString()
-    while (valueString) {
-      valString = valueString.slice(-3) + ' ' + valString
-      valueString = valueString.slice(0, -3)
-    }
-    valString = valString.trim()
-    if (fractional > 0) {
-      const frString = (fractional < 10 ? '0' : '') + fractional
-      return `${valString}.${frString}`
-    }
-    return valString
-  }
-  return 'Бюджет'
-})
-</script>
 <template>
   <div class="flex items-center bg-[#F4F5F7] rounded-[6px] text-[#575758] text-[12px] px-[8px] py-[5px] cursor-pointer font-[500] group">
     <svg
       width="17"
       height="12"
       class="mr-[7px]"
-      :class="{'group-hover:hidden': props.canEdit && props.budget }"
+      :class="{'group-hover:hidden': canEdit && budget }"
       viewBox="0 0 17 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +33,7 @@ const budget = computed(() => {
     </svg>
     <div
       class="flex items-center justify-center p-[4.5px] mr-[4px] hidden"
-      :class="{ 'group-hover:block': props.canEdit && props.budget }"
+      :class="{ 'group-hover:block': canEdit && budget }"
       @click.stop="$emit('OnWipeBudget', 0)"
     >
       <svg
@@ -79,6 +51,43 @@ const budget = computed(() => {
       </svg>
     </div>
 
-    {{ budget ?? 'Бюджет' }}
+    {{ computedBudget ?? 'Бюджет' }}
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    budget: {
+      type: Number,
+      default: null
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['OnWipeBudget'],
+  computed: {
+    computedBudget () {
+      if (this.budget > 0) {
+        const fractional = this.budget % 100
+        const value = Math.floor(this.budget / 100)
+        let valString = ''
+        let valueString = value.toString()
+        while (valueString) {
+          valString = valueString.slice(-3) + ' ' + valString
+          valueString = valueString.slice(0, -3)
+        }
+        valString = valString.trim()
+        if (fractional > 0) {
+          const frString = (fractional < 10 ? '0' : '') + fractional
+          return `${valString}.${frString}`
+        }
+        return valString
+      }
+      return 'Бюджет'
+    }
+  }
+}
+</script>

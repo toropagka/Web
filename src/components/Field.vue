@@ -1,49 +1,11 @@
-<script setup>
-import { computed, useSlots } from 'vue'
-
-defineProps({
-  label: {
-    type: String,
-    default: null
-  },
-  help: {
-    type: String,
-    default: null
-  },
-  maxCount: {
-    type: Number,
-    default: 0
-  },
-  actualCount: {
-    type: Number,
-    default: 0
-  }
-})
-
-const slots = useSlots()
-
-const wrapperClass = computed(() => {
-  const base = []
-  const slotsLength = slots.default().length
-
-  if (slotsLength > 1) {
-    base.push('grid grid-cols-1 gap-3')
-  }
-
-  if (slotsLength === 2) {
-    base.push('md:grid-cols-2')
-  }
-
-  return base
-})
-</script>
-
 <template>
   <div class="mb-3 last:mb-0">
     <label
       v-if="label"
       class="block font-bold mb-2"
-    >{{ label }}</label>
+    >
+      {{ label }}
+    </label>
     <div :class="wrapperClass">
       <slot />
     </div>
@@ -66,3 +28,42 @@ const wrapperClass = computed(() => {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    label: {
+      type: String,
+      default: null
+    },
+    help: {
+      type: String,
+      default: null
+    },
+    maxCount: {
+      type: Number,
+      default: 0
+    },
+    actualCount: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    wrapperClass () {
+      const base = []
+      const slotsLength = this.$slots.default().length
+
+      if (slotsLength > 1) {
+        base.push('grid grid-cols-1 gap-3')
+      }
+
+      if (slotsLength === 2) {
+        base.push('md:grid-cols-2')
+      }
+
+      return base
+    }
+  }
+}
+</script>

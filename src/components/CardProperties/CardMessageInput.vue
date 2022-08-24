@@ -14,7 +14,7 @@
       >
         Отпустите файл, чтобы загрузить
         <input
-          v-if="props.canAddFiles"
+          v-if="canAddFiles"
           id="file-input"
           type="file"
           multiple="multiple"
@@ -32,7 +32,7 @@
     >
       <div class="rounded-l-[10px] flex items-center justify-center bg-[#F4F5F7] pl-[15px]">
         <label
-          v-if="props.canAddFiles"
+          v-if="canAddFiles"
           for="file-input"
         >
           <svg
@@ -51,7 +51,7 @@
           </svg>
         </label>
         <input
-          v-if="props.canAddFiles"
+          v-if="canAddFiles"
           id="file-input"
           type="file"
           multiple="multiple"
@@ -115,64 +115,71 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, watch, nextTick } from 'vue'
-const emit = defineEmits(['update:modelValue', 'createCardMessage', 'createCardFile', 'onPaste', 'cantWriteMessages', 'changeHeight'])
-
-const props = defineProps({
-  canAddFiles: Boolean,
-  modelValue: String
-})
-const taskMsgEdit = ref(null)
-const drag = ref(false)
-const dragStartHandler = () => {
-  drag.value = true
-}
-const dragEndHandler = () => {
-  drag.value = false
-}
-const dropHandler = (e) => {
-  dragEndHandler()
-  emit('createCardFile', e)
-}
-
-const computedValue = computed({
-  get: () => props.modelValue,
-  set: value => {
-    emit('update:modelValue', value)
-  }
-})
-
-watch(() => props.modelValue, () => {
-  nextTick(() => {
-    onInputTaskMsg()
-  })
-})
-
-const onInputTaskMsg = () => {
-  const oldHeight = taskMsgEdit.value.style.height
-  taskMsgEdit.value.style.height = '40px'
-  const scrollHeight = taskMsgEdit.value.scrollHeight
-  taskMsgEdit.value.style.height = scrollHeight + 'px'
-  if (oldHeight !== taskMsgEdit.value.style.height) {
-    // у нас стоит max-h-[100px] - по этому делаем проверку
-    // больше этого значения не раздвинется
-    if (scrollHeight > 100) {
-      emit('changeHeight', 100)
-    } else {
-      emit('changeHeight', scrollHeight)
+<script>
+export default {
+  props: {
+    canAddFiles: Boolean,
+    modelValue: {
+      type: String,
+      default: ''
     }
-  }
-}
-
-const createCardMessage = () => {
-  taskMsgEdit.value.style.height = ''
-  emit('createCardMessage', computedValue.value)
-}
-
-const cantWriteHandler = () => {
-  if (!props.canAddFiles) {
-    emit('cantWriteMessages')
+  },
+  emits: ['update:modelValue', 'createCardMessage', 'createCardFile', 'onPaste', 'cantWriteMessages', 'changeHeight'],
+  data () {
+    return {
+      drag: false
+    }
+  },
+  computed: {
+    computedValue: {
+      get () { return this.modelValue },
+      set (value) {
+        this.$emit('update:modelValue', value)
+      }
+    }
+  },
+  watch: {
+    modelValue () {
+      this.$nextTick(() => {
+        this.onInputTaskMsg()
+      })
+    }
+  },
+  methods: {
+    onInputTaskMsg () {
+      const oldHeight = this.$refs.taskMsgEdit.style.height
+      this.$refs.taskMsgEdit.style.height = '40px'
+      const scrollHeight = this.$refs.taskMsgEdit.scrollHeight
+      this.$refs.taskMsgEdit.style.height = scrollHeight + 'px'
+      if (oldHeight !== this.$refs.taskMsgEdit.style.height) {
+        // у нас стоит max-h-[100px] - по этому делаем проверку
+        // больше этого значения не раздвинется
+        if (scrollHeight > 100) {
+          this.$emit('changeHeight', 100)
+        } else {
+          this.$emit('changeHeight', scrollHeight)
+        }
+      }
+    },
+    createCardMessage () {
+      this.$refs.taskMsgEdit.style.height = ''
+      this.$emit('createCardMessage', this.computedValue)
+    },
+    cantWriteHandler () {
+      if (!this.canAddFiles) {
+        this.$emit('cantWriteMessages')
+      }
+    },
+    dragStartHandler () {
+      this.drag = true
+    },
+    dragEndHandler () {
+      this.drag = false
+    },
+    dropHandler (e) {
+      this.dragEndHandler()
+      this.$emit('createCardFile', e)
+    }
   }
 }
 </script>

@@ -140,9 +140,8 @@ export default {
     У вас пока нет задач этой категории!
   </pre>
   <nav
-    v-if="lastTab == 'tasks'"
     v-show="isNavBarVisible"
-    class="top-[35px] left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
+    class="top-[0px] left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
     transition-position xl:ml-72 w-auto lg:items-center dark:bg-gray-800 dark:border-gray-800"
     :class="{ 'ml-80':isAsideMobileExpanded, 'mr-96':isPropertiesMobileExpanded }"
   >
@@ -169,7 +168,7 @@ export default {
       </nav-bar-item>
     </div>
     <div
-      v-if="$store.state.onboarding.hideNavBar === false"
+      v-if="lastTab !== 'directory' && lastTab !== 'doitnow'"
       class="nav-scroll flex-wrap overflow-scroll scroll-style"
     >
       <nav-bar-item

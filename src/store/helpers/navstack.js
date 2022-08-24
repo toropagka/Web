@@ -42,11 +42,6 @@ export function checkGreedSource () {
   const lastNavStackElement = navStack.value[navStack.value.length - 1]
   if (lastNavStackElement && lastNavStackElement.key === 'greedSource') {
     if (
-      lastNavStackElement.value.uid === '2bad1413-a373-4926-8a3c-58677a680714'
-    ) {
-      store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      store.commit('basic', { key: 'greedPath', value: 'dashboard' })
-    } else if (
       lastNavStackElement.value.uid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25'
     ) {
       store.commit('basic', { key: 'mainSectionState', value: 'greed' })
