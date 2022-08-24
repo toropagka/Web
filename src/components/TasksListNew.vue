@@ -142,7 +142,6 @@
                 @focusout="clearTaskFocus(props.node.info)"
                 @keydown.enter="updateTask($event, props.node.info); props.node.info._isEditable = false;"
               />
-              {{ props.node.info.uid }}
             </div>
 
             <!-- Tags, Overdue, Customer, Performer -->
@@ -993,7 +992,7 @@ export default {
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
-      this.$store.dispatch(TASK.SELECT_TASK, uid)
+      this.$store.commit(TASK.SELECT_TASK, uid)
     },
     addSubtask (parent) {
       this.orderNewSubtask = this.orderNewSubtask - 1

@@ -656,7 +656,7 @@ const actions = {
     if (data.readed === 0) {
       dispatch(TASK.CHANGE_TASK_READ, data.uid)
     }
-    console.log('task selected')
+
     commit(REFRESH_FILES)
     commit(REFRESH_CHAT_MESSAGES)
     commit(REFRESH_INSPECTOR_MESSAGES)
