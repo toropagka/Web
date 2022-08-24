@@ -73,9 +73,9 @@ export default {
       }
 
       if (!this.dropdown) {
-        base.push('py-2', 'px-3')
+        base.push('px-3')
       } else {
-        base.push('p-0', 'lg:py-2', 'lg:px-3')
+        base.push('p-0', 'lg:px-3')
       }
 
       if (this.hasDivider) {
