@@ -293,9 +293,6 @@ export default {
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     },
-    asideLgClose () {
-      this.$store.dispatch('asideLgToggle', false)
-    },
     // TODO: clean up messy logic
     menuClick (event, item) {
       // Если уже находимся на этой вкладке игнорировать дальнейший код
@@ -318,15 +315,6 @@ export default {
         this.$store.state.navigator.submenu.status = false
       }
 
-      console.log(item)
-      // скрывать навбар при онбординге
-      // if (this.$store.state.onboarding.visitedModals) {
-      //   this.$store.state.onboarding.hideNavBar = false
-      //   if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
-      //     console.log('hide')
-      //     this.$store.state.onboarding.hideNavBar = true
-      //   }
-      // }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -567,7 +555,6 @@ export default {
     },
     onNewDay () {
       this.$store.commit('updateCalendarToday')
-      //
     },
     assigmentsClick (user) {
       if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
