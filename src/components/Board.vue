@@ -482,6 +482,7 @@ export default {
   },
   unmounted () {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
+    this.$store.state.tasks.selectedTask = null
   },
   methods: {
     print (msg, val) {
