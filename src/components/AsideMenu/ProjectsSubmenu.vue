@@ -5,15 +5,27 @@
     @ok="showProjectsLimit = false"
   />
   <div class="px-3">
+    <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[20px] font-medium text-[#606061]">
+      Избранные проекты
+    </span>
+    <template
+      v-for="project in favoriteProjects"
+      :key="project.uid"
+    >
+      <ProjectBlocItem
+        :project="project"
+        @gotoChildren="gotoChildren"
+      />
+    </template>
     <template
       v-for="(value, index) in items"
       :key="index"
     >
-      <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold py-3 mt-[10px]">
+      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[20px] font-medium text-[#606061]">
         {{ value.dep }}
-      </p>
+      </span>
       <div
-        class="grid gap-2 mt-[5px] grid-cols-1"
+        class="grid gap-2 mt-[5px] grid-cols-1 mb-[30px]"
       >
         <template
           v-for="project in value.items"
@@ -21,7 +33,7 @@
         >
           <ProjectBlocItem
             :project="project"
-            @click.stop="gotoChildren(project)"
+            @gotoChildren="gotoChildren"
           />
         </template>
         <InputValue
@@ -38,7 +50,7 @@
   </div>
 </template>
 <script>
-import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
+import ProjectBlocItem from '@/components/AsideMenu/ProjectBlocItem.vue'
 import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
 import InputValue from '@/components/InputValue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
@@ -72,6 +84,16 @@ export default {
     },
     user () {
       return this.$store.state.user.user
+    },
+    favoriteProjects () {
+      const arr = []
+      const projects = this.$store.state.projects.projects
+      Object.keys(projects).forEach(key => {
+        if (projects[key].favorite === 1) {
+          arr.push(projects[key])
+        }
+      })
+      return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
