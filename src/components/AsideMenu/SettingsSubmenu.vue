@@ -12,9 +12,7 @@
         >
           <AsideMenuList
             :menu="menuGroup"
-            :assigments="assigments"
             @menu-click="menuClick"
-            @assigments-click="assigmentsClick"
           />
         </template>
       </div>
@@ -55,6 +53,7 @@ export default {
         greedPath: item.type
       }
       localStorage.setItem('currentSettingsTab', item.type)
+      localStorage.setItem('lastTab', 'settings')
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$emit('closeSubMenu')
     }

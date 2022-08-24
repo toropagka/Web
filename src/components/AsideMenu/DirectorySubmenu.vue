@@ -40,6 +40,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubMenu'],
   data () {
     return {
       newDayTimerID: 0,
@@ -102,6 +103,9 @@ export default {
     },
     // TODO: clean up messy logic
     menuClick (event, item) {
+      localStorage.setItem('lastTab', 'directory')
+      this.$emit('closeSubMenu')
+
       console.log('directory', item)
 
       // Если уже находимся на этой вкладке игнорировать дальнейший код

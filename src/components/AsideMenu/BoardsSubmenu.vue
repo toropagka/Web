@@ -138,6 +138,9 @@ export default {
       }
     },
     gotoChildren (board) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
+
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }

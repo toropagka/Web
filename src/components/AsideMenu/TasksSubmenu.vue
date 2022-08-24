@@ -299,8 +299,8 @@ export default {
       if (this.checkOnWhichTab(item)) {
         return
       }
-      this.$emit('closeSubMenu')
       localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
@@ -426,6 +426,8 @@ export default {
       }
     },
     onDayClick (day) {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$emit('closeSubMenu')
       if (this.checkOnWhichDay(day)) {
         return
       }
