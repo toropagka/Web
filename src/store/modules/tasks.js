@@ -1119,7 +1119,7 @@ const actions = {
       const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
       const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
       if (nextSelectedTaskData?.info) {
-        commit(TASK.SELECT_TASK, nextSelectedTaskData.info)
+        dispatch(TASK.SELECT_TASK, nextSelectedTaskData.info)
       }
       resolve(nextSelectedTaskData)
     })

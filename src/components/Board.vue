@@ -466,6 +466,7 @@ export default {
     board: {
       immediate: true,
       handler: function (val) {
+        this.$store.commit(BOARD.SELECT_BOARD, val)
         this.selectedCardUid = ''
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
@@ -481,6 +482,7 @@ export default {
   },
   unmounted () {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
+    this.$store.state.tasks.selectedTask = null
   },
   methods: {
     print (msg, val) {
