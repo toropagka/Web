@@ -100,7 +100,6 @@ export default {
           reglaments = resp.data
         }).finally(() => {
           this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
-            console.log(resp.data)
             this.storeNavigator.reglaments = {
               uid: 'fake-uid',
               items: reglaments
