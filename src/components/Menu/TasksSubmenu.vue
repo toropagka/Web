@@ -34,7 +34,6 @@
         />
       </div>
       <div class="my-[10px]">
-        <pre> {{ navStack }} </pre>
         <template v-for="(menuGroup, index) in menu">
           <div
             v-if="typeof menuGroup === 'string'"
