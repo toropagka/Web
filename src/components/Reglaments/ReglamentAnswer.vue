@@ -46,7 +46,7 @@
     class="flex justify-between w-[550px] mb-4"
   >
     <div
-      v-if="rightAnswer === false"
+      v-if="!answer.is_right"
       class="bg-[#E3F4E8] cursor-pointer flex flex-row mt-2 items-center px-2 py-1 rounded-[6px] ml-1 hover:transition hover:opacity-[0.8]"
       @click="setRightAnswer(true)"
     >
@@ -68,7 +68,7 @@
       <span class="ml-2 text-[12px] font-[400] font-roboto text-[#4C4C4D]">Отметить как правильный</span>
     </div>
     <div
-      v-if="rightAnswer === true"
+      v-if="answer.is_right"
       class="bg-[#FFEDED] cursor-pointer flex flex-row mt-2 items-center px-2 py-1 rounded-[6px] ml-1 hover:transition hover:opacity-[0.8]"
       @click="setRightAnswer(false)"
     >
