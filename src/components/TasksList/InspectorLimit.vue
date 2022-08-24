@@ -5,8 +5,12 @@
   >
     <div class="flex flex-col">
       <div class="text-[#7e7e80] text-[13px] leading-[18px] font-roboto whitespace-pre-line">
-        <p class="font-semibold">Инспектор - функция тарифа "Альфа"</p>
-        <p>Поручайте задачи коллегам, получайте уведомления об их готовности при помощи новой функции "Инспектор"!</p>
+        <p class="font-semibold">
+          Инспектор - функция тарифа "Альфа"
+        </p>
+        <p>
+          Поручайте задачи коллегам, получайте уведомления об их готовности при помощи новой функции "Инспектор"!
+        </p>
       </div>
       <div class="gap-[4px] flex justify-end mt-4">
         <a

@@ -148,6 +148,10 @@ export default {
     AsideMenuListItem,
     AsideMenuListButton
   },
+  data: () => ({
+    showFreeModal: false,
+    showInspector: false
+  }),
   computed: {
     lastTab () {
       return this.$store.state.navigator.lastTab
