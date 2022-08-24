@@ -122,26 +122,6 @@
         </select>
       </div>
     </div>
-    <div class="my-2 mt-[30px]">
-      <p class="text-base font-medium text-[#4C4C4D]">
-        Язык
-      </p>
-      <div class="flex mt-2">
-        <select
-          v-if="settings?.language"
-          v-model="settings.language"
-          class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
-          @change="updateSettings"
-        >
-          <option value="russian">
-            Русский
-          </option>
-          <option value="english">
-            Английский
-          </option>
-        </select>
-      </div>
-    </div>
   </form>
 </template>
 
@@ -190,7 +170,6 @@ export default {
         nav_show_summary: this.settings.nav_show_summary ? 1 : 0,
         nav_show_emps: this.settings.nav_show_emps ? 1 : 0,
         nav_show_markers: this.settings.nav_show_markers ? 1 : 0,
-        language: this.settings.language,
         stopwatch: this.settings.stopwatch ? 1 : 0,
         cal_work_time: this.settings.cal_work_time ? 1 : 0,
         reminders_in_n_minutes: this.settings.reminders_in_n_minutes,

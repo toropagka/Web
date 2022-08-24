@@ -318,7 +318,7 @@
       </div>
     </div>
     <!-- accept/redo/decline -->
-    <div class="mr-2">
+    <div class="mt-[49px]">
       <div
         v-if="task"
         class="flex flex-col min-w-[200px] items-center"
@@ -326,52 +326,62 @@
         <!-- accept -->
         <button
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex py-0.5 items-center justify-center text-sm hover:bg-white bg-green-100 hover:bg-opacity-90 font-medium border-green-400 min-h-[40px] w-[181px] rounded-lg border hover:text-green-500 mb-2 hover:animate-fadeIn"
+          class="flex items-center text-sm hover:bg-white hover:bg-opacity-90 font-medium min-h-[40px] w-[221px] rounded-lg hover:text-green-500 mb-2 hover:animate-fadeIn
+          whitespace-nowrap text-[#3e3e3f]"
           @click="accept"
         >
+          <svg
+            width="14"
+            height="10"
+            viewBox="0 0 14 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="ml-6"
+          >
+            <path
+              d="M12.3337 1L5.00033 8.33333L1.66699 5"
+              stroke="#4C4C4D"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
           <span
-            class="ml-8 w-[70px]"
+            class="ml-[8px] w-[70px]"
           >{{ acceptBtnText }}</span>
-          <Icon
-            :path="check.path"
-            :width="check.width"
-            :height="check.height"
-            :box="check.viewBox"
-            class="ml-8"
-          />
         </button>
         <!-- redo -->
         <button
           v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex py-0.5 items-center justify-center text-sm bg-white w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
+          class="flex items-center text-sm w-[221px] hover:bg-red-200 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
           @click="reDo"
         >
-          <span
-            class="ml-8 w-[70px]"
-          >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
-          }}</span>
           <Icon
             :path="close.path"
             :width="close.width"
             :height="close.height"
             :box="close.viewBox"
-            class="ml-8"
+            class="ml-5"
           />
+          <span
+            class="ml-[11px] w-[70px]"
+          >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
+          }}</span>
         </button>
         <!-- decline -->
         <button
           v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex py-0.5 w-[181px] justify-center items-center text-sm bg-white hover:bg-gray-50 hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn"
+          class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn text-[#3e3e3f]"
           @click="decline"
         >
-          <span class="ml-8 w-[70px]">Отложить</span>
           <Icon
             :path="pauseD.path"
             :width="pauseD.width"
             :height="pauseD.height"
             :box="pauseD.viewBox"
-            class="ml-8"
+            class="ml-[20px]"
           />
+          <span class="ml-[8.7px] w-[70px]">Отложить</span>
         </button>
         <PerformButton
           v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
@@ -385,11 +395,11 @@
         <!-- Change access -->
         <button
           v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
-          class="flex py-0.5 items-center justify-center text-sm bg-gray-100 w-[181px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn"
+          class="flex py-0.5 items-center text-sm w-[221px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn border border-inherit"
           @click="() => onChangeAccess(task.emails)"
         >
           <span
-            class="ml-8 w-[70px]"
+            class="ml-[11px] w-[70px]"
           >
             Выйти из доступа
           </span>
@@ -398,7 +408,7 @@
             :width="close.width"
             :height="close.height"
             :box="close.viewBox"
-            class="ml-8"
+            class="ml-5"
           />
         </button>
         <SetDate
@@ -412,11 +422,18 @@
         />
         <button
           v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex py-0.5 w-[181px] justify-center items-center text-sm bg-white hover:bg-gray-50 hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn cursor-pointer"
+          class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg hover:animate-fadeIn text-[#3e3e3f] whitespace-nowrap text-end"
         >
+          <Icon
+            :path="openTask.path"
+            :width="openTask.width"
+            :height="openTask.height"
+            :box="openTask.viewBox"
+            class="ml-[19px]"
+          />
           <a
             :href="`${currentLocation}/task/${task?.uid}`"
-            class=""
+            class="ml-[11px]"
           >
             Открыть задачу
           </a>
@@ -460,6 +477,7 @@ import msgs from '@/icons/msgs.js'
 import taskcomment from '@/icons/taskcomment.js'
 import checklist from '@/icons/checklist.js'
 import project from '@/icons/doitnow/project.js'
+import openTask from '@/icons/doitnow/openTask.js'
 import tagIcon from '@/icons/tag.js'
 import performerRead from '@/icons/performer-read.js'
 import performerNotRead from '@/icons/performer-not-read.js'
@@ -589,6 +607,7 @@ export default {
       msgs,
       name,
       pauseD,
+      openTask,
       isloading: false,
       showOnlyFiles: false,
       check,

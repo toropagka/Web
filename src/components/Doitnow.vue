@@ -35,53 +35,54 @@
       </button>
     </div>
   </div>
-  <div
-    v-else-if="tasksCount && !isLoading && isNotifiesLoaded"
-    class="flex items-center pt-[35px] mb-5 justify-between"
-  >
-    <!-- header -->
-    <div class="flex items-center" />
-    <button
-      class="border border-slate-600 py-3 px-4 flex rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[181px] items-center justify-center"
-      @click="nextTask"
+  <div class="pt-[35px] w-full">
+    <div
+      v-if="tasksCount && !isLoading && isNotifiesLoaded && !displayModal"
+      class="flex mb-5 justify-end z-[1]"
     >
-      <span class="pr-2">Следующая задача</span>
-      <Icon
-        :height="arrowForw.height"
-        :width="arrowForw.width"
-        :box="arrowForw.viewBox"
-        :path="arrowForw.path"
-      />
-    </button>
-  </div>
-  <transition :name="taskTransition">
-    <div class="ml-[300px]">
-      <DoitnowTask
-        v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
-        :key="firstTask.uid"
-        :task="firstTask"
-        :childrens="childrens"
-        :sub-tasks="subTasks"
-        :colors="colors"
-        :tags="tags"
-        :user="user"
-        :task-messages="taskMessages.slice().reverse()"
-        :employees="employees"
-        :projects="projects"
-        :tasks-count="tasksCount"
-        :is-task-messages-loading="isTaskMessagesLoading"
-        @clickTask="onClickTask"
-        @nextTask="nextTask"
-        @changeValue="changeValue"
-        @readTask="readTask"
-      />
-      <DoitnowNotificationTasks
-        v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
-        :name="firstTask.name"
-        :uid="firstTask.uid"
-      />
+      <!-- header -->
+      <button
+        class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex  w-[221px] h-[40px] items-center bg-white justify-center"
+        @click="nextTask"
+      >
+        <span class="pr-2">Следующая задача</span>
+        <Icon
+          :height="arrowForw.height"
+          :width="arrowForw.width"
+          :box="arrowForw.viewBox"
+          :path="arrowForw.path"
+        />
+      </button>
     </div>
-  </transition>
+    <transition :name="taskTransition">
+      <div class="ml-[300px] z-[2] mt-[-60px]">
+        <DoitnowTask
+          v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
+          :key="firstTask.uid"
+          :task="firstTask"
+          :childrens="childrens"
+          :sub-tasks="subTasks"
+          :colors="colors"
+          :tags="tags"
+          :user="user"
+          :task-messages="taskMessages.slice().reverse()"
+          :employees="employees"
+          :projects="projects"
+          :tasks-count="tasksCount"
+          :is-task-messages-loading="isTaskMessagesLoading"
+          @clickTask="onClickTask"
+          @nextTask="nextTask"
+          @changeValue="changeValue"
+          @readTask="readTask"
+        />
+        <DoitnowNotificationTasks
+          v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
+          :name="firstTask.name"
+          :uid="firstTask.uid"
+        />
+      </div>
+    </transition>
+  </div>
   <DoitnowSkeleton
     v-if="isLoading"
     class="mt-20"

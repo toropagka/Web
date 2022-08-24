@@ -1,13 +1,13 @@
 <template>
-  <div class="flex px-5 justify-between">
-    <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
+  <div class="flex px-5 justify-between items-center">
+    <div class="flex flex-col justify-center items-center py-6 px-5 w-10/12 bg-white rounded-lg text-[25px] font-bold">
       <div
-        class="taskName ring-0 outline-none max-w-7xl mt-0.5 overflow-x-hidden"
+        class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center"
       >
         Пройти регламент "{{ name }}"
       </div>
       <button
-        class="justify-center cursor-pointer bg-orange-400 text-white mt-8 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+        class="w-1/6 cursor-pointer bg-orange-400 text-white mt-8 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400 text-[14px] font-normal"
         @click="gotoReglamentContent"
       >
         Пройти регламент
