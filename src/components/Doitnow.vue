@@ -83,7 +83,7 @@
     </div>
   </transition>
   <DoitnowSkeleton
-    v-if="isLoading && !isNotifiesLoaded"
+    v-if="isLoading"
     class="mt-20"
   />
   <DoitnowEmpty
