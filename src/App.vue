@@ -45,6 +45,9 @@ export default {
     lastTab () {
       return this.$store.state.navigator.lastTab
     },
+    isAuth () {
+      return this.$store.getters.isAuthenticated
+    },
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
@@ -53,6 +56,13 @@ export default {
     },
     isFileRedirect () {
       return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
+    }
+  },
+  watch: {
+    isAuth (newval, oldval) {
+      if (newval) {
+        location.reload()
+      }
     }
   },
   mounted () {
@@ -70,17 +80,21 @@ export default {
     const userLoaded = this.$store.state.user.hasLoadedOnce
     const navLoaded = this.$store.state.navigator.hasLoadedOnce
     if (!userLoaded && !navLoaded) {
-      this.$store.dispatch(USER_REQUEST).then(resp => {
-        this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
-        this.getNavigator()
-        if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-          this.getTask(this.$router.currentRoute.value.params.id)
-        } else {
-          if (localStorage.getItem('lastTab') === 'tasks') {
-            this.getTasks()
+      this.$store.dispatch(USER_REQUEST)
+        .then(resp => {
+          this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
+          this.getNavigator()
+          if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
+            this.getTask(this.$router.currentRoute.value.params.id)
+          } else {
+            if (localStorage.getItem('lastTab') === 'tasks') {
+              this.getTasks()
+            }
           }
-        }
-      })
+        })
+        .catch(() => {
+          this.isContentLoaded = true
+        })
     } else {
       this.isContentLoaded = true
     }

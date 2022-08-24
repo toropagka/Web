@@ -31,7 +31,7 @@ const ifAuthenticated = (to, from, next) => {
     }
     const lastTab = localStorage.getItem('lastTab')
     if (lastTab === null) {
-      next('/tasks')
+      next('/doitnow')
       return
     }
     next(`/${lastTab}`)
