@@ -98,7 +98,7 @@ export default {
       )
     },
     FileIsAudio () {
-      return ['mp3', 'wav', 'm4a'].includes(this.fileExtension)
+      return ['mp3', 'wav'].includes(this.fileExtension)
     },
     correctShortFileMessage () {
       const fileMessageSplitForExtesion = this.message.file_name.split('.')
