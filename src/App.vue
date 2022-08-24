@@ -136,7 +136,6 @@ export default {
       />
       <DirectorySubmenu
         v-if="lastTab === 'directory'"
-        :menu="menu"
       />
       <TasksSubmenu
         v-if="lastTab === 'tasks'"
