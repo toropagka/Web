@@ -116,7 +116,9 @@ export default {
         class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
         :class="{ 'text-left': !message.isMyMessage, 'text-right': message.isMyMessage }"
       >
-        {{ employees[message.uid_creator].name }}
+        <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">
+          {{ employees[message.uid_creator].name }}
+        </span>
       </div>
 
       <CardChatQuoteMessage
