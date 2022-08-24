@@ -729,7 +729,7 @@ export default {
         const taskName = document.getElementById(uid).querySelector('.taskName')
         const range = document.createRange()
         const sel = document.getSelection()
-        // taskName.focus({ preventScroll: false })
+        taskName.focus({ preventScroll: false })
         range.setStart(taskName, 0)
         range.setEnd(taskName, 1)
         sel.addRange(range)

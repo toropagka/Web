@@ -6,7 +6,7 @@ const state = {
   },
   lastVisitedAttribute: {
     highlight: { color: 'orange', class: 'vc-highlight' },
-    dates: new Date(localStorage.getItem('lastVisitedDate')) ? new Date(localStorage.getItem('lastVisitedDate')) : 0
+    dates: new Date()
   },
   dotsAttribute: {
     order: 1,
@@ -39,7 +39,6 @@ const mutations = {
     state.todayAttribute.dates = new Date()
   },
   updateCalendarLastVisited (state, date) {
-    localStorage.setItem('lastVisitedDate', date)
     state.lastVisitedAttribute.dates = new Date(date)
   },
   setDotsDates (state, dates) {
