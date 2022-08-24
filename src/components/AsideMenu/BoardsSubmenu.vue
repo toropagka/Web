@@ -14,7 +14,7 @@
     >
       <BoardBlocItem
         :board="board"
-        @gotoChildren="gotoChildren"
+        @click="gotoChildren(board)"
       />
     </template>
     <template
@@ -33,7 +33,7 @@
         >
           <BoardBlocItem
             :board="board"
-            @gotoChildren="gotoChildren"
+            @click="gotoChildren(board)"
           />
         </template>
         <BoardInputValue
