@@ -1,143 +1,5 @@
-<script setup>
-import * as TASK from '@/store/actions/tasks.js'
-import { useStore } from 'vuex'
-import Icon from '@/components/Icon.vue'
-import { computed, reactive, ref, watch, nextTick, onMounted } from 'vue'
-import close from '@/icons/close.js'
-
-const props = defineProps({
-  taskUid: {
-    type: String,
-    default: ''
-  },
-  task: {
-    type: Object,
-    default: () => {}
-  },
-  isCustomer: {
-    type: Boolean,
-    default: false
-  },
-  isPerformer: {
-    type: Boolean,
-    default: false
-  },
-  checklist: {
-    type: String,
-    default: ''
-  }
-})
-
-const store = useStore()
-
-const processedChecklist = ref('')
-
-const computedChecklist = computed(() => {
-  const _renderedChecklist = []
-
-  if (!props.checklist) {
-    _renderedChecklist.push({ checked: false, text: '' })
-    return _renderedChecklist
-  }
-
-  // нормализуем перенос строки (разные на windows и на mac)
-  const chlist = props.checklist.replaceAll('\r\n', '\n').replaceAll('\r', '\n').replaceAll('\n', '\r\n')
-  for (const check of chlist.split('\r\n\r\n')) {
-    _renderedChecklist.push({ checked: !!+check.split('\r\n')[0], text: check.split('\r\n')[1] })
-  }
-  return _renderedChecklist
-})
-
-const renderedChecklist = reactive({ checklist: computedChecklist.value })
-const shouldUpdate = ref(false)
-watch(() => props.taskUid, (oldValue, newValue) => {
-  if (oldValue !== newValue) shouldUpdate.value = true
-})
-
-watch(() => computedChecklist.value, (oldValue, newValue) => {
-  if (shouldUpdate.value) {
-    renderedChecklist.checklist = oldValue
-    shouldUpdate.value = false
-  }
-})
-
-const processChecklist = () => {
-  processedChecklist.value = ''
-  for (const [i, check] of renderedChecklist.checklist.entries()) {
-    if (!check.text) continue
-    processedChecklist.value += (check.checked ? '1' : '0') + '\r\n' + check.text
-    if (i !== renderedChecklist.checklist.length - 1) {
-      processedChecklist.value += '\r\n\r\n'
-    }
-  }
-  if (!Object.keys(store.state.tasks.newtasks).includes(props.taskUid)) {
-    store.commit(TASK.ADD_TO_NEWTASKS, props.task)
-  }
-  store.state.tasks.newtasks[props.taskUid].info.cheklist = processedChecklist.value
-  store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: props.taskUid, checklist: processedChecklist.value })
-}
-
-const addEmptyChecklist = (index = -1) => {
-  if (!index && index !== 0) {
-    renderedChecklist.checklist.push({ checked: false, text: '' })
-    nextTick(() => {
-      document.getElementById('check_' + (renderedChecklist.checklist.length - 1)).focus()
-    })
-  } else {
-    renderedChecklist.checklist.splice(index + 1, 0, { checked: false, text: '' })
-    nextTick(() => {
-      document.getElementById('check_' + (index + 1)).focus()
-    })
-  }
-}
-
-const removeChecklistItem = (index) => {
-  renderedChecklist.checklist.splice(index, 1)
-  processChecklist()
-}
-
-const saveChecklist = (index) => {
-  if (renderedChecklist.checklist.length === 1) {
-    return false
-  }
-  if (!renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
-    renderedChecklist.checklist.splice(index, 1)
-    return
-  }
-  renderedChecklist.checklist[index].text = renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
-  processChecklist()
-}
-
-const updateChecklist = (index) => {
-  if (!renderedChecklist.checklist[renderedChecklist.checklist.length - 1].text) {
-    return false
-  }
-  if (!renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
-    if (renderedChecklist.checklist.length === 1) {
-      return false
-    }
-    renderedChecklist.checklist.splice(index, 1)
-  } else {
-    renderedChecklist.checklist[index].text = renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
-    processChecklist()
-    addEmptyChecklist(index)
-  }
-}
-
-for (let i = 0; i < renderedChecklist.checklist; i++) {
-  if (!renderedChecklist.checklist[i].text.length) {
-    renderedChecklist.checklist.splice(i, 1)
-  }
-}
-
-onMounted(() => {
-  document.getElementById('check_0').focus()
-})
-
-</script>
-
 <template>
-  <div v-show="renderedChecklist.checklist[0].text.length">
+  <div v-if="renderedChecklist.checklist[0].text.length">
     <div
       v-for="check, index of renderedChecklist.checklist"
       :key="index"
@@ -202,6 +64,150 @@ onMounted(() => {
     </button>
   </div>
 </template>
+
+<script>
+import * as TASK from '@/store/actions/tasks.js'
+import Icon from '@/components/Icon.vue'
+import close from '@/icons/close.js'
+
+export default {
+  components: {
+    Icon
+  },
+  props: {
+    taskUid: {
+      type: String,
+      default: ''
+    },
+    task: {
+      type: Object,
+      default: () => {}
+    },
+    isCustomer: {
+      type: Boolean,
+      default: false
+    },
+    isPerformer: {
+      type: Boolean,
+      default: false
+    },
+    checklist: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      close,
+      processedChecklist: null,
+      shouldUpdate: false,
+      renderedChecklist: []
+    }
+  },
+  computed: {
+    computedChecklist () {
+      const _renderedChecklist = []
+
+      if (!this.checklist) {
+        _renderedChecklist.push({ checked: false, text: '' })
+        return _renderedChecklist
+      }
+
+      // нормализуем перенос строки (разные на windows и на mac)
+      const chlist = this.checklist.replaceAll('\r\n', '\n').replaceAll('\r', '\n').replaceAll('\n', '\r\n')
+      for (const check of chlist.split('\r\n\r\n')) {
+        _renderedChecklist.push({ checked: !!+check.split('\r\n')[0], text: check.split('\r\n')[1] })
+      }
+      return _renderedChecklist
+    }
+  },
+  watch: {
+    taskUid (oldValue, newValue) {
+      if (oldValue !== newValue) this.shouldUpdate.value = true
+    },
+    computedChecklist (oldValue, newValue) {
+      if (this.shouldUpdate) {
+        this.renderedChecklist.checklist = oldValue
+        this.shouldUpdate = false
+      }
+    }
+  },
+  created () {
+    this.renderedChecklist.checklist = this.computedChecklist
+    for (let i = 0; i < this.renderedChecklist.checklist; i++) {
+      if (!this.renderedChecklist.checklist[i].text.length) {
+        this.renderedChecklist.checklist.splice(i, 1)
+      }
+    }
+    console.log(this.renderedChecklist, 'created')
+  },
+  mounted: function () {
+    this.$nextTick(() => {
+      document.getElementById('check_0').focus()
+    })
+  },
+  methods: {
+    processChecklist () {
+      this.processedChecklist = ''
+      for (const [i, check] of this.renderedChecklist.checklist.entries()) {
+        if (!check.text) continue
+        this.processedChecklist += (check.checked ? '1' : '0') + '\r\n' + check.text
+        if (i !== this.renderedChecklist.checklist.length - 1) {
+          this.processedChecklist += '\r\n\r\n'
+        }
+      }
+      if (!Object.keys(this.$store.state.tasks.newtasks).includes(this.taskUid)) {
+        this.$store.commit(TASK.ADD_TO_NEWTASKS, this.task)
+      }
+      this.$store.state.tasks.newtasks[this.taskUid].info.cheklist = this.processedChecklist
+      this.$store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: this.taskUid, checklist: this.processedChecklist })
+    },
+    addEmptyChecklist (index = -1) {
+      if (!index && index !== 0) {
+        this.renderedChecklist.checklist.push({ checked: false, text: '' })
+        this.$nextTick(() => {
+          document.getElementById('check_' + (this.renderedChecklist.checklist.length - 1)).focus()
+        })
+      } else {
+        this.renderedChecklist.checklist.splice(index + 1, 0, { checked: false, text: '' })
+        this.$nextTick(() => {
+          document.getElementById('check_' + (index + 1)).focus()
+        })
+      }
+    },
+    removeChecklistItem (index) {
+      this.renderedChecklist.checklist.splice(index, 1)
+      this.processChecklist()
+    },
+    saveChecklist (index) {
+      if (this.renderedChecklist.checklist.length === 1) {
+        return false
+      }
+      if (!this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
+        this.renderedChecklist.checklist.splice(index, 1)
+        return
+      }
+      this.renderedChecklist.checklist[index].text = this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
+      this.processChecklist()
+    },
+    updateChecklist (index) {
+      if (!this.renderedChecklist.checklist[this.renderedChecklist.checklist.length - 1].text) {
+        return false
+      }
+      if (!this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
+        if (this.renderedChecklist.checklist.length === 1) {
+          return false
+        }
+        this.renderedChecklist.checklist.splice(index, 1)
+      } else {
+        this.renderedChecklist.checklist[index].text = this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
+        this.processChecklist()
+        this.addEmptyChecklist(index)
+      }
+    }
+  }
+}
+</script>
 
 <style>
 [contenteditable=true]:empty:before{
