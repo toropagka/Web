@@ -68,7 +68,9 @@ axios.interceptors.response.use(
             window.location.reload()
           })
           .catch(() => {
-            store.dispatch('AUTH_LOGOUT')
+            if (store.getters.isAuthenticated) {
+              store.dispatch('AUTH_LOGOUT')
+            }
           })
           .finally(() => {
             isRefreshNow = false
