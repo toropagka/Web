@@ -2,7 +2,7 @@
   <div class="flex px-5 justify-between items-center">
     <div class="flex flex-col justify-center items-center py-6 px-5 w-10/12 bg-white rounded-lg text-[25px] font-bold">
       <div
-        class="taskName ring-0 outline-none max-w-7xl mt-0.5 overflow-x-hidden"
+        class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center"
       >
         Пройти регламент "{{ name }}"
       </div>
