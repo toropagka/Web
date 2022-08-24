@@ -6,25 +6,13 @@
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <div class="my-[10px]">
-        <template v-for="(menuGroup, index) in menu">
-          <div
-            v-if="typeof menuGroup === 'string'"
-            :key="`a-${index}`"
-            class="my-2"
-          >
-            <hr
-              :key="`a-${index}`"
-              class="text-xs mx-3 custom-border-divider"
-              :class="[ asideMenuLabelStyle ]"
-            >
-          </div>
+        <template
+          v-for="(menuGroup, index) in menu"
+          :key="`b-${index}`"
+        >
           <aside-menu-list
-            v-else
-            :key="`b-${index}`"
             :menu="menuGroup"
-            :assigments="assigments"
             @menu-click="menuClick"
-            @assigments-click="assigmentsClick"
           />
         </template>
       </div>
@@ -40,9 +28,6 @@ import { UID_TO_ACTION } from '@/store/helpers/functions'
 
 import warn from '@/icons/warn.js'
 import { mdiMenu } from '@mdi/js'
-
-import * as TASK from '@/store/actions/tasks'
-import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
@@ -77,58 +62,20 @@ export default {
     lastTab () {
       return this.$store.state.navigator.lastTab
     },
-    isFullScreen () {
-      return this.$store.state.isFullScreen
-    },
     isAsideMobileExpanded () {
       return this.$store.state.isAsideMobileExpanded
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    isDark () {
-      return this.$store.state.darkMode
-    },
     navStack () {
       return this.$store.state.navbar.navStack
-    },
-    datePickerBG () {
-      return this.isDark ? 'rgb(31 41 55)' : '#f4f5f7'
-    },
-    attrs () {
-      return this.$store.getters.attrsCalendar
     },
     user () {
       return this.$store.state.user.user
     },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
-    },
-    getNavigatorLanguage () {
-      return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en'
-    },
-    favoriteBoards () {
-      const arr = []
-      const boards = this.$store.state.boards.boards
-      Object.keys(boards).forEach(key => {
-        if (boards[key].favorite === 1) {
-          arr.push(boards[key])
-        }
-      })
-      return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
-    },
-    favoriteProjects () {
-      const arr = []
-      const projects = this.$store.state.projects.projects
-      Object.keys(projects).forEach(key => {
-        if (projects[key].favorite === 1) {
-          arr.push(projects[key])
-        }
-      })
-      return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
-    },
-    assigments () {
-      return { delegate_iam: this.storeNavigator.delegate_iam, delegate_to_me: this.storeNavigator.delegate_to_me }
     }
   },
   mounted () {
@@ -153,9 +100,6 @@ export default {
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     },
-    asideLgClose () {
-      this.$store.dispatch('asideLgToggle', false)
-    },
     // TODO: clean up messy logic
     menuClick (event, item) {
       console.log('directory', item)
@@ -178,15 +122,6 @@ export default {
         this.$store.state.navigator.submenu.status = false
       }
 
-      console.log(item)
-      // скрывать навбар при онбординге
-      // if (this.$store.state.onboarding.visitedModals) {
-      //   this.$store.state.onboarding.hideNavBar = false
-      //   if (!this.$store.state.onboarding.visitedModals?.includes(this.$store.state.onboarding.hintUid[item.uid])) {
-      //     console.log('hide')
-      //     this.$store.state.onboarding.hideNavBar = true
-      //   }
-      // }
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
@@ -297,113 +232,6 @@ export default {
         }
       }
     },
-    onDayClick (day) {
-      if (this.checkOnWhichDay(day)) {
-        return
-      }
-      this.userParentId = null
-      this.resetLastTab()
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.dispatch(TASK.TASKS_REQUEST, new Date(day.date))
-      const navElem = {
-        name: this.dateToLabelFormat(day.date),
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) },
-        typeVal: new Date(day.date),
-        type: 'date'
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.lastVisitedDate = new Date() // desktop check
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-    },
-    goToBoard (board) {
-      if (this.checkOnWhichTab(board)) {
-        return
-      }
-      this.userParentId = null
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      const path = 'new_private_boards'
-      const el = {
-        greedPath: path,
-        key: 'greedSource',
-        name: 'Доски',
-        value: this.storeNavigator[path]
-      }
-      this.$store.commit('updateStackWithInitValue', el)
-
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
-      })
-
-      const navElem = {
-        name: board.name,
-        key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
-        greedPath: 'boards_children',
-        value: board.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
-    },
-    goToProject (project) {
-      if (this.checkOnWhichTab(project)) {
-        return
-      }
-      this.userParentId = null
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      const path = 'new_private_projects'
-      const el = {
-        name: 'Проекты',
-        key: 'greedSource',
-        greedPath: path,
-        value: this.storeNavigator[path]
-      }
-      this.$store.commit('updateStackWithInitValue', el)
-
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: project.name,
-        key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
-        greedPath: 'projects_children',
-        value: project.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
-    },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
       if (lastNavStack?.value?.uid === item.uid ||
@@ -412,47 +240,6 @@ export default {
         (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
         return true
       }
-    },
-    checkOnWhichDay (day) {
-      this.currentDay = day.id
-      if (this.visitedDay === this.currentDay) {
-        return true
-      }
-      this.visitedDay = this.currentDay
-    },
-    resetLastTab () {
-      this.lastSelectedItem = null
-    },
-    onNewDay () {
-      this.$store.commit('updateCalendarToday')
-      //
-    },
-    assigmentsClick (user) {
-      if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
-        return
-      }
-      console.log(user.parentID)
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-
-      const action = UID_TO_ACTION[user.parentID]
-      if (!action) {
-        console.error('UID_TO_ACTION in undefined', user.parentID)
-        return
-      }
-      this.$store.dispatch(action, user.email)
-      const navElem = {
-        name: user.name,
-        key: 'taskListSource',
-        value: { uid: user.parentID, param: user.email }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-      this.$store.state.navbar.lastSelectedAsideTab = user.uid
-      this.userParentId = user.parentID
     }
   }
 }
