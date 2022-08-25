@@ -305,8 +305,7 @@ export default {
       saveContentStatus: 1, // 1 - is saved, 2 error, 0 request processing
       buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
       isFormInvalid: false,
-      showEmployees: false,
-      firstInvalidQuestionUid: null
+      showEmployees: false
     }
   },
   computed: {
