@@ -42,7 +42,7 @@ const ifAuthenticated = (to, from, next) => {
 
 const ifRouteNotExists = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next('/')
+    next('/doitnow')
   } else {
     next('/login')
   }
