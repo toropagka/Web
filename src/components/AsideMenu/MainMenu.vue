@@ -294,6 +294,7 @@ export default {
         name: 'Очередь',
         items: [{}]
       }
+      window.ym(89796698, 'reachGoal', 'doitnow')
       this.changeTab(elemToPush)
     },
     gotoSettings () {
@@ -371,6 +372,7 @@ export default {
       this.changeTab(elemToPush)
     },
     shouldShowInspector () {
+      window.ym(89796698, 'reachGoal', 'inspector')
       if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
         this.showFreeModal = true
         return
