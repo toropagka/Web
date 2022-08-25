@@ -136,6 +136,7 @@
 </template>
 <script>
 import { SWITCH_TAB } from '@/store/actions/tabs.js'
+import * as TASK from '@/store/actions/tasks.js'
 
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
@@ -201,6 +202,7 @@ export default {
       this.changeTab(elemToPush)
     },
     gotoTasks () {
+      this.$store.dispatch(TASK.DAYS_WITH_TASKS)
       const elemToPush = {
         code: 'tasks',
         name: 'Задачи',
