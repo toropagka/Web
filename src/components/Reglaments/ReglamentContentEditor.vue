@@ -587,6 +587,24 @@ export default {
       for (const question of this.questions) {
         question.invalid = question.name === ''
 
+        const checkOnEmptyRightAnswers = question.answers.find((answer) => {
+          if (answer.is_right === true || answer.is_right === 1) {
+            return true
+          }
+          return false
+        })
+
+        if (!checkOnEmptyRightAnswers) {
+          question.invalid = true
+          question.errorText = 'Отметьте как минимум один правильный ответ'
+          if (!this.isFormInvalid) {
+            this.isFormInvalid = true
+          }
+          if (!this.firstInvalidQuestionUid) {
+            this.firstInvalidQuestionUid = question.uid
+          }
+        }
+
         if (!this.isFormInvalid && question.name === '') {
           this.isFormInvalid = true
           this.firstInvalidQuestionUid = question.uid
