@@ -6,8 +6,8 @@
     <slot />
   </div>
 </template>
+
 <script>
 export default {
-  emits: ['closeSubMenu']
 }
 </script>
