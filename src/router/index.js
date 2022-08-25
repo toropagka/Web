@@ -5,6 +5,8 @@ import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
 import Settings from '@/components/Settings/Settings.vue'
 import TaskFile from '@/views/TaskFile'
+import Colors from '@/components/Colors.vue'
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -145,6 +147,15 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: Settings,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/colors',
+    name: 'colors',
+    component: Colors,
     beforeEnter: shouldRedirectToLogin
   },
   {

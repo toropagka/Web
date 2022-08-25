@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="!isFullScreen"
     id="aside"
     style="overflow-x:hidden"
   >
@@ -8,9 +7,6 @@
     <div v-if="status == 'success'">
       <div class="mt-[20px]">
         <DatePicker
-          v-if="lastTab === 'tasks'"
-          id="step4"
-          ref="calendarclass"
           v-model="dateToday"
           dot="true"
           class="border-none pl-[22px] pr-[16px] calendar-nav-custom"
