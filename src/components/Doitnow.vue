@@ -38,8 +38,18 @@
   <div class="pt-[15px] w-full">
     <div
       v-if="!isLoading"
-      class="ml-[300px] flex items-center grow-0 shrink-0 relative font-light text-gray-700 hover:text-blue-500 dark:text-white dark:hover:text-gray-400 px-3 group"
+      class="ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
     >
+      <div
+        class="h-[24px] w-[24px] block xl:hidden"
+        @click="menuToggleMobile"
+      >
+        <icon
+          :box="'0 0 24 24'"
+          :path="menuToggleMobileIcon"
+          size="24"
+        />
+      </div>
       <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs text-[#7E7E80] font-medium">Очередь</span>
     </div>
     <div class="flex justify-between gap-[20px]">
@@ -106,6 +116,10 @@ import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
+import {
+  mdiForwardburger,
+  mdiBackburger
+} from '@mdi/js'
 
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -148,7 +162,9 @@ export default {
     notifiesCopy: [],
     tasksLoaded: false,
     childrens: [],
-    isTaskMessagesLoading: false
+    isTaskMessagesLoading: false,
+    mdiForwardburger,
+    mdiBackburger
   }),
   computed: {
     tasksCount () {
@@ -233,6 +249,12 @@ export default {
     },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    },
+    menuToggleMobileIcon () {
+      return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
     }
   },
   watch: {
@@ -442,6 +464,9 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    menuToggleMobile () {
+      this.$store.dispatch('asideMobileToggle')
     }
   }
 }
