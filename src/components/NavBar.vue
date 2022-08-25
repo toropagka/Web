@@ -165,7 +165,6 @@ export default {
       </nav-bar-item>
     </div>
     <div
-      v-if="lastTab !== 'directory' && lastTab !== 'doitnow'"
       class="nav-scroll flex-wrap overflow-scroll scroll-style"
     >
       <nav-bar-item
