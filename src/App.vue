@@ -159,8 +159,6 @@ export default {
       />
       <BoardsSubmenu
         v-if="lastTab === 'new_private_boards'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
       />
       <ProjectsSubmenu
         v-if="lastTab === 'new_private_projects'"
