@@ -6,25 +6,8 @@
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <div class="mt-[20px]">
-        <DatePicker
-          v-model="dateToday"
-          dot="true"
-          class="border-none pl-[22px] pr-[16px] calendar-nav-custom"
-          :style="{ backgroundColor: datePickerBG }"
-          show-weeknumbers="left"
-          days="-1"
-          color="#CCC"
-          week-from-end="6"
-          is-expanded
-          :locale="getNavigatorLanguage"
-          :masks="{ weekdays: 'WWW' }"
-          :attributes="attrs"
-          :is-dark="isDark"
-          mode="single"
-          is-inline
-          in-next-month="true"
-          in-month="true"
-          in-prev-month="true"
+        <TasksSubmenuCalendar
+          class="pl-[22px] pr-[16px]"
           @dayclick="onDayClick"
         />
       </div>
@@ -56,10 +39,9 @@
 </template>
 
 <script>
-import { DatePicker } from 'v-calendar'
 import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
 import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
-import 'v-calendar/dist/style.css'
+import TasksSubmenuCalendar from '@/components/AsideMenu/TasksSubmenuCalendar.vue'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
 import warn from '@/icons/warn.js'
@@ -69,9 +51,9 @@ import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
-    DatePicker,
     AsideMenuSkeleton,
-    AsideMenuList
+    AsideMenuList,
+    TasksSubmenuCalendar
   },
   props: {
     menu: {
@@ -82,17 +64,11 @@ export default {
   emits: ['closeSubMenu'],
   data () {
     return {
-      newDayTimerID: 0,
-      dateToday: '',
       mdiMenu,
       currentDay: null,
       visitedDay: null,
       userParentId: null,
-      warn,
-      showFreeModal: false,
-      modalOneActive: false,
-      lastVisitedDate: this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date(),
-      currentSettingsTab: 'account'
+      warn
     }
   },
   computed: {
@@ -136,28 +112,7 @@ export default {
       return { delegate_iam: this.storeNavigator.delegate_iam, delegate_to_me: this.storeNavigator.delegate_to_me }
     }
   },
-  mounted () {
-    let currDate = new Date()
-    currDate.setHours(0, 0, 0, 0)
-    this.setLastPickedDate()
-    this.newDayTimerID = setInterval(() => {
-      const newDate = new Date()
-      newDate.setHours(0, 0, 0, 0)
-      if (currDate.getTime() !== newDate.getTime()) {
-        currDate = newDate
-        this.onNewDay()
-      }
-    }, 1000)
-  },
-  beforeUnmount () {
-    clearInterval(this.newDayTimerID)
-  },
   methods: {
-    setLastPickedDate () {
-      if (this.navStack[0]?.value?.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-        this.$store.commit('updateCalendarLastPicked', this.navStack[0].value.param)
-      }
-    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
@@ -175,7 +130,7 @@ export default {
       this.userParentId = null
       this.visitedDay = ''
       if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-        this.dateToday = new Date()
+        this.$store.commit('setCalendarLastPicked', new Date().date)
       }
 
       if (item.path === 'new_private_boards' || item.path === 'new_private_projects') {
@@ -203,25 +158,6 @@ export default {
         }
         localStorage.setItem('currentSettingsTab', item.type)
         this.$store.commit('updateStackWithInitValue', navElem)
-        return
-      }
-
-      // do it now
-      if (item.uid === '2cf6b167-6506-4b05-bc34-70a8d88e3b25') {
-        window.ym(89796698, 'reachGoal', 'doitnow')
-        if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
-          this.showFreeModal = true
-          return
-        }
-        const navElem = {
-          name: item.label,
-          key: 'greedSource',
-          value: { uid: item.uid, param: null },
-          greedPath: 'doitnow'
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'doitnow' })
         return
       }
 
@@ -267,7 +203,6 @@ export default {
           type: 'date'
         }
         this.$store.commit('updateStackWithInitValue', navElem)
-        if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') { this.lastVisitedDate = new Date() } // desktop check
         this.$store.commit('basic', { key: 'taskListSource', value: { uid: item.uid, param: null } })
         this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       // Grid source (projects, employees, colors, tags)
@@ -313,9 +248,8 @@ export default {
         typeVal: new Date(day.date),
         type: 'date'
       }
-      this.$store.commit('updateCalendarLastPicked', day.date)
+      this.$store.commit('setCalendarLastPicked', day.date)
       this.$store.commit('updateStackWithInitValue', navElem)
-      this.lastVisitedDate = new Date() // desktop check
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(day.date) } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     },
@@ -374,89 +308,5 @@ export default {
 }
 </script>
 
-<style>
-.vc-container.calendar-nav-custom
-{
-  @apply font-roboto;
-}
-
-.calendar-nav-custom .vc-weeknumber-content {
-  @apply bg-white rounded-[6px] text-[#8b64bd] not-italic text-[11px] mt-0 mr-[2px] h-[24px] w-[24px];
-}
-
-.calendar-nav-custom .vc-weeks {
-  @apply p-0;
-}
-
-.calendar-nav-custom .vc-arrow {
-  @apply text-[#424242] w-[32px] h-[32px];
-}
-
-.calendar-nav-custom .vc-title {
-  @apply text-[#424242] capitalize text-[15px] font-bold;
-}
-
-.calendar-nav-custom .vc-weekday {
-  @apply text-[#424242] capitalize text-[12px] h-[34px] pt-0 pb-0 flex items-center justify-center font-bold;
-}
-.calendar-nav-custom .vc-weekday:nth-child(7), .vc-weekday:nth-child(8)
-{
-  @apply text-[#e23300];
-}
-
-.calendar-nav-custom .vc-header
-{
-  @apply mb-[2px] h-[32px] p-0;
-}
-
-.calendar-nav-custom .vc-arrows-container
-{
-  @apply h-[32px] p-0;
-}
-
-.calendar-nav-custom .vc-day
-{
-  @apply min-h-[30px] h-[30px] w-[30px];
-}
-
-.calendar-nav-custom .vc-day-content:focus
-{
-  @apply bg-[#ff9123]/70 !important;
-}
-
-.calendar-nav-custom .vc-highlight,
-.calendar-nav-custom .vc-highlight:focus
-{
-  @apply bg-[#ff9123]/50;
-}
-
-.calendar-nav-custom .vc-day-content,
-.calendar-nav-custom .vc-highlight
-{
-  @apply rounded-[8px] w-[30px] h-[30px] border-[#ff9123]/40 text-[#424242] text-[12px] font-medium !important;
-}
-
-.calendar-nav-custom .is-not-in-month .vc-day-content,
-.calendar-nav-custom .is-not-in-month .vc-highlights,
-.calendar-nav-custom .is-not-in-month .vc-day-layer,
-.calendar-nav-custom .is-not-in-month .vc-highlight
-{
-  @apply opacity-100 pointer-events-auto text-black/50 !important;
-}
-
-.calendar-nav-custom .vc-day.weekday-7:not(.is-not-in-month) .vc-day-content,
-.calendar-nav-custom .vc-day.weekday-1:not(.is-not-in-month) .vc-day-content
-{
-  @apply text-red-500 !important;
-}
-
-.calendar-nav-custom .dots-back
-{
-  background-color: #444444!important;
-  height: 3px !important;
-  width: 3px !important;
-  position: relative !important;
-  top: 11px !important;
-  border-radius: 9999px !important;
-}
+<style scoped>
 </style>
