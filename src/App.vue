@@ -7,7 +7,6 @@
     />
     <SubMenu
       v-if="isSubMenuActive"
-      @closeSubMenu="closeSubMenu"
     >
       <SettingsSubmenu
         v-if="lastTab === 'settings'"
