@@ -324,7 +324,7 @@ export default {
       if (lastNavStack?.value?.uid === item.uid ||
         lastNavStack?.uid === item.uid ||
         lastNavStack?.name === item.label ||
-        (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
+        (lastNavStack?.name && item.name && lastNavStack?.name === item.name)) {
         return true
       }
     },
