@@ -5,7 +5,7 @@
     @ok="showTagsLimit = false"
   />
   <div
-    class="w-full flex items-center justify-between order-1"
+    class="w-full flex items-center justify-between order-1 pt-[30px]"
   >
     <p
       class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"

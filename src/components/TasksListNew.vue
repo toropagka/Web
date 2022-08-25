@@ -12,6 +12,7 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
+  <NavBar />
   <div
     v-if="displayModal"
     class="flex flex-col items-center max-w-[600px] mx-auto"
@@ -41,7 +42,7 @@
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded}"
+    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks'}"
   >
     <!-- Add task input -->
     <div
@@ -333,6 +334,8 @@ import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
+import NavBar from '@/components/NavBar.vue'
+
 import * as TASK from '@/store/actions/tasks'
 
 /* Icons */
@@ -360,6 +363,7 @@ import linkify from 'vue-linkify'
 export default {
   components: {
     tree: treeview,
+    NavBar,
     TaskListIconLabel,
     TaskListTagLabel,
     TaskListEdit,
@@ -483,6 +487,9 @@ export default {
     },
     employees () {
       return this.$store.state.employees.employees
+    },
+    mainSectionState () {
+      return this.$store.state.mainSectionState
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail

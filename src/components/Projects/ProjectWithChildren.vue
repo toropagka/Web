@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full">
+  <NavBar />
+  <div
+    class="w-full"
+    :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
+  >
     <BoardModalBoxRename
       v-if="showAdd"
       :show="showAdd"
@@ -28,7 +32,7 @@
       />
     </div>
     <div class="mt-5">
-      <TasksListNew />
+      <TasksListNew class="pt-[0px]" />
     </div>
   </div>
 </template>
@@ -43,13 +47,16 @@ import * as TASK from '@/store/actions/tasks'
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
+import NavBar from '@/components/NavBar.vue'
+
 export default {
   components: {
     BoardModalBoxRename,
     ProjectBlocItem,
     ProjectModalBoxProjectsLimit,
     ListBlocAdd,
-    TasksListNew
+    TasksListNew,
+    NavBar
   },
   props: {
     projects: {
