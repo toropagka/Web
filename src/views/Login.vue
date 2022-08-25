@@ -48,14 +48,13 @@
         @click="checkEmailExistense"
       />
       <div
-        v-if="false"
         class="mt-2 w-full"
       >
         <GoogleLogin
           v-if="form.showCheckButton"
           class="w-full"
           :callback="googleCallback"
-          :popup-type="TOKEN"
+          popup-type="TOKEN"
         >
           <jb-button
             class="w-full rounded-lg text-sm"
@@ -424,7 +423,7 @@ export default {
       // const userData = decodeCredential(response.credential)
       // console.log('Handle the userData', userData)
       const data = {
-        token: response.code,
+        token: response.access_token,
         system: 'web',
         language: 'russian',
         type_device: 'mobile',
