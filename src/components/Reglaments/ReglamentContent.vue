@@ -117,6 +117,18 @@
         :toolbar="['']"
         class="h-auto mx-auto mb-5 border-none 2xl:px-[145px] mt-[35px]"
       />
+
+      <div
+        v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
+        class="flex justify-center"
+      >
+        <button
+          class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          @click="startTheReglament"
+        >
+          Пройти тест
+        </button>
+      </div>
     </div>
     <div
       v-if="!isTesting && contributors.length"
@@ -185,17 +197,6 @@
     @exitTestingMode="isTesting = false"
   />
 
-  <div
-    v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
-    class="flex justify-end"
-  >
-    <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-      @click="startTheReglament"
-    >
-      Пройти тест
-    </button>
-  </div>
 </template>
 
 <script>
