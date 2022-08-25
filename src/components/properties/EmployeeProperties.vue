@@ -16,6 +16,20 @@
         <PropsButtonMenu />
         <template #menu>
           <PopMenuItem
+            v-if="$store?.state?.user?.user?.owner_email === $store?.state?.user?.user?.current_user_email && selectedEmployee.type === 3"
+            icon="delete"
+            @click="setAdmin()"
+          >
+            Назначить администратором
+          </PopMenuItem>
+          <PopMenuItem
+            v-if="$store?.state?.user?.user?.owner_email === $store?.state?.user?.user?.current_user_email && selectedEmployee.type === 2"
+            icon="delete"
+            @click="removeAdmin()"
+          >
+            Удалить права администратора
+          </PopMenuItem>
+          <PopMenuItem
             icon="delete"
             @click="showConfirm = true"
           >
@@ -242,7 +256,7 @@ export default {
       // текущий пользователь админ
       // тот которого удаляем не суперадмин
       // тот которого удаляем не текущий пользователь
-      return userAdmin && this.selectedEmployeeType !== 1 && !this.isSelectedEmployeeCurrentUser
+      return userAdmin && this.selectedEmployeeType !== userType && this.selectedEmployeeType !== 1 && !this.isSelectedEmployeeCurrentUser
     },
     allDepartments () {
       const deps = Object.values(this.$store.state.departments.deps)
@@ -333,6 +347,17 @@ export default {
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_EMPLOYEE, this.selectedEmployee)
         })
+    },
+    setAdmin () {
+      console.log(this.selectedEmployee)
+      this.$store.dispatch(EMPLOYEE.SET_ADMIN_STATUS_REQUEST, this.selectedEmployee).then(() => {
+        this.$store.commit(EMPLOYEE.SET_ADMIN_STATUS_REQUEST)
+      })
+    },
+    removeAdmin () {
+      this.$store.dispatch(EMPLOYEE.REMOVE_ADMIN_STATUS_REQUEST, this.selectedEmployee).then(() => {
+        this.$store.commit(EMPLOYEE.REMOVE_ADMIN_STATUS_REQUEST)
+      })
     },
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)

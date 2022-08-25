@@ -50,11 +50,11 @@
       :z-index="'z-20'"
       @overlay-click="overlayClick"
     />
-    <nav-bar v-if="!isFileRedirect" />
     <properties-right v-if="!isFileRedirect" />
     <ErrorNotification v-if="!isFileRedirect" />
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
+    <slot />
     <TasksListNew
       v-if="mainSectionState === 'tasks'"
     />
@@ -112,10 +112,6 @@
         v-if="greedPath === 'new_emps'"
         :employees="greedSource"
       />
-      <colors
-        v-if="greedPath === 'colors'"
-        :colors="greedSource"
-      />
       <assignments
         v-if="greedPath === 'new_delegate'"
         :assignments="greedSource"
@@ -126,7 +122,6 @@
 
 <script>
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
-import NavBar from '@/components/NavBar.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
@@ -145,7 +140,6 @@ import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
-import Colors from '@/components/Colors.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -165,7 +159,6 @@ export default {
     ModalBoxNotificationInstruction,
     MainSection,
     Overlay,
-    NavBar,
     PropertiesRight,
     ErrorNotification,
     Notification,
@@ -183,7 +176,6 @@ export default {
     BoardWithChildren,
     ReglamentContent,
     Employees,
-    Colors,
     Assignments,
     NotificationTasks,
     ModalBox
@@ -634,7 +626,10 @@ export default {
         accept: true
       }
       this.$store.dispatch(USER_INVITE_ME, data)
-      this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+        .then(() => {
+          this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+          location.reload()
+        })
     },
     declineInviteModalBox () {
       const data = {

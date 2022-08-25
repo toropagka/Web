@@ -197,7 +197,7 @@
       <div class="flex justify-center">
         <button
           v-if="canEdit"
-          class="flex items-center rounded-[8px] mt-5 w-[220px] mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
+          class="flex items-center justify-center rounded-[8px] mt-5 w-[220px] mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
           @click.stop="onAddQuestion"
         >
           Создать вопрос
@@ -323,6 +323,13 @@ export default {
       if (this.showAllReglaments) return deps
       const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
       return deps.filter(dep => dep.emails.find(email => email.toLowerCase() === currentUserEmail))
+    },
+    showAllReglaments () {
+      const employees = this.$store.state.employees.employees
+      const user = this.$store.state.user.user
+      const userType = employees[user.current_user_uid].type
+      const userAdmin = userType === 1 || userType === 2
+      return userAdmin
     },
     user () {
       return this.$store.state.user.user
@@ -579,6 +586,24 @@ export default {
     validateReglamentQuestions () {
       for (const question of this.questions) {
         question.invalid = question.name === ''
+
+        const checkOnEmptyRightAnswers = question.answers.find((answer) => {
+          if (answer.is_right === true || answer.is_right === 1) {
+            return true
+          }
+          return false
+        })
+
+        if (!checkOnEmptyRightAnswers) {
+          question.invalid = true
+          question.errorText = 'Отметьте как минимум один правильный ответ'
+          if (!this.isFormInvalid) {
+            this.isFormInvalid = true
+          }
+          if (!this.firstInvalidQuestionUid) {
+            this.firstInvalidQuestionUid = question.uid
+          }
+        }
 
         if (!this.isFormInvalid && question.name === '') {
           this.isFormInvalid = true

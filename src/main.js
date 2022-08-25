@@ -106,7 +106,9 @@ const defaultDocumentTitle = 'Leadertask 2.0'
 
 /* Collapse mobile aside menu on route change */
 router.beforeEach((to) => {
-  store.dispatch('asideMobileToggle', false)
+  if (to.path === '/doitnow') {
+    store.dispatch('asideMobileToggle', false)
+  }
 })
 
 router.afterEach((to) => {

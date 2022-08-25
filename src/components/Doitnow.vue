@@ -35,57 +35,76 @@
       </button>
     </div>
   </div>
-  <div class="pt-[35px] w-full">
+  <div class="pt-[15px] w-full">
     <div
-      v-if="tasksCount && !isLoading && isNotifiesLoaded && !displayModal"
-      class="flex mb-5 justify-end z-[1]"
+      v-if="!isLoading"
+      class="ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
     >
-      <!-- header -->
-      <button
-        class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex  w-[221px] h-[40px] items-center bg-white justify-center"
-        @click="nextTask"
+      <div
+        class="h-[24px] w-[24px] block xl:hidden"
+        @click="menuToggleMobile"
       >
-        <span class="pr-2">Следующая задача</span>
-        <Icon
-          :height="arrowForw.height"
-          :width="arrowForw.width"
-          :box="arrowForw.viewBox"
-          :path="arrowForw.path"
-        />
-      </button>
-    </div>
-    <transition :name="taskTransition">
-      <div class="ml-[300px] z-[2] mt-[-60px]">
-        <DoitnowTask
-          v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
-          :key="firstTask.uid"
-          :task="firstTask"
-          :childrens="childrens"
-          :sub-tasks="subTasks"
-          :colors="colors"
-          :tags="tags"
-          :user="user"
-          :task-messages="taskMessages.slice().reverse()"
-          :employees="employees"
-          :projects="projects"
-          :tasks-count="tasksCount"
-          :is-task-messages-loading="isTaskMessagesLoading"
-          @clickTask="onClickTask"
-          @nextTask="nextTask"
-          @changeValue="changeValue"
-          @readTask="readTask"
-        />
-        <DoitnowNotificationTasks
-          v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
-          :name="firstTask.name"
-          :uid="firstTask.uid"
+        <icon
+          :box="'0 0 24 24'"
+          :path="menuToggleMobileIcon"
+          size="24"
         />
       </div>
-    </transition>
+      <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs text-[#7E7E80] font-medium">Очередь</span>
+    </div>
+    <div class="flex justify-between gap-[20px]">
+      <transition :name="taskTransition">
+        <div class="ml-[300px] z-[2] grow">
+          <DoitnowTask
+            v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
+            :key="firstTask.uid"
+            :task="firstTask"
+            :childrens="childrens"
+            :sub-tasks="subTasks"
+            :colors="colors"
+            :tags="tags"
+            :user="user"
+            :task-messages="taskMessages.slice().reverse()"
+            :employees="employees"
+            :projects="projects"
+            :tasks-count="tasksCount"
+            :is-task-messages-loading="isTaskMessagesLoading"
+            @clickTask="onClickTask"
+            @nextTask="nextTask"
+            @changeValue="changeValue"
+            @readTask="readTask"
+          />
+          <DoitnowNotificationTasks
+            v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
+            :name="firstTask.name"
+            :uid="firstTask.uid"
+          />
+        </div>
+      </transition>
+      <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
+      <div
+        v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
+
+        class="flex mb-5 justify-end z-[1]"
+      >
+        <!-- header -->
+        <button
+          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center"
+          @click="nextTask"
+        >
+          <span class="pr-2">Следующая задача</span>
+          <Icon
+            :height="arrowForw.height"
+            :width="arrowForw.width"
+            :box="arrowForw.viewBox"
+            :path="arrowForw.path"
+          />
+        </button>
+      </div>
+    </div>
   </div>
   <DoitnowSkeleton
     v-if="isLoading"
-    class="mt-20"
   />
   <DoitnowEmpty
     v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
@@ -98,6 +117,10 @@ import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
+import {
+  mdiForwardburger,
+  mdiBackburger
+} from '@mdi/js'
 
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -140,7 +163,9 @@ export default {
     notifiesCopy: [],
     tasksLoaded: false,
     childrens: [],
-    isTaskMessagesLoading: false
+    isTaskMessagesLoading: false,
+    mdiForwardburger,
+    mdiBackburger
   }),
   computed: {
     tasksCount () {
@@ -225,6 +250,12 @@ export default {
     },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    },
+    menuToggleMobileIcon () {
+      return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
     }
   },
   watch: {
@@ -434,6 +465,9 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    menuToggleMobile () {
+      this.$store.dispatch('asideMobileToggle')
     }
   }
 }

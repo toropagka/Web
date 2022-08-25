@@ -1,5 +1,5 @@
-import * as TAB from '../actions/tabs'
 import store from '@/store/index.js'
+import * as TAB from '../actions/tabs'
 
 const getters = {
   lastTab () {
@@ -23,7 +23,10 @@ const actions = {
       case 'settings':
         store.commit('updateStackWithInitValue', {
           name: 'Аккаунт',
-          value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
+          value: {
+            uid: '9d3ba501-c173-462d-9b5f-0db97c06a026',
+            param: new Date()
+          },
           typeVal: new Date(),
           type: 'account'
         })
@@ -38,8 +41,6 @@ const actions = {
     store.state.navigator.menu.code = tab.code
     if (tab.items) {
       store.state.navigator.menu.push(...tab.items)
-      console.log(store.state.navigator.menu, tab.items)
-      console.log(store.state.navigator.menu)
     }
   }
 }

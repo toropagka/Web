@@ -15,17 +15,24 @@
       @cancel="showStatusModal = false"
       @yes="changeStatus(lastSelectedStatus, true)"
     />
-    <div class="py-6 px-5 w-5/6 bg-white rounded-lg">
+
+    <div
+      v-if="task.mode === 'slide' && task.visible"
+      class="py-6 px-5 w-full bg-white rounded-lg"
+    >
       <SlideBody
-        v-if="task.mode === 'slide' && task.visible"
         :title="task.title"
         :text="task.text"
         :video="task.video"
         :name="task.name"
         @nextTask="nextTask"
       />
+    </div>
+    <div
+      v-else
+      class="py-6 px-5 w-[85%] bg-white rounded-lg mr-[10px]"
+    >
       <div
-        v-else
         class="flex mr-[30px] justify-between items-center mb-6 p-2 rounded-[8px] pl-4"
         :style="{ backgroundColor: colors[task.uid_marker] ? colors[task.uid_marker].back_color : '', color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
       >
@@ -318,127 +325,138 @@
       </div>
     </div>
     <!-- accept/redo/decline -->
-    <div class="mt-[49px]">
-      <div
-        v-if="task"
-        class="flex flex-col min-w-[200px] items-center"
+    <div
+      v-if="task && !task.visible"
+      class="flex flex-col min-w-[200px] items-center"
+    >
+      <button
+        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        class="rounded-lg hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white  mb-[20px] whitespace-nowrap text-center "
+        @click="decline"
       >
-        <!-- accept -->
-        <button
-          v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex items-center text-sm hover:bg-white hover:bg-opacity-90 font-medium min-h-[40px] w-[221px] rounded-lg hover:text-green-500 mb-2 hover:animate-fadeIn
-          whitespace-nowrap text-[#3e3e3f]"
-          @click="accept"
-        >
-          <svg
-            width="14"
-            height="10"
-            viewBox="0 0 14 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            class="ml-6"
-          >
-            <path
-              d="M12.3337 1L5.00033 8.33333L1.66699 5"
-              stroke="#4C4C4D"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span
-            class="ml-[8px] w-[70px]"
-          >{{ acceptBtnText }}</span>
-        </button>
-        <!-- redo -->
-        <button
-          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex items-center text-sm w-[221px] hover:bg-red-200 min-h-[40px] hover:bg-opacity-90 font-medium rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
-          @click="reDo"
-        >
-          <Icon
-            :path="close.path"
-            :width="close.width"
-            :height="close.height"
-            :box="close.viewBox"
-            class="ml-5"
-          />
-          <span
-            class="ml-[11px] w-[70px]"
-          >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
-          }}</span>
-        </button>
-        <!-- decline -->
-        <button
-          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn text-[#3e3e3f]"
-          @click="decline"
-        >
-          <Icon
-            :path="pauseD.path"
-            :width="pauseD.width"
-            :height="pauseD.height"
-            :box="pauseD.viewBox"
-            class="ml-[20px]"
-          />
-          <span class="ml-[8.7px] w-[70px]">Отложить</span>
-        </button>
-        <PerformButton
-          v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
-          class="hover:animate-fadeIn hover:cursor-pointer"
-          :task-type="task.type"
-          :current-user-uid="user?.current_user_uid"
-          :performer-email="task.email_performer"
-          @changePerformer="onChangePerformer"
-          @reAssign="onReAssignToUser"
+        <span class="ml-[44px] w-[70px]">Следующая задача</span>
+        <Icon
+          class="ml-[68px]"
+          :height="arrowForw.height"
+          :width="arrowForw.width"
+          :box="arrowForw.viewBox"
+          :path="arrowForw.path"
         />
-        <!-- Change access -->
-        <button
-          v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
-          class="flex py-0.5 items-center text-sm w-[221px] hover:bg-red-200 hover:border hover:border-red-300 min-h-[40px] font-medium rounded-lg hover:text-red-500 mb-2 hover:animate-fadeIn border border-inherit"
-          @click="() => onChangeAccess(task.emails)"
+      </button>
+      <!-- accept -->
+      <button
+        v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        @click="accept"
+      >
+        <svg
+          width="14"
+          height="10"
+          viewBox="0 0 14 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="ml-6"
         >
-          <span
-            class="ml-[11px] w-[70px]"
-          >
-            Выйти из доступа
-          </span>
-          <Icon
-            :path="close.path"
-            :width="close.width"
-            :height="close.height"
-            :box="close.viewBox"
-            class="ml-5"
+          <path
+            d="M12.3337 1L5.00033 8.33333L1.66699 5"
+            stroke="#4C4C4D"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
-        </button>
-        <SetDate
-          v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
-          class="hover:animate-fadeIn hover:cursor-pointer"
-          :name="'Назначить срок'"
-          :date-begin="task.date_begin"
-          :date-end="task.date_end"
-          :date-text="task.term_user"
-          @changeDates="onChangeDates"
+        </svg>
+        <span
+          class="ml-[8px] w-[70px]"
+        >{{ acceptBtnText }}</span>
+      </button>
+      <!-- redo -->
+      <button
+        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        @click="reDo"
+      >
+        <Icon
+          :path="close.path"
+          :width="close.width"
+          :height="close.height"
+          :box="close.viewBox"
+          class="ml-5"
         />
-        <button
-          v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg hover:animate-fadeIn text-[#3e3e3f] whitespace-nowrap text-end"
+        <span
+          class="ml-[11px] w-[70px]"
+        >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
+        }}</span>
+      </button>
+      <!-- decline -->
+      <button
+        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        @click="decline"
+      >
+        <Icon
+          :path="pauseD.path"
+          :width="pauseD.width"
+          :height="pauseD.height"
+          :box="pauseD.viewBox"
+          class="ml-[20px]"
+        />
+        <span class="ml-[8.7px] w-[70px]">Отложить</span>
+      </button>
+      <PerformButton
+        v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
+        class=" hover:cursor-pointer"
+        :task-type="task.type"
+        :current-user-uid="user?.current_user_uid"
+        :performer-email="task.email_performer"
+        @changePerformer="onChangePerformer"
+        @reAssign="onReAssignToUser"
+      />
+      <!-- Change access -->
+      <button
+        v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        @click="() => onChangeAccess(task.emails)"
+      >
+        <span
+          class="ml-[11px] w-[70px]"
         >
-          <Icon
-            :path="openTask.path"
-            :width="openTask.width"
-            :height="openTask.height"
-            :box="openTask.viewBox"
-            class="ml-[19px]"
-          />
-          <a
-            :href="`${currentLocation}/task/${task?.uid}`"
-            class="ml-[11px]"
-          >
-            Открыть задачу
-          </a>
-        </button>
-      </div>
+          Выйти из доступа
+        </span>
+        <Icon
+          :path="close.path"
+          :width="close.width"
+          :height="close.height"
+          :box="close.viewBox"
+          class="ml-5"
+        />
+      </button>
+      <SetDate
+        v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
+        class=" hover:cursor-pointer"
+        :name="'Назначить срок'"
+        :date-begin="task.date_begin"
+        :date-end="task.date_end"
+        :date-text="task.term_user"
+        @changeDates="onChangeDates"
+      />
+      <button
+        v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:hover:bg-[#0000000a] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
+      >
+        <Icon
+          :path="openTask.path"
+          :width="openTask.width"
+          :height="openTask.height"
+          :box="openTask.viewBox"
+          class="ml-[19px]"
+        />
+        <a
+          :href="`${currentLocation}/task/${task?.uid}`"
+          class="ml-[11px]"
+        >
+          Открыть задачу
+        </a>
+      </button>
     </div>
   </div>
 </template>
@@ -484,6 +502,7 @@ import performerNotRead from '@/icons/performer-not-read.js'
 import taskfocus from '@/icons/taskfocus.js'
 import check from '@/icons/doitnow/check.js'
 import clock from '@/icons/clock.js'
+import arrowForw from '@/icons/arrow-forw-sm.js'
 // Statuses icons
 import readyStatus from '@/icons/ready-status.js'
 import note from '@/icons/note.js'
@@ -625,7 +644,8 @@ export default {
       inwork,
       canceled,
       improve,
-      repeat
+      repeat,
+      arrowForw
     }
   },
   mutations: {

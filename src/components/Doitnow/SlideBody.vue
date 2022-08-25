@@ -9,25 +9,25 @@
   />
   <div class="flex items-center justify-center text-center flex-col">
     <div
-      class="taskName p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-[500px] text-[25px] font-bold"
+      class="taskName p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-[500px] text-[25px] font-bold mb-[28px]"
     >
       {{ title }}
     </div>
 
     <div
-      class="font-[400] text-[18px] leading-[21px] text-[#4C4C4D] w-[500px] mb-[50px] pl-0"
+      class="font-[400] text-[18px] leading-[21px] text-[#4C4C4D] w-[500px] mb-[35px] pl-0"
       v-html="text"
     />
     <button
       v-if="name === 'addReglaments'"
-      class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
       @click="clickAddReglament"
     >
       Создать регламент
     </button>
     <button
       v-if="name === 'delegateTasks'"
-      class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
       @click="showInspector = true"
     >
       Поручить задачу
@@ -36,7 +36,7 @@
   <div class="flex items-center justify-center">
     <div
       v-if="video"
-      class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D] mt-5"
+      class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D]"
     >
       <iframe
         width="560"
@@ -50,7 +50,7 @@
       />
       <button
         v-if="name === 'addEmployees'"
-        class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
         @click="clickAddEmployees"
       >
         Добавить сотрудников
@@ -58,14 +58,14 @@
     </div>
     <button
       v-if="name === 'welcome'"
-      class="ml-5 justify-center cursor-pointer bg-orange-400 text-white mt-4 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
       @click="clickSuccess"
     >
       Понятно
     </button>
     <button
       v-if="name === 'addAvatar'"
-      class="justify-center cursor-pointer bg-orange-400 text-white mt-2 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400"
+      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
       @click="clickAddAvatar"
     >
       Загрузить

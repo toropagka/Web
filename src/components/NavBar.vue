@@ -136,12 +136,6 @@ export default {
 </script>
 
 <template>
-  <pre
-    v-if="navStack.length && showNoneUid.includes(navStack[navStack.length - 1].uid)"
-    class="md:text-lg sm:text-base"
-  >
-    У вас пока нет задач этой категории!
-  </pre>
   <nav
     v-show="isNavBarVisible"
     class="top-[0px] left-0 pt-2 right-0 fixed flex h-14 z-[10] bg-[#f4f5f7] font-['Roboto']
@@ -171,7 +165,6 @@ export default {
       </nav-bar-item>
     </div>
     <div
-      v-if="lastTab !== 'directory' && lastTab !== 'doitnow'"
       class="nav-scroll flex-wrap overflow-scroll scroll-style"
     >
       <nav-bar-item

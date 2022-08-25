@@ -18,6 +18,8 @@ export default {
       height="35"
       class="rounded-xl mr-2"
     >
-    <p>{{ name }}</p>
+    <p class="truncate ...">
+      {{ name }}
+    </p>
   </div>
 </template>

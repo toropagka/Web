@@ -5,18 +5,23 @@ const state = {
     dates: new Date()
   },
   lastPickedAttribute: {
+    order: 1,
     highlight: { color: 'orange', class: 'vc-highlight' },
-    dates: new Date()
+    dates: []
   },
   dotsAttribute: {
     order: 1,
-    dates: [],
-    highlight: { color: 'dark', class: 'dots-back' }
+    highlight: { color: 'dark', class: 'dots-back' },
+    dates: []
   }
 }
 
 const getters = {
-  attrsCalendar: (state) => [state.todayAttribute, state.lastPickedAttribute, state.dotsAttribute]
+  attrsCalendar: (state) => [
+    state.lastPickedAttribute,
+    state.todayAttribute,
+    state.dotsAttribute
+  ]
 }
 
 const actions = {
@@ -38,8 +43,12 @@ const mutations = {
   updateCalendarToday (state) {
     state.todayAttribute.dates = new Date()
   },
-  updateCalendarLastPicked (state, date) {
-    state.lastPickedAttribute.dates = new Date(date)
+  setCalendarLastPicked (state, date) {
+    if (date === null) {
+      state.lastPickedAttribute.dates = []
+    } else {
+      state.lastPickedAttribute.dates = new Date(date)
+    }
   },
   setDotsDates (state, dates) {
     state.dotsAttribute.dates = dates

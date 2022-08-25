@@ -6,6 +6,7 @@ import {
   USER_SUCCESS
 } from '../actions/user'
 import * as SLIDES from '@/store/actions/slides.js'
+import store from '@/store/index.js'
 
 const state = {
   user: null,
@@ -96,6 +97,7 @@ const actions = {
 const mutations = {
   [USER_CHANGE_PHOTO]: (state, data) => {
     state.user.foto_link = state.user.foto_link + '&Z=' + Date.now()
+    store.state.employees.employeesByEmail[state.user.current_user_email].fotolink = store.state.employees.employeesByEmail[state.user.current_user_email].fotolink + '&Z=' + Date.now()
   },
   [USER_REQUEST]: (state) => {
     state.status = 'loading'

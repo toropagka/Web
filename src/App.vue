@@ -1,3 +1,42 @@
+<template>
+  <template v-if="isContentLoaded">
+    <!-- TODO: Перенести MainMenu в Home.vue, здесь оставить чистую страницу для компонентов вроде TaskFile.vue, CardFile.vue, которым нужен чистый экран -->
+    <MainMenu
+      v-if="!isFileRedirect && $store.state.auth.token"
+      class="fixed"
+    />
+    <SubMenu
+      v-if="isSubMenuActive"
+    >
+      <SettingsSubmenu
+        v-if="lastTab === 'settings'"
+      />
+      <DirectorySubmenu
+        v-if="lastTab === 'directory'"
+      />
+      <TasksSubmenu
+        v-if="lastTab === 'tasks'"
+        :menu="menu"
+        @closeSubMenu="closeSubMenu"
+      />
+      <BoardsSubmenu
+        v-if="lastTab === 'new_private_boards'"
+      />
+      <ProjectsSubmenu
+        v-if="lastTab === 'new_private_projects'"
+      />
+    </SubMenu>
+    <overlay
+      v-show="isSubMenuActive"
+      :z-index="'z-20'"
+      @overlay-click="closeSubMenu"
+    />
+    <component :is="$route.meta.layout || 'div'">
+      <router-view />
+    </component>
+  </template>
+  <AppSkeleton v-else />
+</template>
 <script>
 import MainMenu from '@/components/AsideMenu/MainMenu.vue'
 import TasksSubmenu from '@/components/AsideMenu/TasksSubmenu.vue'
@@ -7,7 +46,8 @@ import SubMenu from '@/components/AsideMenu/SubMenu.vue'
 import BoardsSubmenu from '@/components/AsideMenu/BoardsSubmenu.vue'
 import SettingsSubmenu from '@/components/AsideMenu/SettingsSubmenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
-import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
+
+import AppSkeleton from '@/components/AsideMenu/AppSkeleton.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
@@ -25,10 +65,10 @@ export default {
     SettingsSubmenu,
     DirectorySubmenu,
     Overlay,
+    AppSkeleton,
     ProjectsSubmenu,
     SubMenu,
-    BoardsSubmenu,
-    AsideMenuSkeleton
+    BoardsSubmenu
   },
   data () {
     return {
@@ -131,51 +171,4 @@ export default {
     }
   }
 }
-
 </script>
-
-<template>
-  <template v-if="isContentLoaded">
-    <MainMenu
-      v-if="!isFileRedirect && $store.state.auth.token"
-      class="fixed"
-    />
-    <SubMenu
-      v-if="isSubMenuActive"
-      @closeSubMenu="closeSubMenu"
-    >
-      <SettingsSubmenu
-        v-if="lastTab === 'settings'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
-      />
-      <DirectorySubmenu
-        v-if="lastTab === 'directory'"
-      />
-      <TasksSubmenu
-        v-if="lastTab === 'tasks'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
-      />
-      <BoardsSubmenu
-        v-if="lastTab === 'new_private_boards'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-      <ProjectsSubmenu
-        v-if="lastTab === 'new_private_projects'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
-      />
-    </SubMenu>
-    <overlay
-      v-show="isSubMenuActive"
-      :z-index="'z-20'"
-      @overlay-click="closeSubMenu"
-    />
-    <router-view />
-  </template>
-  <AsideMenuSkeleton
-    v-else
-  />
-</template>
