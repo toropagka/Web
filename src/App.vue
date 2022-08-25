@@ -162,8 +162,6 @@ export default {
       />
       <ProjectsSubmenu
         v-if="lastTab === 'new_private_projects'"
-        :items="storeNavigator[lastTab]"
-        @closeSubMenu="closeSubMenu"
       />
     </SubMenu>
     <overlay

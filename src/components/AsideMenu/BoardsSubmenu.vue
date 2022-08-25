@@ -37,13 +37,14 @@
         </template>
         <AsideMenuListInput
           v-if="showAddBoard && index == 0"
+          class="mb-[16px]"
           :show="showAddBoard"
           @cancel="showAddBoard = false"
           @save="onAddNewBoard"
         >
           <svg
-            width="20"
-            height="20"
+            width="22"
+            height="22"
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +59,7 @@
         </AsideMenuListInput>
         <AsideMenuListAdd
           v-else-if="index == 0"
+          class="mb-[16px]"
           title="Добавить доску"
           @click.stop="clickAddBoard"
         />
@@ -225,7 +227,6 @@ export default {
         value: 'boards_children'
       })
       localStorage.setItem('lastTab', 'new_private_boards')
-      this.$emit('closeSubMenu')
     }
   }
 }

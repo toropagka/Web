@@ -4,77 +4,90 @@
     @cancel="showProjectsLimit = false"
     @ok="showProjectsLimit = false"
   />
-  <div class="px-3 pt-[25px]">
-    <span
-      v-if="favoriteProjects.length"
-      class="font-['Roboto'] text-[14px] leading-[22px] font-medium text-[#606061]"
-    >
-      Избранные проекты
-    </span>
-    <template
-      v-for="project in favoriteProjects"
-      :key="project.uid"
-    >
-      <ProjectBlocItem
-        :project="project"
-        @click="gotoChildren(project)"
-      />
-    </template>
-    <template
-      v-for="(value, index) in items"
-      :key="index"
-    >
-      <span class="font-['Roboto'] text-[14px] leading-[22px] mt-[8px] font-medium text-[#606061]">
-        {{ value.dep }}
-      </span>
-      <div
-        class="grid gap-2 mt-[5px] grid-cols-1 mb-[30px]"
+  <div class="px-[16px] pt-[15px]">
+    <AsideMenuListSkeleton v-if="status == 'loading'" />
+    <template v-if="status == 'success'">
+      <AsideMenuListTitle v-if="favoriteProjects.length">
+        Избранные проекты
+      </AsideMenuListTitle>
+      <template
+        v-for="project in favoriteProjects"
+        :key="project.uid"
       >
+        <ProjectsSubmenuItem
+          :project="project"
+          @click="gotoChildren(project)"
+        />
+      </template>
+      <template
+        v-for="(value, index) in items"
+        :key="index"
+      >
+        <AsideMenuListTitle>
+          {{ value.dep }}
+        </AsideMenuListTitle>
         <template
           v-for="project in value.items"
           :key="project.uid"
         >
-          <ProjectBlocItem
+          <ProjectsSubmenuItem
             :project="project"
             @click="gotoChildren(project)"
           />
         </template>
-        <InputValue
-          v-if="showAddProject && index === 0"
-          @save="onAddNewProject"
+        <AsideMenuListInput
+          v-if="showAddProject && index == 0"
+          class="mb-[16px]"
+          :show="showAddProject"
           @cancel="showAddProject = false"
-        />
-        <ListBlocAdd
+          @save="onAddNewProject"
+        >
+          <svg
+            class="flex-none"
+            width="22"
+            height="22"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16.6486 5.13099V4.19718C16.6486 3.33099 15.9668 2.62535 15.1299 2.62535H8.87113L8.68333 2.30423C8.56901 2.11831 8.36896 2 8.15666 2H3.51875C2.68181 2 2 2.70563 2 3.57183V15.4282C2 16.2944 2.68181 17 3.51875 17H16.4812C17.3182 17 18 16.2944 18 15.4282V6.69437C18.0041 5.8831 17.408 5.21549 16.6486 5.13099ZM3.23297 3.57183C3.23297 3.40704 3.36361 3.27183 3.52284 3.27183H7.81372L9.47945 6.08592C9.58968 6.27183 9.78973 6.39014 10.0061 6.39014H16.4894C16.6486 6.39014 16.7793 6.52535 16.7793 6.69014V15.4282C16.7793 15.593 16.6486 15.7282 16.4894 15.7282H3.51875C3.35953 15.7282 3.22888 15.593 3.22888 15.4282V3.57183H3.23297ZM15.4157 5.11831H10.345L9.62234 3.89718H15.1258C15.285 3.89718 15.4157 4.03239 15.4157 4.19718V5.11831Z"
+              fill="currentColor"
+            />
+          </svg>
+        </AsideMenuListInput>
+        <AsideMenuListAdd
           v-else-if="index == 0"
+          class="mb-[16px]"
+          title="Добавить проект"
           @click.stop="clickAddProject"
         />
-      </div>
+      </template>
     </template>
   </div>
 </template>
+
 <script>
-import ProjectBlocItem from '@/components/AsideMenu/ProjectBlocItem.vue'
 import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
-import InputValue from '@/components/InputValue'
-import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
+import AsideMenuListTitle from '@/components/AsideMenu/AsideMenuListTitle.vue'
+import AsideMenuListAdd from '@/components/AsideMenu/AsideMenuListAdd.vue'
+import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
+import ProjectsSubmenuItem from '@/components/AsideMenu/ProjectsSubmenuItem.vue'
+import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
+
 import * as TASK from '@/store/actions/tasks'
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
 export default {
   components: {
-    ProjectBlocItem,
-    InputValue,
-    ListBlocAdd,
-    ProjectModalBoxProjectsLimit
+    ProjectModalBoxProjectsLimit,
+    AsideMenuListTitle,
+    ProjectsSubmenuItem,
+    AsideMenuListAdd,
+    AsideMenuListInput,
+    AsideMenuListSkeleton
   },
-  props: {
-    items: {
-      type: Array,
-      default: () => ([])
-    }
-  },
-  emits: ['closeSubMenu'],
   data () {
     return {
       showAddProject: false,
@@ -82,6 +95,9 @@ export default {
     }
   },
   computed: {
+    status () {
+      return this.$store.state.navigator.status
+    },
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
@@ -103,6 +119,9 @@ export default {
     },
     isAsideMobileExpanded () {
       return this.$store.state.isAsideMobileExpanded
+    },
+    items () {
+      return this.storeNavigator?.new_private_projects ?? []
     }
   },
   methods: {
@@ -177,7 +196,8 @@ export default {
     },
     gotoChildren (project) {
       localStorage.setItem('lastTab', 'tasks')
-      this.$emit('closeSubMenu')
+      // закрываем сабменю
+      this.$store.state.navigator.submenu.status = false
 
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -207,7 +227,6 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
       localStorage.setItem('lastTab', 'new_private_projects')
-      this.$emit('closeSubMenu')
     }
   }
 }
