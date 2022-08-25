@@ -26,10 +26,14 @@
       </div>
     </div>
     <div class="flex justify-between items-center mt-4">
-      <h1 v-if="!isTesting" class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap">
+      <h1
+        v-if="!isTesting"
+        class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap"
+      >
         {{ reglamentTitle }}
       </h1>
       <div
+        v-if="!showCompleteMessage && !isTesting"
         class="flex justify-end h-[30px]"
       >
         <ReglamentSmallButton

@@ -1,5 +1,13 @@
 <template>
-  <div class="bg-white pt-[55px] my-2 rounded-[28px]">
+  <ReglamentCompleteMessage
+    v-if="showCompleteMessage"
+    :is-passed="isPassed"
+    @confirm="confirm"
+  />
+  <div
+    v-if="!isPassed"
+    class="bg-white pt-[55px] my-2 rounded-[28px]"
+  >
     <div
       v-if="!showCompleteMessage"
     >
@@ -37,9 +45,11 @@
       </button>
     </div>
     <!-- отображение неправильных вопросов-->
-    <div class="max-w-[550px] mx-auto">
+    <div
+      v-if="showCompleteMessage && !isPassed"
+      class="max-w-[550px] mx-auto"
+    >
       <h3
-        v-if="showCompleteMessage && !isPassed"
         class="text-[#2E2E2E] text-[19px] font-bold leading-[25px] mb-[35px]"
       >
         Вы неправильно ответили на следующие вопросы:
@@ -53,13 +63,19 @@
           :question="question"
         />
       </template>
-
-      <ReglamentCompleteMessage
-        v-if="showCompleteMessage"
-        :is-passed="isPassed"
-        :name="reglament.name"
-        @confirm="confirm"
-      />
+      <p
+        class="font-[500] text-[16px] mt-10 leading-[26px] text-center"
+      >
+        Пожалуйста, еще раз внимательно ознакомьтесь с регламентом и пройдите текст повторно
+      </p>
+      <div class="w-full flex justify-center">
+        <button
+          class="flex bg-[#FF912380] p-3 px-10 mt-10 mb-5 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          @click="confirm(isPassed)"
+        >
+          Завершить
+        </button>
+      </div>
     </div>
   </div>
 </template>
