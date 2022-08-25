@@ -84,7 +84,6 @@
       <EmptyTasksListPics v-if="isEmpty" />
     </div>
   </div>
-  <properties-right />
 </template>
 
 <script>
@@ -98,7 +97,6 @@ import { CREATE_COLOR_REQUEST, SELECT_COLOR } from '@/store/actions/colors'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import InputValue from '@/components/InputValue'
-import PropertiesRight from './PropertiesRight.vue'
 
 export default {
   components: {
@@ -107,8 +105,7 @@ export default {
     ListBlocAdd,
     ListBlocItem,
     ColorModalBoxColorsLimit,
-    EmptyTasksListPics,
-    PropertiesRight
+    EmptyTasksListPics
   },
   data () {
     return {

@@ -54,6 +54,7 @@
     <ErrorNotification v-if="!isFileRedirect" />
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
+    <slot />
     <TasksListNew
       v-if="mainSectionState === 'tasks'"
     />

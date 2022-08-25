@@ -1,5 +1,6 @@
 <template>
   <template v-if="isContentLoaded">
+    <!-- TODO: Перенести MainMenu в Home.vue, здесь оставить чистую страницу для компонентов вроде TaskFile.vue, CardFile.vue, которым нужен чистый экран -->
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
       class="fixed"
@@ -31,7 +32,9 @@
       :z-index="'z-20'"
       @overlay-click="closeSubMenu"
     />
-    <router-view />
+    <component :is="$route.meta.layout || 'div'">
+      <router-view />
+    </component>
   </template>
   <AppSkeleton v-else />
 </template>

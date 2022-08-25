@@ -150,7 +150,9 @@ const routes = [
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/colors',
     name: 'colors',
     component: Colors,
