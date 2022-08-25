@@ -164,7 +164,7 @@ export default {
     },
     showTomorrow () {
       let today = new Date()
-      let navVal = new Date(this.navStack[0].typeVal)
+      let navVal = new Date(this.navStack[0]?.typeVal)
       today.setHours(0, 0, 0, 0)
       navVal.setHours(0, 0, 0, 0)
       today = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear()
