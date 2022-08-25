@@ -103,7 +103,6 @@
   </div>
   <DoitnowSkeleton
     v-if="isLoading"
-    class="mt-20"
   />
   <DoitnowEmpty
     v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
