@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center ">
+  <div class="flex justify-between items-center">
     <div class="flex flex-col justify-center items-center py-6 px-5 bg-white rounded-lg text-[25px] font-bold grow">
       <div
         class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center"

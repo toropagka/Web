@@ -3,7 +3,7 @@
 }
 
 body {
-  @apply pt-14 xl:pl-[292px] h-full;
+  @apply xl:pl-[292px] h-full;
 }
 html
 {

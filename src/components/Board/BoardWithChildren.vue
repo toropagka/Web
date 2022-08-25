@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full h-full flex flex-col">
+  <NavBar />
+  <div
+    class="w-full h-full flex flex-col"
+    :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
+  >
     <BoardModalBoxRename
       v-if="showAddBoard"
       :show="showAddBoard"
@@ -37,6 +41,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
@@ -52,6 +57,7 @@ export default {
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
     ListBlocAdd,
+    NavBar,
     Board
   },
   props: {

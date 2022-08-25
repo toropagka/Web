@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full pt-[30px]">
     <div>
       <div class="flex items-center justify-between w-full">
         <p

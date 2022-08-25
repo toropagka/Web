@@ -50,7 +50,6 @@
       :z-index="'z-20'"
       @overlay-click="overlayClick"
     />
-    <nav-bar v-if="!isFileRedirect" />
     <properties-right v-if="!isFileRedirect" />
     <ErrorNotification v-if="!isFileRedirect" />
     <Notification v-if="!isFileRedirect" />
@@ -126,7 +125,6 @@
 
 <script>
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
-import NavBar from '@/components/NavBar.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
@@ -165,7 +163,6 @@ export default {
     ModalBoxNotificationInstruction,
     MainSection,
     Overlay,
-    NavBar,
     PropertiesRight,
     ErrorNotification,
     Notification,
