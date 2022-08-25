@@ -111,10 +111,6 @@
         v-if="greedPath === 'new_emps'"
         :employees="greedSource"
       />
-      <colors
-        v-if="greedPath === 'colors'"
-        :colors="greedSource"
-      />
       <assignments
         v-if="greedPath === 'new_delegate'"
         :assignments="greedSource"
@@ -143,7 +139,6 @@ import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
-import Colors from '@/components/Colors.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -180,7 +175,6 @@ export default {
     BoardWithChildren,
     ReglamentContent,
     Employees,
-    Colors,
     Assignments,
     NotificationTasks,
     ModalBox
