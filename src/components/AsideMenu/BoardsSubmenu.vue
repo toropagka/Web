@@ -93,6 +93,9 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    },
     favoriteBoards () {
       const arr = []
       const boards = this.$store.state.boards.boards
@@ -168,6 +171,9 @@ export default {
 
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
+      }
+      if (this.isAsideMobileExpanded) {
+        this.$store.dispatch('asideMobileToggle', false)
       }
 
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })

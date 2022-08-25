@@ -90,7 +90,7 @@
     >
       <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
         <div class="pr-2 border-r border-gray-200">
-          <span class="font-medium pr-3">Отдел:</span><span class="text-[12px]">{{ dep?.name || 'Общий для всех отделов' }}</span>
+          <span class="font-medium pr-3">Отдел:</span><span class="text-[12px]">{{ reglamentDep }}</span>
         </div>
         <div class="ml-2 flex">
           <span class="font-medium pr-3">Автор:</span>
@@ -121,6 +121,18 @@
         :toolbar="['']"
         class="h-auto mx-auto mb-5 border-none 2xl:px-[145px] mt-[35px]"
       />
+
+      <div
+        v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
+        class="flex justify-center"
+      >
+        <button
+          class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          @click="startTheReglament"
+        >
+          Пройти тест
+        </button>
+      </div>
     </div>
     <div
       v-if="!isTesting && contributors.length"
@@ -189,17 +201,6 @@
     @exitTestingMode="isTesting = false"
   />
 
-  <div
-    v-if="!isEditing && !isTesting && questions.length > 0 && !isContributor && shouldShowButton"
-    class="flex justify-end"
-  >
-    <button
-      class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-      @click="startTheReglament"
-    >
-      Пройти тест
-    </button>
-  </div>
 </template>
 
 <script>
@@ -263,7 +264,9 @@ export default {
       return this.currReglament?.email_creator ?? ''
     },
     reglamentDep () {
-      return this.currReglament?.department_uid ?? ''
+      const department = this.currReglament?.department_uid ?? ''
+      const dep = this.$store.state.departments.deps[department]
+      return dep?.name || 'Общий для всех отделов'
     },
     reglamentEditors () {
       return this.currReglament?.editors ?? []
@@ -315,9 +318,6 @@ export default {
         }
       }
       return hasRightAnswers
-    },
-    showAllReglaments () {
-      return this.$store.state.reglaments.showAll
     },
     creatorName () {
       return this.$store.state.employees.employeesByEmail[this.reglamentCreatorEmail]?.name || this.reglamentCreatorEmail

@@ -100,6 +100,9 @@ export default {
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
     }
   },
   methods: {
@@ -178,6 +181,9 @@ export default {
 
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
+      }
+      if (this.isAsideMobileExpanded) {
+        this.$store.dispatch('asideMobileToggle', false)
       }
       this.mainStateUpdate()
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
