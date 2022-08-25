@@ -590,7 +590,7 @@ export default {
         if (!checkOnEmptyRightAnswers) {
           question.invalid = true
           question.errorText = 'Отметьте как минимум один правильный ответ'
-          if (!this.firstInvalid) {
+          if (!this.isFormInvalid) {
             this.isFormInvalid = true
           }
           if (!this.firstInvalidQuestionUid) {
