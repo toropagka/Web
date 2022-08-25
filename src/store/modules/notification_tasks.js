@@ -9,7 +9,7 @@ const state = {
 const actions = {
   [NOTIFICATION_TASKS.NOTIFICATION_TASKS_GENERATE]: ({ commit, dispatch }) => {
     const userUid = store.state.user.user.current_user_uid
-    const userDep = store.state.employees.employees[userUid].uid_dep
+    const userDep = store.state.employees.employees[userUid]?.uid_dep
     const reglaments = Object.values(store.state.reglaments.reglaments).filter(reglament => {
       return (reglament.department_uid === userDep ||
         reglament.department_uid === '') &&
