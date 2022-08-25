@@ -305,7 +305,8 @@ export default {
       saveContentStatus: 1, // 1 - is saved, 2 error, 0 request processing
       buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
       isFormInvalid: false,
-      showEmployees: false
+      showEmployees: false,
+      firstInvalidQuestionUid: null
     }
   },
   computed: {
@@ -579,6 +580,24 @@ export default {
     validateReglamentQuestions () {
       for (const question of this.questions) {
         question.invalid = question.name === ''
+
+        const checkOnEmptyRightAnswers = question.answers.find((answer) => {
+          if (answer.is_right === true || answer.is_right === 1) {
+            return true
+          }
+          return false
+        })
+
+        if (!checkOnEmptyRightAnswers) {
+          question.invalid = true
+          question.errorText = 'Отметьте как минимум один правильный ответ'
+          if (!this.firstInvalid) {
+            this.isFormInvalid = true
+          }
+          if (!this.firstInvalidQuestionUid) {
+            this.firstInvalidQuestionUid = question.uid
+          }
+        }
 
         if (!this.isFormInvalid && question.name === '') {
           this.isFormInvalid = true
