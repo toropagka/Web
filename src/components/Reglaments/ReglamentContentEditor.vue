@@ -324,6 +324,13 @@ export default {
       const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
       return deps.filter(dep => dep.emails.find(email => email.toLowerCase() === currentUserEmail))
     },
+    showAllReglaments () {
+      const employees = this.$store.state.employees.employees
+      const user = this.$store.state.user.user
+      const userType = employees[user.current_user_uid].type
+      const userAdmin = userType === 1 || userType === 2
+      return userAdmin
+    },
     user () {
       return this.$store.state.user.user
     },
