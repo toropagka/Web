@@ -13,15 +13,17 @@ export default {
     class="flex items-start space-x-[10px] w-full justify-between"
     :class="{ 'bg-white': showCloseIcon }"
   >
-    <div
-      class="flex flex-col border-l-[2px] border-[#7E7E80] pl-[4px] py-[2px]"
-    >
-      <p class="text-[#7E7E80] text-[13px] leading-[15px] font-[500] tracking-wide">
-        {{ employee?.name }}
-      </p>
-      <p class="text-[#7E7E80] font-[400] text-[12px] leading-[14px] mt-[3px]">
-        {{ quoteMessage.msg ?? quoteMessage.file_name }}
-      </p>
+    <div class="grow w-[calc(100%-20px)]">
+      <div
+        class="mx-[4px]"
+      >
+        <p class="text-[11px] leading-[16px] overflow-hidden text-black text-ellipsis whitespace-nowrap">
+          {{ employee?.name }}
+        </p>
+        <p class="text-[12px] leading-[16px] overflow-hidden text-[#9a9fa6] text-ellipsis whitespace-nowrap">
+          {{ quoteMessage.msg ?? quoteMessage.file.name }}
+        </p>
+      </div>
     </div>
     <svg
       width="13"
