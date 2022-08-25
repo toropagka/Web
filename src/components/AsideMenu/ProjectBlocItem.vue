@@ -1,6 +1,6 @@
 <template>
   <div class="h-[40px] flex items-center cursor-pointer hover:bg-white hover:rounded-[10px]">
-    <div class="relative flex items-center w-[26px] justify-center ml-[8px] mr-[8px]">
+    <div class="relative flex items-center w-[26px] justify-center ml-[8px] mr-[8px] shrink-0">
       <svg
         v-if="project.members?.length > 1"
         class="flex-none"
@@ -41,7 +41,7 @@
         />
       </svg>
     </div>
-    <p class="font-roboto text-[13px] leading-[15px] font-medium text-[#606061]">
+    <p class="font-roboto text-[13px] leading-[15px] font-medium text-[#606061] truncate">
       {{ project.name }}
     </p>
   </div>
