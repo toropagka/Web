@@ -13,7 +13,8 @@
   <aside
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 z-30 h-screen transition-position lg:left-0 bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm xl:left-0"
+    :class="isAsideMobileExpanded ? 'left-0' : '-left-full'"
   >
     <div class="px-[16px] pt-[15px]">
       <AsideMenuListItem
@@ -167,6 +168,9 @@ export default {
     },
     storeNavigator () {
       return this.$store.state.navigator.navigator
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
     }
   },
   methods: {
