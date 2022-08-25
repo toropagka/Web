@@ -45,9 +45,6 @@ export default {
     lastTab () {
       return this.$store.state.navigator.lastTab
     },
-    isAuth () {
-      return this.$store.getters.isAuthenticated
-    },
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
@@ -56,13 +53,6 @@ export default {
     },
     isFileRedirect () {
       return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
-    }
-  },
-  watch: {
-    isAuth (newval, oldval) {
-      if (newval) {
-        location.reload()
-      }
     }
   },
   mounted () {
