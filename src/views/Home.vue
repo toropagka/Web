@@ -634,7 +634,10 @@ export default {
         accept: true
       }
       this.$store.dispatch(USER_INVITE_ME, data)
-      this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+        .then(() => {
+          this.$store.state.navigator.navigator.invite_me.uid = '00000000-0000-0000-0000-000000000000'
+          location.reload()
+        })
     },
     declineInviteModalBox () {
       const data = {
