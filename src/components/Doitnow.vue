@@ -35,7 +35,10 @@
       </button>
     </div>
   </div>
-  <div class="pt-[35px] w-full">
+  <div class="pt-[15px] w-full">
+    <div class="ml-[300px] flex items-center grow-0 shrink-0 relative font-light text-gray-700 hover:text-blue-500 dark:text-white dark:hover:text-gray-400 px-3 group">
+      <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs text-[#7E7E80] font-medium">Очередь</span>
+    </div>
     <div
       v-if="tasksCount && !isLoading && isNotifiesLoaded && !displayModal"
       class="flex mb-5 justify-end z-[1]"
