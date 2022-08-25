@@ -319,9 +319,6 @@ export default {
       }
       return hasRightAnswers
     },
-    showAllReglaments () {
-      return this.$store.state.reglaments.showAll
-    },
     creatorName () {
       return this.$store.state.employees.employeesByEmail[this.reglamentCreatorEmail]?.name || this.reglamentCreatorEmail
     },
