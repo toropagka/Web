@@ -7,6 +7,13 @@
       @cancel="showDeleteBoard = false"
       @yes="onDeleteBoard"
     />
+    <BoardModalBoxRename
+      v-if="showAddBoard"
+      :show="showAddBoard"
+      title="Добавить доску"
+      @cancel="showAddBoard = false"
+      @save="onAddNewBoard"
+    />
     <PopMenu>
       <NavBarButtonIcon
         icon="filter"
@@ -59,7 +66,14 @@
           Свойства доски
         </PopMenuItem>
         <PopMenuItem
-          v-if="canDelete"
+          v-if="canEditBoard"
+          icon="add"
+          @click="clickAddBoard"
+        >
+          Создать поддоску
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="canEditBoard"
           icon="delete"
           @click="clickDeleteBoard"
         >
@@ -81,8 +95,12 @@ import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
+import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 
 import * as BOARD from '@/store/actions/boards'
+import * as NAVIGATOR from '@/store/actions/navigator'
+import * as CARD from '@/store/actions/cards'
+
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
 
 export default {
@@ -91,6 +109,7 @@ export default {
     PopMenu,
     PopMenuItem,
     PopMenuDivider,
+    BoardModalBoxRename,
     BoardModalBoxDelete
   },
   props: {
@@ -102,7 +121,9 @@ export default {
   emits: ['popNavBar'],
   data () {
     return {
-      showDeleteBoard: false
+      showDeleteBoard: false,
+      showBoardsLimit: false,
+      showAddBoard: false
     }
   },
   computed: {
@@ -115,8 +136,12 @@ export default {
     board () {
       return this.$store.state.boards.boards[this.boardUid]
     },
-    canDelete () {
+    canEditBoard () {
       return this.board?.email_creator === this.$store.state.user.user?.current_user_email
+    },
+    canAddChild () {
+      const user = this.$store.state.user.user
+      return this.board?.email_creator === user.current_user_email
     },
     showArchive () {
       return this.$store.state.boards.showArchive
@@ -147,6 +172,89 @@ export default {
     },
     clickDeleteBoard () {
       this.showDeleteBoard = true
+    },
+    clickAddBoard () {
+      const user = this.$store.state.user.user
+      // если лицензия истекла
+      if (Object.keys(this.$store.state.boards.boards).length >= 3 && user.days_left <= 0) {
+        this.showBoardsLimit = true
+        return
+      }
+      this.showAddBoard = true
+    },
+    onAddNewBoard (name) {
+      this.showAddBoard = false
+      const title = name.trim()
+      if (title) {
+        // добавляем новую доску и переходим в неё
+        const maxOrder =
+          this.board?.children?.reduce(
+            (maxOrder, child) =>
+              child.order > maxOrder ? child.order : maxOrder,
+            0
+          ) ?? 0
+        const user = this.$store.state.user.user
+        const members = {}
+        members[user.current_user_uid] = 1
+        const board = {
+          uid: this.uuidv4(),
+          name: title,
+          uid_parent: this.board.uid,
+          email_creator: user.current_user_email,
+          order: maxOrder + 1,
+          collapsed: 0,
+          color: '',
+          public_link_status: 0,
+          show_date: 0,
+          favorite: 0,
+          stages: [],
+          children: [],
+          members
+        }
+        console.log(`create board uid: ${board.uid}`, board)
+        this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, board).then((res) => {
+          // заполняем недостающие параметры
+          board.global_property_uid = '1b30b42c-b77e-40a4-9b43-a19991809add'
+          board.type_access = res.data.type_access
+          board.color = '#A998B6'
+          //
+          this.$store.commit(BOARD.PUSH_BOARD, [board])
+          this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_BOARD, [board])
+          this.gotoChildren(board)
+        })
+      }
+    },
+    gotoChildren (board) {
+      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
+      this.$store.commit('basic', {
+        key: 'cardSource',
+        value: { uid: board.global_property_uid, param: board.uid }
+      })
+      // store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
+      const navElem = {
+        name: board.name,
+        key: 'greedSource',
+        uid: board.uid,
+        global_property_uid: board.global_property_uid,
+        greedPath: 'boards_children',
+        value: board.children
+      }
+
+      this.$store.commit('pushIntoNavStack', navElem)
+      this.$store.commit('basic', { key: 'greedSource', value: board.children })
+      this.$store.commit('basic', {
+        key: 'greedPath',
+        value: 'boards_children'
+      })
+    },
+    uuidv4 () {
+      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+        (
+          c ^
+          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+        ).toString(16)
+      )
     },
     onDeleteBoard () {
       this.showDeleteBoard = false
