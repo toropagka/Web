@@ -159,7 +159,7 @@ export default {
   },
   methods: {
     setLastPickedDate () {
-      if (this.navStack[0].value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
+      if (this.navStack[0]?.value?.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
         this.$store.commit('updateCalendarLastPicked', this.navStack[0].value.param)
       }
     },
