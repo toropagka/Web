@@ -346,7 +346,7 @@
       <!-- accept -->
       <button
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="accept"
       >
         <svg
@@ -372,7 +372,7 @@
       <!-- redo -->
       <button
         v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="reDo"
       >
         <Icon
@@ -390,7 +390,7 @@
       <!-- decline -->
       <button
         v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="decline"
       >
         <Icon
@@ -404,7 +404,7 @@
       </button>
       <PerformButton
         v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
-        class="hover:animate-fadeIn hover:cursor-pointer"
+        class=" hover:cursor-pointer"
         :task-type="task.type"
         :current-user-uid="user?.current_user_uid"
         :performer-email="task.email_performer"
@@ -414,7 +414,7 @@
       <!-- Change access -->
       <button
         v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="() => onChangeAccess(task.emails)"
       >
         <span

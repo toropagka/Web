@@ -6,7 +6,7 @@
     <!-- Поручить -->
     <div
       v-if="taskType === 1"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
     >
       <Icon
         :height="change.height"
@@ -20,7 +20,7 @@
     <!-- Исполнитель -->
     <div
       v-else-if="taskType === 2"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
     >
       <Icon
         :height="change.height"
@@ -52,7 +52,7 @@
     <!-- Перепоручить -->
     <div
       v-else-if="taskType === 3"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
     >
       <Icon
         :height="change.height"
@@ -66,7 +66,7 @@
     <!-- Взять на исполнение -->
     <div
       v-else-if="taskType === 5"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 hover:animate-fadeIn whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
       @click.stop="setPerformerCurrentUser"
     >
       <Icon
