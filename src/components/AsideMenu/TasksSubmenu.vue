@@ -2,8 +2,7 @@
   <div
     v-show="!isFullScreen"
     id="aside"
-    style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm"
+    style="overflow-x:hidden"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
