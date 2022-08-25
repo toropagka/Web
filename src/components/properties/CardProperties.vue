@@ -310,6 +310,7 @@ export default {
             name: formData
           }
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
+            this.selectedCard.has_files = true
             this.scrollDown()
           })
         }
