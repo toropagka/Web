@@ -310,6 +310,7 @@ export default {
             name: formData
           }
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
+            this.selectedCard.has_files = true
             this.scrollDown()
           })
         }
@@ -369,6 +370,8 @@ export default {
       this.selectedCard.comment = text
     },
     createCardFile (event) {
+      console.log('create card file')
+      console.log('event -->', event)
       if (event === false) {
         this.showMessagesLimit = true
         return
