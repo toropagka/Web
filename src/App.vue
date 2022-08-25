@@ -53,45 +53,56 @@ export default {
     },
     isFileRedirect () {
       return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
+    },
+    isAuth () {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+  watch: {
+    isAuth (newval, oldval) {
+      location.reload()
     }
   },
   mounted () {
-    console.clear()
-    const fm = document.createElement('script')
-    fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
-    fm.onload = () => {
-      // подключаем скрыпты в правильном порядке - сначала fm.min потом fm.websync.min
-      const websync = document.createElement('script')
-      websync.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.websync.min.js')
-      document.head.appendChild(websync)
-    }
-    document.head.appendChild(fm)
-
-    const userLoaded = this.$store.state.user.hasLoadedOnce
-    const navLoaded = this.$store.state.navigator.hasLoadedOnce
-    if (!userLoaded && !navLoaded) {
-      this.$store.dispatch(USER_REQUEST)
-        .then(resp => {
-          this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
-          this.getNavigator()
-          if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-            this.getTask(this.$router.currentRoute.value.params.id)
-          } else {
-            if (localStorage.getItem('lastTab') === 'tasks') {
-              this.getTasks()
-            }
-          }
-        })
-        .catch(() => {
-          this.isContentLoaded = true
-        })
-    } else {
-      this.isContentLoaded = true
-    }
+    this.initApplication()
   },
   methods: {
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
+    },
+    initApplication () {
+      console.clear()
+      const fm = document.createElement('script')
+      fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
+      fm.onload = () => {
+        // подключаем скрыпты в правильном порядке - сначала fm.min потом fm.websync.min
+        const websync = document.createElement('script')
+        websync.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.websync.min.js')
+        document.head.appendChild(websync)
+      }
+      document.head.appendChild(fm)
+
+      const userLoaded = this.$store.state.user.hasLoadedOnce
+      const navLoaded = this.$store.state.navigator.hasLoadedOnce
+      if (!userLoaded && !navLoaded) {
+        this.$store.dispatch(USER_REQUEST)
+          .then(resp => {
+            this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
+            this.getNavigator()
+            if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
+              this.getTask(this.$router.currentRoute.value.params.id)
+            } else {
+              if (localStorage.getItem('lastTab') === 'tasks') {
+                this.getTasks()
+              }
+            }
+          })
+          .catch(() => {
+            this.isContentLoaded = true
+          })
+      } else {
+        this.isContentLoaded = true
+      }
     },
     getNavigator () {
       if (this.$store.state.auth.token) {
