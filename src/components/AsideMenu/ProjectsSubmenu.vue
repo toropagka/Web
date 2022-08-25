@@ -37,6 +37,7 @@
         </template>
         <AsideMenuListInput
           v-if="showAddProject && index == 0"
+          class="mb-[16px]"
           :show="showAddProject"
           @cancel="showAddProject = false"
           @save="onAddNewProject"
@@ -57,6 +58,7 @@
         </AsideMenuListInput>
         <AsideMenuListAdd
           v-else-if="index == 0"
+          class="mb-[16px]"
           title="Добавить проект"
           @click.stop="clickAddProject"
         />

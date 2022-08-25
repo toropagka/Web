@@ -37,6 +37,7 @@
         </template>
         <AsideMenuListInput
           v-if="showAddBoard && index == 0"
+          class="mb-[16px]"
           :show="showAddBoard"
           @cancel="showAddBoard = false"
           @save="onAddNewBoard"
@@ -58,6 +59,7 @@
         </AsideMenuListInput>
         <AsideMenuListAdd
           v-else-if="index == 0"
+          class="mb-[16px]"
           title="Добавить доску"
           @click.stop="clickAddBoard"
         />
