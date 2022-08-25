@@ -1,6 +1,5 @@
 <template>
   <div
-    id="aside"
     style="overflow-x:hidden"
   >
     <AsideMenuSkeleton v-if="status == 'loading'" />
