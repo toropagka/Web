@@ -90,7 +90,7 @@
     >
       <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
         <div class="pr-2 border-r border-gray-200">
-          <span class="font-medium pr-3">Отдел:</span><span class="text-[12px]">{{ dep?.name || 'Общий для всех отделов' }}</span>
+          <span class="font-medium pr-3">Отдел:</span><span class="text-[12px]">{{ reglamentDep }}</span>
         </div>
         <div class="ml-2 flex">
           <span class="font-medium pr-3">Автор:</span>
@@ -263,7 +263,9 @@ export default {
       return this.currReglament?.email_creator ?? ''
     },
     reglamentDep () {
-      return this.currReglament?.department_uid ?? ''
+      const department = this.currReglament?.department_uid ?? ''
+      const dep = this.$store.state.departments.deps[department]
+      return dep?.name || 'Общий для всех отделов'
     },
     reglamentEditors () {
       return this.currReglament?.editors ?? []
