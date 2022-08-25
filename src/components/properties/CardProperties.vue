@@ -370,8 +370,6 @@ export default {
       this.selectedCard.comment = text
     },
     createCardFile (event) {
-      console.log('create card file')
-      console.log('event -->', event)
       if (event === false) {
         this.showMessagesLimit = true
         return
