@@ -81,13 +81,15 @@
           />
         </div>
       </transition>
+      <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
       <div
-        v-if="tasksCount && !isLoading && isNotifiesLoaded && !displayModal"
+        v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
+
         class="flex mb-5 justify-end z-[1]"
       >
         <!-- header -->
         <button
-          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex  w-[221px] h-[40px] items-center bg-white justify-center"
+          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center"
           @click="nextTask"
         >
           <span class="pr-2">Следующая задача</span>
