@@ -151,7 +151,7 @@ createApp(App)
   .use(store)
   .use(router)
   .use(vue3GoogleLogin, {
-    clientId: '88157405682-f86b6b3if1ligkbqoh4vqlbu6r3mbi7p.apps.googleusercontent.com'
+    clientId: '770584674672-8vif3lutuhc786suh8vuomht37t1uah8.apps.googleusercontent.com'
   })
   .use(Notifications)
   .directive('linkified', linkify)
