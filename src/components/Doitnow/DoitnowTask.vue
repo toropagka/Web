@@ -235,7 +235,8 @@
       <TaskPropsCommentEditor
         v-if="task.uid"
         v-show="task.comment.length || task.uid_customer === user?.current_user_uid"
-        class="mt-3 break-words"
+        class="mt-3"
+        style="word-break: break-word"
         :comment="task.comment"
         :can-edit="task.uid_customer === user?.current_user_uid"
         @changeComment="onChangeComment"
