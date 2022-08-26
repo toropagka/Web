@@ -103,6 +103,7 @@ const actions = {
       localStorage.removeItem('user-token')
       localStorage.removeItem('user-refresh-token')
       localStorage.removeItem('lastTab')
+      localStorage.removeItem('visitedModals')
       localStorage.removeItem('navStack')
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
       commit(RESET_STATE_NAVIGATOR)
