@@ -160,7 +160,7 @@
       </button>
       <div
         v-if="showEmployees"
-        class="flex items-center mt-2.5"
+        class="flex items-center mt-2.5 pb-2 flex-wrap gap-y-[10px]"
       >
         <button
           v-if="canEdit"
