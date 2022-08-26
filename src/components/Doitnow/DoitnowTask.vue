@@ -21,9 +21,6 @@
       class="py-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
-        :title="task.title"
-        :text="task.text"
-        :video="task.video"
         :name="task.name"
         @nextTask="nextTask"
       />
