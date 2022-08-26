@@ -5,7 +5,7 @@
       :src="photo"
       class="h-[22px] w-[22px] rounded-md mr-1"
     >
-    <span class="text-[12px]">
+    <span class="text-[12px] shrink-0">
       {{ name }}
     </span>
   </div>
