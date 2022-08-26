@@ -40,7 +40,7 @@ export default {
 <template>
   <aside
     id="aside-right"
-    class="bg-[#f4f5f7] w-[388px] fixed top-0 h-full transition-position z-[11]"
+    class="bg-[#f4f5f7] w-[388px] fixed top-0 h-full transition-position z-[1]"
     :class="{ 'block right-0': isPropertiesMobileExpanded, 'hidden -right-[388px]': !isPropertiesMobileExpanded}"
   >
     <!-- серый отступ в 8px слева, чтобы когда панель налетала на белый элемент она не сливалась -->
