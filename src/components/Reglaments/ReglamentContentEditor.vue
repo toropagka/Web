@@ -35,7 +35,7 @@
               Назад
             </ReglamentSmallButton>
             <ReglamentSmallButton
-              :class="{'cursor-default, opacity-[0.5]': buttonDisabled === true, 'animate-pulse bg-[#E3F4E8]': buttonSaveReglament === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
+              :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || saveContentStatus === 0, 'animate-pulse bg-[#E3F4E8]': buttonSaveReglament === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
               @click="onSaveReglamentButtonClick"
             >
               <svg
@@ -53,7 +53,7 @@
             </ReglamentSmallButton>
             <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
-              :class="{'cursor-default, opacity-[0.5]': buttonDisabled === true}"
+              :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || buttonSaveReglament === 0}"
               @click="setEdit"
             >
               <svg
@@ -558,7 +558,7 @@ export default {
       return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     },
     setEdit () {
-      if (this.buttonDisabled === true) {
+      if (this.buttonDisabled === true || this.buttonSaveReglament === 0) {
         return
       }
       const reglament = { ...this.currReglament }
@@ -629,7 +629,7 @@ export default {
       }
     },
     onSaveReglamentButtonClick () {
-      if (this.buttonDisabled === true) {
+      if (this.buttonDisabled === true || this.saveContentStatus === 0) {
         return
       }
       const reglament = { ...this.currReglament }
