@@ -28,6 +28,12 @@
           :src="user?.foto_link"
         >
       </AsideMenuListItem>
+      <EventAlert
+        v-if="user?.tarif === 'trial' || user?.tarif === 'free'"
+        :bg-color="'#FFCA86'"
+        :message-text="user?.tarif === 'trial' ? 'Пробная версия' : 'У Вас истекла лицензия, пожалуйста, обновите тариф'"
+        :text-color="'white'"
+      />
       <AsideMenuListItem
         :selected="lastTab === 'doitnow'"
         title="Очередь"
@@ -140,12 +146,14 @@ import * as TASK from '@/store/actions/tasks.js'
 
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
+import EventAlert from '@/components/EventAlert.vue'
 import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
 import AsideMenuListButton from '@/components/AsideMenu/AsideMenuListButton.vue'
 
 export default {
   components: {
     InspectorLimit,
+    EventAlert,
     InspectorModalBox,
     AsideMenuListItem,
     AsideMenuListButton
