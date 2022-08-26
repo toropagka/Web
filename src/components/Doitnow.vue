@@ -38,7 +38,7 @@
   <div class="pt-[15px] w-full">
     <div
       v-if="!isLoading"
-      class="ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
+      class="ml-0 xl:ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
     >
       <div
         class="h-[24px] w-[24px] block xl:hidden"
@@ -54,7 +54,7 @@
     </div>
     <div class="flex justify-between gap-[20px]">
       <transition :name="taskTransition">
-        <div class="ml-[300px] z-[2] grow">
+        <div class="ml-0 xl:ml-[300px] z-[2] grow">
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
