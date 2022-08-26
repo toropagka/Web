@@ -279,6 +279,7 @@ export default {
           typeVal: new Date(),
           type: 'date'
         }
+        this.$store.commit('setCalendarLastPicked', null)
         this.$store.commit('updateStackWithInitValue', navElem)
         this.$store.commit('basic', { key: 'taskListSource', value: { uid: uid, param: null } })
         this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
