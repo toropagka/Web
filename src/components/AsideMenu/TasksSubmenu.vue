@@ -229,7 +229,6 @@ export default {
       return this.isDateSelected(new Date())
     },
     isOverdueSelected () {
-      // console.log('isOverdueSelected', this.lastNavStack)
       return this.isActionSelected('46418722-a720-4c9e-b255-16db4e590c34')
     },
     isUnsortedSelected () {
