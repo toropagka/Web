@@ -42,7 +42,6 @@ const mutations = {
           data[value.name] = value.visible
           console.log(data)
         } catch (e) {
-          console.log(e)
           data = {
             welcome: true,
             addAvatar: true,
