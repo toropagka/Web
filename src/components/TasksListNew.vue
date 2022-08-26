@@ -689,10 +689,11 @@ export default {
         const taskName = document.getElementById(uid).querySelector('.taskName')
         const range = document.createRange()
         const sel = document.getSelection()
-        taskName.focus({ preventScroll: false })
         range.setStart(taskName, 0)
-        range.setEnd(taskName, 1)
+        range.collapse(true)
+        sel.removeAllRanges()
         sel.addRange(range)
+        taskName.focus({ preventScroll: false })
       })
     },
     nodeExpanding (arg) {

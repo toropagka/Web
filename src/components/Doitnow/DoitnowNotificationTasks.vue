@@ -7,7 +7,7 @@
         Пройти регламент "{{ name }}"
       </div>
       <button
-        class="w-xl-1/6 cursor-pointer bg-orange-400 text-white mt-8 text-lg p-2 rounded-md hover:bg-slate-200 hover:text-orange-400 text-[14px] font-normal"
+        class="w-xl-1/6 mt-[35px] w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
         @click="gotoReglamentContent"
       >
         Пройти регламент

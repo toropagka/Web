@@ -61,7 +61,7 @@
                           width="16"
                           height="17"
                           viewBox="0 0 16 17"
-                          fill="none"
+                          fill="black"
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
@@ -258,7 +258,7 @@
       </div>
     </template>
     <a
-      class="group flex w-[221px] border border-transparent items-center text-sm hover:border hover:border-gray-500 hover:bg-opacity-90 font-medium min-h-[40px] rounded-lg mb-2 hover:animate-fadeIn text-[#3e3e3f] whitespace-nowrap"
+      class="group flex w-[221px] border border-transparent items-center text-sm font-medium min-h-[40px] rounded-lg mb-2  text-[#3e3e3f] whitespace-nowrap hover:bg-[#0000000a] text-[#3e3e3f"
     >
       <span
         v-if="dateText !== ''"

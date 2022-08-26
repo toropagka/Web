@@ -98,7 +98,7 @@ export default {
 <template>
   <PopMenu
     :disabled="task.type === 4 || task.type === 5 || notAllowedTaskStatus"
-    placement="left"
+    placement="right"
   >
     <template #menu>
       <template

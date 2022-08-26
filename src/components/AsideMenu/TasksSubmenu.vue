@@ -43,9 +43,6 @@ import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import TasksSubmenuCalendar from '@/components/AsideMenu/TasksSubmenuCalendar.vue'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
-import warn from '@/icons/warn.js'
-import { mdiMenu } from '@mdi/js'
-
 import * as TASK from '@/store/actions/tasks'
 
 export default {
@@ -63,11 +60,9 @@ export default {
   emits: ['closeSubMenu'],
   data () {
     return {
-      mdiMenu,
       currentDay: null,
       visitedDay: null,
-      userParentId: null,
-      warn
+      userParentId: null
     }
   },
   computed: {

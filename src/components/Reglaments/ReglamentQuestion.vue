@@ -12,6 +12,12 @@
       v-if="isEditing ? true: rightAnswersAmount(question)"
       class="bg-white p-3 rounded-[10px] mb-2 w-[580px]"
     >
+      <div
+        v-if="question.invalid"
+        class="text-center text-red-500 text-[14px] font-medium mb-2"
+      >
+        {{ question.errorText }}
+      </div>
       <div class="flex justify-between w-[550px] mb-2">
         <span class="text-[#424242] font-[700] ml-2 text-[15px]">Текст вопроса</span>
         <div
