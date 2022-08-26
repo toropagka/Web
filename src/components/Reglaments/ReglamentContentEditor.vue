@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="w-full top-[45px] left-0 right-0 z-[6]">
-      <div class="top-0 bg-[#f4f5f7] pt-[5px] pb-[15px]">
+      <div class="top-0 bg-[#f4f5f7] pt-[5px]">
         <div
           class="flex flex-row justify-between items-center"
         >
@@ -159,13 +159,16 @@
       </div>
     </div>
     <div class="bg-white rounded-[28px]">
-      <QuillEditor
-        v-model:content="currText"
-        content-type="html"
-        :toolbar="'full'"
-        class="h-auto mb-5 bg-white"
-        @paste="pasteEvent"
-      />
+      <!-- Пустой див для корректного поведения quill-tollbar'a-->
+      <div>
+        <QuillEditor
+          v-model:content="currText"
+          content-type="html"
+          :toolbar="'full'"
+          class="h-auto mb-5 bg-white"
+          @paste="pasteEvent"
+        />
+      </div>
       <hr class="border-[1px] mr-10 ml-10">
       <div
         v-if="questions.length > 0"

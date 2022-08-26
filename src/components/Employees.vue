@@ -292,12 +292,6 @@ export default {
     PopMenu,
     PopMenuItem
   },
-  props: {
-    employees: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       gridView,
@@ -315,6 +309,9 @@ export default {
     }
   },
   computed: {
+    employees () {
+      return this.$store.state.navigator.navigator.new_emps
+    },
     items () {
       const items = this.employees.map(item => ({
         dep: item.dep.uid === '' ? 'Сотрудники' : item.dep.name,
@@ -322,7 +319,8 @@ export default {
         order: item.dep?.order ?? Number.MIN_SAFE_INTEGER,
         uid: item.dep.uid,
         item: item.dep.uid === '' ? null : item.dep
-      }))
+      }
+      ))
       items.sort((item1, item2) => {
         // сначала по порядку
         if (item1.order > item2.order) return 1
@@ -388,6 +386,20 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    localStorage.setItem('lastTab', 'directory')
+    // открываем вид
+    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+    this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
+    const navElem = {
+      name: 'Сотрудники',
+      key: 'greedSource',
+      greedPath: 'new_emps',
+      value: this.$store.getters.sortedNavigator.new_emps
+    }
+    this.$store.commit('updateStackWithInitValue', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
   },
   methods: {
     print (msg, val) {
