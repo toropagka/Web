@@ -131,13 +131,16 @@ export default {
     },
     isOverdueSelected () {
       // console.log('isOverdueSelected', this.lastNavStack)
-      return this.lastNavStack?.value?.uid === '46418722-a720-4c9e-b255-16db4e590c34'
+      return this.isActionSelected('46418722-a720-4c9e-b255-16db4e590c34')
     }
   },
   methods: {
     pushToRouter () {
       localStorage.setItem('lastTab', 'tasks')
       this.$router.push('/tasks')
+    },
+    isActionSelected (uid) {
+      return this.lastNavStack?.value?.uid === uid
     },
     isDateSelected (date) {
       if (
@@ -252,11 +255,11 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(date) } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     },
-    gotoAction (uid, label, isSelected) {
+    gotoAction (uid, label) {
       this.pushToRouter()
       this.$emit('closeSubMenu')
       // если уже выбран - ничего не делаем
-      if (isSelected) return
+      if (this.isActionSelected(uid)) return
       //
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -290,7 +293,7 @@ export default {
       this.gotoToDate(day.date)
     },
     gotoOverdue () {
-      this.gotoAction('46418722-a720-4c9e-b255-16db4e590c34', 'Просроченные', this.isOverdueSelected)
+      this.gotoAction('46418722-a720-4c9e-b255-16db4e590c34', 'Просроченные')
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
