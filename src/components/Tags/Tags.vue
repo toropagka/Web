@@ -62,7 +62,6 @@
       </ListBlocItem>
     </template>
   </div>
-
   <EmptyTasksListPics v-if="isEmpty" />
 </template>
 
@@ -73,7 +72,6 @@ import TagIcon from '@/components/Tags/Icons/TagIcon.vue'
 import Icon from '@/components/Icon.vue'
 import AddTag from '@/components/Tags/AddTag.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
-
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
@@ -91,12 +89,6 @@ export default {
     TagModalBoxTagsLimit,
     EmptyTasksListPics,
     InputValue
-  },
-  props: {
-    tags: {
-      type: Array,
-      default: () => []
-    }
   },
   data () {
     return {
@@ -121,6 +113,9 @@ export default {
     }
   },
   computed: {
+    tags () {
+      return this.$store.getters.sortedNavigator.tags?.items
+    },
     isGridView () {
       return this.$store.state.isGridView
     },
@@ -139,6 +134,19 @@ export default {
     isEmpty () {
       return this.tags.length < 1
     }
+  },
+  mounted () {
+    localStorage.setItem('lastTab', 'directory')
+    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+    this.$store.commit('basic', { key: 'greedPath', value: 'tags' })
+    const navElem = {
+      name: 'Метки',
+      key: 'greedSource',
+      greedPath: 'tags',
+      value: this.$store.state.navigator.navigator.tags?.items
+    }
+    this.$store.commit('updateStackWithInitValue', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
   },
   methods: {
     updateGridView (value) {

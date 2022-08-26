@@ -133,7 +133,7 @@
               <contenteditable
                 v-model="props.node.info.name"
                 tag="div"
-                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default"
+                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[17px]"
                 :contenteditable="props.node.info._isEditable"
                 placeholder="Введите название задачи"
                 :no-nl="true"

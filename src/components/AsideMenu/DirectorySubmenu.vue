@@ -38,26 +38,31 @@
           />
         </svg>
       </AsideMenuListItem>
-      <AsideMenuListItem
-        :selected="isTagsSelected"
-        title="Метки"
-        @click="gotoTags"
+      <router-link
+        v-slot="{ isActive}"
+        to="/tags"
       >
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 30 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+        <AsideMenuListItem
+          :selected="isActive"
+          title="Метки"
+          @click="closeMenu"
         >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M15.1314 7.73928C15.2871 7.57676 15.5025 7.48486 15.7276 7.48486L21.6895 7.48486C22.1456 7.48486 22.5153 7.85458 22.5153 8.31064V14.2726C22.5153 14.4977 22.4234 14.713 22.2609 14.8688L14.8658 21.9558C14.5414 22.2666 14.0281 22.2611 13.7105 21.9435L8.05667 16.2897C7.73902 15.972 7.73356 15.4587 8.04438 15.1344L15.1314 7.73928ZM14.1828 6.34215L6.29265 14.5753C5.67101 15.224 5.68193 16.2506 6.31723 16.8859L13.1143 23.6829C13.7496 24.3182 14.7762 24.3291 15.4248 23.7075L23.658 15.8174C23.983 15.5059 24.1668 15.0752 24.1668 14.625V7.48486C24.1668 6.57274 23.4274 5.83331 22.5153 5.83331H15.3752C14.925 5.83331 14.4943 6.0171 14.1828 6.34215ZM17.0535 11.0579C17.3059 10.8055 17.6406 10.6665 17.9979 10.6665C18.3553 10.6665 18.6899 10.8055 18.9424 11.0579C19.1948 11.3103 19.3337 11.645 19.3337 12.0023C19.3337 12.3597 19.1948 12.6943 18.9424 12.9467C18.6899 13.1992 18.3553 13.3381 17.9979 13.3381C17.6406 13.3381 17.3059 13.1992 17.0535 12.9467C16.8011 12.6943 16.6621 12.3597 16.6621 12.0023C16.6621 11.645 16.8011 11.3103 17.0535 11.0579Z"
-            fill="currentColor"
-          />
-        </svg>
-      </AsideMenuListItem>
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M15.1314 7.73928C15.2871 7.57676 15.5025 7.48486 15.7276 7.48486L21.6895 7.48486C22.1456 7.48486 22.5153 7.85458 22.5153 8.31064V14.2726C22.5153 14.4977 22.4234 14.713 22.2609 14.8688L14.8658 21.9558C14.5414 22.2666 14.0281 22.2611 13.7105 21.9435L8.05667 16.2897C7.73902 15.972 7.73356 15.4587 8.04438 15.1344L15.1314 7.73928ZM14.1828 6.34215L6.29265 14.5753C5.67101 15.224 5.68193 16.2506 6.31723 16.8859L13.1143 23.6829C13.7496 24.3182 14.7762 24.3291 15.4248 23.7075L23.658 15.8174C23.983 15.5059 24.1668 15.0752 24.1668 14.625V7.48486C24.1668 6.57274 23.4274 5.83331 22.5153 5.83331H15.3752C14.925 5.83331 14.4943 6.0171 14.1828 6.34215ZM17.0535 11.0579C17.3059 10.8055 17.6406 10.6665 17.9979 10.6665C18.3553 10.6665 18.6899 10.8055 18.9424 11.0579C19.1948 11.3103 19.3337 11.645 19.3337 12.0023C19.3337 12.3597 19.1948 12.6943 18.9424 12.9467C18.6899 13.1992 18.3553 13.3381 17.9979 13.3381C17.6406 13.3381 17.3059 13.1992 17.0535 12.9467C16.8011 12.6943 16.6621 12.3597 16.6621 12.0023C16.6621 11.645 16.8011 11.3103 17.0535 11.0579Z"
+              fill="currentColor"
+            />
+          </svg>
+        </AsideMenuListItem>
+      </router-link>
       <!-- TODO: сделать где-нибудь единственный объект со всеми ссылками, чтобы было прямо константами
       по типу:
       const menu = {
@@ -100,37 +105,6 @@
           </svg>
         </AsideMenuListItem>
       </router-link>
-
-      <AsideMenuListItem
-        :selected="isNotificationsSelected"
-        title="Уведомления"
-        @click="gotoNotifications"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 64 64"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M51.0055 4.66667H13.72C8.71681 4.66667 4.66663 8.7169 4.66663 13.7201V40.821C4.66663 45.8242 8.71681 49.8744 13.72 49.8744H46.6575L56.1278 59.3448C56.5447 59.7618 57.1404 60 57.736 60C58.9868 60 59.9993 58.9874 59.9993 57.7366V13.7201C60.0589 8.7169 56.0087 4.66667 51.0055 4.66667ZM9.25287 13.7201C9.25287 11.2185 11.278 9.25296 13.72 9.25296H51.0055C53.5071 9.25296 55.4726 11.2781 55.4726 13.7201V52.2569L49.2187 46.0029C48.8017 45.5859 48.2061 45.3477 47.6105 45.3477H13.72C11.2184 45.3477 9.25287 43.3226 9.25287 40.8805V13.7201Z"
-            fill="currentColor"
-          />
-          <path
-            d="M32.3627 31.291C34.5665 31.291 36.3534 29.5041 36.3534 27.3003C36.3534 25.0965 34.5665 23.3097 32.3627 23.3097C30.159 23.3097 28.3721 25.0965 28.3721 27.3003C28.3721 29.5041 30.159 31.291 32.3627 31.291Z"
-            fill="currentColor"
-          />
-          <path
-            d="M44.2155 31.291C46.4193 31.291 48.2061 29.5041 48.2061 27.3003C48.2061 25.0965 46.4193 23.3097 44.2155 23.3097C42.0117 23.3097 40.2249 25.0965 40.2249 27.3003C40.2249 29.5041 42.0117 31.291 44.2155 31.291Z"
-            fill="currentColor"
-          />
-          <path
-            d="M20.51 31.291C22.7138 31.291 24.5006 29.5041 24.5006 27.3003C24.5006 25.0965 22.7138 23.3097 20.51 23.3097C18.3062 23.3097 16.5194 25.0965 16.5194 27.3003C16.5194 29.5041 18.3062 31.291 20.51 31.291Z"
-            fill="currentColor"
-          />
-        </svg>
-      </AsideMenuListItem>
     </div>
   </div>
 </template>
@@ -178,9 +152,6 @@ export default {
     },
     isColorsSelected () {
       return this.lastNavStack?.greedPath === 'colors'
-    },
-    isNotificationsSelected () {
-      return this.lastNavStack?.greedPath === 'notifications'
     }
   },
   methods: {
@@ -219,21 +190,6 @@ export default {
       }
       cbOpenView()
     },
-    gotoNotifications () {
-      this.selectSubMenuItem(this.isNotificationsSelected, () => {
-        // открываем вид
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'notifications' })
-        const navElem = {
-          name: 'Цвета',
-          key: 'greedSource',
-          greedPath: 'notifications',
-          value: this.storeNavigator.notifications?.items
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-      })
-    },
     gotoColors () {
       this.selectSubMenuItem(this.isColorsSelected, () => {
         // открываем вид
@@ -244,21 +200,6 @@ export default {
           key: 'greedSource',
           greedPath: 'colors',
           value: this.storeNavigator.colors?.items
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-      })
-    },
-    gotoTags () {
-      this.selectSubMenuItem(this.isTagsSelected, () => {
-        // открываем вид
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'tags' })
-        const navElem = {
-          name: 'Метки',
-          key: 'greedSource',
-          greedPath: 'tags',
-          value: this.storeNavigator.tags?.items
         }
         this.$store.commit('updateStackWithInitValue', navElem)
         this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
