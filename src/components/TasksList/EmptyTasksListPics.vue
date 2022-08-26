@@ -48,15 +48,15 @@
       <div
         v-if="!displayModal"
       >
-        <p class="text-xl text-center font-bold mt-10">
-          Задач пока нет.<br> Запланируем дела на завтра?
+        <p class="text-xl font-bold mt-10 text-center">
+          Задач пока нет.<br> Создайте задачи на сегодня или запланируйте завтрашний день.
         </p>
         <div class="grid grid-cols-1">
           <button
-            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] h-[51px] mr-auto ml-auto mt-[35px] whitespace-nowrap"
             @click="goToNextDay"
           >
-            Запланировать
+            Запланировать завтра
           </button>
         </div>
       </div>
