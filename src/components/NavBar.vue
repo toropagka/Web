@@ -175,7 +175,7 @@ export default {
       >
         <span
           v-if="navItem && navItem.name"
-          class="font-['Roboto'] font-[700] text-[#4C4C4D] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] breadcrumbs"
+          class="font-['Roboto'] font-[700] text-[#4C4C4D] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs"
           :class="index === 0 ? 'text-[#4C4C4D] font-[700]' : index+1 === navStack.length ? 'text-[#4C4C4D] font-[700]' : 'text-[#4C4C4D] font-[700]'"
           @click.stop="clickOnGridCard(navItem, index), closeProperties()"
         >
