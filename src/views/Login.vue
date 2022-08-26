@@ -294,6 +294,14 @@ export default {
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
           this.$router.push('/doitnow')
+          const slides = {
+            addAvatar: true,
+            addEmployees: true,
+            addReglaments: true,
+            delegateTasks: true,
+            welcome: true
+          }
+          localStorage.setItem('slides', JSON.stringify(slides))
           this.$store.dispatch(USER_START_ONBOARDING)
         })
         .catch(() => {

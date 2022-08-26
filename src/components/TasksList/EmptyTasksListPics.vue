@@ -298,13 +298,13 @@ export default {
     navStackLastPath () { return this.navStack[this.navStack.length - 1]?.greedPath },
     shouldShowEmptyPics () {
       const lastNavStackElement = this.navStack[this.navStack.length - 1]
-      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement.value.param).toDateString() === new Date().toDateString()) {
+      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement?.value.param).toDateString() === new Date().toDateString()) {
         return true
       } else { return false }
     },
     isTags () { return this.navStackLastPath === 'tags' || this.navStackLastPath === 'tags_children' },
     isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
-    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID },
+    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1]?.value?.uid === this.COLOR_UID },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }

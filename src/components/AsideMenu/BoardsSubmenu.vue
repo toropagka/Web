@@ -126,6 +126,10 @@ export default {
     }
   },
   methods: {
+    pushToRouter () {
+      localStorage.setItem('lastTab', 'new_private_boards')
+      this.$router.push('/tasks')
+    },
     clickAddBoard () {
       // если лицензия истекла
       if (Object.keys(this.$store.state.boards.boards).length >= 3 && this.user.days_left <= 0) {
@@ -184,8 +188,8 @@ export default {
       }
     },
     gotoChildren (board) {
-      localStorage.setItem('lastTab', 'tasks')
       // закрываем сабменю
+      this.pushToRouter()
       this.$store.state.navigator.submenu.status = false
 
       if (this.isPropertiesMobileExpanded) {
@@ -226,7 +230,6 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
-      localStorage.setItem('lastTab', 'new_private_boards')
     }
   }
 }
