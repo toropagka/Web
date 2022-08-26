@@ -21,9 +21,6 @@
       class="py-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
-        :title="task.title"
-        :text="task.text"
-        :video="task.video"
         :name="task.name"
         @nextTask="nextTask"
       />
@@ -328,7 +325,7 @@
     <!-- accept/redo/decline -->
     <div
       v-if="task && !task.visible"
-      class="flex flex-col min-w-[200px] items-center"
+      class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
       <button
         v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"

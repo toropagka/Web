@@ -48,15 +48,15 @@
       <div
         v-if="!displayModal"
       >
-        <p class="text-xl text-center font-bold mt-10">
-          Задач пока нет.<br> Запланируем дела на завтра?
+        <p class="text-xl font-bold mt-10 text-center">
+          Задач пока нет.<br> Создайте задачи на сегодня или запланируйте завтрашний день.
         </p>
         <div class="grid grid-cols-1">
           <button
-            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] h-[51px] mr-auto ml-auto mt-[35px] whitespace-nowrap"
             @click="goToNextDay"
           >
-            Запланировать
+            Запланировать завтра
           </button>
         </div>
       </div>
@@ -298,13 +298,13 @@ export default {
     navStackLastPath () { return this.navStack[this.navStack.length - 1]?.greedPath },
     shouldShowEmptyPics () {
       const lastNavStackElement = this.navStack[this.navStack.length - 1]
-      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement.value.param).toDateString() === new Date().toDateString()) {
+      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement?.value.param).toDateString() === new Date().toDateString()) {
         return true
       } else { return false }
     },
     isTags () { return this.navStackLastPath === 'tags' || this.navStackLastPath === 'tags_children' },
     isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
-    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1].value?.uid === this.COLOR_UID },
+    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1]?.value?.uid === this.COLOR_UID },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }

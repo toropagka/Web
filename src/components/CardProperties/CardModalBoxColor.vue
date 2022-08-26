@@ -78,6 +78,7 @@ export default {
     },
     selectColor (color) {
       this.$emit('changeColor', color)
+      this.$emit('cancel')
     }
   }
 }

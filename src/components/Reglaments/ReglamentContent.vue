@@ -160,7 +160,7 @@
       </button>
       <div
         v-if="showEmployees"
-        class="flex items-center mt-2.5"
+        class="flex items-center mt-2.5 pb-2 flex-wrap gap-y-[10px]"
       >
         <button
           v-if="canEdit"
@@ -200,7 +200,6 @@
     :reglament="reglament"
     @exitTestingMode="isTesting = false"
   />
-
 </template>
 
 <script>
@@ -334,25 +333,6 @@ export default {
             document.querySelector('div.ql-toolbar').remove()
           } catch (e) {}
         }, 50)
-      } else {
-        setTimeout(() => {
-          try {
-            const toolBar = document.querySelector('div.ql-toolbar')
-            const editor = document.querySelector('div.ql-editor')
-            const container = document.querySelector('div.ql-container')
-            container.style.background = '#f4f5f7'
-            editor.style.borderTopLeftRadius = '28px'
-            editor.style.borderTopRightRadius = '28px'
-            editor.style.borderTop = '28px solid white'
-            editor.style.background = 'white'
-            toolBar.style.height = '60px'
-            toolBar.style.top = '95px'
-            toolBar.style.padding = '8px 8px 8px 0'
-            toolBar.style.zIndex = '5'
-            toolBar.style.background = '#f4f5f7'
-            toolBar.style.border = 'none'
-          } catch (e) {}
-        }, 50)
       }
     },
     needStartEdit: {
@@ -425,5 +405,25 @@ export default {
 }
 .ql-snow .ql-tooltip[data-mode=video]::before {
   content: "Введите ссылку:";
+}
+
+.ql-snow.ql-container:not(.ql-disabled) {
+  background: #f4f5f7;
+}
+
+.ql-toolbar.ql-snow {
+  position: sticky;
+  top: 0;
+  padding: 20px 0;
+  z-index: 5;
+  background: #f4f5f7;
+  border: none;
+}
+
+.ql-editor:not(.ql-blank) {
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  border-top: 28px solid white;
+  background: #fff;
 }
 </style>

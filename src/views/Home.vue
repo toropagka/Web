@@ -85,10 +85,6 @@
       <other
         v-if="greedPath === 'other'"
       />
-      <tags
-        v-if="greedPath === 'tags'"
-        :tags="greedSource"
-      />
       <NotificationTasks
         v-if="greedPath === 'notifications'"
       />
@@ -107,10 +103,6 @@
       <ReglamentContent
         v-if="greedPath === 'reglament_content'"
         :reglament="greedSource"
-      />
-      <employees
-        v-if="greedPath === 'new_emps'"
-        :employees="greedSource"
       />
       <assignments
         v-if="greedPath === 'new_delegate'"
@@ -138,8 +130,6 @@ import Boards from '@/components/Boards.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
-import Employees from '@/components/Employees.vue'
-import Tags from '@/components/Tags/Tags.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -170,12 +160,10 @@ export default {
     Boards,
     Doitnow,
     Other,
-    Tags,
     TagWithChildren,
     ProjectWithChildren,
     BoardWithChildren,
     ReglamentContent,
-    Employees,
     Assignments,
     NotificationTasks,
     ModalBox

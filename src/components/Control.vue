@@ -144,18 +144,12 @@ export default {
       return this.type === 'textarea' ? 'h-full' : 'h-12'
     }
   },
-  watch: {
-    show: {
-      handler: function (value) {
-        if (value) {
-          this.$nextTick(() => {
-            return this.$refs.inputEl.value.focus()
-          })
-        }
-      }
-    }
-  },
   mounted () {
+    if (this.show) {
+      this.$nextTick(() => {
+        return this.$refs.inputEl.focus()
+      })
+    }
     if (!this.$store.state.isFieldFocusRegistered) {
       window.addEventListener('keydown', this.fieldFocusHook)
 

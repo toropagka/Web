@@ -16,8 +16,6 @@
       />
       <TasksSubmenu
         v-if="lastTab === 'tasks'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
       />
       <BoardsSubmenu
         v-if="lastTab === 'new_private_boards'"
@@ -31,7 +29,10 @@
       :z-index="'z-20'"
       @overlay-click="closeSubMenu"
     />
-    <component :is="$route.meta.layout || 'div'">
+    <component
+      :is="$route.meta.layout || 'div'"
+      class="h-screen"
+    >
       <router-view />
     </component>
   </template>
