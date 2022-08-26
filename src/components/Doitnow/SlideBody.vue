@@ -36,7 +36,7 @@
   <div class="flex items-center justify-center">
     <div
       v-if="video"
-      class="font-[400] text-[14px] leading-[21px] pl-5 text-[#4C4C4D]"
+      class="font-[400] flex flex-col items-center text-[14px] leading-[21px] pl-5"
     >
       <iframe
         width="560"
@@ -49,6 +49,13 @@
         class="border rounded-xl"
       />
       <button
+        v-if="name === 'welcome'"
+        class="w-[238px] mt-[35px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+        @click="clickSuccess"
+      >
+        Понятно
+      </button>
+      <button
         v-if="name === 'addEmployees'"
         class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
         @click="clickAddEmployees"
@@ -56,13 +63,6 @@
         Добавить сотрудников
       </button>
     </div>
-    <button
-      v-if="name === 'welcome'"
-      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
-      @click="clickSuccess"
-    >
-      Понятно
-    </button>
     <button
       v-if="name === 'addAvatar'"
       class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
