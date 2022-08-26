@@ -6,9 +6,6 @@ const state = {
       name: 'welcome',
       mode: 'slide',
       title: 'Добро пожаловать в ЛидерТаск Web!',
-      text: `ЛидерТаск – это система для совместной работы в команде, которая: <ul class="list-['-'] pl-8"><li class="pl-2"> запишет и сохранит все задачи;
-        проекты, дела и встречи </li><li class="pl-2"> проследит за выполнением ваших поручений сотрудникам; </li><li class="pl-2"> будет вести статистику;
-        каждого участника команды </li><li class="pl-2"> автоматизирует внедрение новых сотрудников; </li><li class="pl-2"> и многое другое </li></ul>`,
       video: 'https://www.youtube.com/embed/FbdQZihaWqQ',
       visible: JSON.parse(localStorage.getItem('slides'))?.welcome ?? true
     },

@@ -14,10 +14,22 @@
       {{ title }}
     </div>
 
+    <!-- welcome -->
     <div
-      class="font-[400] text-[18px] leading-[21px] text-[#4C4C4D] w-[500px] mb-[35px] pl-0"
-      v-html="text"
-    />
+      v-if="name === 'welcome'"
+      class="w-8/12"
+    >
+      <article class="font-[400] text-[18px] leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
+        <p>ЛидерТаск – это система для совместной работы в команде, которая:</p>
+        <ul class="list-disc">
+          <li>запишет и сохранит все задачи; проекты, дела и встречи</li>
+          <li>проследит за выполнением ваших поручений сотрудникам;</li>
+          <li>будет вести статистику; каждого участника команды</li>
+          <li>автоматизирует внедрение новых сотрудников;</li>
+          <li>и многое другое</li>
+        </ul>
+      </article>
+    </div>
     <button
       v-if="name === 'addReglaments'"
       class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
