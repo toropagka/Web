@@ -6,6 +6,7 @@ import Empty from '@/components/Empty.vue'
 import Settings from '@/components/Settings/Settings.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
+import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -157,6 +158,15 @@ const routes = [
     path: '/tags',
     name: 'tags',
     component: Tags,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/employees',
+    name: 'employees',
+    component: Employees,
     beforeEnter: shouldRedirectToLogin
   },
   {
