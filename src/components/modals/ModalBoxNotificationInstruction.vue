@@ -1,9 +1,9 @@
 <template>
-  <overlay
+  <Overlay
     v-show="value"
     @overlay-click="cancel"
   >
-    <card-component
+    <CardComponent
       v-show="value"
       has-table
       :title="title"
@@ -17,7 +17,7 @@
       <div
         class="flex items-stretch justify-between mt-5"
       >
-        <jb-button
+        <JbButton
           v-if="hasCancel"
           class="w-full mr-5"
           label="Отмена"
@@ -25,7 +25,7 @@
           outline
           @click="cancel"
         />
-        <jb-button
+        <JbButton
           v-if="hasButton"
           :label="buttonLabel"
           :color="button"
@@ -33,8 +33,8 @@
           @click="confirm"
         />
       </div>
-    </card-component>
-  </overlay>
+    </CardComponent>
+  </Overlay>
 </template>
 
 <script>
