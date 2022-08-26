@@ -16,8 +16,6 @@
       />
       <TasksSubmenu
         v-if="lastTab === 'tasks'"
-        :menu="menu"
-        @closeSubMenu="closeSubMenu"
       />
       <BoardsSubmenu
         v-if="lastTab === 'new_private_boards'"

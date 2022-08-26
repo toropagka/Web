@@ -98,37 +98,96 @@
           />
         </svg>
       </AsideMenuListItem>
-      <div class="my-[10px]">
-        <template v-for="(menuGroup, index) in menu">
-          <div
-            v-if="typeof menuGroup === 'string'"
-            :key="`a-${index}`"
-            class="my-2"
-          >
-            <hr
-              :key="`a-${index}`"
-              class="text-xs mx-3 custom-border-divider"
-              :class="[ asideMenuLabelStyle ]"
-            >
-          </div>
-          <aside-menu-list
-            v-else
-            :key="`b-${index}`"
-            :menu="menuGroup"
-            :assigments="assigments"
-            @menu-click="menuClick"
-            @assigments-click="assigmentsClick"
+      <AsideMenuListItem
+        :selected="isInWorkSelected"
+        title="В работе"
+        @click="gotoInWork"
+      >
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8.46116 22.6199L21.893 14.865L8.46116 7.1101L8.46116 22.6199ZM22.9465 16.6897C24.3512 15.8787 24.3512 13.8513 22.9465 13.0403L9.51464 5.28542C8.11 4.47445 6.3542 5.48817 6.3542 7.1101V22.6199C6.3542 24.2418 8.11 25.2555 9.51464 24.4446L22.9465 16.6897Z"
+            fill="currentColor"
           />
+        </svg>
+      </AsideMenuListItem>
+      <AsideMenuListItem
+        :selected="isFocusSelected"
+        title="Задачи в фокусе"
+        @click="gotoFocus"
+      >
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21.0096 5.83331H8.99077C8.62927 5.83331 8.3335 6.1487 8.3335 6.53418V23.4658C8.3335 23.7578 8.50877 24.0206 8.7662 24.1258C8.83741 24.155 8.91409 24.1666 8.99077 24.1666C9.18248 24.1666 9.36871 24.0732 9.49469 23.9155L15.0002 18.9771L20.5056 23.9155C20.6316 24.0732 20.8124 24.1666 21.0096 24.1666C21.0862 24.1666 21.1629 24.155 21.2341 24.1258C21.4916 24.0265 21.6668 23.7578 21.6668 23.4658V6.53418C21.6668 6.1487 21.3711 5.83331 21.0096 5.83331ZM14.4962 17.3958L9.79183 21.7285V7.38279L20.2085 7.37273V21.7184L15.5041 17.3958C15.3781 17.2381 15.1973 17.1446 15.0002 17.1446C14.803 17.1446 14.6222 17.2381 14.4962 17.3958Z"
+            fill="currentColor"
+          />
+        </svg>
+      </AsideMenuListItem>
+      <AsideMenuListItem
+        :selected="isReadySelected"
+        title="Готово к сдаче"
+        @click="gotoReady"
+      >
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M22.781 8.88555C23.1009 9.20546 23.1009 9.71404 22.781 10.034L13.479 19.336C13.4039 19.412 13.3145 19.4723 13.2159 19.5135C13.1173 19.5546 13.0116 19.5758 12.9048 19.5758C12.7979 19.5758 12.6922 19.5546 12.5936 19.5135C12.495 19.4723 12.4056 19.412 12.3306 19.336L8.88537 15.8908C8.80938 15.8157 8.74905 15.7263 8.70787 15.6277C8.66669 15.5292 8.64549 15.4234 8.64549 15.3166C8.64549 15.2098 8.66669 15.104 8.70787 15.0054C8.74905 14.9069 8.80938 14.8175 8.88537 14.7424C8.96045 14.6664 9.04986 14.6061 9.14842 14.5649C9.24699 14.5237 9.35275 14.5025 9.45957 14.5025C9.56639 14.5025 9.67215 14.5237 9.77071 14.5649C9.86928 14.6061 9.95869 14.6664 10.0338 14.7424L12.9048 17.6134L21.6326 8.88555C21.7076 8.80956 21.7971 8.74923 21.8956 8.70805C21.9942 8.66687 22.1 8.64567 22.2068 8.64567C22.3136 8.64567 22.4194 8.66687 22.5179 8.70805C22.6165 8.74923 22.7059 8.80956 22.781 8.88555ZM21.0502 7.14655L12.9048 15.292L10.6162 13.0034C9.97635 12.3636 8.93459 12.3636 8.29477 13.0034L7.14637 14.1518C6.50655 14.7916 6.50655 15.8334 7.14637 16.4732L11.74 21.0668C12.3798 21.7066 13.4215 21.7066 14.0614 21.0668L24.52 10.6164C25.1598 9.97653 25.1598 8.93477 24.52 8.29495L23.3716 7.14655C22.7236 6.50673 21.69 6.50673 21.0502 7.14655Z"
+            fill="currentColor"
+          />
+        </svg>
+      </AsideMenuListItem>
+      <template
+        v-for="(value, index) in delegate"
+        :key="index"
+      >
+        <AsideMenuListTitle>
+          {{ value.dep }}
+        </AsideMenuListTitle>
+        <template
+          v-for="userDelegate in value.items"
+          :key="userDelegate.uid"
+        >
+          <AsideMenuListItem
+            :title="userDelegate.name"
+            @click="assigmentsClick(userDelegate)"
+          >
+            <img
+              :src="userDelegate.fotolink"
+              :alt="userDelegate.name"
+              height="28"
+              width="28"
+              class="rounded-[6px] border-2"
+              :style="[index === 0 ? {'border-color': 'rgb(63, 191, 100)'} : {'border-color': 'rgb(236, 69, 46)'}]"
+            >
+          </AsideMenuListItem>
         </template>
-      </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import AsideMenuList from '@/components/AsideMenu/AsideMenuList.vue'
 import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
+import AsideMenuListTitle from '@/components/AsideMenu/AsideMenuListTitle.vue'
 import TasksSubmenuCalendar from '@/components/AsideMenu/TasksSubmenuCalendar.vue'
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
@@ -137,21 +196,9 @@ import * as TASK from '@/store/actions/tasks'
 export default {
   components: {
     AsideMenuSkeleton,
-    AsideMenuList,
     TasksSubmenuCalendar,
-    AsideMenuListItem
-  },
-  props: {
-    menu: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['closeSubMenu'],
-  data () {
-    return {
-      userParentId: null
-    }
+    AsideMenuListItem,
+    AsideMenuListTitle
   },
   computed: {
     status () {
@@ -172,8 +219,8 @@ export default {
     storeNavigator () {
       return this.$store.getters.sortedNavigator
     },
-    assigments () {
-      return { delegate_iam: this.storeNavigator.delegate_iam, delegate_to_me: this.storeNavigator.delegate_to_me }
+    delegate () {
+      return this.storeNavigator.new_delegate
     },
     lastNavStack () {
       return this.$store.getters.lastNavStackElement
@@ -190,6 +237,15 @@ export default {
     },
     isUnreadSelected () {
       return this.isActionSelected('fa042915-a3d2-469c-bd5a-708cf0339b89')
+    },
+    isInWorkSelected () {
+      return this.isActionSelected('2a5cae4b-e877-4339-8ca1-bd61426864ec')
+    },
+    isFocusSelected () {
+      return this.isActionSelected('6fc44cc6-9d45-4052-917e-25b1189ab141')
+    },
+    isReadySelected () {
+      return this.isActionSelected('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0')
     }
   },
   methods: {
@@ -219,76 +275,9 @@ export default {
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     },
-    // TODO: clean up messy logic
-    menuClick (event, item) {
-      // Если уже находимся на этой вкладке игнорировать дальнейший код
-      this.pushToRouter()
-      if (this.checkOnWhichTab(item)) {
-        return
-      }
-      this.$emit('closeSubMenu')
-      this.userParentId = null
-      if (item.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-        this.$store.commit('setCalendarLastPicked', new Date().date)
-      }
-
-      if (item.path === 'new_private_boards' || item.path === 'new_private_projects') {
-        this.$store.state.navigator.submenu.status = true
-        this.$store.state.navigator.submenu.path = item.path
-        return
-      } else {
-        this.$store.state.navigator.submenu.status = false
-      }
-
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-
-      // Tasks list source
-      if (UID_TO_ACTION[item.uid] && item.type === 'uid') {
-        this.$store.dispatch(UID_TO_ACTION[item.uid])
-        const navElem = {
-          name: item.label,
-          key: 'taskListSource',
-          value: { uid: item.uid, param: new Date() },
-          typeVal: new Date(),
-          type: 'date'
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'taskListSource', value: { uid: item.uid, param: null } })
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      // Grid source (projects, employees, colors, tags)
-      } else {
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: item.path })
-        if (item.path === 'new_private_projects' || item.path === 'new_emps' || item.path === 'new_delegate' || item.path === 'new_private_boards') {
-          const navElem = {
-            name: item.label,
-            key: 'greedSource',
-            greedPath: item.path,
-            value: this.storeNavigator[item.path]
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path] })
-        } else {
-          console.log(item.uid)
-          const navElem = {
-            name: item.label,
-            key: 'greedSource',
-            greedPath: item.path,
-            value: this.storeNavigator[item.path]?.items
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator[item.path]?.items })
-        }
-      }
-    },
     gotoToDate (date) {
       this.pushToRouter()
-      this.$emit('closeSubMenu')
+      this.$store.state.navigator.submenu.status = false
       // если день уже выбран - ничего не делаем
       if (this.isDateSelected(date)) return
       //
@@ -299,7 +288,6 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
       //
-      this.userParentId = null
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(date))
       const navElem = {
         name: this.dateToLabelFormat(date),
@@ -315,7 +303,7 @@ export default {
     },
     gotoAction (uid, label) {
       this.pushToRouter()
-      this.$emit('closeSubMenu')
+      this.$store.state.navigator.submenu.status = false
       // если уже выбран - ничего не делаем
       if (this.isActionSelected(uid)) return
       //
@@ -325,8 +313,6 @@ export default {
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-      //
-      this.userParentId = null
       //
       if (UID_TO_ACTION[uid]) {
         this.$store.dispatch(UID_TO_ACTION[uid])
@@ -360,19 +346,16 @@ export default {
     gotoUnread () {
       this.gotoAction('fa042915-a3d2-469c-bd5a-708cf0339b89', 'Непрочитанные')
     },
-    checkOnWhichTab (item) {
-      const lastNavStack = this.navStack[this.navStack.length - 1]
-      if (lastNavStack?.value?.uid === item.uid ||
-        lastNavStack?.uid === item.uid ||
-        lastNavStack?.name === item.label ||
-        (lastNavStack?.name && item.name && lastNavStack?.name === item.name)) {
-        return true
-      }
+    gotoInWork () {
+      this.gotoAction('2a5cae4b-e877-4339-8ca1-bd61426864ec', 'В работе')
+    },
+    gotoFocus () {
+      this.gotoAction('6fc44cc6-9d45-4052-917e-25b1189ab141', 'Задачи в фокусе')
+    },
+    gotoReady () {
+      this.gotoAction('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0', 'Готово к сдаче')
     },
     assigmentsClick (user) {
-      if (this.$store.state.navbar.lastSelectedAsideTab === user.uid && this.userParentId === user.parentID) {
-        return
-      }
       console.log(user.parentID)
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -394,9 +377,8 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
       this.$store.state.navbar.lastSelectedAsideTab = user.uid
-      this.userParentId = user.parentID
 
-      this.$emit('closeSubMenu')
+      this.$store.state.navigator.submenu.status = false
     }
   }
 }
