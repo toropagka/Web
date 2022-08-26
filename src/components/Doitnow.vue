@@ -68,7 +68,7 @@
     </div>
   </div>
   <div
-    v-if="displayModal"
+    v-if="displayModal && !isLoading"
     class="max-w-xl mx-auto"
   >
     <div
