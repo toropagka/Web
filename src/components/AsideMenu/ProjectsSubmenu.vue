@@ -125,6 +125,10 @@ export default {
     }
   },
   methods: {
+    pushToRouter () {
+      localStorage.setItem('lastTab', 'new_private_projects')
+      this.$router.push('/tasks')
+    },
     uuidv4 () {
       return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
         (
@@ -195,7 +199,7 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_private_projects?.items })
     },
     gotoChildren (project) {
-      localStorage.setItem('lastTab', 'tasks')
+      this.pushToRouter()
       // закрываем сабменю
       this.$store.state.navigator.submenu.status = false
 
@@ -226,7 +230,6 @@ export default {
       this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
-      localStorage.setItem('lastTab', 'new_private_projects')
     }
   }
 }

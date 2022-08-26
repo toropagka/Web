@@ -107,6 +107,10 @@ export default {
     }
   },
   methods: {
+    pushToRouter () {
+      localStorage.setItem('lastTab', 'tasks')
+      this.$router.push('/tasks')
+    },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
@@ -116,10 +120,10 @@ export default {
     // TODO: clean up messy logic
     menuClick (event, item) {
       // Если уже находимся на этой вкладке игнорировать дальнейший код
+      this.pushToRouter()
       if (this.checkOnWhichTab(item)) {
         return
       }
-      localStorage.setItem('lastTab', 'tasks')
       this.$emit('closeSubMenu')
       this.userParentId = null
       this.visitedDay = ''
@@ -226,7 +230,7 @@ export default {
       }
     },
     onDayClick (day) {
-      localStorage.setItem('lastTab', 'tasks')
+      this.pushToRouter()
       this.$emit('closeSubMenu')
       if (this.checkOnWhichDay(day)) {
         return

@@ -328,11 +328,9 @@ export default {
     switchTab (tab) {
       this.$store.dispatch(SWITCH_TAB, tab)
         .then(() => {
-          if (tab?.code === 'new_private_boards' || tab?.code === 'new_private_projects') {
-            this.$router.push('/tasks')
-            return
+          if (tab?.code === 'doitnow') {
+            this.$router.push(tab.code)
           }
-          this.$router.push(tab?.code)
         })
     },
     checkOnWhichTab (item) {

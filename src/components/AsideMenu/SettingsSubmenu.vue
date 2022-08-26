@@ -161,8 +161,9 @@ export default {
       localStorage.setItem('currentSettingsTab', type)
       localStorage.setItem('lastTab', 'settings')
       this.$store.commit('updateStackWithInitValue', navElem)
-      // закрываем сабменю
+      // закрываем сабменю и меняем роут
       this.$store.state.navigator.submenu.status = false
+      this.$router.push('/settings')
     },
     gotoAccount () {
       this.gotoSettingsTab('account', 'Аккаунт', '9d3ba501-c173-462d-9b5f-0db97c06a026')
