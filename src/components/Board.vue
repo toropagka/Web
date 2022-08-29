@@ -55,6 +55,8 @@
       @changePosition="onChangeAllCardsPosition"
     />
     <draggable
+      v-dragscroll.y="true"
+      v-dragscroll:nochilddrag
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
       :list="storeCards"
       ghost-class="ghost-column"
@@ -353,6 +355,7 @@
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import draggable from 'vuedraggable'
+import { dragscroll } from 'vue-dragscroll'
 import BoardCard from '@/components/Board/BoardCard.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 import BoardModalBoxColor from '@/components/Board/BoardModalBoxColor.vue'
@@ -365,6 +368,9 @@ import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/sto
 import BoardInputValue from './Board/BoardInputValue.vue'
 
 export default {
+  directives: {
+    dragscroll
+  },
   components: {
     PopMenu,
     PopMenuItem,
