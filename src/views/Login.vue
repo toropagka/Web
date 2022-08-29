@@ -431,12 +431,13 @@ export default {
       console.log('Handle the response', response)
       // const userData = decodeCredential(response.credential)
       // console.log('Handle the userData', userData)
+      const cid = localStorage.getItem('cid') ?? 'webnew'
       const data = {
         token: response.access_token,
         system: 'web',
         language: 'russian',
         type_device: 'mobile',
-        cid: 'webnew'
+        cid: cid
       }
       this.$store.dispatch(GOOGLE_AUTH_REQUEST, data)
         .then(() => {
