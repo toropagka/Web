@@ -42,7 +42,7 @@
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks'}"
+    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px] pl-[292px]': mainSectionState === 'tasks'}"
   >
     <!-- Add task input -->
     <div
@@ -133,7 +133,7 @@
               <contenteditable
                 v-model="props.node.info.name"
                 tag="div"
-                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[17px]"
+                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[14px]"
                 :contenteditable="props.node.info._isEditable"
                 placeholder="Введите название задачи"
                 :no-nl="true"

@@ -2,9 +2,6 @@
   --hex-parent-height: 96px;
 }
 
-body {
-  @apply xl:pl-[292px] h-full;
-}
 html
 {
   width: 100%;

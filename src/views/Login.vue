@@ -280,6 +280,7 @@ export default {
       if (!this.form.password || !this.form.username) { return }
       const date = new Date()
       const timezone = date.getTimezoneOffset() / 60 * (-1)
+      const cid = localStorage.getItem('cid') ?? 'webnew'
       const data = {
         email: this.form.email,
         password: this.form.password,
@@ -287,7 +288,7 @@ export default {
         phone: this.form.phone,
         timezone: timezone,
         system: 'web',
-        cid: 'webnew',
+        cid: cid,
         language: 'russian',
         type_device: 'mobile'
       }
@@ -430,12 +431,13 @@ export default {
       console.log('Handle the response', response)
       // const userData = decodeCredential(response.credential)
       // console.log('Handle the userData', userData)
+      const cid = localStorage.getItem('cid') ?? 'webnew'
       const data = {
         token: response.access_token,
         system: 'web',
         language: 'russian',
         type_device: 'mobile',
-        cid: 'webnew'
+        cid: cid
       }
       this.$store.dispatch(GOOGLE_AUTH_REQUEST, data)
         .then(() => {
