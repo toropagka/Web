@@ -420,7 +420,7 @@ export default {
   border: none;
 }
 
-.ql-editor:not(.ql-blank) {
+.ql-editor[contenteditable="true"] {
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
   border-top: 28px solid white;
