@@ -4,67 +4,65 @@
     @cancel="showTagsLimit = false"
     @ok="showTagsLimit = false"
   />
-  <div class="pl-[292px]">
-    <div
-      class="w-full flex items-center justify-between order-1 pt-[30px]"
+  <div
+    class="w-full flex items-center justify-between order-1 pt-[30px]"
+  >
+    <p
+      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
     >
-      <p
-        class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
-      >
-        Метки
-      </p>
-      <div
-        class="flex"
-      >
-        <Icon
-          :path="listView.path"
-          :width="listView.width"
-          :height="listView.height"
-          :box="listView.viewBox"
-          class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
-          :class="isGridView ? 'text-gray-400' : 'text-gray-800'"
-          @click="updateGridView(false)"
-        />
-        <Icon
-          :path="gridView.path"
-          :width="gridView.width"
-          :height="gridView.height"
-          :box="gridView.viewBox"
-          class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
-          :class="!isGridView ? 'text-gray-400' : 'text-gray-800'"
-          @click="updateGridView(true)"
-        />
-      </div>
-    </div>
+      Метки
+    </p>
     <div
-      class="grid gap-2 mt-3 grid-cols-1 order-2"
-      :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
+      class="flex"
     >
-      <InputValue
-        v-if="showAddTag"
-        @save="createTag"
-        @cancel="showAddTag = false"
+      <Icon
+        :path="listView.path"
+        :width="listView.width"
+        :height="listView.height"
+        :box="listView.viewBox"
+        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
+        :class="isGridView ? 'text-gray-400' : 'text-gray-800'"
+        @click="updateGridView(false)"
       />
-      <AddTag
-        v-else
-        @click="clickAddTag"
+      <Icon
+        :path="gridView.path"
+        :width="gridView.width"
+        :height="gridView.height"
+        :box="gridView.viewBox"
+        class="cursor-pointer hover:text-gray-800 mr-2 mt-0.5"
+        :class="!isGridView ? 'text-gray-400' : 'text-gray-800'"
+        @click="updateGridView(true)"
       />
-      <template
-        v-for="tag in tags"
-        :key="tag.uid"
-      >
-        <ListBlocItem
-          :count="tag.children?.length ?? 0"
-          :color="tag.back_color"
-          :title="tag.name"
-          @click="openProperties(tag)"
-        >
-          <TagIcon />
-        </ListBlocItem>
-      </template>
     </div>
-    <EmptyTasksListPics v-if="isEmpty" />
   </div>
+  <div
+    class="grid gap-2 mt-3 grid-cols-1 order-2"
+    :class="{ 'md:grid-cols-2 lg:grid-cols-4': isGridView, 'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView }"
+  >
+    <InputValue
+      v-if="showAddTag"
+      @save="createTag"
+      @cancel="showAddTag = false"
+    />
+    <AddTag
+      v-else
+      @click="clickAddTag"
+    />
+    <template
+      v-for="tag in tags"
+      :key="tag.uid"
+    >
+      <ListBlocItem
+        :count="tag.children?.length ?? 0"
+        :color="tag.back_color"
+        :title="tag.name"
+        @click="openProperties(tag)"
+      >
+        <TagIcon />
+      </ListBlocItem>
+    </template>
+  </div>
+  <EmptyTasksListPics v-if="isEmpty" />
 </template>
 
 <script>

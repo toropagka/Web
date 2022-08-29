@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full pt-[30px] pl-[292px]">
+  <div class="w-full pt-[30px]">
     <div>
       <ColorModalBoxColorsLimit
         v-if="showColorsLimit"

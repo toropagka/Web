@@ -42,7 +42,7 @@
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px] pl-[292px]': mainSectionState === 'tasks'}"
+    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks'}"
   >
     <!-- Add task input -->
     <div
