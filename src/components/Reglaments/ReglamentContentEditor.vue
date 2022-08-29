@@ -20,6 +20,7 @@
             <input
               v-model="currName"
               type="text"
+              spellcheck="false"
               placeholder="Наименование"
               class="bg-[#f4f5f7] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
             >
