@@ -1,129 +1,131 @@
 <template>
-  <div class="w-full pt-[30px]">
-    <div
-      v-if="!displayModal"
-    >
-      <ReglamentAddLimit
-        v-if="showAddLimit"
-        @cancel="showAddLimit = false"
-        @ok="showAddLimit = false"
-      />
+  <div class="pl-[292px]">
+    <div class="w-full pt-[30px]">
       <div
-        v-for="(reg, index) in reglaments"
-        :key="index"
+        v-if="!displayModal"
       >
+        <ReglamentAddLimit
+          v-if="showAddLimit"
+          @cancel="showAddLimit = false"
+          @ok="showAddLimit = false"
+        />
         <div
-          class="flex w-full"
-          :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
+          v-for="(reg, index) in reglaments"
+          :key="index"
         >
-          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-            {{ reg.dep }}
-          </p>
           <div
-            v-if="index == 0"
-            class="flex"
+            class="flex w-full"
+            :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
           >
-            <icon
-              :path="listView.path"
-              :width="listView.width"
-              :height="listView.height"
-              :box="listView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': !isGridView,
-                'text-gray-400': isGridView
-              }"
-              @click="updateGridView(false)"
+            <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+              {{ reg.dep }}
+            </p>
+            <div
+              v-if="index == 0"
+              class="flex"
+            >
+              <icon
+                :path="listView.path"
+                :width="listView.width"
+                :height="listView.height"
+                :box="listView.viewBox"
+                class="cursor-pointer hover:text-gray-800 mr-2"
+                :class="{
+                  'text-gray-800': !isGridView,
+                  'text-gray-400': isGridView
+                }"
+                @click="updateGridView(false)"
+              />
+              <icon
+                :path="gridView.path"
+                :width="gridView.width"
+                :height="gridView.height"
+                :box="gridView.viewBox"
+                class="cursor-pointer hover:text-gray-800 mr-2"
+                :class="{
+                  'text-gray-800': isGridView,
+                  'text-gray-400': !isGridView
+                }"
+                @click="updateGridView(true)"
+              />
+            </div>
+          </div>
+          <div
+            class="grid gap-2 mt-3 grid-cols-1"
+            :class="{
+              'md:grid-cols-2 lg:grid-cols-4': isGridView,
+              'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+            }"
+          >
+            <template
+              v-for="reglament in reg.items"
+              :key="reglament.uid"
+            >
+              <ReglamentBlocItem
+                :reglament="reglament"
+                @click.stop="gotoReglamentContent(reglament)"
+              />
+            </template>
+            <ReglamentBlocEmpty
+              v-if="!reg.is_my_dep && reg.items.length === 0"
             />
-            <icon
-              :path="gridView.path"
-              :width="gridView.width"
-              :height="gridView.height"
-              :box="gridView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': isGridView,
-                'text-gray-400': !isGridView
-              }"
-              @click="updateGridView(true)"
+            <InputValue
+              v-if="showAddReglament && addReglamentDepartment === reg.uid"
+              @save="onAddNewReglament"
+              @cancel="showAddReglament = false"
+            />
+            <ListBlocAdd
+              v-else-if="reg.is_my_dep"
+              @click.stop="clickAddReglament(reg.uid)"
             />
           </div>
         </div>
         <div
-          class="grid gap-2 mt-3 grid-cols-1"
-          :class="{
-            'md:grid-cols-2 lg:grid-cols-4': isGridView,
-            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-          }"
+          v-if="currentUserIsAdmin"
+          class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
+          @click.stop="clickShowAll"
         >
-          <template
-            v-for="reglament in reg.items"
-            :key="reglament.uid"
-          >
-            <ReglamentBlocItem
-              :reglament="reglament"
-              @click.stop="gotoReglamentContent(reglament)"
-            />
-          </template>
-          <ReglamentBlocEmpty
-            v-if="!reg.is_my_dep && reg.items.length === 0"
-          />
-          <InputValue
-            v-if="showAddReglament && addReglamentDepartment === reg.uid"
-            @save="onAddNewReglament"
-            @cancel="showAddReglament = false"
-          />
-          <ListBlocAdd
-            v-else-if="reg.is_my_dep"
-            @click.stop="clickAddReglament(reg.uid)"
-          />
+          <p class="font-roboto text-[17px] leading-[22px]">
+            {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+          </p>
         </div>
       </div>
-      <div
-        v-if="currentUserIsAdmin"
-        class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
-        @click.stop="clickShowAll"
+      <EmptyTasksListPics v-if="isEmpty" />
+    </div>
+    <div
+      v-if="displayModal"
+      class="flex flex-col justify-center items-center"
+    >
+      <img
+        class="mx-auto mt-10"
+        width="320"
+        height="314"
+        src="@/assets/images/regl.svg"
+        alt="Empty task image"
       >
-        <p class="font-roboto text-[17px] leading-[22px]">
-          {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+      <div class="w-[600px]">
+        <p class="font-bold p-3 text-left">
+          Автоматизируйте процесс внедрения новых сотрудников и аттестуйте текущих с помощью регламентов
         </p>
+        <ul class="list-decimal pl-[30px]">
+          <li class="p-3 text-sm">
+            Запишите регламент и создайте тест, чтобы ваши сотрудники могли пройти его
+          </li>
+          <li class="p-3 text-sm">
+            Общие регламенты - регламенты для всех сотрудников компании. Их должен знать каждый в компании
+          </li>
+          <li class="p-3 text-sm">
+            Регламенты по отделам - доступны только сотрудникам отделов
+          </li>
+        </ul>
       </div>
+      <button
+        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+        @click="okToModal"
+      >
+        Понятно
+      </button>
     </div>
-    <EmptyTasksListPics v-if="isEmpty" />
-  </div>
-  <div
-    v-if="displayModal"
-    class="flex flex-col justify-center items-center"
-  >
-    <img
-      class="mx-auto mt-10"
-      width="320"
-      height="314"
-      src="@/assets/images/regl.svg"
-      alt="Empty task image"
-    >
-    <div class="w-[600px]">
-      <p class="font-bold p-3 text-left">
-        Автоматизируйте процесс внедрения новых сотрудников и аттестуйте текущих с помощью регламентов
-      </p>
-      <ul class="list-decimal pl-[30px]">
-        <li class="p-3 text-sm">
-          Запишите регламент и создайте тест, чтобы ваши сотрудники могли пройти его
-        </li>
-        <li class="p-3 text-sm">
-          Общие регламенты - регламенты для всех сотрудников компании. Их должен знать каждый в компании
-        </li>
-        <li class="p-3 text-sm">
-          Регламенты по отделам - доступны только сотрудникам отделов
-        </li>
-      </ul>
-    </div>
-    <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-      @click="okToModal"
-    >
-      Понятно
-    </button>
   </div>
 </template>
 
