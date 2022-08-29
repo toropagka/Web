@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full pb-[28px] pt-[30px]"
+    class="w-full pb-[28px] pt-[30px] pl-[292px]"
   >
     <div
       v-if="displayModal"
