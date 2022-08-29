@@ -18,13 +18,14 @@
     />
     <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <template
-        v-for="project in projects"
+        v-for="project in currentProject.children"
         :key="project.uid"
       >
-        <ProjectBlocItem
-          :project="project"
-          @click.stop="gotoChildren(project)"
-        />
+        <router-link :to="'/project/' + project.uid">
+          <ProjectBlocItem
+            :project="project"
+          />
+        </router-link>
       </template>
       <ListBlocAdd
         v-if="canAddChild"
@@ -67,49 +68,70 @@ export default {
   data () {
     return {
       showAdd: false,
-      showProjectsLimit: false
-
+      showProjectsLimit: false,
+      currentProject: {}
     }
   },
   computed: {
-    currentProject () {
-      const projects = this.$store.state.projects.projects
-      const navStack = this.$store.state.navbar.navStack
-      const currProjectUid = navStack[navStack.length - 1].uid
-      const project = projects[currProjectUid]
-      return project
-    },
     canAddChild () {
       const user = this.$store.state.user.user
       return this.currentProject?.email_creator === user.current_user_email
     }
   },
+  /**
+   * TODO: выяснить, почему рендерит 2 раза
+   */
+  created () {
+    this.$watch(
+      () => this.$route.params,
+      (toParams) => {
+        // REMOVE: После полного перехода на vue-router возможно стоит убрать. Сейчас это для того, чтобы можно было переходить с '/project/:uid' на другие урлы
+        if (this.$route.name === 'project') {
+          this.selectAnotherProject(toParams.project_id)
+        }
+      }
+    )
+  },
+  mounted () {
+    this.selectAnotherProject(this.$route.params.project_id)
+  },
   methods: {
     print (msg, val) {
       console.log(msg, val)
     },
-    gotoChildren (project) {
-      this.$store.dispatch('asidePropertiesToggle', false)
+    selectAnotherProject (uid) {
+      const navElemRoot = {
+        name: 'Проекты',
+        key: 'greedSource',
+        greedPath: 'new_private_projects',
+        value: this.$store.state.navigator.navigator.new_private_projects?.items
+      }
+      this.$store.commit('updateStackWithInitValue', navElemRoot)
+      this.currentProject = this.$store.state.projects.projects[uid]
 
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
+      this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_projects?.items })
+
+      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
       this.$store.commit('basic', {
         key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
+        value: { uid: this.currentProject.global_property_uid, param: this.currentProject.uid }
       })
 
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
 
       const navElem = {
-        name: project.name,
+        name: this.currentProject.name,
         key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
+        uid: this.currentProject.uid,
+        global_property_uid: this.currentProject.global_property_uid,
         greedPath: 'projects_children',
-        value: project.children
+        value: this.currentProject.children
       }
 
       this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
+      this.$store.commit('basic', { key: 'greedSource', value: this.currentProject.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     uuidv4 () {
@@ -170,7 +192,7 @@ export default {
 
           this.$store.commit(PROJECT.PUSH_PROJECT, [project])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
-          this.gotoChildren(project)
+          this.$router.push('/project/' + project.uid)
         })
       }
     }

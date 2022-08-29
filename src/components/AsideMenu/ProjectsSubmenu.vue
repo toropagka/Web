@@ -14,10 +14,12 @@
         v-for="project in favoriteProjects"
         :key="project.uid"
       >
-        <ProjectsSubmenuItem
-          :project="project"
-          @click="gotoChildren(project)"
-        />
+        <router-link :to="'/project/' + project.uid">
+          <ProjectsSubmenuItem
+            :project="project"
+            @click="closeMenu"
+          />
+        </router-link>
       </template>
       <template
         v-for="(value, index) in items"
@@ -30,10 +32,12 @@
           v-for="project in value.items"
           :key="project.uid"
         >
-          <ProjectsSubmenuItem
-            :project="project"
-            @click="gotoChildren(project)"
-          />
+          <router-link :to="'/project/' + project.uid">
+            <ProjectsSubmenuItem
+              :project="project"
+              @click="closeMenu"
+            />
+          </router-link>
         </template>
         <AsideMenuListInput
           v-if="showAddProject && index == 0"
@@ -75,7 +79,6 @@ import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
 import ProjectsSubmenuItem from '@/components/AsideMenu/ProjectsSubmenuItem.vue'
 import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
 
-import * as TASK from '@/store/actions/tasks'
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
@@ -125,10 +128,6 @@ export default {
     }
   },
   methods: {
-    pushToRouter () {
-      localStorage.setItem('lastTab', 'new_private_projects')
-      this.$router.push('/tasks')
-    },
     uuidv4 () {
       return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
         (
@@ -174,7 +173,7 @@ export default {
 
           this.$store.commit(PROJECT.PUSH_PROJECT, [project])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
-          this.gotoChildren(project)
+          this.$router.push('/project/' + project.uid)
         })
       }
     },
@@ -186,50 +185,14 @@ export default {
       }
       this.showAddProject = true
     },
-    mainStateUpdate () {
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
-      const navElem = {
-        name: 'Проекты',
-        key: 'greedSource',
-        greedPath: 'new_private_projects',
-        value: this.storeNavigator.new_private_projects?.items
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_private_projects?.items })
-    },
-    gotoChildren (project) {
-      this.pushToRouter()
-      // закрываем сабменю
+    closeMenu () {
       this.$store.state.navigator.submenu.status = false
-
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-      this.mainStateUpdate()
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: project.name,
-        key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
-        greedPath: 'projects_children',
-        value: project.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     }
   }
 }

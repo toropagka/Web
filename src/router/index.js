@@ -10,6 +10,7 @@ import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
 import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
+import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -70,15 +71,6 @@ const routes = [
     },
     path: '/task/:id',
     name: 'task',
-    component: Home,
-    beforeEnter: ifAuthenticated
-  },
-  {
-    meta: {
-      // title: 'Application'
-    },
-    path: '/project/:id',
-    name: 'project',
     component: Home,
     beforeEnter: ifAuthenticated
   },
@@ -184,6 +176,15 @@ const routes = [
     path: '/colors',
     name: 'colors',
     component: Colors,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/project/:project_id',
+    name: 'project',
+    component: ProjectWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
   {
