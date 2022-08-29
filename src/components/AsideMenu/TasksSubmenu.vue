@@ -158,26 +158,28 @@
         v-for="(value, index) in delegate"
         :key="index"
       >
-        <AsideMenuListTitle>
-          {{ value.dep }}
-        </AsideMenuListTitle>
-        <template
-          v-for="userDelegate in value.items"
-          :key="userDelegate.uid"
-        >
-          <AsideMenuListItem
-            :title="userDelegate.name"
-            @click="assigmentsClick(userDelegate)"
+        <template v-if="value.items.length">
+          <AsideMenuListTitle>
+            {{ value.dep }}
+          </AsideMenuListTitle>
+          <template
+            v-for="userDelegate in value.items"
+            :key="userDelegate.uid"
           >
-            <img
-              :src="userDelegate.fotolink"
-              :alt="userDelegate.name"
-              height="28"
-              width="28"
-              class="rounded-[6px] border-2"
-              :style="[index === 0 ? {'border-color': 'rgb(63, 191, 100)'} : {'border-color': 'rgb(236, 69, 46)'}]"
+            <AsideMenuListItem
+              :title="userDelegate.name"
+              @click="assigmentsClick(userDelegate)"
             >
-          </AsideMenuListItem>
+              <img
+                :src="userDelegate.fotolink"
+                :alt="userDelegate.name"
+                height="28"
+                width="28"
+                class="rounded-[6px] border-2"
+                :style="[index === 0 ? {'border-color': 'rgb(63, 191, 100)'} : {'border-color': 'rgb(236, 69, 46)'}]"
+              >
+            </AsideMenuListItem>
+          </template>
         </template>
       </template>
     </div>
