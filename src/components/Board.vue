@@ -74,6 +74,7 @@
       <template #item="{element: column}">
         <div
           v-if="isColumnVisible(column)"
+          data-dragscroll
           class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
@@ -168,6 +169,7 @@
           >
             <div
               v-if="getColumnCards(column).length"
+              data-dragscroll
               class="flex items-center justify-between h-[16px]"
             >
               <PopMenu :disabled="isReadOnlyBoard">
@@ -273,6 +275,7 @@
           <div
             v-if="column.AddCard && !isFiltered"
             class="mt-2 h-[40px]"
+            data-dragscroll
           >
             <BoardInputValue
               v-if="showAddCard && column.UID === selectedColumn.UID"
@@ -282,6 +285,7 @@
             />
             <button
               v-else
+              data-dragscroll
               class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.Color) }"
               @click="addCard(column)"
