@@ -206,6 +206,7 @@ import MessageSkeleton from '@/components/TaskProperties/MessageSkeleton.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import * as CARD from '@/store/actions/cards'
 import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -355,14 +356,6 @@ export default {
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     changeComment (text) {
       if (!this.selectedCard) return
       const data = { cardUid: this.selectedCard.uid, comment: text }
@@ -421,7 +414,7 @@ export default {
       msgcard = msgcard.replaceAll('&', '&amp;')
       msgcard = msgcard.replaceAll('>', '&gt;')
       msgcard = msgcard.replaceAll('<', '&lt;')
-      const uid = this.uuidv4()
+      const uid = uuidv4()
       const data = {
         uid_card: this.selectedCard?.uid,
         uid: uid,

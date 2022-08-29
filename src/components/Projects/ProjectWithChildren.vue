@@ -48,6 +48,7 @@ import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
 import NavBar from '@/components/NavBar.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -112,14 +113,6 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: project.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     clickAddProject () {
       const user = this.$store.state.user.user
       // если лицензия истекла
@@ -143,7 +136,7 @@ export default {
         const user = this.$store.state.user.user
 
         const project = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: title,
           uid_parent: this.currentProject?.uid ?? '00000000-0000-0000-0000-000000000000',
           email_creator: user.current_user_email,

@@ -109,6 +109,7 @@ import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 import { UPDATE_TAG_REQUEST, REMOVE_TAG_REQUEST, CREATE_TAG_REQUEST, SELECT_TAG } from '@/store/actions/tasks'
 
 import { NAVIGATOR_REMOVE_TAG, NAVIGATOR_PUSH_TAG } from '@/store/actions/navigator'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -220,7 +221,7 @@ export default {
         group: 0,
         show: 0,
         favorite: 0,
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         name: title,
         email_creator: this.user.current_user_email,
         bold: 0
@@ -231,14 +232,6 @@ export default {
           this.$store.commit(NAVIGATOR_PUSH_TAG, [tag])
           this.$store.commit(SELECT_TAG, tag)
         })
-    },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
     },
     print (msg, param) {
       console.log(msg, param)
@@ -280,7 +273,7 @@ export default {
           group: 0,
           show: 0,
           favorite: 0,
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: this.selectedTagName,
           bold: 0
         }
@@ -306,7 +299,7 @@ export default {
           group: 0,
           show: 0,
           favorite: 0,
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: this.selectedTagName,
           bold: 0
         }

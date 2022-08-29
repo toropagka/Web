@@ -144,6 +144,7 @@ import * as SLIDES from '@/store/actions/slides.js'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { uuidv4 } from '@/helpers/functions'
 import InputValue from '@/components/InputValue'
 
 export default {
@@ -287,14 +288,6 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: reglament })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     clickShowAll () {
       this.$store.state.reglaments.showAll = !this.showAllReglaments
     },
@@ -320,7 +313,7 @@ export default {
           name: title,
           content: '',
           department_uid: departmentUid,
-          uid: this.uuidv4()
+          uid: uuidv4()
         }
 
         this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_REQUEST, reglament).then(() => {

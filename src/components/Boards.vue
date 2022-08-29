@@ -130,6 +130,7 @@ import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import BoardInputValue from './Board/BoardInputValue.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -195,14 +196,6 @@ export default {
         value: 'boards_children'
       })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     clickAddBoard () {
       const user = this.$store.state.user.user
       // если лицензия истекла
@@ -227,7 +220,7 @@ export default {
         const members = {}
         members[user.current_user_uid] = 1
         const board = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: title,
           uid_parent: '00000000-0000-0000-0000-000000000000',
           email_creator: user.current_user_email,
