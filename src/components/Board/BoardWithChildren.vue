@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <div
-    class="w-full h-full flex flex-col"
+    class="w-full h-full pl-[292px] flex flex-col"
     :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
   >
     <BoardModalBoxBoardsLimit
