@@ -14,10 +14,14 @@
         v-for="board in favoriteBoards"
         :key="board.uid"
       >
-        <BoardsSubmenuItem
-          :board="board"
-          @click="gotoChildren(board)"
-        />
+        <router-link
+          :to="'/board/' + board.uid"
+        >
+          <BoardsSubmenuItem
+            :board="board"
+            @click="closeMenu"
+          />
+        </router-link>
       </template>
       <template
         v-for="(value, index) in items"
@@ -30,10 +34,14 @@
           v-for="board in value.items"
           :key="board.uid"
         >
-          <BoardsSubmenuItem
-            :board="board"
-            @click="gotoChildren(board)"
-          />
+          <router-link
+            :to="'/board/' + board.uid"
+          >
+            <BoardsSubmenuItem
+              :board="board"
+              @click="closeMenu"
+            />
+          </router-link>
         </template>
         <AsideMenuListInput
           v-if="showAddBoard && index == 0"
@@ -76,7 +84,6 @@ import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
 import BoardsSubmenuItem from '@/components/AsideMenu/BoardsSubmenuItem.vue'
 import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
 
-import * as CARD from '@/store/actions/cards.js'
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
@@ -126,10 +133,6 @@ export default {
     }
   },
   methods: {
-    pushToRouter () {
-      localStorage.setItem('lastTab', 'new_private_boards')
-      this.$router.push('/tasks')
-    },
     clickAddBoard () {
       // если лицензия истекла
       if (Object.keys(this.$store.state.boards.boards).length >= 3 && this.user.days_left <= 0) {
@@ -183,13 +186,12 @@ export default {
           //
           this.$store.commit(BOARD.PUSH_BOARD, [board])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_BOARD, [board])
-          this.gotoChildren(board)
+          this.$router.push('/boards/' + board.uid)
         })
       }
     },
-    gotoChildren (board) {
+    closeMenu (board) {
       // закрываем сабменю
-      this.pushToRouter()
       this.$store.state.navigator.submenu.status = false
 
       if (this.isPropertiesMobileExpanded) {
@@ -198,38 +200,6 @@ export default {
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      const path = 'new_private_boards'
-      const el = {
-        greedPath: path,
-        key: 'greedSource',
-        name: 'Доски',
-        value: this.storeNavigator[path]
-      }
-      this.$store.commit('updateStackWithInitValue', el)
-
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
-      })
-
-      const navElem = {
-        name: board.name,
-        key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
-        greedPath: 'boards_children',
-        value: board.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
     }
   }
 }
