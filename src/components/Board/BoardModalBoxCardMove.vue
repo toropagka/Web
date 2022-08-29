@@ -5,7 +5,7 @@
     @ok="onSave"
     @cancel="onCancel"
   >
-    <div class="w-full overflow-y-auto max-h-[440px]">
+    <div class="w-full overflow-y-auto max-h-[440px] scroll-style">
       <div class="ml-[4px] mb-[8px]">
         Доска:
       </div>
@@ -59,7 +59,12 @@
           class="flex flex-col w-full gap-[9px] -mt-px bg-white border rounded-[6px] border-black/12 px-[16px] py-[14px]"
         >
           <div
-            v-for="board in myBoards"
+            v-if="favoriteBoards.length"
+          >
+            Избранные доски:
+          </div>
+          <div
+            v-for="board in favoriteBoards"
             :key="board.uid"
             class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
             :style="{ 'margin-left': `${board.pad * 16}px` }"
@@ -69,8 +74,25 @@
           </div>
           <div
             v-if="myBoards.length"
-            class="h-[16px]"
-          />
+            class="mt-2"
+          >
+            Мои доски:
+          </div>
+          <div
+            v-for="board in myBoards"
+            :key="board.uid"
+            class="cursor-pointer text-[#4c4c4d] hover:text-[#ebaa40] text-[14px] leading-[16px]"
+            :style="{ 'margin-left': `${board.pad * 16}px` }"
+            @click="selectBoard(board.uid)"
+          >
+            {{ board.name }} {{ board.uid === boardUid ? '(текущая)' : '' }}
+          </div>
+          <div
+            v-if="commonBoards.length"
+            class="mt-2"
+          >
+            Общие доски:
+          </div>
           <div
             v-for="board in commonBoards"
             :key="board.uid"
@@ -212,6 +234,16 @@ export default {
       })
       this.buildTree(result, arrMyBoards, null, 0)
       return result
+    },
+    favoriteBoards () {
+      const arr = []
+      const boards = this.$store.state.boards.boards
+      Object.keys(boards).forEach(key => {
+        if (boards[key].favorite === 1) {
+          arr.push(boards[key])
+        }
+      })
+      return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
     },
     commonBoards () {
       const currentUserEmail = this.user.current_user_email.toLowerCase()
