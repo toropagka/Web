@@ -2,7 +2,7 @@
   <div class="h-screen">
     <NavBar />
     <div
-      class="w-full h-full pl-[292px] flex flex-col"
+      class="w-full h-full flex flex-col"
       :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
     >
       <BoardModalBoxBoardsLimit
@@ -17,7 +17,7 @@
         >
           <BoardBlocItem
             :board="board"
-            @click.stop="gotoChildren(board)"
+            @click.stop="selectAnotherBoard(board.uid)"
           />
         </template>
       </div>

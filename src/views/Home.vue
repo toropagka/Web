@@ -61,7 +61,6 @@
     <!-- Greed section -->
     <div
       v-if="mainSectionState === 'greed'"
-      class="h-full"
       :class="{ 'overflow-auto scroll-style relative': greedPath === 'doitnow', 'h-auto': greedPath === 'projects_children' }"
     >
       <projects
