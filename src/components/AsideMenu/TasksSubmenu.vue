@@ -360,7 +360,6 @@ export default {
       this.$store.state.navigator.submenu.status = false
       // если уже выбран - ничего не делаем
       if (this.isUserSelected(user)) return
-      //
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
