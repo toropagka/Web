@@ -352,9 +352,26 @@ export default {
   },
   mounted () {
     if (!this.currReglament) return
-    localStorage.setItem('lastTab', 'directory')
+
+    this.$store.commit('basic', {
+      key: 'reglamentSource',
+      value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.currReglament.uid }
+    })
 
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
+    const navElem = {
+      name: this.currReglament.name,
+      key: 'greedSource',
+      uid: this.currReglament.uid,
+      global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
+      greedPath: 'reglament_content',
+      value: []
+    }
+
+    this.$store.commit('pushIntoNavStack', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: this.currReglament })
+    this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
 
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     try {
