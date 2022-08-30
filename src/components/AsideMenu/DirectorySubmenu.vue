@@ -3,7 +3,7 @@
     <AsideMenuListSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
       <router-link
-        :selected="{isActive}"
+        v-slot="{isActive}"
         to="/reglaments"
       >
         <AsideMenuListItem
