@@ -10,6 +10,9 @@ import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 
+import Reglaments from '@/components/Reglaments/Reglaments.vue'
+import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -83,12 +86,21 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
-    path: '/reglament/:id',
-    name: 'reglament',
-    component: Home,
-    beforeEnter: ifAuthenticated
+    path: '/reglaments',
+    name: 'reglaments',
+    component: Reglaments,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/reglaments/:id',
+    component: ReglamentContent,
+    name: 'currentReglament',
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {

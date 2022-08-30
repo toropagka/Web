@@ -8,6 +8,11 @@ html
   height: 100%;
   font-family: 'Roboto', sans-serif
 }
+
+body {
+  @apply xl:pl-[292px] h-full;
+}
+
 #app {
   @apply w-screen h-full transition-position xl:w-auto;
 }

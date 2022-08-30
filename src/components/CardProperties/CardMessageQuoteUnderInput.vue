@@ -21,7 +21,7 @@ export default {
           {{ employee?.name }}
         </p>
         <p class="text-[12px] leading-[16px] overflow-hidden text-[#9a9fa6] text-ellipsis whitespace-nowrap">
-          {{ quoteMessage.msg ?? quoteMessage.file.name }}
+          {{ quoteMessage.msg ?? quoteMessage.file_name }}
         </p>
       </div>
     </div>

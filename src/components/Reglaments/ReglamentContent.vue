@@ -36,25 +36,28 @@
         v-if="!showCompleteMessage && !isTesting"
         class="flex justify-end h-[30px]"
       >
-        <ReglamentSmallButton
-          class="flex items-center px-[10px] py-[5px] mr-1"
-          @click="getBack"
+        <router-link
+          to="/reglaments"
         >
-          <svg
-            class="mr-1.5"
-            width="14"
-            height="8"
-            viewBox="0 0 14 8"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <ReglamentSmallButton
+            class="flex items-center px-[10px] py-[5px] mr-1"
           >
-            <path
-              d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
-              fill="#4C4C4D"
-            />
-          </svg>
-          Назад
-        </ReglamentSmallButton>
+            <svg
+              class="mr-1.5"
+              width="14"
+              height="8"
+              viewBox="0 0 14 8"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
+                fill="#4C4C4D"
+              />
+            </svg>
+            Назад
+          </ReglamentSmallButton>
+        </router-link>
         <ReglamentSmallButton
           v-if="canEdit && !showCompleteMessage && !isTesting"
           class="flex items-center px-[10px] py-[5px]"
@@ -102,7 +105,7 @@
       </div>
       <div
         v-if="reglamentEditors.length"
-        class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+        class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
       >
         <span class="font-medium pr-3">Редакторы:</span>
         <EmployeeProfile
@@ -215,6 +218,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEditor'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import ReglamentTest from '@/components/Reglaments/ReglamentTest'
+import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
@@ -226,12 +230,6 @@ export default {
     ReglamentEditLimit,
     ReglamentTestLimit,
     EmployeeProfile
-  },
-  props: {
-    reglament: {
-      type: Object,
-      default: () => ({})
-    }
   },
   data () {
     return {
@@ -247,8 +245,11 @@ export default {
     }
   },
   computed: {
+    reglament () {
+      return this.currReglament
+    },
     currReglament () {
-      return this.$store.state.reglaments.reglaments[this.reglament?.uid]
+      return this.$store.state.reglaments.reglaments[this.$route.params.id]
     },
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
@@ -351,7 +352,10 @@ export default {
   },
   mounted () {
     if (!this.currReglament) return
-    this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
+    localStorage.setItem('lastTab', 'directory')
+
+    this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     try {
       if (!this.isEditing) {

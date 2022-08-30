@@ -68,10 +68,6 @@
         v-if="greedPath === 'new_private_projects'"
         :items="greedSource"
       />
-      <reglaments
-        v-if="greedPath === 'reglaments'"
-        :items="greedSource"
-      />
       <boards
         v-if="greedPath === 'new_private_boards'"
         :boards="greedSource"
@@ -121,7 +117,6 @@ import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
 import Clients from '@/components/Clients/Clients.vue'
-import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import Boards from '@/components/Boards.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
@@ -150,7 +145,6 @@ export default {
     InspectorNotification,
     TasksListNew,
     Projects,
-    Reglaments,
     Clients,
     Boards,
     Doitnow,

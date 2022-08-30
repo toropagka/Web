@@ -257,7 +257,7 @@ export default {
       this.$store.dispatch(SWITCH_TAB, tab)
         .then(() => {
           if (tab?.code === 'doitnow') {
-            this.$router.push(tab.code)
+            this.$router.push({ path: `/${tab.code}` })
           }
         })
     },

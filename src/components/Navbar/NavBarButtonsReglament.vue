@@ -85,7 +85,7 @@ export default {
       })
     },
     сlickCopyLink () {
-      copyText(`${window.location.origin}/reglament/${this.reglamentUid}`, undefined, (error, event) => {
+      copyText(`${window.location.origin}/reglaments/${this.reglamentUid}`, undefined, (error, event) => {
         console.log(error, event)
       })
     }
