@@ -17,6 +17,7 @@ import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: { CardMessageInput },
@@ -62,11 +63,6 @@ export default {
     pad2: function (n) {
       return (n < 10 ? '0' : '') + n
     },
-    uuidv4: function () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
-    },
     _linkify: function (text) {
       return text.replace(/(lt?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
     },
@@ -102,7 +98,7 @@ export default {
       msgtask = this.taskMsg.replaceAll('&', '&amp;')
       msgtask = this.taskMsg.replaceAll('<', '&lt;')
       msgtask = this.taskMsg.replaceAll('>', '&gt;')
-      const uid = this.uuidv4()
+      const uid = uuidv4()
       const data = {
         uid_task: this.selectedTask.uid,
         uid_creator: this.cusers.current_user_uid,

@@ -64,6 +64,7 @@ import CardComponent from '@/components/CardComponent.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 import InspectorContent from '@/components/Inspector/InspectorContent.vue'
 import { computed } from '@vue/reactivity'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -164,14 +165,6 @@ export default {
     cancel () {
       this.confirmCancel('cancel')
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
     },
@@ -193,7 +186,7 @@ export default {
       }
     },
     createTask () {
-      this.delegatedTask.uid = this.uuidv4()
+      this.delegatedTask.uid = uuidv4()
       this.delegatedTask.uid_parent = '00000000-0000-0000-0000-000000000000'
       this.delegatedTask.uid_customer = this.user.current_user_uid
       this.delegatedTask.status = 0
