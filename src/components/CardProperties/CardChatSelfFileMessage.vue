@@ -102,6 +102,7 @@ export default {
       :file-extension="fileExtension"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
+      :is-file-uploading="message.is_uploading"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />
@@ -122,6 +123,7 @@ export default {
       :file-name="correctShortFileMessage"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
+      :is-file-uploading="message.is_uploading"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />

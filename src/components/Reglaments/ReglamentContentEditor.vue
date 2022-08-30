@@ -313,6 +313,7 @@ import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import { NAVIGATOR_REMOVE_REGLAMENT } from '@/store/actions/navigator'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 import ReglamentQuestion from '@/components/Reglaments/ReglamentQuestion'
+import { uuidv4 } from '@/helpers/functions'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import * as REGLAMENTS from '@/store/actions/reglaments'
 import * as QUESTIONS from '@/store/actions/reglament_questions'
@@ -484,25 +485,17 @@ export default {
     updateQuestionName (data) {
       this.$store.commit(REGLAMENTS.REGLAMENT_UPDATE_QUESTION_NAME, data)
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     gotoNode (uid) {
       this.$refs[uid][0].onFocus()
     },
     onAddQuestion () {
       const question = {
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         name: '',
         uid_reglament: this.currReglament.uid
       }
       const answer = {
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         uid_question: question.uid,
         name: '',
         is_right: 0,
@@ -704,6 +697,7 @@ export default {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$router.push('/reglaments')
       })
     },
     pasteEvent (e) {

@@ -66,7 +66,7 @@
     <template
       #content="{ close }"
     >
-      <div class="max-h-[156px] max-w-[300px] overflow-y-scroll">
+      <div class="max-h-[156px] max-w-[300px] overflow-y-scroll scroll-style">
         <div
           v-for="(employee, index) in employeesByEmail"
           :key="index"

@@ -276,6 +276,7 @@ import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import * as SLIDES from '@/store/actions/slides.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -425,14 +426,6 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'employee' })
       this.$store.commit(EMPLOYEE.SELECT_EMPLOYEE, this.$store.state.employees.employees[user.uid])
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     clickAddDep () {
       // ограничение на добавление отдела на аккаунте с истекшей лицензией(не удалять)
       // if (this.user.days_left <= 0) {
@@ -452,7 +445,7 @@ export default {
             0
           ) || 0
         const data = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           uid_parent: '00000000-0000-0000-0000-000000000000',
           name: title,
           collapsed: 0,
