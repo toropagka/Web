@@ -48,7 +48,7 @@ import BoardsSubmenu from '@/components/AsideMenu/BoardsSubmenu.vue'
 import SettingsSubmenu from '@/components/AsideMenu/SettingsSubmenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 
-import AppSkeleton from '@/components/AsideMenu/AppSkeleton.vue'
+import AppSkeleton from '@/AppSkeleton.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
