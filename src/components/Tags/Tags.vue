@@ -79,6 +79,7 @@ import * as TASK from '@/store/actions/tasks'
 import { SELECT_TAG } from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
 import InputValue from '@/components/InputValue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -182,14 +183,6 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: value.children })
       this.$store.commit('basic', { key: 'greedPath', value: 'tags_children' })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     clickAddTag () {
       // если лицензия истекла
       if (Object.keys(this.$store.state.tasks.tags).length >= 3 && this.user.days_left <= 0) {
@@ -211,7 +204,7 @@ export default {
         group: 0,
         show: 0,
         favorite: 0,
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         name: title,
         email_creator: this.user.current_user_email,
         bold: 0
