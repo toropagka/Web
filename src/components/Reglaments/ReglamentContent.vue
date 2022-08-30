@@ -431,4 +431,9 @@ export default {
   border-top: 28px solid white;
   background: #fff;
 }
+
+.ql-editor > * {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 </style>
