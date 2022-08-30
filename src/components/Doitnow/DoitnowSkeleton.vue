@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="bg-white w-[1350px] ml-0 xl:ml-[290px] py-6 px-5 mb-5 rounded-lg flex justify-between h-[450px] animate-pulse">
+    <div class="bg-white w-[85%] ml-0 py-6 px-5 mb-5 rounded-lg flex justify-between h-[450px] animate-pulse">
       <div class="w-5/6 ">
         <div class="flex">
           <hr
