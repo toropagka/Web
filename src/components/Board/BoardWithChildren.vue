@@ -1,30 +1,32 @@
 <template>
-  <NavBar />
-  <div
-    class="w-full h-full pl-[292px] flex flex-col"
-    :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
-  >
-    <BoardModalBoxBoardsLimit
-      v-if="showBoardsLimit"
-      @cancel="showBoardsLimit = false"
-      @ok="showBoardsLimit = false"
-    />
-    <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <template
-        v-for="(board, pindex) in boards"
-        :key="pindex"
-      >
-        <BoardBlocItem
-          :board="board"
-          @click.stop="gotoChildren(board)"
-        />
-      </template>
-    </div>
-    <div class="mt-5 h-full min-h-0">
-      <Board
-        :store-cards="storeCards"
-        :board="currentBoard"
+  <div class="h-screen">
+    <NavBar />
+    <div
+      class="w-full h-full pl-[292px] flex flex-col"
+      :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
+    >
+      <BoardModalBoxBoardsLimit
+        v-if="showBoardsLimit"
+        @cancel="showBoardsLimit = false"
+        @ok="showBoardsLimit = false"
       />
+      <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <template
+          v-for="(board, pindex) in boards"
+          :key="pindex"
+        >
+          <BoardBlocItem
+            :board="board"
+            @click.stop="gotoChildren(board)"
+          />
+        </template>
+      </div>
+      <div class="mt-5 h-full min-h-0">
+        <Board
+          :store-cards="storeCards"
+          :board="currentBoard"
+        />
+      </div>
     </div>
   </div>
 </template>
