@@ -357,7 +357,7 @@ export default {
       this.gotoAction('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0', 'Готово к сдаче')
     },
     assigmentsClick (user) {
-      console.log(user.parentID)
+      this.pushToRouter()
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
