@@ -35,8 +35,8 @@ export default {
   },
   methods: {
     gotoReglamentContent () {
+      this.$router.push('/reglaments/' + this.uid)
       this.$store.state.reglaments.returnDoitnow = true
-      this.$router.push('/directory')
       localStorage.setItem('lastTab', 'directory')
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.commit('NAVIGATOR_SUCCESS')
@@ -49,23 +49,7 @@ export default {
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-      const reglament = this.$store.state.reglaments.reglaments[this.uid]
-      this.$store.commit('basic', {
-        key: 'reglamentSource',
-        value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.uid }
-      })
-      const navElem = {
-        name: this.name,
-        key: 'greedSource',
-        uid: this.uid,
-        global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
-        greedPath: 'reglament_content',
-        value: []
-      }
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: reglament })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     }
   }
 }

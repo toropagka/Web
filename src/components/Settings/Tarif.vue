@@ -1,13 +1,3 @@
-<script>
-export default {
-  computed: {
-    user () {
-      return this.$store.state.user?.user
-    }
-  }
-}
-
-</script>
 <template>
   <form class="px-5 text-lg bg-white p-2 rounded pb-[150px]">
     <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
@@ -120,14 +110,32 @@ export default {
     </div>
     <form
       class="mt-[12px] mb-[12px]"
-      action="https://www.leadertask.ru/market"
+      action="https://www.leadertask.ru/alpha"
     >
       <button
         type="submit"
         class="text-[14px] text-[#606061] py-[12px] px-[16px] rounded-[6px] border-[1px] border-[#FF9123]"
       >
-        Продлить лицензию
+        {{ tarifButtonTitle }}
       </button>
     </form>
   </form>
 </template>
+
+<script>
+export default {
+  computed: {
+    user () {
+      return this.$store.state.user?.user
+    },
+    tarifButtonTitle () {
+      if (this.user.tarif === 'trial' || this.user.tarif === 'free') {
+        return 'Купить лицензию'
+      } else {
+        return 'Продлить подписку'
+      }
+    }
+  }
+}
+
+</script>

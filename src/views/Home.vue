@@ -68,10 +68,6 @@
         v-if="greedPath === 'new_private_projects'"
         :items="greedSource"
       />
-      <reglaments
-        v-if="greedPath === 'reglaments'"
-        :items="greedSource"
-      />
       <boards
         v-if="greedPath === 'new_private_boards'"
         :boards="greedSource"
@@ -92,17 +88,9 @@
         v-if="greedPath === 'tags_children'"
         :tags="greedSource"
       />
-      <ProjectWithChildren
-        v-if="greedPath === 'projects_children'"
-        :projects="greedSource"
-      />
       <BoardWithChildren
         v-if="greedPath === 'boards_children'"
         :boards="greedSource"
-      />
-      <ReglamentContent
-        v-if="greedPath === 'reglament_content'"
-        :reglament="greedSource"
       />
       <assignments
         v-if="greedPath === 'new_delegate'"
@@ -125,11 +113,8 @@ import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
 import Clients from '@/components/Clients/Clients.vue'
-import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import Boards from '@/components/Boards.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
-import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
-import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -155,15 +140,12 @@ export default {
     InspectorNotification,
     TasksListNew,
     Projects,
-    Reglaments,
     Clients,
     Boards,
     Doitnow,
     Other,
     TagWithChildren,
-    ProjectWithChildren,
     BoardWithChildren,
-    ReglamentContent,
     Assignments,
     NotificationTasks,
     ModalBox

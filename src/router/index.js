@@ -8,6 +8,9 @@ import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
+import Reglaments from '@/components/Reglaments/Reglaments.vue'
+import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
+import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -73,21 +76,21 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
-    path: '/project/:id',
-    name: 'project',
-    component: Home,
-    beforeEnter: ifAuthenticated
+    path: '/reglaments',
+    name: 'reglaments',
+    component: Reglaments,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
-    path: '/reglament/:id',
-    name: 'reglament',
-    component: Home,
-    beforeEnter: ifAuthenticated
+    path: '/reglaments/:id',
+    component: ReglamentContent,
+    name: 'currentReglament',
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
@@ -176,6 +179,15 @@ const routes = [
     path: '/colors',
     name: 'colors',
     component: Colors,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/project/:project_id',
+    name: 'project',
+    component: ProjectWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
   {

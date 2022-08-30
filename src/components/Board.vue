@@ -55,6 +55,8 @@
       @changePosition="onChangeAllCardsPosition"
     />
     <draggable
+      v-dragscroll.y="true"
+      v-dragscroll:nochilddrag
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
       :list="storeCards"
       ghost-class="ghost-column"
@@ -72,6 +74,7 @@
       <template #item="{element: column}">
         <div
           v-if="isColumnVisible(column)"
+          data-dragscroll
           class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
@@ -81,20 +84,47 @@
             class="px-1 flex justify-between items-start"
             :class="{ 'draggable-column cursor-move': column.CanEditStage }"
           >
-            <BoardInputValue
-              v-if="showRenameColumn && column.UID === selectedColumn.UID"
-              :show="showRenameColumn && column.UID === selectedColumn.UID"
-              :value="selectedColumnName"
-              @cancel="showRenameColumn = false"
-              @save="onRenameColumn"
-            />
-            <p
-              v-else
-              class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
-              :style="{ color: getContrastYIQ(column.Color) }"
+            <div
+              v-if="column.CanEditStage"
+              class="w-full"
             >
-              {{ column.Name }}
-            </p>
+              <BoardInputValue
+                v-if="showRenameColumn && column.UID === selectedColumn.UID"
+                :show="showRenameColumn && column.UID === selectedColumn.UID"
+                :value="selectedColumnName"
+                @cancel="showRenameColumn = false"
+                @save="onRenameColumn"
+              />
+              <p
+                v-else
+                class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
+                :style="{ color: getContrastYIQ(column.Color) }"
+              >
+                {{ column.Name }}
+              </p>
+            </div>
+            <div
+              v-else
+              class="w-full"
+              data-dragscroll
+            >
+              <BoardInputValue
+                v-if="showRenameColumn && column.UID === selectedColumn.UID"
+                data-dragscroll
+                :show="showRenameColumn && column.UID === selectedColumn.UID"
+                :value="selectedColumnName"
+                @cancel="showRenameColumn = false"
+                @save="onRenameColumn"
+              />
+              <p
+                v-else
+                data-dragscroll
+                class="text-[#424242] cursor-default font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
+                :style="{ color: getContrastYIQ(column.Color) }"
+              >
+                {{ column.Name }}
+              </p>
+            </div>
             <!-- Три точки -->
             <div
               v-if="column.CanEditStage"
@@ -166,11 +196,16 @@
           >
             <div
               v-if="getColumnCards(column).length"
+              data-dragscroll
               class="flex items-center justify-between h-[16px]"
             >
-              <PopMenu :disabled="isReadOnlyBoard">
+              <PopMenu
+                data-dragscroll
+                :disabled="isReadOnlyBoard"
+              >
                 <p
                   class="text-[12px] leading-[14px]"
+                  data-dragscroll
                   :class="{ 'hover:underline cursor-pointer': !isReadOnlyBoard}"
                 >
                   Карточек: {{ getColumnCards(column).length }}
@@ -271,6 +306,7 @@
           <div
             v-if="column.AddCard && !isFiltered"
             class="mt-2 h-[40px]"
+            data-dragscroll
           >
             <BoardInputValue
               v-if="showAddCard && column.UID === selectedColumn.UID"
@@ -280,11 +316,15 @@
             />
             <button
               v-else
+              data-dragscroll
               class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.Color) }"
               @click="addCard(column)"
             >
-              <p class="text-sm">
+              <p
+                class="text-sm"
+                data-dragscroll
+              >
                 Добавить карточку
               </p>
               <svg
@@ -353,6 +393,7 @@
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import draggable from 'vuedraggable'
+import { dragscroll } from 'vue-dragscroll'
 import BoardCard from '@/components/Board/BoardCard.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 import BoardModalBoxColor from '@/components/Board/BoardModalBoxColor.vue'
@@ -365,6 +406,9 @@ import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/sto
 import BoardInputValue from './Board/BoardInputValue.vue'
 
 export default {
+  directives: {
+    dragscroll
+  },
   components: {
     PopMenu,
     PopMenuItem,

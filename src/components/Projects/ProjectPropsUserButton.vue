@@ -6,7 +6,10 @@
       class="flex-none border border-[#7e7e80] rounded-[4px] w-[20px] h-[20px] mr-[7px]"
     >
     <div class="grow font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px]">
-      {{ name }}
+      {{ name.length > 23 ?
+        name.substring(0,23) + '...'
+        : name
+      }}
     </div>
     <div class="flex-none">
       <div

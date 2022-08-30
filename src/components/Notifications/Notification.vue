@@ -79,7 +79,7 @@ export default {
                     :fotolink="employees[notification.obj.obj.uid_customer].fotolink"
                     :name="employees[notification.obj.obj.uid_customer].name"
                   />
-                  <p class="text-sm font-semibold text-gray-500">
+                  <p class="text-sm font-semibold text-gray-500 truncate">
                     {{ notification.text }}
                   </p>
                 </div>

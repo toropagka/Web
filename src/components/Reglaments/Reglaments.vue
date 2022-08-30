@@ -60,10 +60,13 @@
             v-for="reglament in reg.items"
             :key="reglament.uid"
           >
-            <ReglamentBlocItem
-              :reglament="reglament"
-              @click.stop="gotoReglamentContent(reglament)"
-            />
+            <router-link
+              :to="'/reglaments/' + reglament.uid"
+            >
+              <ReglamentBlocItem
+                :reglament="reglament"
+              />
+            </router-link>
           </template>
           <ReglamentBlocEmpty
             v-if="!reg.is_my_dep && reg.items.length === 0"
@@ -136,7 +139,7 @@ import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ReglamentAddLimit from '@/components/Reglaments/ReglamentAddLimit.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 
-import * as TASK from '@/store/actions/tasks'
+// import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
 import * as REGLAMENTS from '@/store/actions/reglaments'
 import * as SLIDES from '@/store/actions/slides.js'
@@ -144,6 +147,7 @@ import * as SLIDES from '@/store/actions/slides.js'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { uuidv4 } from '@/helpers/functions'
 import InputValue from '@/components/InputValue'
 
 export default {
@@ -156,12 +160,6 @@ export default {
     ListBlocAdd,
     EmptyTasksListPics
   },
-  props: {
-    items: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       showAddReglament: false,
@@ -172,6 +170,9 @@ export default {
     }
   },
   computed: {
+    items () {
+      return this.$store.getters.sortedNavigator.reglaments?.items
+    },
     isGridView () {
       setLocalStorageItem('isGridView', true)
       return this.$store.state.isGridView
@@ -258,6 +259,19 @@ export default {
       return !this.$store.state.onboarding.visitedModals?.includes('reglaments') && this.$store.state.onboarding.showModals
     }
   },
+  mounted () {
+    localStorage.setItem('lastTab', 'directory')
+    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+    this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+    const navElem = {
+      name: 'Регламенты',
+      key: 'greedSource',
+      greedPath: 'reglaments',
+      value: this.$store.state.navigator.navigator.reglaments?.items
+    }
+    this.$store.commit('updateStackWithInitValue', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
+  },
   created () {
     setLocalStorageItem('isGridView', true)
   },
@@ -267,33 +281,7 @@ export default {
       setLocalStorageItem('isGridView', value)
     },
     gotoReglamentContent (reglament) {
-      this.$store.commit('basic', {
-        key: 'reglamentSource',
-        value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: reglament.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: reglament.name,
-        key: 'greedSource',
-        uid: reglament.uid,
-        global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
-        greedPath: 'reglament_content',
-        value: []
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: reglament })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
-    },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
     },
     clickShowAll () {
       this.$store.state.reglaments.showAll = !this.showAllReglaments
@@ -320,14 +308,14 @@ export default {
           name: title,
           content: '',
           department_uid: departmentUid,
-          uid: this.uuidv4()
+          uid: uuidv4()
         }
 
         this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_REQUEST, reglament).then(() => {
           reglament.needStartEdit = true
           this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_REGLAMENT, reglament)
-          this.gotoReglamentContent(reglament)
+          this.$router.push('/reglaments/' + reglament.uid)
         })
       }
     },

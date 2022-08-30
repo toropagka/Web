@@ -43,10 +43,10 @@ export default {
                   >
                 </div>
                 <div class="ml-3 w-0 flex-1 pt-0.5">
-                  <p class="font-semibold text-gray-800">
+                  <p class="font-semibold text-gray-800 truncate">
                     {{ notification.title }}
                   </p>
-                  <p class="text-sm font-semibold text-gray-500">
+                  <p class="text-sm font-semibold text-gray-500 truncate">
                     {{ notification.text }}
                   </p>
                   <div class="flex items-start mt-3">
@@ -58,7 +58,7 @@ export default {
                       height="40"
                     >
                     <a
-                      class="text-sm font-semibold text-blue-500"
+                      class="text-sm font-semibold text-blue-500 truncate"
                       :href="currentLocation + 'task/' + notification.task.uid"
                     >
                       {{ notification.task.name.length < 150 ? notification.task.name : notification.task.name.substring(0, 149) + '...' }}

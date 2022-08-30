@@ -133,7 +133,7 @@
               <contenteditable
                 v-model="props.node.info.name"
                 tag="div"
-                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[17px]"
+                class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[14px]"
                 :contenteditable="props.node.info._isEditable"
                 placeholder="Введите название задачи"
                 :no-nl="true"
@@ -333,6 +333,7 @@ import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBo
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { uuidv4 } from '@/helpers/functions'
 
 import NavBar from '@/components/NavBar.vue'
 
@@ -732,11 +733,6 @@ export default {
       }
       return data
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
-    },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
     },
@@ -759,7 +755,7 @@ export default {
     handleTaskSource (taskData, uidParent) {
       let data
       if (taskData) {
-        taskData.uid = this.uuidv4()
+        taskData.uid = uuidv4()
         taskData.status = 0
         taskData.uid_parent = uidParent
         taskData.uid_customer = this.user.current_user_uid
@@ -773,7 +769,7 @@ export default {
         data = taskData
       } else {
         data = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           uid_parent: uidParent,
           uid_customer: this.user.current_user_uid,
           uid_project: '00000000-0000-0000-0000-000000000000',
@@ -962,7 +958,7 @@ export default {
       this.orderNewSubtask = this.orderNewSubtask - 1
       const newSubtask = {
         date_create: new Date(),
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         uid_customer: this.user.current_user_uid,
         email_performer: parent.uid_customer === this.user.current_user_uid ? parent.email_performer : '',
         name: '',

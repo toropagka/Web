@@ -16,7 +16,7 @@
     @exitEditMode="isEditing = false"
   />
   <div v-else>
-    <div
+    <!-- <div
       class="flex justify-end h-[30px]"
     >
       <div class="flex justify-center items-center">
@@ -24,7 +24,7 @@
           :reglament-uid="reglament.uid"
         />
       </div>
-    </div>
+    </div> -->
     <div class="flex justify-between items-center mt-4">
       <h1
         v-if="!isTesting"
@@ -36,25 +36,28 @@
         v-if="!showCompleteMessage && !isTesting"
         class="flex justify-end h-[30px]"
       >
-        <ReglamentSmallButton
-          class="flex items-center px-[10px] py-[5px] mr-1"
-          @click="getBack"
+        <router-link
+          to="/reglaments"
         >
-          <svg
-            class="mr-1.5"
-            width="14"
-            height="8"
-            viewBox="0 0 14 8"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <ReglamentSmallButton
+            class="flex items-center px-[10px] py-[5px] mr-1"
           >
-            <path
-              d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
-              fill="#4C4C4D"
-            />
-          </svg>
-          Назад
-        </ReglamentSmallButton>
+            <svg
+              class="mr-1.5"
+              width="14"
+              height="8"
+              viewBox="0 0 14 8"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
+                fill="#4C4C4D"
+              />
+            </svg>
+            Назад
+          </ReglamentSmallButton>
+        </router-link>
         <ReglamentSmallButton
           v-if="canEdit && !showCompleteMessage && !isTesting"
           class="flex items-center px-[10px] py-[5px]"
@@ -102,7 +105,7 @@
       </div>
       <div
         v-if="reglamentEditors.length"
-        class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+        class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
       >
         <span class="font-medium pr-3">Редакторы:</span>
         <EmployeeProfile
@@ -211,27 +214,22 @@ import ReglamentEditLimit from '@/components/Reglaments/ReglamentEditLimit.vue'
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
+// import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEditor'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import ReglamentTest from '@/components/Reglaments/ReglamentTest'
+import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
     ReglamentTest,
     ReglamentContentEditor,
-    NavBarButtonsReglament,
+    // NavBarButtonsReglament,
     QuillEditor,
     ReglamentSmallButton,
     ReglamentEditLimit,
     ReglamentTestLimit,
     EmployeeProfile
-  },
-  props: {
-    reglament: {
-      type: Object,
-      default: () => ({})
-    }
   },
   data () {
     return {
@@ -247,8 +245,11 @@ export default {
     }
   },
   computed: {
+    reglament () {
+      return this.currReglament
+    },
     currReglament () {
-      return this.$store.state.reglaments.reglaments[this.reglament?.uid]
+      return this.$store.state.reglaments.reglaments[this.$route.params.id]
     },
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
@@ -351,7 +352,27 @@ export default {
   },
   mounted () {
     if (!this.currReglament) return
-    this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
+
+    this.$store.commit('basic', {
+      key: 'reglamentSource',
+      value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.currReglament.uid }
+    })
+
+    this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
+    const navElem = {
+      name: this.currReglament.name,
+      key: 'greedSource',
+      uid: this.currReglament.uid,
+      global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
+      greedPath: 'reglament_content',
+      value: []
+    }
+
+    this.$store.commit('pushIntoNavStack', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: this.currReglament })
+    this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
+
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     try {
       if (!this.isEditing) {
@@ -389,6 +410,7 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
       this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+      this.$store.dispatch('popNavStack')
     }
   }
 }
@@ -420,10 +442,15 @@ export default {
   border: none;
 }
 
-.ql-editor:not(.ql-blank) {
+.ql-editor[contenteditable="true"] {
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
   border-top: 28px solid white;
   background: #fff;
+}
+
+.ql-editor > * {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>

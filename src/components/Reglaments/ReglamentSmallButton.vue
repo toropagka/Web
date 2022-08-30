@@ -1,6 +1,8 @@
 <template>
-  <div
-    class="h-[30px] flex items-center gap-[10px] px-[10px] cursor-pointer bg-white hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
+  <button
+    :disabled="disabled"
+    class="h-[30px] flex items-center gap-[10px] px-[10px] bg-white enabled:hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
+    :class="{'cursor-default opacity-[0.5]': disabled}"
   >
     <svg
       v-if="icon === 'edit'"
@@ -49,7 +51,7 @@
       />
     </svg>
     <slot />
-  </div>
+  </button>
 </template>
 
 <script>
@@ -58,6 +60,9 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean
     }
   }
 }

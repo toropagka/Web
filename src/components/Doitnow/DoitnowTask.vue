@@ -44,6 +44,7 @@
             v-linkify:options="{ className: 'text-blue-600', tagName: 'a' }"
             tag="div"
             class="taskName p-0.5 ring-0 outline-none max-w-7xl mt-0.5 ml-1 flex overflow-x-hidden"
+            style="word-break: break-word"
             :contenteditable="task._isEditable"
             placeholder="Введите название задачи"
             :no-nl="false"
@@ -461,6 +462,7 @@
 
 <script>
 import { copyText } from 'vue3-clipboard'
+import { uuidv4 } from '@/helpers/functions'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
@@ -813,7 +815,7 @@ export default {
       const seconds = this.pad2(date.getUTCSeconds())
       const dateCreate = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds
       const msgtask = this._linkify(msg)
-      const uid = this.uuidv4()
+      const uid = uuidv4()
 
       const data = {
         uid_task: this.task.uid,
@@ -1227,11 +1229,6 @@ export default {
         this.$store.commit(TASK.REMOVE_TASK, taskUid)
         this.$store.dispatch('asidePropertiesToggle', false)
       }
-    },
-    uuidv4: function () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
     },
     onAnswerMessage (uid) {
       this.currentAnswerMessageUid = uid
