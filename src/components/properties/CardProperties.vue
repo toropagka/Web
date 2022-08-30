@@ -206,6 +206,7 @@ import MessageSkeleton from '@/components/TaskProperties/MessageSkeleton.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import * as CARD from '@/store/actions/cards'
 import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -297,6 +298,10 @@ export default {
     }
   },
   methods: {
+    isFilePreloadable (fileExtension) {
+      const preloadableFiles = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'mov', 'mp4', 'mp3', 'wav']
+      return preloadableFiles.includes(fileExtension)
+    },
     onPasteEvent (e) {
       const items = (e.clipboardData || e.originalEvent.clipboardData).items
       for (const index in items) {
@@ -355,14 +360,6 @@ export default {
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     changeComment (text) {
       if (!this.selectedCard) return
       const data = { cardUid: this.selectedCard.uid, comment: text }
@@ -374,6 +371,8 @@ export default {
         this.showMessagesLimit = true
         return
       }
+      const uploadingFiles = []
+
       const files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
       for (let i = 0; i < files?.length; i++) {
@@ -387,11 +386,29 @@ export default {
         }
 
         formData.append('files[' + i + ']', file)
+
+        // проверяем если файл не нуждается в прелоуде, тогда добавляем его псевдоданные
+        // чтобы отобразить, что файл / файлы загружаются
+        const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase()
+        if (!this.isFilePreloadable(fileExtension)) {
+          uploadingFiles.push({
+            uid: this.uuidv4(),
+            uid_creator: this.user.current_user_uid,
+            uid_file: this.uuidv4(),
+            date_create: new Date().toISOString(),
+            order: 0,
+            file_name: file.name,
+            file_size: file.size,
+            file_version: 1,
+            is_uploading: true
+          })
+        }
       }
       const data = {
         uid_card: this.selectedCard?.uid,
         name: formData
       }
+      this.$store.commit('addCardMessages', uploadingFiles)
       this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
         if (this.selectedCard) this.selectedCard.has_files = true
         this.scrollDown()
@@ -421,7 +438,7 @@ export default {
       msgcard = msgcard.replaceAll('&', '&amp;')
       msgcard = msgcard.replaceAll('>', '&gt;')
       msgcard = msgcard.replaceAll('<', '&lt;')
-      const uid = this.uuidv4()
+      const uid = uuidv4()
       const data = {
         uid_card: this.selectedCard?.uid,
         uid: uid,

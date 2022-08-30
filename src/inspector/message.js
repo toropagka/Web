@@ -38,7 +38,7 @@ export function getInspectorMessage (type, task) {
     : customer?.name ??
     '[Удаленный сотрудник]'
   const performerName =
-  performer?.name > 30
+  performer?.name.length > 30
     ? performer?.name.substring(0, 30) + '...'
     : performer?.name ??
     '[Удаленный сотрудник]'

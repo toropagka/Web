@@ -311,6 +311,7 @@ import linkify from 'vue-linkify'
 import { maska } from 'maska'
 
 import { shouldAddTaskIntoList } from '@/websync/utils'
+import { uuidv4 } from '@/helpers/functions'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import TaskPropsButtonDots from '@/components/TaskProperties/TaskPropsButtonDots.vue'
 import TaskPropsButtonFocus from '@/components/TaskProperties/TaskPropsButtonFocus.vue'
@@ -457,11 +458,6 @@ export default {
     },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
-    },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
     },
     changeFocus (uid, value) {
       this.$store.dispatch(TASK.CHANGE_TASK_FOCUS, { uid: uid, value: value }).then(
@@ -655,7 +651,7 @@ export default {
       msgtask = msgtask.replaceAll('&', '&amp;')
       msgtask = msgtask.replaceAll('<', '&lt;')
       msgtask = msgtask.replaceAll('>', '&gt;')
-      const uid = this.uuidv4()
+      const uid = uuidv4()
       const data = {
         uid_task: this.selectedTaskUid,
         uid: uid,
