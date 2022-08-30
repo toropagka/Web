@@ -24,6 +24,8 @@
 import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
 import TasksListNew from '@/components/TasksListNew.vue'
 import * as TASK from '@/store/actions/tasks'
+import * as PROJECT from '@/store/actions/projects.js'
+import * as NAVIGATOR from '@/store/actions/navigator.js'
 
 import NavBar from '@/components/NavBar.vue'
 import { uuidv4 } from '@/helpers/functions'
