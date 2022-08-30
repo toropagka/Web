@@ -2,6 +2,7 @@
   <div class="w-full">
     <div
       v-if="!displayModal"
+      class="pt-[30px]"
     >
       <ProjectModalBoxProjectsLimit
         v-if="showProjectsLimit"

@@ -48,10 +48,11 @@ import BoardsSubmenu from '@/components/AsideMenu/BoardsSubmenu.vue'
 import SettingsSubmenu from '@/components/AsideMenu/SettingsSubmenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 
-import AppSkeleton from '@/components/AsideMenu/AppSkeleton.vue'
+import AppSkeleton from '@/AppSkeleton.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_REQUEST } from '@/store/actions/user'
+import { setLocalStorageItem } from '@/store/helpers/functions'
 
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
@@ -111,8 +112,20 @@ export default {
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
     },
+    checkCidParam () {
+      // здесь не использую this.$router, потому что не получилось нормально достать url param
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop)
+      })
+      if (params.cid) {
+        setLocalStorageItem('cid', params.cid)
+      }
+    },
     initApplication () {
       console.clear()
+
+      this.checkCidParam()
+
       const fm = document.createElement('script')
       fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
       fm.onload = () => {

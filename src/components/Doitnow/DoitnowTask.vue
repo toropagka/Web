@@ -44,6 +44,7 @@
             v-linkify:options="{ className: 'text-blue-600', tagName: 'a' }"
             tag="div"
             class="taskName p-0.5 ring-0 outline-none max-w-7xl mt-0.5 ml-1 flex overflow-x-hidden"
+            style="word-break: break-word"
             :contenteditable="task._isEditable"
             placeholder="Введите название задачи"
             :no-nl="false"

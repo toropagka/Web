@@ -67,7 +67,7 @@ export default function processCreate (obj) {
             group: 'top',
             title: 'Новое поручение',
             obj: obj,
-            text: obj.obj.name
+            text: obj.obj.name.length > 25 ? obj.obj.name.substring(0, 25) + '...' : obj.obj.name
           },
           isNotificationSoundOn()
         )

@@ -1,21 +1,8 @@
 <template>
   <NavBar />
   <div
-    class="w-full"
-    :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
+    class="w-full pt-[45px]"
   >
-    <BoardModalBoxRename
-      v-if="showAdd"
-      :show="showAdd"
-      title="Добавить подпроект"
-      @cancel="showAdd = false"
-      @save="onAddNewProject"
-    />
-    <ProjectModalBoxProjectsLimit
-      v-if="showProjectsLimit"
-      @cancel="showProjectsLimit = false"
-      @ok="showProjectsLimit = false"
-    />
     <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <template
         v-for="project in projects"
@@ -26,36 +13,24 @@
           @click.stop="gotoChildren(project)"
         />
       </template>
-      <ListBlocAdd
-        v-if="canAddChild"
-        @click.stop="clickAddProject"
-      />
     </div>
-    <div class="mt-5">
+    <div class="mt-2">
       <TasksListNew class="pt-[0px]" />
     </div>
   </div>
 </template>
 
 <script>
-import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
-import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
-import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import TasksListNew from '@/components/TasksListNew.vue'
 import * as TASK from '@/store/actions/tasks'
-import * as PROJECT from '@/store/actions/projects'
-import * as NAVIGATOR from '@/store/actions/navigator'
 
 import NavBar from '@/components/NavBar.vue'
 import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
-    BoardModalBoxRename,
     ProjectBlocItem,
-    ProjectModalBoxProjectsLimit,
-    ListBlocAdd,
     TasksListNew,
     NavBar
   },
@@ -63,26 +38,6 @@ export default {
     projects: {
       type: Array,
       default: () => []
-    }
-  },
-  data () {
-    return {
-      showAdd: false,
-      showProjectsLimit: false
-
-    }
-  },
-  computed: {
-    currentProject () {
-      const projects = this.$store.state.projects.projects
-      const navStack = this.$store.state.navbar.navStack
-      const currProjectUid = navStack[navStack.length - 1].uid
-      const project = projects[currProjectUid]
-      return project
-    },
-    canAddChild () {
-      const user = this.$store.state.user.user
-      return this.currentProject?.email_creator === user.current_user_email
     }
   },
   methods: {

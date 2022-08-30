@@ -1,14 +1,26 @@
 <template>
   <div>
+    <ModalBoxDelete
+      v-if="showConfirm"
+      title="Удалить регламент"
+      :text="`Вы действительно хотите удалить регламент\n ${
+        greedSource.name.length > 50
+          ? greedSource.name.substring(0, 50) + '...'
+          : greedSource.name
+      }?`"
+      @cancel="showConfirm = false"
+      @yes="removeReglament"
+    />
     <div class="w-full top-[45px] left-0 right-0 z-[6]">
       <div class="top-0 bg-[#f4f5f7] pt-[5px]">
         <div
           class="flex flex-row justify-between items-center"
         >
-          <div class="pt-3 pb-3 pr-3 bg-[#f4f5f7] w-[700px] hover:transition hover:opacity-[0.8]">
+          <div class="pt-3 pb-3 pr-3 bg-[#f4f5f7] w-[600px] hover:transition hover:opacity-[0.8]">
             <input
               v-model="currName"
               type="text"
+              spellcheck="false"
               placeholder="Наименование"
               class="bg-[#f4f5f7] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
             >
@@ -16,7 +28,7 @@
           <div class="flex justify-end gap-[8px] mr-3">
             <ReglamentSmallButton
               v-if="!isTesting"
-              class="flex items-center px-[10px] py-[5px] mr-1"
+              class="flex items-center px-[10px] py-[5px]"
               @click="getBack()"
             >
               <svg
@@ -35,7 +47,28 @@
               Назад
             </ReglamentSmallButton>
             <ReglamentSmallButton
-              :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || saveContentStatus === 0, 'animate-pulse bg-[#E3F4E8]': buttonSaveReglament === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
+              v-if="!isTesting"
+              class="flex items-center bg-[#FFE1E3] px-[10px] py-[5px]"
+              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
+              @click="showConfirm=true"
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.92308 2.64286H8.07692C8.07692 2.3587 7.96346 2.08617 7.7615 1.88524C7.55954 1.68431 7.28562 1.57143 7 1.57143C6.71438 1.57143 6.44046 1.68431 6.2385 1.88524C6.03654 2.08617 5.92308 2.3587 5.92308 2.64286ZM4.84615 2.64286C4.84615 2.07454 5.07308 1.52949 5.477 1.12763C5.88093 0.725765 6.42876 0.5 7 0.5C7.57124 0.5 8.11907 0.725765 8.523 1.12763C8.92692 1.52949 9.15385 2.07454 9.15385 2.64286H13.4615C13.6043 2.64286 13.7413 2.6993 13.8423 2.79976C13.9433 2.90023 14 3.03649 14 3.17857C14 3.32065 13.9433 3.45691 13.8423 3.55738C13.7413 3.65784 13.6043 3.71429 13.4615 3.71429H12.8542L11.5565 13.1836C11.4684 13.8253 11.1497 14.4135 10.6593 14.8394C10.1688 15.2653 9.5399 15.5 8.88892 15.5H5.11108C4.4601 15.5 3.83116 15.2653 3.34072 14.8394C2.85028 14.4135 2.53155 13.8253 2.44354 13.1836L1.14585 3.71429H0.538462C0.395653 3.71429 0.258693 3.65784 0.157712 3.55738C0.0567306 3.45691 0 3.32065 0 3.17857C0 3.03649 0.0567306 2.90023 0.157712 2.79976C0.258693 2.6993 0.395653 2.64286 0.538462 2.64286H4.84615ZM5.92308 6.39286C5.92308 6.25078 5.86635 6.11452 5.76537 6.01405C5.66438 5.91358 5.52742 5.85714 5.38462 5.85714C5.24181 5.85714 5.10485 5.91358 5.00387 6.01405C4.90288 6.11452 4.84615 6.25078 4.84615 6.39286V11.75C4.84615 11.8921 4.90288 12.0283 5.00387 12.1288C5.10485 12.2293 5.24181 12.2857 5.38462 12.2857C5.52742 12.2857 5.66438 12.2293 5.76537 12.1288C5.86635 12.0283 5.92308 11.8921 5.92308 11.75V6.39286ZM8.61539 5.85714C8.75819 5.85714 8.89515 5.91358 8.99614 6.01405C9.09712 6.11452 9.15385 6.25078 9.15385 6.39286V11.75C9.15385 11.8921 9.09712 12.0283 8.99614 12.1288C8.89515 12.2293 8.75819 12.2857 8.61539 12.2857C8.47258 12.2857 8.33562 12.2293 8.23463 12.1288C8.13365 12.0283 8.07692 11.8921 8.07692 11.75V6.39286C8.07692 6.25078 8.13365 6.11452 8.23463 6.01405C8.33562 5.91358 8.47258 5.85714 8.61539 5.85714ZM3.51077 13.0389C3.56362 13.4239 3.75485 13.7768 4.04906 14.0322C4.34328 14.2877 4.72056 14.4285 5.11108 14.4286H8.88892C9.27963 14.4288 9.65717 14.2881 9.95161 14.0326C10.246 13.7771 10.4374 13.4241 10.4903 13.0389L11.7675 3.71429H2.23246L3.51077 13.0389Z"
+                  fill="#7E7E80"
+                />
+              </svg>
+              Удалить
+            </ReglamentSmallButton>
+            <ReglamentSmallButton
+              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
+              :class="{'animate-pulse bg-[#E3F4E8] opacity-[1]': buttonSaveReglament === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
               @click="onSaveReglamentButtonClick"
             >
               <svg
@@ -53,7 +86,7 @@
             </ReglamentSmallButton>
             <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
-              :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || buttonSaveReglament === 0}"
+              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
               @click="setEdit"
             >
               <svg
@@ -75,12 +108,12 @@
         </div>
 
         <div
-          class="flex justify-start gap-[8px] mr-3 leading-[30px] text-[13px] text-[#424242]"
+          class="flex justify-start gap-[8px] mr-3 leading-[30px] text-[13px] text-[#424242] flex-wrap"
         >
           <span class="font-medium">Отдел:</span>
           <PopMenu>
             <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-              <div class="mr-1">
+              <div class="mr-1 shrink-0">
                 {{ currDepTitle }}
               </div>
               <svg
@@ -116,12 +149,12 @@
             </template>
           </PopMenu>
           <div
-            class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+            class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
           >
             <span class="font-medium pr-3">Редакторы:</span>
             <PopMenu v-if="!editorsCanEdit">
               <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-                <span class="mr-1">Добавить редактора</span>
+                <span class="mr-1 shrink-0">Добавить редактора</span>
                 <svg
                   class="mr-3"
                   width="12"
@@ -276,6 +309,8 @@ import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.v
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
+import { NAVIGATOR_REMOVE_REGLAMENT } from '@/store/actions/navigator'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 import ReglamentQuestion from '@/components/Reglaments/ReglamentQuestion'
 import { uuidv4 } from '@/helpers/functions'
@@ -289,6 +324,7 @@ export default {
     QuillEditor,
     ReglamentSmallButton,
     PopMenu,
+    ModalBoxDelete,
     PopMenuItem,
     BoardPropsMenuItemUser,
     ReglamentQuestion,
@@ -306,6 +342,7 @@ export default {
       currEditors: [],
       currName: '',
       currDep: '',
+      showConfirm: false,
       currText: this.$store.state.reglaments.reglaments[this.reglament?.uid].content ?? '',
       saveContentStatus: 1, // 1 - is saved, 2 error, 0 request processing
       buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
@@ -339,6 +376,9 @@ export default {
     },
     user () {
       return this.$store.state.user.user
+    },
+    greedSource () {
+      return this.$store.state.greedSource
     },
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
@@ -551,9 +591,6 @@ export default {
       return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     },
     setEdit () {
-      if (this.buttonDisabled === true || this.buttonSaveReglament === 0) {
-        return
-      }
       const reglament = { ...this.currReglament }
       reglament.content = this.currText
       reglament.name = this.currName.trim()
@@ -622,9 +659,6 @@ export default {
       }
     },
     onSaveReglamentButtonClick () {
-      if (this.buttonDisabled === true || this.saveContentStatus === 0) {
-        return
-      }
       const reglament = { ...this.currReglament }
       reglament.content = this.currText
       reglament.name = this.currName.trim()
@@ -653,6 +687,17 @@ export default {
         }, 5000)
       }).catch(() => {
         this.buttonSaveReglament = 2
+      })
+    },
+    removeReglament () {
+      this.showConfirm = false
+      this.$store.dispatch(REGLAMENTS.DELETE_REGLAMENT_REQUEST, this.greedSource.uid).then(() => {
+        this.$store.dispatch('asidePropertiesToggle', false)
+        this.$store.commit(NAVIGATOR_REMOVE_REGLAMENT, this.greedSource)
+        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+        this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+        this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$router.push('/reglaments')
       })
     },
     pasteEvent (e) {

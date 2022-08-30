@@ -30,7 +30,7 @@ export default {
       type: String,
       default: 'text-blue-600'
     },
-    isFirstOrLastItem: {
+    nonClickableElement: {
       type: Boolean,
       default: false
     },
@@ -68,7 +68,7 @@ export default {
         base.push('lg:flex')
       }
 
-      if (!this.isFirstOrLastItem) {
+      if (!this.nonClickableElement) {
         base.push('cursor-pointer')
       }
 

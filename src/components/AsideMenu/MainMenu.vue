@@ -246,20 +246,15 @@ export default {
     changeTab (tab) {
       if (tab.code === 'doitnow') {
         this.$store.state.navigator.submenu.status = false
+        if (this.$router.currentRoute.value.name !== 'doitnow') {
+          this.$router.push('/doitnow')
+        }
       } else {
         this.$store.state.navigator.submenu.status = true
       }
       if (this.lastTab !== tab.code) {
-        this.switchTab(tab)
+        this.$store.dispatch(SWITCH_TAB, tab)
       }
-    },
-    switchTab (tab) {
-      this.$store.dispatch(SWITCH_TAB, tab)
-        .then(() => {
-          if (tab?.code === 'doitnow') {
-            this.$router.push(tab.code)
-          }
-        })
     },
     checkOnWhichTab (item) {
       const lastNavStack = this.navStack[this.navStack.length - 1]
