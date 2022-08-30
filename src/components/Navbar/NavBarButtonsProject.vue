@@ -1,5 +1,17 @@
 <template>
   <div class="flex items-center gap-[10px]">
+    <BoardModalBoxRename
+      v-if="showAdd"
+      :show="showAdd"
+      title="Добавить подпроект"
+      @cancel="showAdd = false"
+      @save="onAddNewProject"
+    />
+    <ProjectModalBoxProjectsLimit
+      v-if="showProjectsLimit"
+      @cancel="showProjectsLimit = false"
+      @ok="showProjectsLimit = false"
+    />
     <BoardModalBoxDelete
       v-if="showDeleteProject"
       title="Удалить проект"
@@ -21,6 +33,13 @@
           @click="clickEditProject"
         >
           Свойства проекта
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="canAddChild"
+          icon="add"
+          @click="clickAddProject"
+        >
+          Создать подпроект
         </PopMenuItem>
         <PopMenuItem
           v-if="canDelete"
@@ -45,6 +64,11 @@ import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PopMenuDivider from '@/components/Common/PopMenuDivider.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
+import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
+import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
+import * as PROJECT from '@/store/actions/projects'
+import * as NAVIGATOR from '@/store/actions/navigator'
+import * as TASK from '@/store/actions/tasks'
 
 import {
   ADD_PROJECT_TO_FAVORITE,
@@ -58,6 +82,8 @@ export default {
   components: {
     NavBarButtonIcon,
     PopMenu,
+    BoardModalBoxRename,
+    ProjectModalBoxProjectsLimit,
     PopMenuItem,
     PopMenuDivider,
     BoardModalBoxDelete
@@ -75,7 +101,9 @@ export default {
   emits: ['popNavBar', 'toggleCompletedTasks'],
   data () {
     return {
-      showDeleteProject: false
+      showDeleteProject: false,
+      showAdd: false,
+      showProjectsLimit: false
     }
   },
   computed: {
@@ -87,6 +115,17 @@ export default {
     },
     project () {
       return this.$store.state.projects.projects[this.projectUid]
+    },
+    currentProject () {
+      const projects = this.$store.state.projects.projects
+      const navStack = this.$store.state.navbar.navStack
+      const currProjectUid = navStack[navStack.length - 1].uid
+      const project = projects[currProjectUid]
+      return project
+    },
+    canAddChild () {
+      const user = this.$store.state.user.user
+      return this.currentProject?.email_creator === user.current_user_email
     },
     canDelete () {
       return this.project?.email_creator === this.$store.state.user?.user?.current_user_email
@@ -105,6 +144,92 @@ export default {
     },
     clickDeleteProject () {
       this.showDeleteProject = true
+    },
+    clickAddProject () {
+      const user = this.$store.state.user.user
+      // если лицензия истекла
+      if (Object.keys(this.$store.state.projects.projects).length >= 10 && user.days_left <= 0) {
+        this.showProjectsLimit = true
+        return
+      }
+      this.showAdd = true
+    },
+    uuidv4 () {
+      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+        (
+          c ^
+          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+        ).toString(16)
+      )
+    },
+    gotoChildren (project) {
+      this.$store.dispatch('asidePropertiesToggle', false)
+
+      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
+      this.$store.commit('basic', {
+        key: 'taskListSource',
+        value: { uid: project.global_property_uid, param: project.uid }
+      })
+
+      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
+      const navElem = {
+        name: project.name,
+        key: 'greedSource',
+        uid: project.uid,
+        global_property_uid: project.global_property_uid,
+        greedPath: 'projects_children',
+        value: project.children
+      }
+
+      this.$store.commit('pushIntoNavStack', navElem)
+      this.$store.commit('basic', { key: 'greedSource', value: project.children })
+      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
+    },
+    onAddNewProject (name) {
+      this.showAdd = false
+      const title = name.trim()
+      if (title) {
+        // добавляем новый проект и переходим в него
+        const maxOrder =
+          this.currentProject?.children?.reduce(
+            (maxOrder, child) =>
+              child.order > maxOrder ? child.order : maxOrder,
+            0
+          ) ?? 0
+        const user = this.$store.state.user.user
+
+        const project = {
+          uid: this.uuidv4(),
+          name: title,
+          uid_parent: this.currentProject?.uid ?? '00000000-0000-0000-0000-000000000000',
+          email_creator: user.current_user_email,
+          order: maxOrder + 1,
+          comment: '',
+          plugin: '',
+          collapsed: 0,
+          isclosed: 0,
+          group: 0,
+          show: 1,
+          favorite: 0,
+          quiet: 0,
+          members: [user.current_user_email],
+          children: [],
+          bold: 0
+        }
+        console.log(`create project uid: ${project.uid}`, project)
+
+        this.$store.dispatch(PROJECT.CREATE_PROJECT_REQUEST, project).then((res) => {
+          // заполняем недостающие параметры
+          project.global_property_uid = '431a3531-a77a-45c1-8035-f0bf75c32641'
+          project.order = res.data.order
+          project.color = '#A998B6'
+
+          this.$store.commit(PROJECT.PUSH_PROJECT, [project])
+          this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
+          this.gotoChildren(project)
+        })
+      }
     },
     onDeleteProject () {
       this.showDeleteProject = false
