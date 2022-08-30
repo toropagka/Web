@@ -86,11 +86,11 @@ export default {
     menuToggleMobile () {
       this.$store.dispatch('asideMobileToggle')
     },
-    isFirstOrLastItem (index) {
-      return index === this.navStack.length - 1 || index === 0
+    nonClickableElement (index) {
+      return index === this.navStack.length - 1
     },
     clickOnGridCard (item, index) {
-      if (index === this.navStack.length - 1 || index === 0) {
+      if (index === this.navStack.length - 1) {
         return
       }
       this.$store.dispatch('gotoNavStackItem', index)
@@ -171,7 +171,7 @@ export default {
         v-for="(navItem, index) in navStack"
         :key="index"
         class="px-1 group"
-        :is-first-or-last-item="isFirstOrLastItem(index)"
+        :non-clickable-element="nonClickableElement(index)"
       >
         <span
           v-if="navItem && navItem.name"
