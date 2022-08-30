@@ -704,6 +704,7 @@ export default {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$router.push('/reglaments')
       })
     },
     pasteEvent (e) {
