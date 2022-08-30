@@ -105,7 +105,7 @@
       </div>
       <div
         v-if="reglamentEditors.length"
-        class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+        class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
       >
         <span class="font-medium pr-3">Редакторы:</span>
         <EmployeeProfile
