@@ -236,11 +236,11 @@ export default {
       this.changeTab(elemToPush)
     },
     shouldShowInspector () {
-      // window.ym(89796698, 'reachGoal', 'inspector')
-      // if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
-      //   this.showFreeModal = true
-      //   return
-      // }
+      window.ym(89796698, 'reachGoal', 'inspector')
+      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
+        this.showFreeModal = true
+        return
+      }
       this.showInspector = true
     },
     changeTab (tab) {
