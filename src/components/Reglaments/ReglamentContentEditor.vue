@@ -108,12 +108,12 @@
         </div>
 
         <div
-          class="flex justify-start gap-[8px] mr-3 leading-[30px] text-[13px] text-[#424242]"
+          class="flex justify-start gap-[8px] mr-3 leading-[30px] text-[13px] text-[#424242] flex-wrap"
         >
           <span class="font-medium">Отдел:</span>
           <PopMenu>
             <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-              <div class="mr-1">
+              <div class="mr-1 shrink-0">
                 {{ currDepTitle }}
               </div>
               <svg
@@ -149,12 +149,12 @@
             </template>
           </PopMenu>
           <div
-            class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+            class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
           >
             <span class="font-medium pr-3">Редакторы:</span>
             <PopMenu v-if="!editorsCanEdit">
               <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-                <span class="mr-1">Добавить редактора</span>
+                <span class="mr-1 shrink-0">Добавить редактора</span>
                 <svg
                   class="mr-3"
                   width="12"
@@ -704,6 +704,7 @@ export default {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$router.push('/reglaments')
       })
     },
     pasteEvent (e) {

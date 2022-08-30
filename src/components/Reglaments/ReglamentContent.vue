@@ -105,7 +105,7 @@
       </div>
       <div
         v-if="reglamentEditors.length"
-        class="flex justify-start leading-[30px] text-[13px] text-[#424242]"
+        class="flex justify-start leading-[30px] text-[13px] text-[#424242] flex-wrap"
       >
         <span class="font-medium pr-3">Редакторы:</span>
         <EmployeeProfile
@@ -352,9 +352,26 @@ export default {
   },
   mounted () {
     if (!this.currReglament) return
-    localStorage.setItem('lastTab', 'directory')
+
+    this.$store.commit('basic', {
+      key: 'reglamentSource',
+      value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.currReglament.uid }
+    })
 
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+
+    const navElem = {
+      name: this.currReglament.name,
+      key: 'greedSource',
+      uid: this.currReglament.uid,
+      global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
+      greedPath: 'reglament_content',
+      value: []
+    }
+
+    this.$store.commit('pushIntoNavStack', navElem)
+    this.$store.commit('basic', { key: 'greedSource', value: this.currReglament })
+    this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
 
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     try {
@@ -430,5 +447,10 @@ export default {
   border-top-right-radius: 28px;
   border-top: 28px solid white;
   background: #fff;
+}
+
+.ql-editor > * {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>

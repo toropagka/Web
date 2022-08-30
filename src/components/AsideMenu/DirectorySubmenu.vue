@@ -166,7 +166,6 @@ export default {
   },
   methods: {
     // Выношу логику по скрытию меню из selectSubMenuItem
-    // TODO: Стоит перенести в MainMenu, а здесь просто делать emit
     closeMenu () {
       this.$store.state.navigator.submenu.status = false
 

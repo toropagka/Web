@@ -249,7 +249,7 @@ export default {
       return this.form.password.trim().length > 7
     },
     validateName () {
-      return this.form.username.length > 0
+      return this.form.username.trim().length > 0
     },
     validatePhone () {
       return !(this.form.phone.length > 0 && this.form.phone.length < 18)

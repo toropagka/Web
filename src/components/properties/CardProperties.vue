@@ -297,6 +297,10 @@ export default {
     }
   },
   methods: {
+    isFilePreloadable (fileExtension) {
+      const preloadableFiles = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'mov', 'mp4', 'mp3', 'wav']
+      return preloadableFiles.includes(fileExtension)
+    },
     onPasteEvent (e) {
       const items = (e.clipboardData || e.originalEvent.clipboardData).items
       for (const index in items) {
@@ -374,6 +378,8 @@ export default {
         this.showMessagesLimit = true
         return
       }
+      const uploadingFiles = []
+
       const files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
       for (let i = 0; i < files?.length; i++) {
@@ -387,11 +393,29 @@ export default {
         }
 
         formData.append('files[' + i + ']', file)
+
+        // проверяем если файл не нуждается в прелоуде, тогда добавляем его псевдоданные
+        // чтобы отобразить, что файл / файлы загружаются
+        const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase()
+        if (!this.isFilePreloadable(fileExtension)) {
+          uploadingFiles.push({
+            uid: this.uuidv4(),
+            uid_creator: this.user.current_user_uid,
+            uid_file: this.uuidv4(),
+            date_create: new Date().toISOString(),
+            order: 0,
+            file_name: file.name,
+            file_size: file.size,
+            file_version: 1,
+            is_uploading: true
+          })
+        }
       }
       const data = {
         uid_card: this.selectedCard?.uid,
         name: formData
       }
+      this.$store.commit('addCardMessages', uploadingFiles)
       this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
         if (this.selectedCard) this.selectedCard.has_files = true
         this.scrollDown()

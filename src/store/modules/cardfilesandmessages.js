@@ -121,6 +121,8 @@ const mutations = {
     state.status = 'loading'
   },
   [CARD_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, resp) => {
+    // удаляем псевдо файлы, которые отображались как загружаемые, мутируем сам массив
+    state.messages = state.messages.filter((message) => !message.is_uploading)
     state.messages = state.messages.concat(resp.data.success)
   },
   [CARD_FILES_AND_MESSAGES.MESSAGES_SUCCESS]: (state, resp) => {
@@ -165,6 +167,9 @@ const mutations = {
         state.messages.splice(i, 1)
       }
     }
+  },
+  addCardMessages (state, messagesArray) {
+    state.messages = state.messages.concat(messagesArray)
   }
 }
 

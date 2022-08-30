@@ -84,6 +84,9 @@ const routes = [
     beforeEnter: shouldRedirectToLogin
   },
   {
+    meta: {
+      layout: Home
+    },
     path: '/reglaments/:id',
     component: ReglamentContent,
     name: 'currentReglament',
