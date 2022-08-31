@@ -109,7 +109,7 @@ const routes = [
   {
     meta: {},
     path: '/tasks/in-focus',
-    name: 'tasksInWork',
+    name: 'tasksInFocus',
     component: TasksInFocus,
     beforeEnter: shouldRedirectToLogin
   },
