@@ -373,6 +373,7 @@ export default {
     this.$store.commit('basic', { key: 'greedSource', value: this.currReglament })
     this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
 
+    this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     try {
       if (!this.isEditing) {

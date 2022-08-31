@@ -1,6 +1,6 @@
 <template>
   <div class="mb-[45px]">
-    <h3 class="text-[#4C4C4D] font-bold text-[19px] leading-[25px] text-center mb-[25px]">
+    <h3 class="text-[#4C4C4D] font-bold text-[19px] leading-[25px] text-center mb-[25px] break-words">
       {{ question.name }}
     </h3>
     <label
@@ -8,8 +8,9 @@
       :key="answer.uid"
       class="answer flex justify-between items-center rounded-[8px] px-[16px] py-[20px] bg-[#F4F5F7] mb-[10px]"
     >
-
-      {{ answer.name }}
+      <div class="w-[500px] break-words">
+        {{ answer.name }}
+      </div>
       <input
         :name="`answers-${question.uid}`"
         :type="answerType"
