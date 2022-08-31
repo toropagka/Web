@@ -86,7 +86,7 @@ export default {
     },
     selectAnotherBoard (uid) {
       const navElemRoot = {
-        name: 'Проекты',
+        name: 'Доски',
         key: 'greedSource',
         greedPath: 'new_private_boards',
         value: this.$store.state.navigator.navigator.new_private_boards
@@ -95,7 +95,7 @@ export default {
       this.currentBoard = this.$store.state.boards.boards[uid]
 
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_boards' })
       this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_boards })
 
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.currentBoard.uid)
