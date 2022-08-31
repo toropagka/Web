@@ -251,6 +251,7 @@ import UsernameRename from '@/components/Settings/UsernameRename.vue'
 import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 import UploadAvatar from '@/components/UploadAvatar'
+import * as SLIDES from '@/store/actions/slides.js'
 
 export default {
   components: {
@@ -312,6 +313,14 @@ export default {
       this.$store.state.navigator.lastTab = 'doitnow'
       localStorage.setItem('lastTab', 'doitnow')
       this.$router.push('/doitnow')
+      this.startSlides()
+    },
+    startSlides () {
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addAvatar', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'delegateTasks', visible: true })
     },
     changeUserPhoto (event) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']

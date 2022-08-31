@@ -106,26 +106,28 @@
           </svg>
         </AsideMenuListItem>
       </router-link>
-      <AsideMenuListItem
-        :selected="isInWorkSelected"
-        title="В работе"
-        @click="gotoInWork"
-      >
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 30 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+      <router-link to="/tasks/in-work">
+        <AsideMenuListItem
+          :selected="isInWorkSelected"
+          title="В работе"
+          @click="closeMenu"
         >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M8.46116 22.6199L21.893 14.865L8.46116 7.1101L8.46116 22.6199ZM22.9465 16.6897C24.3512 15.8787 24.3512 13.8513 22.9465 13.0403L9.51464 5.28542C8.11 4.47445 6.3542 5.48817 6.3542 7.1101V22.6199C6.3542 24.2418 8.11 25.2555 9.51464 24.4446L22.9465 16.6897Z"
-            fill="currentColor"
-          />
-        </svg>
-      </AsideMenuListItem>
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.46116 22.6199L21.893 14.865L8.46116 7.1101L8.46116 22.6199ZM22.9465 16.6897C24.3512 15.8787 24.3512 13.8513 22.9465 13.0403L9.51464 5.28542C8.11 4.47445 6.3542 5.48817 6.3542 7.1101V22.6199C6.3542 24.2418 8.11 25.2555 9.51464 24.4446L22.9465 16.6897Z"
+              fill="currentColor"
+            />
+          </svg>
+        </AsideMenuListItem>
+      </router-link>
       <AsideMenuListItem
         :selected="isFocusSelected"
         title="Задачи в фокусе"
@@ -352,9 +354,6 @@ export default {
     },
     gotoUnsorted () {
       this.gotoAction('5183b619-3968-4c3a-8d87-3190cfaab014', 'Неразобранные')
-    },
-    gotoUnread () {
-      this.gotoAction('fa042915-a3d2-469c-bd5a-708cf0339b89', 'Непрочитанные')
     },
     gotoInWork () {
       this.gotoAction('2a5cae4b-e877-4339-8ca1-bd61426864ec', 'В работе')
