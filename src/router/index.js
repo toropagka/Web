@@ -17,6 +17,7 @@ import TasksToday from '@/components/TasksList/TasksToday.vue'
 import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
+import TasksInWork from '@/components/TasksList/TasksInWork'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -94,6 +95,12 @@ const routes = [
     path: '/tasks/unread',
     name: 'tasksUnread',
     component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    path: '/tasks/in-work',
+    name: 'tasksInWork',
+    component: TasksInWork,
     beforeEnter: shouldRedirectToLogin
   },
   {
