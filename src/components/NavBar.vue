@@ -87,10 +87,10 @@ export default {
       this.$store.dispatch('asideMobileToggle')
     },
     nonClickableElement (index) {
-      return index === this.navStack.length - 1
+      return index === this.navStack.length - 1 || index === 0
     },
     clickOnGridCard (item, index) {
-      if (index === this.navStack.length - 1) {
+      if (index === this.navStack.length - 1 || index === 0) {
         return
       }
       this.$store.dispatch('gotoNavStackItem', index)
