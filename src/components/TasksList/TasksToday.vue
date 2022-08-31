@@ -19,11 +19,6 @@ export default {
       date: new Date()
     }
   },
-  computed: {
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    }
-  },
   mounted () {
     if (this.isPropertiesMobileExpanded) {
       this.$store.dispatch('asidePropertiesToggle', false)
