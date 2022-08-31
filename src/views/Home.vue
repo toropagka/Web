@@ -61,7 +61,6 @@
     <!-- Greed section -->
     <div
       v-if="mainSectionState === 'greed'"
-      class="h-full"
       :class="{ 'overflow-auto scroll-style relative': greedPath === 'doitnow', 'h-auto': greedPath === 'projects_children' }"
     >
       <projects
@@ -88,10 +87,6 @@
         v-if="greedPath === 'tags_children'"
         :tags="greedSource"
       />
-      <BoardWithChildren
-        v-if="greedPath === 'boards_children'"
-        :boards="greedSource"
-      />
       <assignments
         v-if="greedPath === 'new_delegate'"
         :assignments="greedSource"
@@ -114,7 +109,6 @@ import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
 import Clients from '@/components/Clients/Clients.vue'
 import Boards from '@/components/Boards.vue'
-import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -145,7 +139,6 @@ export default {
     Doitnow,
     Other,
     TagWithChildren,
-    BoardWithChildren,
     Assignments,
     NotificationTasks,
     ModalBox

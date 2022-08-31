@@ -8,6 +8,8 @@ import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
+import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+
 import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
@@ -104,15 +106,6 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
-    },
-    path: '/board/:id',
-    name: 'board',
-    component: Home,
-    beforeEnter: ifAuthenticated
-  },
-  {
-    meta: {
       title: 'Task file'
     },
     path: '/taskfile/:id',
@@ -127,6 +120,15 @@ const routes = [
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id',
+    name: 'board',
+    component: BoardWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
   {

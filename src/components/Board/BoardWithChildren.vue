@@ -1,30 +1,32 @@
 <template>
-  <NavBar />
-  <div
-    class="w-full h-full flex flex-col"
-    :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
-  >
-    <BoardModalBoxBoardsLimit
-      v-if="showBoardsLimit"
-      @cancel="showBoardsLimit = false"
-      @ok="showBoardsLimit = false"
-    />
-    <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <template
-        v-for="(board, pindex) in boards"
-        :key="pindex"
-      >
-        <BoardBlocItem
-          :board="board"
-          @click.stop="gotoChildren(board)"
-        />
-      </template>
-    </div>
-    <div class="mt-5 h-full min-h-0">
-      <Board
-        :store-cards="storeCards"
-        :board="currentBoard"
+  <div class="h-screen">
+    <NavBar />
+    <div
+      class="w-full h-full flex flex-col"
+      :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
+    >
+      <BoardModalBoxBoardsLimit
+        v-if="showBoardsLimit"
+        @cancel="showBoardsLimit = false"
+        @ok="showBoardsLimit = false"
       />
+      <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <template
+          v-for="(board, pindex) in boards"
+          :key="pindex"
+        >
+          <BoardBlocItem
+            :board="board"
+            @click.stop="selectAnotherBoard(board.uid)"
+          />
+        </template>
+      </div>
+      <div class="mt-5 h-full min-h-0">
+        <Board
+          :store-cards="storeCards"
+          :board="currentBoard"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -52,20 +54,27 @@ export default {
   data () {
     return {
       showAddBoard: false,
-      showBoardsLimit: false
+      showBoardsLimit: false,
+      currentBoard: {}
     }
   },
   computed: {
-    currentBoard () {
-      const boards = this.$store.state.boards.boards
-      const navStack = this.$store.state.navbar.navStack
-      const currBoardUid = navStack[navStack.length - 1].uid
-      const board = boards[currBoardUid]
-      return board
-    },
     storeCards () {
       return this.$store.state.cards.cards
     }
+  },
+  created () {
+    this.$watch(
+      () => this.$route.params,
+      (toParams) => {
+        if (this.$route.name === 'board') {
+          this.selectAnotherBoard(toParams.board_id)
+        }
+      }
+    )
+  },
+  mounted () {
+    this.selectAnotherBoard(this.$route.params.board_id)
   },
   methods: {
     print (val) {
@@ -73,27 +82,39 @@ export default {
     },
     canAddChild () {
       const user = this.$store.state.user.user
-      return this.board?.email_creator === user.current_user_email
+      return this.currentBoard?.email_creator === user.current_user_email
     },
-    gotoChildren (board) {
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
+    selectAnotherBoard (uid) {
+      const navElemRoot = {
+        name: 'Проекты',
+        key: 'greedSource',
+        greedPath: 'new_private_boards',
+        value: this.$store.state.navigator.navigator.new_private_boards
+      }
+      this.$store.commit('updateStackWithInitValue', navElemRoot)
+      this.currentBoard = this.$store.state.boards.boards[uid]
+
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
+      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
+      this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_boards })
+
+      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.currentBoard.uid)
       this.$store.commit('basic', {
         key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
+        value: { uid: this.currentBoard.global_property_uid, param: this.currentBoard.uid }
       })
-      // store.commit(TASK.CLEAN_UP_LOADED_TASKS)
 
       const navElem = {
-        name: board.name,
+        name: this.currentBoard.name,
         key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
+        uid: this.currentBoard.uid,
+        global_property_uid: this.currentBoard.global_property_uid,
         greedPath: 'boards_children',
-        value: board.children
+        value: this.currentBoard.children
       }
 
       this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
+      this.$store.commit('basic', { key: 'greedSource', value: this.currentBoard.children })
       this.$store.commit('basic', {
         key: 'greedPath',
         value: 'boards_children'
