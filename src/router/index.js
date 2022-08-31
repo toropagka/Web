@@ -16,6 +16,7 @@ import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import TasksToday from '@/components/TasksList/TasksToday.vue'
 import TasksReady from '@/components/TasksList/TasksReady.vue'
 import TasksUnread from '@/components/TasksList/TasksUnread.vue'
+import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
 
 import Account from '@/components/Settings/Account.vue'
 import Tarif from '@/components/Settings/Tarif.vue'
@@ -23,6 +24,7 @@ import Options from '@/components/Settings/Options.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
+import TasksInFocus from '@/components/TasksList/TasksInFocus'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -132,9 +134,25 @@ const routes = [
   },
   {
     meta: {},
+    path: '/tasks/in-focus',
+    name: 'tasksInWork',
+    component: TasksInFocus,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
     path: '/tasks/ready',
     name: 'tasksReady',
     component: TasksReady,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/overdue',
+    name: 'tasksOverdue',
+    component: TasksOverdue,
     beforeEnter: shouldRedirectToLogin
   },
   {

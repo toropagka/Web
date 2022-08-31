@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       date: new Date(),
-      uid: '2a5cae4b-e877-4339-8ca1-bd61426864ec'
+      uid: '6fc44cc6-9d45-4052-917e-25b1189ab141'
     }
   },
   computed: {
@@ -36,7 +36,7 @@ export default {
     if (UID_TO_ACTION[this.uid]) {
       this.$store.dispatch(UID_TO_ACTION[this.uid])
       const navElem = {
-        name: 'В работе',
+        name: 'Задачи в фокусе',
         key: 'taskListSource',
         value: { uid: this.uid, param: new Date(this.date) },
         typeVal: new Date(this.date),
