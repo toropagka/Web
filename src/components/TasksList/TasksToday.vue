@@ -19,6 +19,14 @@ export default {
       date: new Date()
     }
   },
+  computed: {
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    }
+  },
   mounted () {
     if (this.isPropertiesMobileExpanded) {
       this.$store.dispatch('asidePropertiesToggle', false)

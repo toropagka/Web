@@ -14,6 +14,7 @@ import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import TasksToday from '@/components/TasksList/TasksToday.vue'
+import TasksReady from '@/components/TasksList/TasksReady.vue'
 import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -94,6 +95,13 @@ const routes = [
     path: '/tasks/unread',
     name: 'tasksUnread',
     component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/ready',
+    name: 'tasksReady',
+    components: TasksReady,
     beforeEnter: shouldRedirectToLogin
   },
   {
