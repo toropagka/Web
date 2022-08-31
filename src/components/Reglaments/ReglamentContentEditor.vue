@@ -820,9 +820,7 @@ export default {
         const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
         if (index !== -1) reglaments.items[index] = reglament
         this.buttonDisabled = true
-        setTimeout(() => {
-          this.buttonDisabled = false
-        }, 5000)
+        this.buttonDisabled = false
       }).catch(() => {
         this.buttonSaveReglament = 2
       })
