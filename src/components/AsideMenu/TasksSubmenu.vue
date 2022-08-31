@@ -110,7 +110,7 @@
         <AsideMenuListItem
           :selected="isInWorkSelected"
           title="В работе"
-          @click="gotoInWork"
+          @click="closeMenu"
         >
           <svg
             width="30"
