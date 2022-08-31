@@ -177,19 +177,19 @@
           </svg>
         </AsideMenuListItem>
       </router-link>
-      <template v-if="delegate[0].items.length">
-        <AsideMenuListTitle>
-          Поручено мной
-        </AsideMenuListTitle>
-        <template
-          v-for="userDelegate in delegate[0].items"
-          :key="userDelegate.uid"
-        >
-          <router-link :to="'/tasks/delegate-by-me/' + userDelegate.uid">
+      <router-link to="/tasks/delegate-by-me">
+        <template v-if="delegate[0].items.length">
+          <AsideMenuListTitle>
+            Поручено мной
+          </AsideMenuListTitle>
+          <template
+            v-for="userDelegate in delegate[0].items"
+            :key="userDelegate.uid"
+          >
             <AsideMenuListItem
               :selected="isUserSelected(userDelegate)"
               :title="userDelegate.name"
-              @click="closeMenu"
+              @click="assigmentsClick(userDelegate)"
             >
               <img
                 :src="userDelegate.fotolink"
@@ -199,23 +199,23 @@
                 class="rounded-[6px] border-2 border-green-500"
               >
             </AsideMenuListItem>
-          </router-link>
+          </template>
         </template>
-      </template>
+      </router-link>
 
-      <template v-if="delegate[1].items.length">
-        <AsideMenuListTitle>
-          Поручено мне
-        </AsideMenuListTitle>
-        <template
-          v-for="userDelegate in delegate[1].items"
-          :key="userDelegate.uid"
-        >
-          <router-link :to="'/tasks/delegate-to-me/' + userDelegate.uid">
+      <router-link to="/tasks/delegate-to-me">
+        <template v-if="delegate[1].items.length">
+          <AsideMenuListTitle>
+            Поручено мне
+          </AsideMenuListTitle>
+          <template
+            v-for="userDelegate in delegate[1].items"
+            :key="userDelegate.uid"
+          >
             <AsideMenuListItem
               :selected="isUserSelected(userDelegate)"
               :title="userDelegate.name"
-              @click="closeMenu"
+              @click="assigmentsClick(userDelegate)"
             >
               <img
                 :src="userDelegate.fotolink"
@@ -225,9 +225,9 @@
                 class="rounded-[6px] border-2 border-red-500"
               >
             </AsideMenuListItem>
-          </router-link>
+          </template>
         </template>
-      </template>
+      </router-link>
     </div>
   </div>
 </template>
@@ -381,6 +381,34 @@ export default {
     },
     gotoReady () {
       this.gotoAction('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0', 'Готово к сдаче')
+    },
+    assigmentsClick (user) {
+      this.pushToRouter()
+      this.$store.state.navigator.submenu.status = false
+      // если уже выбран - ничего не делаем
+      if (this.isUserSelected(user)) return
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
+      if (this.isAsideMobileExpanded) {
+        this.$store.dispatch('asideMobileToggle', false)
+      }
+
+      const action = UID_TO_ACTION[user.parentID]
+      if (!action) {
+        console.error(`assigmentsClick - ${user.email} > UID_TO_ACTION[${user.parentID}] is null!!!`)
+        return
+      }
+      this.$store.dispatch(action, user.email)
+      const navElem = {
+        name: user.name,
+        key: 'taskListSource',
+        value: { uid: user.parentID, param: user.email }
+      }
+      this.$store.commit('updateStackWithInitValue', navElem)
+      this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     closeMenu () {
       this.$store.state.navigator.submenu.status = false

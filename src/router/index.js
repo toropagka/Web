@@ -27,6 +27,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
+import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -104,6 +105,24 @@ const routes = [
     path: '/tasks/unread',
     name: 'tasksUnread',
     component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/delegate-to-me/:employee_uid',
+    name: 'tasksDelegateToMe',
+    component: TasksDelegates,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/delegate-by-me/:employee_uid',
+    name: 'tasksDelegateByMe',
+    component: TasksDelegates,
     beforeEnter: shouldRedirectToLogin
   },
   {
