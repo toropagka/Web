@@ -249,7 +249,7 @@ export default {
       return this.form.password.trim().length > 7
     },
     validateName () {
-      return this.form.username.trim().length > 0
+      return this.form.username.trim().length > 2
     },
     validatePhone () {
       return !(this.form.phone.length > 0 && this.form.phone.length < 18)
@@ -261,7 +261,7 @@ export default {
       return (!this.form.username && this.form.usernameTouched) || (!this.form.password && this.form.passwordTouched)
     },
     allFieldsAreValid () {
-      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.validatePhone && this.form.username.length > 0
+      return !this.ifSpaceInPassword && !this.ifEmptyFields && this.validatePassword && this.validatePhone && this.validateName
     }
   },
   methods: {
@@ -313,7 +313,11 @@ export default {
     submit () {
       if (this.showValues.showLoginInputsValue) {
         this.login()
-      } else if (this.showValues.showRegisterInputsValue && this.form.password.length > 7 && this.form.email.length > 2) {
+      } else if (this.showValues.showRegisterInputsValue) {
+        this.validateAndShowMessage()
+        if (this.form.showError) {
+          return
+        }
         this.register()
       }
     },
@@ -413,7 +417,7 @@ export default {
         this.form.errorMessage = 'Длина пароля не может быть меньше 8 символов'
       } else if (!this.validateName && this.form.usernameTouched) {
         this.form.showError = true
-        this.form.errorMessage = 'Поле "имя" не может быть пустым'
+        this.form.errorMessage = 'Длина имени не может быть меньше 3 символов'
       } else if (!this.validatePhone && this.form.phoneTouched) {
         this.form.showError = true
         this.form.errorMessage = 'Некорректный номер телефона'
