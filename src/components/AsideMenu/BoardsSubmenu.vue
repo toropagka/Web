@@ -83,6 +83,7 @@ import AsideMenuListAdd from '@/components/AsideMenu/AsideMenuListAdd.vue'
 import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
 import BoardsSubmenuItem from '@/components/AsideMenu/BoardsSubmenuItem.vue'
 import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -141,14 +142,6 @@ export default {
       }
       this.showAddBoard = true
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     onAddNewBoard (name) {
       this.showAddBoard = false
       const title = name.trim()
@@ -163,7 +156,7 @@ export default {
         const members = {}
         members[this.user.current_user_uid] = 1
         const board = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: title,
           uid_parent: '00000000-0000-0000-0000-000000000000',
           email_creator: this.user.current_user_email,

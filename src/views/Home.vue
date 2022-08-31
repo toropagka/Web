@@ -87,14 +87,6 @@
         v-if="greedPath === 'tags_children'"
         :tags="greedSource"
       />
-      <ProjectWithChildren
-        v-if="greedPath === 'projects_children'"
-        :projects="greedSource"
-      />
-      <ReglamentContent
-        v-if="greedPath === 'reglament_content'"
-        :reglament="greedSource"
-      />
       <assignments
         v-if="greedPath === 'new_delegate'"
         :assignments="greedSource"
@@ -117,8 +109,6 @@ import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
 import Clients from '@/components/Clients/Clients.vue'
 import Boards from '@/components/Boards.vue'
-import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
-import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -149,8 +139,6 @@ export default {
     Doitnow,
     Other,
     TagWithChildren,
-    ProjectWithChildren,
-    ReglamentContent,
     Assignments,
     NotificationTasks,
     ModalBox

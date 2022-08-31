@@ -67,24 +67,6 @@
               Удалить
             </ReglamentSmallButton>
             <ReglamentSmallButton
-              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
-              :class="{'animate-pulse bg-[#E3F4E8] opacity-[1]': buttonSaveReglament === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
-              @click="onSaveReglamentButtonClick"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.6727 6.17275L13.8273 3.32725C13.696 3.196 13.535 3.09975 13.36 3.04725V3H3.56C3.25025 3 3 3.25025 3 3.56V16.44C3 16.7498 3.25025 17 3.56 17H16.44C16.7498 17 17 16.7498 17 16.44V6.96375C17 6.66625 16.8827 6.38275 16.6727 6.17275ZM7.76 4.26H12.24V6.08H7.76V4.26ZM15.74 15.74H4.26V4.26H6.64V6.64C6.64 6.94975 6.89025 7.2 7.2 7.2H12.8C13.1097 7.2 13.36 6.94975 13.36 6.64V4.6415L15.74 7.0215V15.74ZM10 8.775C8.60875 8.775 7.48 9.90375 7.48 11.295C7.48 12.6862 8.60875 13.815 10 13.815C11.3912 13.815 12.52 12.6862 12.52 11.295C12.52 9.90375 11.3912 8.775 10 8.775ZM10 12.695C9.2265 12.695 8.6 12.0685 8.6 11.295C8.6 10.5215 9.2265 9.895 10 9.895C10.7735 9.895 11.4 10.5215 11.4 11.295C11.4 12.0685 10.7735 12.695 10 12.695Z"
-                  fill="#4C4C4D"
-                />
-              </svg>
-            </ReglamentSmallButton>
-            <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
               :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
               @click="setEdit"
@@ -198,10 +180,171 @@
         <QuillEditor
           v-model:content="currText"
           content-type="html"
-          :toolbar="'full'"
+          toolbar="#my-toolbar"
           class="h-auto mb-5 bg-white"
           @paste="pasteEvent"
-        />
+        >
+          <template #toolbar>
+            <div id="my-toolbar">
+              <span class="ql-formats">
+                <button class="ql-bold" />
+                <button class="ql-italic" />
+                <button class="ql-underline" />
+                <button class="ql-strike" />
+              </span>
+
+              <span class="ql-formats">
+                <button class="ql-blockquote" />
+                <button class="ql-code-block" />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-header"
+                  value="1"
+                />
+                <button
+                  class="ql-header"
+                  value="2"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-list"
+                  value="ordered"
+                />
+                <button
+                  class="ql-list"
+                  value="bullet"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-script"
+                  value="sub"
+                />
+                <button
+                  class="ql-script"
+                  value="super"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-indent"
+                  value="-1"
+                />
+                <button
+                  class="ql-indent"
+                  value="+1"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-direction"
+                  value="rtl"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <span
+                  class="ql-size"
+                />
+                <select class="ql-size">
+                  <option value="small" />
+                  <option selected="selected" />
+                  <option value="large" />
+                  <option value="huge" />
+                </select>
+              </span>
+
+              <span class="ql-formats">
+                <span
+                  class="ql-header"
+                />
+                <select class="ql-header">
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                  <option value="4" />
+                  <option value="5" />
+                  <option value="6" />
+                  <option selected="selected" />
+                </select>
+              </span>
+
+              <span class="ql-formats">
+                <span
+                  class="ql-color"
+                />
+                <select class="ql-color" />
+                <span
+                  class="ql-background"
+                />
+                <select class="ql-background" />
+              </span>
+
+              <span class="ql-formats">
+                <span
+                  class="ql-font"
+                />
+                <select class="ql-font" />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-direction"
+                  value="rtl"
+                />
+              </span>
+
+              <span class="ql-formats">
+                <span
+                  class="ql-align"
+                />
+                <select class="ql-align" />
+              </span>
+
+              <span class="ql-formats">
+                <button
+                  class="ql-link"
+                />
+                <button
+                  class="ql-video"
+                />
+                <button
+                  class="ql-image"
+                />
+              </span>
+              <span class="ql-formats">
+                <button
+                  class="ql-clean"
+                />
+                <button
+                  :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
+                  :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
+                  @click="onSaveReglamentButtonClick"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 1 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.6727 6.17275L13.8273 3.32725C13.696 3.196 13.535 3.09975 13.36 3.04725V3H3.56C3.25025 3 3 3.25025 3 3.56V16.44C3 16.7498 3.25025 17 3.56 17H16.44C16.7498 17 17 16.7498 17 16.44V6.96375C17 6.66625 16.8827 6.38275 16.6727 6.17275ZM7.76 4.26H12.24V6.08H7.76V4.26ZM15.74 15.74H4.26V4.26H6.64V6.64C6.64 6.94975 6.89025 7.2 7.2 7.2H12.8C13.1097 7.2 13.36 6.94975 13.36 6.64V4.6415L15.74 7.0215V15.74ZM10 8.775C8.60875 8.775 7.48 9.90375 7.48 11.295C7.48 12.6862 8.60875 13.815 10 13.815C11.3912 13.815 12.52 12.6862 12.52 11.295C12.52 9.90375 11.3912 8.775 10 8.775ZM10 12.695C9.2265 12.695 8.6 12.0685 8.6 11.295C8.6 10.5215 9.2265 9.895 10 9.895C10.7735 9.895 11.4 10.5215 11.4 11.295C11.4 12.0685 10.7735 12.695 10 12.695Z"
+                      fill="#4C4C4D"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </div>
+          </template>
+        </QuillEditor>
       </div>
       <hr class="border-[1px] mr-10 ml-10">
       <div
@@ -313,6 +456,7 @@ import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import { NAVIGATOR_REMOVE_REGLAMENT } from '@/store/actions/navigator'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 import ReglamentQuestion from '@/components/Reglaments/ReglamentQuestion'
+import { uuidv4 } from '@/helpers/functions'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import * as REGLAMENTS from '@/store/actions/reglaments'
 import * as QUESTIONS from '@/store/actions/reglament_questions'
@@ -484,25 +628,17 @@ export default {
     updateQuestionName (data) {
       this.$store.commit(REGLAMENTS.REGLAMENT_UPDATE_QUESTION_NAME, data)
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     gotoNode (uid) {
       this.$refs[uid][0].onFocus()
     },
     onAddQuestion () {
       const question = {
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         name: '',
         uid_reglament: this.currReglament.uid
       }
       const answer = {
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         uid_question: question.uid,
         name: '',
         is_right: 0,
@@ -704,6 +840,7 @@ export default {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$router.push('/reglaments')
       })
     },
     pasteEvent (e) {

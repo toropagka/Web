@@ -167,6 +167,7 @@
             :key="userDelegate.uid"
           >
             <AsideMenuListItem
+              :selected="isUserSelected(userDelegate)"
               :title="userDelegate.name"
               @click="assigmentsClick(userDelegate)"
             >
@@ -212,17 +213,8 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
-    user () {
-      return this.$store.state.user.user
-    },
-    storeNavigator () {
-      return this.$store.getters.sortedNavigator
-    },
     delegate () {
-      return this.storeNavigator.new_delegate
+      return this.$store.getters.sortedNavigator.new_delegate
     },
     lastNavStack () {
       return this.$store.getters.lastNavStackElement
@@ -254,6 +246,15 @@ export default {
       localStorage.setItem('lastTab', 'tasks')
       this.$router.push('/tasks')
     },
+    isUserSelected (user) {
+      if (
+        this.lastNavStack?.value?.uid === user.parentID &&
+        this.lastNavStack?.value?.param === user.email
+      ) {
+        return true
+      }
+      return false
+    },
     isActionSelected (uid) {
       return this.lastNavStack?.value?.uid === uid
     },
@@ -270,12 +271,6 @@ export default {
       }
       return false
     },
-    dateToLabelFormat (calendarDate) {
-      const day = calendarDate.getDate()
-      const month = calendarDate.toLocaleString('default', { month: 'short' })
-      const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
-      return day + ' ' + month + ', ' + weekday
-    },
     gotoToDate (date) {
       this.pushToRouter()
       this.$store.state.navigator.submenu.status = false
@@ -290,8 +285,12 @@ export default {
       }
       //
       this.$store.dispatch(TASK.TASKS_REQUEST, new Date(date))
+      const day = date.getDate()
+      const month = date.toLocaleString('default', { month: 'short' })
+      const weekday = date.toLocaleString('default', { weekday: 'short' })
+      const dateLabelFormat = day + ' ' + month + ', ' + weekday
       const navElem = {
-        name: this.dateToLabelFormat(date),
+        name: dateLabelFormat,
         key: 'taskListSource',
         value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(date) },
         typeVal: new Date(date),
@@ -357,14 +356,20 @@ export default {
       this.gotoAction('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0', 'Готово к сдаче')
     },
     assigmentsClick (user) {
-      console.log(user.parentID)
+      this.pushToRouter()
+      this.$store.state.navigator.submenu.status = false
+      // если уже выбран - ничего не делаем
+      if (this.isUserSelected(user)) return
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
+      }
+      if (this.isAsideMobileExpanded) {
+        this.$store.dispatch('asideMobileToggle', false)
       }
 
       const action = UID_TO_ACTION[user.parentID]
       if (!action) {
-        console.error('UID_TO_ACTION in undefined', user.parentID)
+        console.error(`assigmentsClick - ${user.email} > UID_TO_ACTION[${user.parentID}] is null!!!`)
         return
       }
       this.$store.dispatch(action, user.email)
@@ -377,9 +382,6 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: user.parentID, param: user.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-      this.$store.state.navbar.lastSelectedAsideTab = user.uid
-
-      this.$store.state.navigator.submenu.status = false
     }
   }
 }

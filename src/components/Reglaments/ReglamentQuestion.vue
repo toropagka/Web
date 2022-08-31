@@ -133,6 +133,8 @@
 <script>
 import ReglamentAnswer from './ReglamentAnswer.vue'
 import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
+import { uuidv4 } from '@/helpers/functions'
+
 export default {
   components: {
     ReglamentAnswer,
@@ -192,7 +194,7 @@ export default {
     onAddAnswer () {
       const data = {
         name: '',
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         uid_question: this.question.uid,
         is_right: false,
         needToCreate: true,
@@ -229,14 +231,6 @@ export default {
           return
         }
       }
-    },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
     },
     onDeleteAnswer (uid) {
       this.$emit('deleteAnswer', uid)
