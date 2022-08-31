@@ -143,7 +143,7 @@ export default {
   },
   mounted: function () {
     this.$nextTick(() => {
-      document.getElementById('check_0').focus()
+      document.getElementById('check_0')?.focus()
     })
   },
   methods: {
@@ -166,12 +166,12 @@ export default {
       if (!index && index !== 0) {
         this.renderedChecklist.checklist.push({ checked: false, text: '' })
         this.$nextTick(() => {
-          document.getElementById('check_' + (this.renderedChecklist.checklist.length - 1)).focus()
+          document.getElementById('check_' + (this.renderedChecklist.checklist.length - 1))?.focus()
         })
       } else {
         this.renderedChecklist.checklist.splice(index + 1, 0, { checked: false, text: '' })
         this.$nextTick(() => {
-          document.getElementById('check_' + (index + 1)).focus()
+          document.getElementById('check_' + (index + 1))?.focus()
         })
       }
     },
