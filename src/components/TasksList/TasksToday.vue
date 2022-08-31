@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mr-3">
     <TasksListNew />
-    <PropertiesRight />
+    <properties-right />
   </div>
 </template>
 
