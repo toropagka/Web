@@ -97,6 +97,7 @@ import { CREATE_COLOR_REQUEST, SELECT_COLOR } from '@/store/actions/colors'
 import gridView from '@/icons/grid-view.js'
 import listView from '@/icons/list-view.js'
 import InputValue from '@/components/InputValue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -165,14 +166,6 @@ export default {
     //
   },
   methods: {
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     addColor (text) {
       const user = this.$store.state.user.user
       // если лицензия истекла
@@ -204,7 +197,7 @@ export default {
         order: 0,
         default: 0,
         email_creator: this.user.current_user_email,
-        uid: this.uuidv4(),
+        uid: uuidv4(),
         name: name,
         bold: 0,
         parentID: 'ed8039ae-f3de-4369-8f32-829d401056e9'

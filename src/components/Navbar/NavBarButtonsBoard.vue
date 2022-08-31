@@ -79,11 +79,6 @@
         >
           Удалить доску
         </PopMenuItem>
-        <PopMenuItem
-          @click="favoriteToggle"
-        >
-          {{ !isFavorite ? 'Добавить в избранное' : 'Удалить из избранного' }}
-        </PopMenuItem>
       </template>
     </PopMenu>
   </div>
@@ -102,6 +97,7 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 import * as CARD from '@/store/actions/cards'
 
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -155,9 +151,6 @@ export default {
     showOnlyMyCreatedCards () {
       return this.$store.state.boards.showOnlyMyCreatedCards
     },
-    isFavorite () {
-      return this.board?.favorite
-    },
     isFilterSet () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWhereIAmResponsible || this.showArchive || this.showOnlyCardsWithNoResponsible
     }
@@ -197,7 +190,7 @@ export default {
         const members = {}
         members[user.current_user_uid] = 1
         const board = {
-          uid: this.uuidv4(),
+          uid: uuidv4(),
           name: title,
           uid_parent: this.board.uid,
           email_creator: user.current_user_email,
@@ -248,14 +241,6 @@ export default {
         value: 'boards_children'
       })
     },
-    uuidv4 () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      )
-    },
     onDeleteBoard () {
       this.showDeleteBoard = false
       //
@@ -287,19 +272,6 @@ export default {
     },
     clickBoardFilterClear () {
       this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
-    },
-    favoriteToggle () {
-      if (!this.isFavorite) {
-        this.$store.dispatch(BOARD.ADD_BOARD_TO_FAVORITE, this.board)
-          .then(res => {
-            this.board.favorite = res.data.favorite
-          })
-      } else {
-        this.$store.dispatch(BOARD.REMOVE_BOARD_FROM_FAVORITE, this.board)
-          .then(res => {
-            this.board.favorite = res.data.favorite
-          })
-      }
     }
   }
 }
