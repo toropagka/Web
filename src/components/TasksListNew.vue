@@ -1130,9 +1130,8 @@ export default {
               restoredTasksArray[item.id] = item
             }
           })
-          this.$store.dispatch(TASK.REMOVE_TASK, task.uid).then(() => {
-            this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          })
+          this.$store.commit(TASK.REMOVE_TASK, task.uid)
+          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: restoredTasksArray }).then(data => {
             if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
