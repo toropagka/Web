@@ -26,6 +26,7 @@ import AccKarma from '@/components/AccKarma.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
+import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -166,6 +167,13 @@ const routes = [
     path: '/tasks/ready',
     name: 'tasksReady',
     component: TasksReady,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/unsorted',
+    name: 'taskUnsorted',
+    component: TaskUnsorted,
     beforeEnter: shouldRedirectToLogin
   },
   {
