@@ -351,9 +351,6 @@ export default {
     gotoUnsorted () {
       this.gotoAction('5183b619-3968-4c3a-8d87-3190cfaab014', 'Неразобранные')
     },
-    gotoUnread () {
-      this.gotoAction('fa042915-a3d2-469c-bd5a-708cf0339b89', 'Непрочитанные')
-    },
     gotoInWork () {
       this.gotoAction('2a5cae4b-e877-4339-8ca1-bd61426864ec', 'В работе')
     },

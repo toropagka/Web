@@ -27,7 +27,6 @@ export default {
     }
   },
   mounted () {
-    this.pushToRouter()
     this.$store.state.navigator.submenu.status = false
     // если уже выбран - ничего не делаем
     if (this.isActionSelected(this.uid)) return
@@ -57,10 +56,6 @@ export default {
     }
   },
   methods: {
-    pushToRouter () {
-      localStorage.setItem('lastTab', 'tasks')
-      this.$router.push('/tasks')
-    },
     isActionSelected (uid) {
       return this.lastNavStack?.value?.uid === uid
     }
