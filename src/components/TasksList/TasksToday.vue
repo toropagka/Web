@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mr-3">
     <TasksListNew />
-    <PropertiesRight />
+    <properties-right />
   </div>
 </template>
 
@@ -17,11 +17,6 @@ export default {
   data () {
     return {
       date: new Date()
-    }
-  },
-  computed: {
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
     }
   },
   mounted () {
