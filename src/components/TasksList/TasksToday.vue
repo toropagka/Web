@@ -19,6 +19,14 @@ export default {
       date: new Date()
     }
   },
+  computed: {
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
+    },
+    isAsideMobileExpanded () {
+      return this.$store.state.isAsideMobileExpanded
+    }
+  },
   mounted () {
     this.$store.dispatch('TASKS_REQUEST', new Date(this.date))
     const day = this.date.getDate()

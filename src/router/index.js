@@ -14,10 +14,13 @@ import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
 import TasksToday from '@/components/TasksList/TasksToday.vue'
+import TasksReady from '@/components/TasksList/TasksReady.vue'
 import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
+import TasksInWork from '@/components/TasksList/TasksInWork'
+import TasksInFocus from '@/components/TasksList/TasksInFocus'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -95,6 +98,27 @@ const routes = [
     path: '/tasks/unread',
     name: 'tasksUnread',
     component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/in-work',
+    name: 'tasksInWork',
+    component: TasksInWork,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/in-focus',
+    name: 'tasksInWork',
+    component: TasksInFocus,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/ready',
+    name: 'tasksReady',
+    component: TasksReady,
     beforeEnter: shouldRedirectToLogin
   },
   {
