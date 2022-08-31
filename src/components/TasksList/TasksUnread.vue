@@ -27,23 +27,18 @@ export default {
     }
   },
   mounted () {
-    this.$store.state.navigator.submenu.status = false
-    // если уже выбран - ничего не делаем
-    if (this.isActionSelected(this.uid)) return
-    //
     if (this.isPropertiesMobileExpanded) {
       this.$store.dispatch('asidePropertiesToggle', false)
     }
     if (this.isAsideMobileExpanded) {
       this.$store.dispatch('asideMobileToggle', false)
     }
-    //
     if (UID_TO_ACTION[this.uid]) {
       this.$store.dispatch(UID_TO_ACTION[this.uid])
       const navElem = {
         name: 'Непрочитанные',
         key: 'taskListSource',
-        value: { uid: this.uid, param: new Date() },
+        value: { uid: this.uid, param: new Date(this.date) },
         typeVal: new Date(),
         type: 'date'
       }
@@ -53,11 +48,6 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     } else {
       console.error(`gotoAction - ${'Непрочитанные'} > UID_TO_ACTION[${this.uid}] is null!!!`)
-    }
-  },
-  methods: {
-    isActionSelected (uid) {
-      return this.lastNavStack?.value?.uid === uid
     }
   }
 }
