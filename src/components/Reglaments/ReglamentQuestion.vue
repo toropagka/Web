@@ -47,7 +47,7 @@
           <div
             :ref="question.uid + 'input'"
             placeholder="Текст вопроса"
-            class="font-[500] text-[14px] mx-4 mt-4 leading-6 min-h-[60px]"
+            class="font-[500] text-[14px] mx-4 mt-4 leading-6 min-h-[60px] break-words"
             :contenteditable="isEditing && canEdit"
             @blur="changeQuestionName($event)"
             @keydown.enter.exact.prevent="$emit('addQuestion')"

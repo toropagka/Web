@@ -1,13 +1,18 @@
 <template>
-  <TasksListNew />
+  <div>
+    <TasksListNew />
+    <PropertiesRight />
+  </div>
 </template>
 
 <script>
 import TasksListNew from '../TasksListNew.vue'
+import PropertiesRight from '../PropertiesRight.vue'
 
 export default {
   components: {
-    TasksListNew
+    TasksListNew,
+    PropertiesRight
   },
   data () {
     return {

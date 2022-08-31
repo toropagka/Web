@@ -14,7 +14,7 @@
     <div
       :ref="answer.uid + 'input'"
       :placeholder="answerPlaceholder(answer)"
-      class="font-[500] text-[14px] px-4 pt-4 leading-6 min-h-[60px]"
+      class="font-[500] text-[14px] px-4 pt-4 leading-6 min-h-[60px] break-words"
       :class="{'cursor-editing': isEditing, 'invalid': answer.invalid }"
       :contenteditable="isEditing"
       @blur="false"
