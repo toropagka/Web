@@ -70,9 +70,6 @@ export default {
     isAccountSelected () {
       return this.$store.state.navigator.currentSettingsTab === 'account'
     },
-    isTarifSelected () {
-      return this.$store.state.navigator.currentSettingsTab === 'tarif'
-    },
     isKarmaSelected () {
       return this.$store.state.navigator.currentSettingsTab === 'karma'
     }
@@ -87,9 +84,6 @@ export default {
     },
     gotoAccount () {
       this.gotoSettingsTab('account', 'Аккаунт', '9d3ba501-c173-462d-9b5f-0db97c06a026')
-    },
-    gotoTarif () {
-      this.gotoSettingsTab('tarif', 'Тариф', '0853812c-cf1c-4037-b2b6-b7020cb68105')
     },
     gotoKarma () {
       this.gotoSettingsTab('karma', 'Карма', '5cda53e7-f859-4bac-b76c-4ad330a65a9a')
