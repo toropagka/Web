@@ -1020,58 +1020,59 @@ export default {
         })
       }
     },
-    nodeDragEnd (node) {
-      console.log(node)
-      if (this.storeTasks[node.dragged.node.id]) {
-        // change order in children
-        if (this.storeTasks[node.dragged.node.id].parent) {
-          const parent = this.storeTasks[this.storeTasks[node.dragged.node.id].parent]
-          if (parent?.children?.length >= 1) {
-            for (let i = 0; i < parent.children.length; i++) {
-              if (parent.children[i] === node.dragged.node.id) {
-                if (i === 0) {
-                  if (this.storeTasks[parent.children[i + 1]]?.info) {
-                    this.storeTasks[parent.children[i]].info.order_new = this.storeTasks[parent.children[i + 1]].info.order_new - 0.1
-                  } else {
-                    this.storeTasks[parent.children[i]].info.order_new = 1
-                  }
-                } else if (i > 0 && i !== parent.children.length - 1) {
-                  if (this.storeTasks[parent.children[i + 1]]?.info) {
-                    this.storeTasks[parent.children[i]].info.order_new = (this.storeTasks[parent.children[i - 1]].info.order_new + this.storeTasks[parent.children[i + 1]].info.order_new) / 2
-                  } else {
-                    this.storeTasks[parent.children[i]].info.order_new = 1
-                  }
-                } else {
-                  this.storeTasks[parent.children[i]].info.order_new = this.storeTasks[parent.children[i - 1]].info.order_new + 0.1
-                }
-              }
+    changeOrder (pool, taskUid) {
+      for (let i = 0; i < pool.length; i++) {
+        if (pool[i] === taskUid) {
+          if (i === 0 && this.storeTasks[taskUid]?.info) {
+            if (this.storeTasks[pool[i + 1]].info.order_new > 0) {
+              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
+            } else {
+              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new + 0.1
             }
-          }
-        } else {
-          // change order in root
-          if (this.newConfig.roots.length >= 1) {
-            for (let i = 0; i < this.newConfig.roots.length; i++) {
-              if (this.newConfig.roots[i] === node.dragged.node.id) {
-                if (i === 0 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
-                  this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i + 1]].info.order_new - 0.1
-                } else if (i > 0 && i !== this.newConfig.roots.length - 1 && this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
-                  this.storeTasks[this.newConfig.roots[i]].info.order_new = (this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + this.storeTasks[this.newConfig.roots[i + 1]].info.order_new) / 2
-                } else {
-                  if (this.storeTasks[this.newConfig.roots[i + 1]]?.info) {
-                    this.storeTasks[this.newConfig.roots[i]].info.order_new = this.storeTasks[this.newConfig.roots[i - 1]].info.order_new + 0.1
-                  }
-                }
+          } else if (i > 0 && i !== pool.length - 1 && this.storeTasks[pool[i + 1]]?.info) {
+            if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
+              this.storeTasks[pool[i]].info.order_new =
+              (this.storeTasks[pool[i - 1]].info.order_new + this.storeTasks[pool[i + 1]].info.order_new) / 2
+            } else {
+              this.storeTasks[pool[i]].info.order_new =
+              (this.storeTasks[pool[i - 1]].info.order_new - this.storeTasks[pool[i + 1]].info.order_new) / 2
+            }
+          } else {
+            if (this.storeTasks[pool[i + 1]]?.info) {
+              if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
+                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
+              } else {
+                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new - 0.1
               }
             }
           }
         }
       }
+    },
+    nodeDragEnd (node) {
+      // do nothing if there is no task
+      if (!this.storeTasks[node.dragged.node.id]) {
+        return
+      }
+
+      if (this.storeTasks[node.dragged.node.id].parent) {
+        const parent = this.storeTasks[this.storeTasks[node.dragged.node.id].parent]
+        if (parent?.children?.length >= 1) {
+          this.changeOrder(parent.children, node.dragged.node.id)
+        }
+      } else {
+        if (this.newConfig.roots.length >= 1) {
+          this.changeOrder(this.newConfig.roots, node.dragged.node.id)
+        }
+      }
+
       let parentUid
       for (const elem in this.storeTasks) {
         if (this.storeTasks[elem].children.includes(node.dragged.node.id)) {
           parentUid = elem
         }
       }
+
       this.storeTasks[node.dragged.node.id].parent = parentUid ?? '00000000-0000-0000-0000-000000000000'
       this.storeTasks[node.dragged.node.id].info.uid_parent = parentUid ?? '00000000-0000-0000-0000-000000000000'
       this.$store.state.tasks.selectedTask = this.storeTasks[node.dragged.node.id].info
