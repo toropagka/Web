@@ -1,6 +1,8 @@
 import store from '@/store/index.js'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
+import * as NAVIGATOR from '@/store/actions/navigator'
+import router from '@/router'
 
 export function updateBoard (obj) {
   const board = obj.obj
@@ -22,5 +24,13 @@ export function updateBoard (obj) {
         cards: cards
       }
     })
+  }
+}
+
+export function removeBoard (obj) {
+  store.commit(NAVIGATOR.NAVIGATOR_REMOVE_BOARD, obj)
+  // Переносим на роут doitnow, если находились в доске, когда нас удалили из доступа к ней
+  if (router.currentRoute.value.fullPath === `/board/${obj.uid}`) {
+    router.push('/doitnow')
   }
 }

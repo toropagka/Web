@@ -11,6 +11,7 @@ import { removeTaskFileMessage } from '@/websync/task_message'
 import { removeColor } from '@/websync/colors_dop.js'
 import { removeParentTag, removeTag } from '@/websync/tag'
 import { removeDepartment } from '@/websync/departments'
+import { removeBoard } from '@/websync/board'
 
 export default function processRemove (obj) {
   switch (obj.type) {
@@ -72,6 +73,7 @@ export default function processRemove (obj) {
     case TYPES.TYPE_OBJECT_NOTIFICATION:
       break
     case TYPES.TYPE_OBJECT_BOARD:
+      removeBoard(obj)
       break
     case TYPES.TYPE_OBJECT_CARD:
       removeCard(obj.uid)
