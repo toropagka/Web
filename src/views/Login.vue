@@ -270,6 +270,7 @@ export default {
       this.$store.dispatch(AUTH_REQUEST, uri)
         .then(() => {
           this.$router.push('/doitnow')
+          localStorage.removeItem('slides')
         })
         .catch(() => {
           this.form.showError = true
@@ -294,6 +295,7 @@ export default {
       }
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
+          localStorage.removeItem('slides')
           this.$router.push('/doitnow')
           const slides = {
             addAvatar: true,
@@ -430,6 +432,7 @@ export default {
       }
     },
     googleCallback (response) {
+      localStorage.removeItem('slides')
       // This callback will be triggered when the user selects or login to
       // his Google account from the popup
       console.log('Handle the response', response)
