@@ -240,12 +240,6 @@ export default {
           })
       }
     },
-    getMovUrl (uid, extension, filename) {
-      const fileURL = window.location.href + 'taskfile/' + uid + '?type=video&format=' + extension
-      this.$nextTick(() => {
-        document.getElementById('video_' + uid).setAttribute('href', fileURL)
-      })
-    },
     getAnyUrl (uid, extension, filename) {
       this.$store.dispatch(GET_FILE, uid).then((resp) => {
         const fileURL = window.URL.createObjectURL(new Blob([resp.data]))
