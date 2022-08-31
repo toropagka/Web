@@ -115,14 +115,7 @@ const routes = [
   },
   {
     meta: {},
-    path: '/settings/help',
-    name: 'help',
-    component: Support,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
-    path: '/settings/help',
+    path: '/help',
     name: 'help',
     component: Support,
     beforeEnter: shouldRedirectToLogin
@@ -136,14 +129,14 @@ const routes = [
   },
   {
     meta: {},
-    path: '/settings/tarif',
+    path: '/tarif',
     name: 'tarif',
     component: Tarif,
     beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {},
-    path: '/settings/options',
+    path: '/options',
     name: 'options',
     component: Options,
     beforeEnter: shouldRedirectToLogin
