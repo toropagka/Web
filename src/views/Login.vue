@@ -270,7 +270,14 @@ export default {
       this.$store.dispatch(AUTH_REQUEST, uri)
         .then(() => {
           this.$router.push('/doitnow')
-          localStorage.removeItem('slides')
+          const slides = {
+            addAvatar: false,
+            addEmployees: false,
+            addReglaments: false,
+            delegateTasks: false,
+            welcome: false
+          }
+          localStorage.setItem('slides', JSON.stringify(slides))
         })
         .catch(() => {
           this.form.showError = true
