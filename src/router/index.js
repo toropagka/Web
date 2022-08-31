@@ -21,6 +21,8 @@ import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
 import Account from '@/components/Settings/Account.vue'
 import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
+import Support from '@/components/Settings/Support.vue'
+import AccKarma from '@/components/AccKarma.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
@@ -109,6 +111,27 @@ const routes = [
     path: '/settings/account',
     name: 'account',
     component: Account,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/help',
+    name: 'help',
+    component: Support,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/help',
+    name: 'help',
+    component: Support,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/karma',
+    name: 'karma',
+    component: AccKarma,
     beforeEnter: shouldRedirectToLogin
   },
   {
