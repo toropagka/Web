@@ -17,6 +17,10 @@ import TasksToday from '@/components/TasksList/TasksToday.vue'
 import TasksReady from '@/components/TasksList/TasksReady.vue'
 import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 
+import Account from '@/components/Settings/Account.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
+import Options from '@/components/Settings/Options.vue'
+
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 
@@ -96,6 +100,27 @@ const routes = [
     path: '/tasks/unread',
     name: 'tasksUnread',
     component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/account',
+    name: 'account',
+    component: Account,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/tarif',
+    name: 'tarif',
+    component: Tarif,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/options',
+    name: 'options',
+    component: Options,
     beforeEnter: shouldRedirectToLogin
   },
   {
