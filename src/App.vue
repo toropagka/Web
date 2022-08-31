@@ -7,23 +7,7 @@
     />
     <SubMenu
       v-if="isSubMenuActive"
-    >
-      <SettingsSubmenu
-        v-if="lastTab === 'settings'"
-      />
-      <DirectorySubmenu
-        v-if="lastTab === 'directory'"
-      />
-      <TasksSubmenu
-        v-if="lastTab === 'tasks'"
-      />
-      <BoardsSubmenu
-        v-if="lastTab === 'new_private_boards'"
-      />
-      <ProjectsSubmenu
-        v-if="lastTab === 'new_private_projects'"
-      />
-    </SubMenu>
+    />
     <overlay
       v-show="isSubMenuActive"
       :z-index="'z-20'"
@@ -40,12 +24,7 @@
 </template>
 <script>
 import MainMenu from '@/components/AsideMenu/MainMenu.vue'
-import TasksSubmenu from '@/components/AsideMenu/TasksSubmenu.vue'
-import DirectorySubmenu from '@/components/AsideMenu/DirectorySubmenu.vue'
-import ProjectsSubmenu from '@/components/AsideMenu/ProjectsSubmenu.vue'
 import SubMenu from '@/components/AsideMenu/SubMenu.vue'
-import BoardsSubmenu from '@/components/AsideMenu/BoardsSubmenu.vue'
-import SettingsSubmenu from '@/components/AsideMenu/SettingsSubmenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 
 import AppSkeleton from '@/AppSkeleton.vue'
@@ -63,14 +42,9 @@ import initInspectorSocket from '@/inspector/index.js'
 export default {
   components: {
     MainMenu,
-    TasksSubmenu,
-    SettingsSubmenu,
-    DirectorySubmenu,
     Overlay,
     AppSkeleton,
-    ProjectsSubmenu,
-    SubMenu,
-    BoardsSubmenu
+    SubMenu
   },
   data () {
     return {
