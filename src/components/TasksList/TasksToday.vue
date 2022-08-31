@@ -1,7 +1,7 @@
 <template>
   <div class="mr-3">
     <TasksListNew />
-    <properties-right />
+    <PropertiesRight />
   </div>
 </template>
 
@@ -28,13 +28,6 @@ export default {
     }
   },
   mounted () {
-    if (this.isPropertiesMobileExpanded) {
-      this.$store.dispatch('asidePropertiesToggle', false)
-    }
-    if (this.isAsideMobileExpanded) {
-      this.$store.dispatch('asideMobileToggle', false)
-    }
-
     this.$store.dispatch('TASKS_REQUEST', new Date(this.date))
     const day = this.date.getDate()
     const month = this.date.toLocaleString('default', { month: 'short' })
