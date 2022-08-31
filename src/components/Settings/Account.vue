@@ -244,7 +244,7 @@
 
 <script>
 import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
-import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
+import { AUTH_CHANGE_PASSWORD, AUTH_LOGOUT } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import UsernameRename from '@/components/Settings/UsernameRename.vue'
@@ -306,7 +306,7 @@ export default {
       })
     },
     logout () {
-      this.$emit('AccLogout')
+      this.$store.dispatch(AUTH_LOGOUT)
     },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
