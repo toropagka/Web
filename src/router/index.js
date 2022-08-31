@@ -214,7 +214,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'Task file'
+      title: 'Card file'
     },
     path: '/cardfile/:id',
     name: 'cardfile',
