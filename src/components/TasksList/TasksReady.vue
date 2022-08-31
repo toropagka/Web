@@ -21,6 +21,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this)
     this.$store.dispatch(TASK.READY_FOR_COMPLITION_TASKS_REQUEST)
     const navElem = {
       name: 'Готово к сдаче',

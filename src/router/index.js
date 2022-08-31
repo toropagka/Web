@@ -109,7 +109,7 @@ const routes = [
     meta: {},
     path: '/tasks/ready',
     name: 'tasksReady',
-    components: TasksReady,
+    component: TasksReady,
     beforeEnter: shouldRedirectToLogin
   },
   {
