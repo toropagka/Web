@@ -295,13 +295,6 @@
               </span>
 
               <span class="ql-formats">
-                <button
-                  class="ql-direction"
-                  value="rtl"
-                />
-              </span>
-
-              <span class="ql-formats">
                 <span
                   class="ql-align"
                 />
