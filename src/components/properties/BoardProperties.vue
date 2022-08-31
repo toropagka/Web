@@ -21,6 +21,9 @@
           <PopMenuItem @click="copyLinkToBoard">
             Копировать ссылку на доску
           </PopMenuItem>
+          <PopMenuItem @click="favoriteToggle">
+            {{ !isFavorite ? 'Добавить в избранное' : 'Удалить из избранного' }}
+          </PopMenuItem>
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
@@ -205,6 +208,9 @@ export default {
       while (colors.length) arrColors.push(colors.splice(0, rowLength))
       return arrColors
     },
+    isFavorite () {
+      return this.selectedBoard?.favorite
+    },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
     },
@@ -291,6 +297,19 @@ export default {
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$store.dispatch('popNavStack')
         })
+    },
+    favoriteToggle () {
+      if (!this.isFavorite) {
+        this.$store.dispatch(BOARD.ADD_BOARD_TO_FAVORITE, this.selectedBoard)
+          .then(res => {
+            this.selectedBoard.favorite = res.data.favorite
+          })
+      } else {
+        this.$store.dispatch(BOARD.REMOVE_BOARD_FROM_FAVORITE, this.selectedBoard)
+          .then(res => {
+            this.selectedBoard.favorite = res.data.favorite
+          })
+      }
     },
     quitBoard () {
       this.showConfirmQuit = false
