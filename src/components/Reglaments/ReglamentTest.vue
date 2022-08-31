@@ -12,7 +12,7 @@
       v-if="!showCompleteMessage"
     >
       <div class="text-center mx-auto max-w-[770px]">
-        <h2 class="font-bold text-[25px] text-[#2E2E2E]">
+        <h2 class="font-bold text-[25px] text-[#2E2E2E] break-words">
           {{ reglament.name }}
         </h2>
       </div>
