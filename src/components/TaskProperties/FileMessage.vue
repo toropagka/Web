@@ -20,12 +20,8 @@
 
   <!-- Movie -->
   <span v-if="movies.includes(file.file_name.split('.').pop())">
-    {{ getMovUrl(file.uid, file.file_name.split('.').pop(), file.file_name) }}
-    <a
-      :id="'video_' + file.uid"
-      :href="
-        'https://web.leadertask.com/User/Files/GetFile?uid=' + file.uid
-      "
+    <router-link
+      :to="{ name: 'taskfile', params: { id: file.uid }, query: { type: 'video', format: file.file_name.split('.').pop().toLowerCase() }}"
       target="_blank"
     >
       <svg
@@ -42,7 +38,7 @@
           fill="#757575"
         />
       </svg>
-    </a>
+    </router-link>
   </span>
 
   <!-- Docs -->
@@ -243,12 +239,6 @@ export default {
             }
           })
       }
-    },
-    getMovUrl (uid, extension, filename) {
-      const fileURL = window.location.href + 'taskfile/' + uid + '?type=video&format=' + extension
-      this.$nextTick(() => {
-        document.getElementById('video_' + uid).setAttribute('href', fileURL)
-      })
     },
     getAnyUrl (uid, extension, filename) {
       this.$store.dispatch(GET_FILE, uid).then((resp) => {

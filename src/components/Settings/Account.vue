@@ -244,13 +244,14 @@
 
 <script>
 import { USER_CHANGE_PHONE } from '@/store/actions/user.js'
-import { AUTH_CHANGE_PASSWORD } from '@/store/actions/auth.js'
+import { AUTH_CHANGE_PASSWORD, AUTH_LOGOUT } from '@/store/actions/auth.js'
 import { CHANGE_EMPLOYEE_NAME } from '@/store/actions/employees.js'
 import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import UsernameRename from '@/components/Settings/UsernameRename.vue'
 import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 import UploadAvatar from '@/components/UploadAvatar'
+import * as SLIDES from '@/store/actions/slides.js'
 
 export default {
   components: {
@@ -305,13 +306,21 @@ export default {
       })
     },
     logout () {
-      this.$emit('AccLogout')
+      this.$store.dispatch(AUTH_LOGOUT)
     },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
       this.$store.state.navigator.lastTab = 'doitnow'
       localStorage.setItem('lastTab', 'doitnow')
       this.$router.push('/doitnow')
+      this.startSlides()
+    },
+    startSlides () {
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addAvatar', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'delegateTasks', visible: true })
     },
     changeUserPhoto (event) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']

@@ -3,16 +3,30 @@ import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
 import Doitnow from '@/components/Doitnow.vue'
 import Empty from '@/components/Empty.vue'
-import Settings from '@/components/Settings/Settings.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
 import Tags from '@/components/Tags/Tags.vue'
+import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+
 import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
+import TasksToday from '@/components/TasksList/TasksToday.vue'
+import TasksReady from '@/components/TasksList/TasksReady.vue'
+import TasksUnread from '@/components/TasksList/TasksUnread.vue'
+import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
+
+import Account from '@/components/Settings/Account.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
+import Options from '@/components/Settings/Options.vue'
+import Support from '@/components/Settings/Support.vue'
+import AccKarma from '@/components/AccKarma.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
+import TasksInWork from '@/components/TasksList/TasksInWork'
+import TasksInFocus from '@/components/TasksList/TasksInFocus'
+import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -76,6 +90,96 @@ const routes = [
   },
   {
     meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/today',
+    name: 'tasksToday',
+    component: TasksToday,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/unread',
+    name: 'tasksUnread',
+    component: TasksUnread,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/account',
+    name: 'account',
+    component: Account,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/help',
+    name: 'help',
+    component: Support,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/settings/karma',
+    name: 'karma',
+    component: AccKarma,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tarif',
+    name: 'tarif',
+    component: Tarif,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/options',
+    name: 'options',
+    component: Options,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/in-work',
+    name: 'tasksInWork',
+    component: TasksInWork,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/in-focus',
+    name: 'tasksInFocus',
+    component: TasksInFocus,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/ready',
+    name: 'tasksReady',
+    component: TasksReady,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {},
+    path: '/tasks/unsorted',
+    name: 'taskUnsorted',
+    component: TaskUnsorted,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/overdue',
+    name: 'tasksOverdue',
+    component: TasksOverdue,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
       layout: Home
     },
     path: '/reglaments',
@@ -94,15 +198,6 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
-    },
-    path: '/board/:id',
-    name: 'board',
-    component: Home,
-    beforeEnter: ifAuthenticated
-  },
-  {
-    meta: {
       title: 'Task file'
     },
     path: '/taskfile/:id',
@@ -112,11 +207,20 @@ const routes = [
   },
   {
     meta: {
-      title: 'Task file'
+      title: 'Card file'
     },
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id',
+    name: 'board',
+    component: BoardWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
   {
@@ -145,13 +249,6 @@ const routes = [
     path: '/clients',
     name: 'clients',
     component: Empty,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
-    path: '/settings',
-    name: 'settings',
-    component: Settings,
     beforeEnter: shouldRedirectToLogin
   },
   {

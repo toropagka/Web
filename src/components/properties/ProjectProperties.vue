@@ -27,6 +27,11 @@
             Копировать ссылку на проект
           </PopMenuItem>
           <PopMenuItem
+            @click="favoriteToggle"
+          >
+            {{ !isFavorite ? 'Добавить в избранное' : 'Удалить из избранного' }}
+          </PopMenuItem>
+          <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
             @click="showConfirm = true"
@@ -268,6 +273,9 @@ export default {
         }
       }
       return users
+    },
+    isFavorite () {
+      return this.selectedProject?.favorite
     }
   },
   watch: {
@@ -309,6 +317,19 @@ export default {
           // выходим выше на один уровень навигации (надеемся что этот проект последний в стеке)
           this.$store.dispatch('popNavStack')
         })
+    },
+    favoriteToggle () {
+      if (!this.isFavorite) {
+        this.$store.dispatch(PROJECT.ADD_PROJECT_TO_FAVORITE, this.selectedProject)
+          .then(res => {
+            this.selectedProject.favorite = res.data.favorite
+          })
+      } else {
+        this.$store.dispatch(PROJECT.REMOVE_PROJECT_FROM_FAVORITE, this.selectedProject)
+          .then(res => {
+            this.selectedProject.favorite = res.data.favorite
+          })
+      }
     },
     closeProperties () {
       this.$store.dispatch('asidePropertiesToggle', false)

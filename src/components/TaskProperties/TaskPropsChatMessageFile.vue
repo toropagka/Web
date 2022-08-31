@@ -31,15 +31,15 @@
             :class="{'ml-[11.67px] w-full': !isAudio, 'mt-[11.67px] w-full': isAudio}"
             class="float-right"
           >
-            <a
+            <router-link
               v-if="movies.includes(file.file_name.split('.').pop())"
-              :href="currentlocation + 'taskfile/' + file.uid + '?type=video&format=' + file.file_name.split('.').pop()"
+              :to="{ name: 'taskfile', params: { id: file.uid }, query: { type: 'video', format: file.file_name.split('.').pop().toLowerCase() }}"
               target="_blank"
               class="table font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
               style="word-break: break-word"
             >
               {{ correctShortFileMessage }}
-            </a>
+            </router-link>
             <a
               v-else
               :href="!isAudio ? fileUrl : null"

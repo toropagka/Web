@@ -49,7 +49,7 @@
             <ReglamentSmallButton
               v-if="!isTesting"
               class="flex items-center px-[10px] py-[5px]"
-              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
+              :disabled="disabledButtons"
               @click="showConfirm=true"
             >
               <svg
@@ -67,7 +67,7 @@
             </ReglamentSmallButton>
             <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
-              :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
+              :disabled="disabledButtons"
               @click="setEdit"
             >
               <svg
@@ -316,8 +316,8 @@
                   class="ql-clean"
                 />
                 <button
-                  :disabled="buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0"
-                  :class="{'cursor-default opacity-[0.5]': buttonDisabled === true || buttonSaveReglament === 0 || saveContentStatus === 0, 'bg-[FFEDED]': buttonSaveReglament === 2}"
+                  :disabled="disabledButtons"
+                  :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
                   @click="onSaveReglamentButtonClick"
                 >
                   <svg
@@ -582,6 +582,9 @@ export default {
         return 'Сохраняется'
       }
       return 'Сохраняется'
+    },
+    disabledButtons () {
+      return this.buttonDisabled === true || this.buttonSaveReglament === 0 || this.saveContentStatus === 0
     }
   },
   mounted () {
@@ -817,14 +820,13 @@ export default {
         const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
         if (index !== -1) reglaments.items[index] = reglament
         this.buttonDisabled = true
-        setTimeout(() => {
-          this.buttonDisabled = false
-        }, 5000)
+        this.buttonDisabled = false
       }).catch(() => {
         this.buttonSaveReglament = 2
       })
     },
     removeReglament () {
+      this.buttonDisabled = true
       this.showConfirm = false
       this.$store.dispatch(REGLAMENTS.DELETE_REGLAMENT_REQUEST, this.greedSource.uid).then(() => {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -832,6 +834,7 @@ export default {
         this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
         this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
         this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.buttonDisabled = false
         this.$router.push('/reglaments')
       })
     },

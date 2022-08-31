@@ -329,9 +329,8 @@
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
       <button
-        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
         class="rounded-lg hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white  mb-[20px] whitespace-nowrap text-center "
-        @click="decline"
+        @click="nextTask"
       >
         <span class="ml-[44px] w-[70px]">Следующая задача</span>
         <Icon
