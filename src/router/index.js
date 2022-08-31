@@ -11,6 +11,7 @@ import Tags from '@/components/Tags/Tags.vue'
 import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
+import TasksToday from '@/components/TasksList/TasksToday.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -73,6 +74,15 @@ const routes = [
     name: 'task',
     component: Home,
     beforeEnter: ifAuthenticated
+  },
+  {
+    meta: {
+      // title: 'Application'
+    },
+    path: '/tasks/today',
+    name: 'tasksToday',
+    component: TasksToday,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {

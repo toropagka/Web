@@ -392,9 +392,9 @@ export default {
         const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase()
         if (!this.isFilePreloadable(fileExtension)) {
           uploadingFiles.push({
-            uid: this.uuidv4(),
+            uid: uuidv4(),
             uid_creator: this.user.current_user_uid,
-            uid_file: this.uuidv4(),
+            uid_file: uuidv4(),
             date_create: new Date().toISOString(),
             order: 0,
             file_name: file.name,
