@@ -132,7 +132,7 @@ export default {
       if (this.user.tarif === 'trial' || this.user.tarif === 'free') {
         return 'Купить лицензию'
       } else {
-        return 'Продлить подписку'
+        return 'Продлить лицензию'
       }
     }
   }
