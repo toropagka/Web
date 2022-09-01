@@ -220,13 +220,13 @@ export default {
       this.$store.dispatch(REMOVE_PROJECT_REQUEST, this.projectUid)
         .then(() => {
           this.$store.dispatch('asidePropertiesToggle', false)
+          this.$router.push(this.project.uid_parent === '00000000-0000-0000-0000-000000000000' ? '/projects' : '/project/' + this.project.uid_parent)
           this.$store.commit(SELECT_PROJECT, undefined)
           //
           this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.project)
           // для актуального значения количества проектов
           this.$store.commit(REMOVE_PROJECT_REQUEST, this.projectUid)
           //
-          this.$router.push(this.project.uid_parent === '00000000-0000-0000-0000-000000000000' ? '/projects' : '/project/' + this.project.uid_parent)
         })
     },
     clickCompletedTasks () {
