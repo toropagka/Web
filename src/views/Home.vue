@@ -44,6 +44,18 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
+    <MainMenu
+      v-if="!isFileRedirect && $store.state.auth.token"
+      class="fixed"
+    />
+    <SubMenu
+      v-if="isSubMenuActive"
+    />
+    <overlay
+      v-show="isSubMenuActive"
+      :z-index="'z-20'"
+      @overlay-click="closeSubMenu"
+    />
     <overlay
       v-if="!isFileRedirect"
       v-show="isAsideLgActive"
@@ -55,76 +67,34 @@
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
     <slot />
-    <TasksListNew
-      v-if="mainSectionState === 'tasks'"
-    />
-    <!-- Greed section -->
-    <div
-      v-if="mainSectionState === 'greed'"
-      :class="{ 'overflow-auto scroll-style relative': greedPath === 'doitnow', 'h-auto': greedPath === 'projects_children' }"
-    >
-      <projects
-        v-if="greedPath === 'new_private_projects'"
-        :items="greedSource"
-      />
-      <boards
-        v-if="greedPath === 'new_private_boards'"
-        :boards="greedSource"
-      />
-      <doitnow
-        v-if="greedPath === 'doitnow'"
-      />
-      <clients
-        v-if="greedPath === 'clients'"
-      />
-      <other
-        v-if="greedPath === 'other'"
-      />
-      <NotificationTasks
-        v-if="greedPath === 'notifications'"
-      />
-      <TagWithChildren
-        v-if="greedPath === 'tags_children'"
-        :tags="greedSource"
-      />
-      <assignments
-        v-if="greedPath === 'new_delegate'"
-        :assignments="greedSource"
-      />
-    </div>
   </main-section>
 </template>
 
 <script>
+import MainMenu from '@/components/AsideMenu/MainMenu.vue'
+import SubMenu from '@/components/AsideMenu/SubMenu.vue'
+import Overlay from '@/components/modals/Overlay.vue'
+
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
-import Overlay from '@/components/modals/Overlay.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 
-import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
-import Projects from '@/components/Projects.vue'
-import Clients from '@/components/Clients/Clients.vue'
-import Boards from '@/components/Boards.vue'
-import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
-import Other from '@/components/Other.vue'
-import Doitnow from '@/components/Doitnow.vue'
-import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
-import NotificationTasks from '@/components/NotificationTasks.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_INVITE_ME } from '@/store/actions/user'
-import * as TASK from '@/store/actions/tasks'
 
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
 
 export default {
   components: {
+    MainMenu,
+    SubMenu,
     ModalBoxNotificationInstruction,
     MainSection,
     Overlay,
@@ -132,15 +102,6 @@ export default {
     ErrorNotification,
     Notification,
     InspectorNotification,
-    TasksListNew,
-    Projects,
-    Clients,
-    Boards,
-    Doitnow,
-    Other,
-    TagWithChildren,
-    Assignments,
-    NotificationTasks,
     ModalBox
   },
   data () {
@@ -189,15 +150,11 @@ export default {
   },
   mounted () {
     this.initNavStackGreedView()
-    if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-      this.getTask(this.$router.currentRoute.value.params.id)
-    } else {
-      if (localStorage.getItem('lastTab') === 'tasks') {
-        this.getTasks()
-      }
-    }
   },
   methods: {
+    closeSubMenu () {
+      this.$store.state.navigator.submenu.status = false
+    },
     getNavigator () {
       if (this.$store.state.auth.token) {
         const data = {
@@ -222,89 +179,6 @@ export default {
             } catch (e) {}
           })
         })
-      }
-    },
-    getTask (uid) {
-      if (this.$store.state.auth.token) {
-        this.$store.dispatch(TASK.ONE_TASK_REQUEST, uid).then((resp) => {
-          const navElem = {
-            name: 'Поиск',
-            key: 'taskListSource',
-            value: {
-              uid: '47a38aa5-19c4-40d0-b8c0-56c3a420935d',
-              param: uid
-            }
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', {
-            key: 'mainSectionState',
-            value: 'tasks'
-          })
-          this.$store.commit('basic', {
-            key: 'taskListSource',
-            value: navElem.value
-          })
-
-          this.$store.commit('basic', {
-            key: 'propertiesState',
-            value: 'task'
-          })
-
-          if (resp.data.tasks.length > 0) {
-            this.$store.dispatch(TASK.SELECT_TASK, resp.data.tasks[0])
-            if (!this.isPropertiesMobileExpanded) {
-              this.$store.dispatch('asidePropertiesToggle', true)
-            }
-          }
-          window.history.replaceState(null, null, '/')
-        })
-      }
-    },
-    getTasks () {
-      if (this.$store.state.auth.token) {
-        if (this.navStack.length && this.navStack.length > 0) {
-          if (this.navStack[this.navStack.length - 1].key === 'taskListSource') {
-            const action = UID_TO_ACTION[this.navStack[this.navStack.length - 1].value.uid]
-            if (!action) {
-              console.error('UID_TO_ACTION in undefined', this.navStack[this.navStack.length - 1].value.uid)
-              return
-            }
-            this.$store.dispatch(action, this.navStack[this.navStack.length - 1].value.param)
-            this.$store.commit('basic', {
-              key: 'mainSectionState',
-              value: 'tasks'
-            })
-            this.$store.commit('basic', {
-              key: this.navStack[this.navStack.length - 1].key,
-              value: this.navStack[this.navStack.length - 1].value
-            })
-          }
-        } else {
-          this.$store.commit('basic', {
-            key: 'taskListSource',
-            value: {
-              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
-              param: null
-            }
-          })
-          this.$store.commit(
-            'updateStackWithInitValue',
-            {
-              name: 'Очередь',
-              type: 'date',
-              typeVal: new Date(),
-              value: {
-                uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
-                param: new Date()
-              }
-            }
-          )
-          this.$store.dispatch(TASK.TASKS_REQUEST, new Date())
-            .then(() => {
-              this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-            })
-            .catch((err) => console.log(err))
-        }
       }
     },
     setShouldShowModalValue (value) {

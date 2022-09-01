@@ -68,7 +68,7 @@ export default function initWebSync () {
         // никак не получить доступ к полю obj.obj.type
         // возвращает не то что там записано
         const obj = { ...JSON.parse(str) }
-        // console.log('websync obj', obj)
+        if (process.env.VUE_APP_EXTENDED_LOGS) console.log('websync obj', obj)
 
         parseObject(obj)
       } catch (e) {

@@ -3,10 +3,7 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить доску"
-      :text="`Вы действительно хотите удалить доску ${selectedBoardName.length > 30
-        ? selectedBoardName.substring(0,30) + '...'
-        : selectedBoardName
-      }?`"
+      :text="`Вы действительно хотите удалить доску ${selectedBoardName}?`"
       @cancel="showConfirm = false"
       @yes="removeBoard"
     />
@@ -299,6 +296,7 @@ export default {
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$store.dispatch('popNavStack')
+          this.$router.push('/board')
         })
     },
     favoriteToggle () {

@@ -213,7 +213,7 @@ export default {
           //
           this.$store.commit(BOARD.PUSH_BOARD, [board])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_BOARD, [board])
-          this.gotoChildren(board)
+          this.$router.push(`/board/${board.uid}`)
         })
       }
     },
@@ -254,6 +254,7 @@ export default {
           this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
           //
           this.$emit('popNavBar')
+          this.$router.push('/board')
         })
     },
     clickBoardMyCards () {

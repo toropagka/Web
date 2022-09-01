@@ -2,11 +2,11 @@
   <div class="px-[16px] pt-[15px]">
     <AsideMenuListSkeleton v-if="status == 'loading'" />
     <template v-if="status == 'success'">
-      <router-link to="/settings/account">
+      <router-link to="/account">
         <AsideMenuListItem
           :selected="isAccountSelected"
           title="Аккаунт"
-          @click="gotoAccount"
+          @click="$store.state.navigator.submenu.status = false"
         >
           <svg
             width="30"
@@ -24,11 +24,11 @@
           </svg>
         </AsideMenuListItem>
       </router-link>
-      <router-link to="/settings/karma">
+      <router-link to="/karma">
         <AsideMenuListItem
           :selected="isKarmaSelected"
           title="Карма"
-          @click="gotoKarma"
+          @click="$store.state.navigator.submenu.status = false"
         >
           <svg
             width="30"

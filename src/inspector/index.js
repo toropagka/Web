@@ -1,4 +1,4 @@
-import { getInspectorMessage } from '@/inspector/message.js'
+import { getInspectorMessage, isKnownInspectorMessageType } from '@/inspector/message.js'
 import { showNotify } from '@/store/helpers/functions'
 import store from '@/store/index.js'
 import { createTaskMessage } from '@/websync/task_message.js'
@@ -73,6 +73,9 @@ function parseMessage (data) {
 }
 
 function createNotificationAndInspectorMessage (parsedData) {
+  if (!isKnownInspectorMessageType(parsedData.message)) {
+    return
+  }
   showNotify(
     {
       uid: parsedData?.uid_json,

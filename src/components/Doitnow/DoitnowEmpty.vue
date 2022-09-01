@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex items-center">
+  <div class="flex items-center">
     <div class="max-w-xl mx-auto">
       <img
         class="mx-auto"

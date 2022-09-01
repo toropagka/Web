@@ -437,9 +437,11 @@
         :date-text="task.term_user"
         @changeDates="onChangeDates"
       />
+
       <button
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
         class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:hover:bg-[#0000000a] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
+        @click="setTaskFromQueue(task.uid)"
       >
         <Icon
           :path="openTask.path"
@@ -448,12 +450,11 @@
           :box="openTask.viewBox"
           class="ml-[19px]"
         />
-        <a
-          :href="`${currentLocation}/task/${task?.uid}`"
+        <span
           class="ml-[11px]"
         >
           Открыть задачу
-        </a>
+        </span>
       </button>
     </div>
   </div>
@@ -849,6 +850,10 @@ export default {
         })
       this.$emit('changeValue', { has_msgs: true })
       this.taskMsg = ''
+    },
+    setTaskFromQueue (uid) {
+      this.$router.push('/task/' + uid)
+      this.$store.state.tasks.taskFromQueue = uid
     },
     removeAnswerHint () {
       this.currentAnswerMessageUid = ''

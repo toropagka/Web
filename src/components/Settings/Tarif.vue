@@ -3,6 +3,20 @@
     <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
       Тариф
     </div>
+    <div class="font-medium text-[roboto] mb-4 text-base landing-[19px]">
+      Тип аккаунта
+    </div>
+    <p
+      class="text-sm font-medium landing-4"
+    >
+      {{ tarifText }}
+    </p>
+    <p
+      v-if="$store.state.user.user?.date_expired"
+      class="mt-1 text-sm font-normal font-[Roboto] landing-5 text-[#606061]"
+    >
+      <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
+    </p>
     <div class="mt-[15px]">
       <p class="text-base font-medium">
         Владелец лицензии
@@ -127,6 +141,22 @@ export default {
   computed: {
     user () {
       return this.$store.state.user?.user
+    },
+    tarifText () {
+      switch (this.$store.state.user.user?.tarif) {
+        case 'trial':
+          return 'Пробная версия'
+        case 'free':
+          return 'Лицензия истекла'
+        case 'expert':
+          return 'Премиум'
+        case 'business':
+          return 'Бизнес'
+        case 'alpha':
+          return 'Бизнес+'
+        default:
+          return this.$store.state.user.user?.tarif
+      }
     },
     tarifButtonTitle () {
       if (this.user.tarif === 'trial' || this.user.tarif === 'free') {

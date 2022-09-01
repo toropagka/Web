@@ -16,9 +16,12 @@
       </div>
       <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs text-[#4C4C4D] font-[700]">Очередь</span>
     </div>
-    <div class="flex justify-between gap-[20px]">
+    <div
+      v-if="!isLoading"
+      class="flex justify-between gap-[20px]"
+    >
       <transition :name="taskTransition">
-        <div class="ml-0 xl:ml-[300px] z-[2] grow">
+        <div class="ml-0 xl:ml-[290px] z-[2] grow">
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
@@ -66,6 +69,15 @@
         </button>
       </div>
     </div>
+    <DoitnowSkeleton
+      v-if="isLoading"
+      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+    />
+    <DoitnowEmpty
+      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
+      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+      @clickPlanning="goToNextDay"
+    />
   </div>
   <div
     v-if="displayModal && !isLoading"
@@ -103,14 +115,6 @@
       </button>
     </div>
   </div>
-  <DoitnowSkeleton
-    v-if="isLoading"
-    class="pt-[30px]"
-  />
-  <DoitnowEmpty
-    v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
-    @clickPlanning="goToNextDay"
-  />
 </template>
 
 <script>

@@ -171,6 +171,7 @@ export default {
           this.$store.commit(PROJECT.PUSH_PROJECT, [project])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
           this.$router.push('/project/' + project.uid)
+          this.$store.state.navigator.submenu.status = false
         })
       }
     },

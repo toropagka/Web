@@ -42,6 +42,7 @@
             </label>
             <input
               id="cover-input"
+              ref="coverInput"
               type="file"
               accept="image/png, image/gif, image/jpeg"
               style="display: none;"
@@ -91,6 +92,7 @@ export default {
     },
     onChangeCardCover (e) {
       this.$emit('onChangeCardCover', e)
+      this.$refs.coverInput.value = ''
     }
   }
 }

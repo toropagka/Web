@@ -62,7 +62,7 @@ export default {
               class="rounded-lg h-[14px] w-[14px]"
               :src="employees[creator]?.fotolink"
             >
-            <span class="ml-1">{{ employees[creator]?.name }}</span>
+            <span class="ml-1 max-w-[280px] truncate">{{ employees[creator]?.name }}</span>
           </div>
         </PopMenuHeader>
         <PopMenuItem

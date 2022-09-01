@@ -6,6 +6,7 @@ import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
+import Projects from '@/components/Projects.vue'
 import Tags from '@/components/Tags/Tags.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 
@@ -27,6 +28,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
+import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
+import TaskByUid from '@/components/TasksList/TaskByUid.vue'
+import Boards from '@/components/Boards'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -81,16 +85,16 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
     path: '/task/:id',
     name: 'task',
-    component: Home,
-    beforeEnter: ifAuthenticated
+    component: TaskByUid,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
     path: '/tasks/today',
     name: 'tasksToday',
@@ -99,7 +103,7 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
     path: '/tasks/unread',
     name: 'tasksUnread',
@@ -107,63 +111,99 @@ const routes = [
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
-    path: '/settings/account',
+    meta: {
+      layout: Home
+    },
+    path: '/tasks/delegate-to-me/:employee_uid',
+    name: 'tasksDelegateToMe',
+    component: TasksDelegates,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/tasks/delegate-by-me/:employee_uid',
+    name: 'tasksDelegateByMe',
+    component: TasksDelegates,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/account',
     name: 'account',
     component: Account,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/help',
     name: 'help',
     component: Support,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
-    path: '/settings/karma',
+    meta: {
+      layout: Home
+    },
+    path: '/karma',
     name: 'karma',
     component: AccKarma,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tarif',
     name: 'tarif',
     component: Tarif,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/options',
     name: 'options',
     component: Options,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tasks/in-work',
     name: 'tasksInWork',
     component: TasksInWork,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tasks/in-focus',
     name: 'tasksInFocus',
     component: TasksInFocus,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tasks/ready',
     name: 'tasksReady',
     component: TasksReady,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tasks/unsorted',
     name: 'taskUnsorted',
     component: TaskUnsorted,
@@ -171,7 +211,7 @@ const routes = [
   },
   {
     meta: {
-      // title: 'Application'
+      layout: Home
     },
     path: '/tasks/overdue',
     name: 'tasksOverdue',
@@ -218,20 +258,33 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/board/:board_id',
+    path: '/board',
     name: 'board',
+    component: Boards,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id',
+    name: 'boardWithChildren',
     component: BoardWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/doitnow',
     name: 'doitnow',
     component: Doitnow,
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {},
+    meta: {
+      layout: Home
+    },
     path: '/tasks',
     name: 'tasks',
     component: Home,
@@ -276,6 +329,19 @@ const routes = [
     path: '/colors',
     name: 'colors',
     component: Colors,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home,
+      breadcrumb: {
+        name: 'Проекты',
+        to: '/projects'
+      }
+    },
+    path: '/projects',
+    name: 'allProjects',
+    component: Projects,
     beforeEnter: shouldRedirectToLogin
   },
   {

@@ -40,7 +40,6 @@ const mutations = {
         try {
           data = JSON.parse(localStorage.getItem('slides'))
           data[value.name] = value.visible
-          console.log(data)
         } catch (e) {
           data = {
             welcome: true,
@@ -53,7 +52,6 @@ const mutations = {
         }
         state.slides[i].visible = value.visible
         localStorage.setItem('slides', JSON.stringify(data))
-        console.log(JSON.parse(localStorage.getItem('slides')))
       }
     }
   }

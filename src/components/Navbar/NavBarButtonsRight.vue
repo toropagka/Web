@@ -136,7 +136,9 @@ export default {
   data: () => ({
     showSearchBar: false,
     searchText: '',
-    showFreeModal: false
+    showFreeModal: false,
+    uid: '',
+    action: null
   }),
   computed: {
     settings () {
@@ -225,12 +227,18 @@ export default {
         // Process saved last visited nav
         if (this.navStack.length && this.navStack.length > 0) {
           if (this.navStack[this.navStack.length - 1].key === 'taskListSource') {
-            const action = UID_TO_ACTION[this.navStack[this.navStack.length - 1].value.uid]
-            if (!action) {
+            this.action = UID_TO_ACTION[this.navStack[this.navStack.length - 1].value.uid]
+            if (this.$route.name === 'tasksDelegateToMe') {
+              this.action = UID_TO_ACTION['511d871c-c5e9-43f0-8b4c-e8c447e1a823']
+            }
+            if (this.$route.name === 'tasksDelegateByMe') {
+              this.action = UID_TO_ACTION['169d728b-b88b-462d-bd8e-3ac76806605b']
+            }
+            if (!this.action) {
               console.error('UID_TO_ACTION in undefined', this.navStack[this.navStack.length - 1].value.uid)
               return
             }
-            this.$store.dispatch(action, this.navStack[this.navStack.length - 1].value.param)
+            this.$store.dispatch(this.action, this.navStack[this.navStack.length - 1].value.param)
             this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
             this.$store.commit('basic', { key: this.navStack[this.navStack.length - 1].key, value: this.navStack[this.navStack.length - 1].value })
           }
