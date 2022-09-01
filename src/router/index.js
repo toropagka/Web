@@ -6,6 +6,7 @@ import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
+import Projects from '@/components/Projects.vue'
 import Tags from '@/components/Tags/Tags.vue'
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 
@@ -305,6 +306,15 @@ const routes = [
     path: '/colors',
     name: 'colors',
     component: Colors,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/project',
+    name: 'allProjects',
+    component: Projects,
     beforeEnter: shouldRedirectToLogin
   },
   {
