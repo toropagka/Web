@@ -852,7 +852,7 @@ export default {
       this.taskMsg = ''
     },
     setTaskFromQueue (uid) {
-      this.$router.push('/taskByUid/' + uid)
+      this.$router.push('/task/' + uid)
       this.$store.state.tasks.taskFromQueue = uid
     },
     removeAnswerHint () {

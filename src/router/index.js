@@ -87,8 +87,8 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/taskByUid/:id',
-    name: 'taskByUid',
+    path: '/task/:id',
+    name: 'task',
     component: TaskByUid,
     beforeEnter: shouldRedirectToLogin
   },
