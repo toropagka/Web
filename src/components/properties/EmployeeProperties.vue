@@ -4,10 +4,7 @@
       v-if="showConfirm"
       title="Удалить сотрудника"
       class="break-words"
-      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName.length > 30
-        ? selectedEmployeeName.substring(0, 30) + '...'
-        : selectedEmployeeName
-      }?`"
+      :text="`Вы действительно хотите удалить сотрудника ${selectedEmployeeName}?`"
       @cancel="showConfirm = false"
       @yes="removeEmployee"
     />

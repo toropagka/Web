@@ -10,7 +10,7 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить метку"
-      :text="`Вы действительно хотите удалить метку ${croppedTagName}?`"
+      :text="`Вы действительно хотите удалить метку ${selectedTagName}?`"
       @cancel="showConfirm = false"
       @yes="removeTag"
     />
@@ -175,9 +175,6 @@ export default {
     },
     selectedTagName () {
       return this.selectedTag?.name || ''
-    },
-    croppedTagName () {
-      return this.selectedTagName.length > 33 ? this.selectedTagName.substr(0, 33) + '...' : this.selectedTagName
     },
     selectedTagColor () {
       const backColor = this.selectedTag?.back_color

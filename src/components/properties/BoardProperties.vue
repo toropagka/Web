@@ -3,10 +3,7 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить доску"
-      :text="`Вы действительно хотите удалить доску ${selectedBoardName.length > 30
-        ? selectedBoardName.substring(0,30) + '...'
-        : selectedBoardName
-      }?`"
+      :text="`Вы действительно хотите удалить доску ${selectedBoardName}?`"
       @cancel="showConfirm = false"
       @yes="removeBoard"
     />

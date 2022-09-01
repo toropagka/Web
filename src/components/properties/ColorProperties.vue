@@ -3,9 +3,7 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить цвет"
-      :text="`Вы действительно хотите удалить цвет ${selectedColorName.length > 30
-        ? selectedColorName.substring(0,30) + '...'
-        : selectedColorName }?`"
+      :text="`Вы действительно хотите удалить цвет ${selectedColorName}?`"
       @cancel="showConfirm = false"
       @yes="removeColor"
     />
