@@ -128,7 +128,7 @@ const routes = [
   },
   {
     meta: {},
-    path: '/settings/account',
+    path: '/account',
     name: 'account',
     component: Account,
     beforeEnter: shouldRedirectToLogin
@@ -142,7 +142,7 @@ const routes = [
   },
   {
     meta: {},
-    path: '/settings/karma',
+    path: '/karma',
     name: 'karma',
     component: AccKarma,
     beforeEnter: shouldRedirectToLogin
