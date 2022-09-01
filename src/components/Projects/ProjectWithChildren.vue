@@ -172,6 +172,10 @@ export default {
     )
   },
   mounted () {
+    if (!Object.keys(this.$store.state.projects.projects).includes(this.$route.params.project_id)) {
+      this.$router.push('/projects')
+      return
+    }
     this.selectAnotherProject(this.$route.params.project_id)
     this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
     this.$store.commit('basic', {
@@ -230,7 +234,6 @@ export default {
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
       this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_projects?.items })
-
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
       this.$store.commit('basic', {
         key: 'taskListSource',
