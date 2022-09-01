@@ -12,7 +12,7 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <NavBar />
+  <NavBar v-if="!hideNavBar" />
   <div
     v-if="displayModal"
     class="flex flex-col items-center max-w-[600px] mx-auto"
@@ -379,6 +379,12 @@ export default {
   },
   directives: {
     linkify
+  },
+  props: {
+    hideNavBar: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
