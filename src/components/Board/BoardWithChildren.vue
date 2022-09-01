@@ -61,25 +61,22 @@ export default {
   computed: {
     storeCards () {
       return this.$store.state.cards.cards
+    },
+    boardUid () {
+      return this.$route.params.board_id
     }
   },
-  created () {
-    this.$watch(
-      () => this.$route.params,
-      (toParams) => {
-        if (this.$route.name === 'board') {
-          this.selectAnotherBoard(toParams.board_id)
-        }
+  watch: {
+    boardUid (newUid) {
+      if (newUid) {
+        this.selectAnotherBoard(newUid)
       }
-    )
+    }
   },
   mounted () {
-    this.selectAnotherBoard(this.$route.params.board_id)
+    this.selectAnotherBoard(this.boardUid)
   },
   methods: {
-    print (val) {
-      console.log(val)
-    },
     canAddChild () {
       const user = this.$store.state.user.user
       return this.currentBoard?.email_creator === user.current_user_email

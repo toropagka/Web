@@ -123,7 +123,6 @@ import { setLocalStorageItem } from '@/store/helpers/functions'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
-import * as CARD from '@/store/actions/cards.js'
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
@@ -140,12 +139,6 @@ export default {
     BoardBlocItem,
     ListBlocAdd,
     BoardInputValue
-  },
-  props: {
-    boards: {
-      type: Array,
-      default: () => []
-    }
   },
   data () {
     return {
@@ -164,6 +157,9 @@ export default {
     },
     displayModal () {
       return !this.$store.state.onboarding?.visitedModals?.includes('boards') && this.$store.state?.onboarding?.showModals
+    },
+    boards () {
+      return this.$store.getters.sortedNavigator.new_private_boards
     }
   },
   methods: {
@@ -175,27 +171,7 @@ export default {
       setLocalStorageItem('isGridView', value)
     },
     gotoChildren (board) {
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
-      })
-
-      const navElem = {
-        name: board.name,
-        key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
-        greedPath: 'boards_children',
-        value: board.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
+      this.$router.push(`/board/${board.uid}`)
     },
     clickAddBoard () {
       const user = this.$store.state.user.user

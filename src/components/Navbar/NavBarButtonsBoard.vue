@@ -254,6 +254,7 @@ export default {
           this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
           //
           this.$emit('popNavBar')
+          this.$router.push('/board')
         })
     },
     clickBoardMyCards () {

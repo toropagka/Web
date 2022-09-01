@@ -299,6 +299,7 @@ export default {
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$store.dispatch('popNavStack')
+          this.$router.push('/board')
         })
     },
     favoriteToggle () {

@@ -27,6 +27,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
+import Boards from '@/components/Boards'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -218,8 +219,17 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/board/:board_id',
+    path: '/board',
     name: 'board',
+    component: Boards,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id',
+    name: 'boardWithChildren',
     component: BoardWithChildren,
     beforeEnter: shouldRedirectToLogin
   },
