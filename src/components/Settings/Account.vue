@@ -287,11 +287,13 @@ export default {
         case 'trial':
           return 'Пробная версия'
         case 'free':
-          return 'Закончилась лицензия, Истек триал, Превышен лимит рабочих мест'
+          return 'Лицензия истекла'
         case 'expert':
-          return 'Действительная лицензия с одним рабочим местом'
+          return 'Премиум'
         case 'business':
-          return 'Действительная лицензия с несколькими рабочими местами'
+          return 'Бизнес'
+        case 'alpha':
+          return 'Бизнес+'
         default:
           return this.$store.state.user.user?.tarif
       }
