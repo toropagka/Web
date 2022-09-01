@@ -46,7 +46,7 @@
   >
     <!-- Add task input -->
     <div
-      v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid]"
+      v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid] && $route.name !== 'tasksDelegateToMe'"
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <div
@@ -797,7 +797,7 @@ export default {
           data.uid_project = this.taskListSource.param
           break
         case TASK.EMPLOYEE_TASKS_REQUEST:
-          data.email_performer = this.employees[this.taskListSource.param].email
+          data.email_performer = this.employees[this.taskListSource.param]?.email
           break
         case TASK.COLOR_TASKS_REQUEST:
           data.uid_marker = this.taskListSource.param
@@ -832,6 +832,9 @@ export default {
       const title = data.name.trim()
       if (title) {
         data.name = title
+        if (this.$route.name === 'tasksDelegateByMe') {
+          data.email_performer = this.$store.state?.employees?.employees[this.$route?.params?.employee_uid]?.email
+        }
         this.$store.dispatch(TASK.CREATE_TASK, data)
           .then((resp) => {
           // выделяем добавленную задачу

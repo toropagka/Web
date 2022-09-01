@@ -20,7 +20,7 @@ export default {
   data () {
     return {
       date: new Date(),
-      uid: 'fa042915-a3d2-469c-bd5a-708cf0339b89',
+      uid: '',
       user: null
     }
   },
@@ -42,11 +42,7 @@ export default {
     this.$watch(
       () => this.$route.params,
       (toParams) => {
-        // REMOVE: После полного перехода на vue-router возможно стоит убрать. Сейчас это для того, чтобы можно было переходить с '/project/:uid' на другие урлы
-        if (this.$route.name === 'delegate-to-me') {
-          this.selectAnotherEmployee(toParams.employee_uid)
-        }
-        if (this.$route.name === 'delegate-by-me') {
+        if (this.$route.name === 'tasksDelegateToMe' || this.$route.name === 'tasksDelegateByMe') {
           this.selectAnotherEmployee(toParams.employee_uid)
         }
       }
@@ -59,38 +55,30 @@ export default {
     selectAnotherEmployee (uid) {
       const employee = this.$store.state?.employees?.employees[uid]
       this.$store.state.navigator.submenu.status = false
-      // если уже выбран - ничего не делаем
-      if (this.isUserSelected(employee)) return
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
       }
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-      const action = UID_TO_ACTION[employee?.parentID]
-      if (!action) {
-        console.error(`assigmentsClick - ${employee?.email} > UID_TO_ACTION[${employee?.parentID}] is null!!!`)
-        return
+      if (this.$route.name === 'tasksDelegateToMe') {
+        this.uid = '511d871c-c5e9-43f0-8b4c-e8c447e1a823'
       }
-      this.$store.dispatch(action, employee?.uid)
+      if (this.$route.name === 'tasksDelegateByMe') {
+        this.uid = '169d728b-b88b-462d-bd8e-3ac76806605b'
+      }
+      const action = UID_TO_ACTION[this.uid]
+      this.$store.dispatch(action, employee?.email)
       const navElem = {
         name: employee?.name,
         key: 'taskListSource',
-        value: { uid: employee?.parentID, param: employee?.uid }
+        value: { uid: employee?.parentID, param: employee?.email }
       }
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: employee?.parentID, param: employee?.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-    },
-    isUserSelected (user) {
-      if (
-        this.lastNavStack?.value?.uid === user.parentID &&
-        this.lastNavStack?.value?.param === user.email
-      ) {
-        return true
-      }
-      return false
+      localStorage.setItem('lastTab', 'tasks')
     }
   }
 }
