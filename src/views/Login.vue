@@ -293,7 +293,7 @@ export default {
         email: this.form.email,
         password: this.form.password,
         name: this.form.username,
-        phone: this.form.phone,
+        phone: this.form.phone.replace(/[^a-zA-Z0-9+]/g, ''),
         timezone: timezone,
         system: 'web',
         cid: cid,

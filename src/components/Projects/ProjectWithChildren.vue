@@ -1,11 +1,11 @@
 <template>
-  <div class="flex justify-between items-center pt-2 pb-1">
+  <div class="flex justify-between items-center pt-2">
     <NavbarSearchLimit
       v-if="showFreeModal"
       @cancel="showFreeModal = false"
     />
     <NavBarVueRouter />
-    <div>
+    <div class="flex gap-[10px] items-center px-3">
       <div
         v-if="!showSearchBar"
         class="flex-none flex gap-[5px] p-[8px] cursor-pointer text-[#7e7e80] hover:text-[#7e7e80]/75"
@@ -88,7 +88,7 @@
   <div
     class="w-full"
   >
-    <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div class="grid gap-2 mt-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <template
         v-for="project in currentProject.children"
         :key="project.uid"

@@ -100,13 +100,6 @@ export default {
           .then(resp => {
             this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
             this.getNavigator()
-            if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-              this.getTask(this.$router.currentRoute.value.params.id)
-            } else {
-              if (localStorage.getItem('lastTab') === 'tasks') {
-                this.getTasks()
-              }
-            }
           })
           .catch(() => {
             this.isContentLoaded = true

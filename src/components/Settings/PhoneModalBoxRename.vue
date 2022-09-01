@@ -89,8 +89,9 @@ export default {
       if (this.validatePhone === false) {
         return
       }
+      const phoneNumber = this.currentValue.replace(/[^a-zA-Z0-9+]/g, '')
       if (this.show) {
-        this.$emit('save', this.currentValue)
+        this.$emit('save', phoneNumber)
         this.showLengthError = false
       }
     }
