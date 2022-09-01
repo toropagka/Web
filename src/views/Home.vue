@@ -87,7 +87,6 @@ import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotific
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_INVITE_ME } from '@/store/actions/user'
-import * as TASK from '@/store/actions/tasks'
 
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
@@ -151,13 +150,6 @@ export default {
   },
   mounted () {
     this.initNavStackGreedView()
-    if (this.$router.currentRoute.value.name === 'task' && this.$router.currentRoute.value.params.id) {
-      this.getTask(this.$router.currentRoute.value.params.id)
-    } else {
-      if (localStorage.getItem('lastTab') === 'tasks') {
-        this.getTasks()
-      }
-    }
   },
   methods: {
     closeSubMenu () {
@@ -187,89 +179,6 @@ export default {
             } catch (e) {}
           })
         })
-      }
-    },
-    getTask (uid) {
-      if (this.$store.state.auth.token) {
-        this.$store.dispatch(TASK.ONE_TASK_REQUEST, uid).then((resp) => {
-          const navElem = {
-            name: 'Поиск',
-            key: 'taskListSource',
-            value: {
-              uid: '47a38aa5-19c4-40d0-b8c0-56c3a420935d',
-              param: uid
-            }
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', {
-            key: 'mainSectionState',
-            value: 'tasks'
-          })
-          this.$store.commit('basic', {
-            key: 'taskListSource',
-            value: navElem.value
-          })
-
-          this.$store.commit('basic', {
-            key: 'propertiesState',
-            value: 'task'
-          })
-
-          if (resp.data.tasks.length > 0) {
-            this.$store.dispatch(TASK.SELECT_TASK, resp.data.tasks[0])
-            if (!this.isPropertiesMobileExpanded) {
-              this.$store.dispatch('asidePropertiesToggle', true)
-            }
-          }
-          window.history.replaceState(null, null, '/')
-        })
-      }
-    },
-    getTasks () {
-      if (this.$store.state.auth.token) {
-        if (this.navStack.length && this.navStack.length > 0) {
-          if (this.navStack[this.navStack.length - 1].key === 'taskListSource') {
-            const action = UID_TO_ACTION[this.navStack[this.navStack.length - 1].value.uid]
-            if (!action) {
-              console.error('UID_TO_ACTION in undefined', this.navStack[this.navStack.length - 1].value.uid)
-              return
-            }
-            this.$store.dispatch(action, this.navStack[this.navStack.length - 1].value.param)
-            this.$store.commit('basic', {
-              key: 'mainSectionState',
-              value: 'tasks'
-            })
-            this.$store.commit('basic', {
-              key: this.navStack[this.navStack.length - 1].key,
-              value: this.navStack[this.navStack.length - 1].value
-            })
-          }
-        } else {
-          this.$store.commit('basic', {
-            key: 'taskListSource',
-            value: {
-              uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
-              param: null
-            }
-          })
-          this.$store.commit(
-            'updateStackWithInitValue',
-            {
-              name: 'Очередь',
-              type: 'date',
-              typeVal: new Date(),
-              value: {
-                uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25',
-                param: new Date()
-              }
-            }
-          )
-          this.$store.dispatch(TASK.TASKS_REQUEST, new Date())
-            .then(() => {
-              this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-            })
-            .catch((err) => console.log(err))
-        }
       }
     },
     setShouldShowModalValue (value) {
