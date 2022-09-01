@@ -6,7 +6,7 @@
         <AsideMenuListItem
           :selected="isAccountSelected"
           title="Аккаунт"
-          @click="gotoAccount"
+          @click="$emit('closeSubmenu')"
         >
           <svg
             width="30"
@@ -28,7 +28,6 @@
         <AsideMenuListItem
           :selected="isKarmaSelected"
           title="Карма"
-          @click="gotoKarma"
         >
           <svg
             width="30"
@@ -63,6 +62,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['closeSubmenu'],
   computed: {
     status () {
       return this.$store.state.navigator.status

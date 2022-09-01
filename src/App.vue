@@ -1,18 +1,6 @@
 <template>
   <template v-if="isContentLoaded">
     <!-- TODO: Перенести MainMenu в Home.vue, здесь оставить чистую страницу для компонентов вроде TaskFile.vue, CardFile.vue, которым нужен чистый экран -->
-    <MainMenu
-      v-if="!isFileRedirect && $store.state.auth.token"
-      class="fixed"
-    />
-    <SubMenu
-      v-if="isSubMenuActive"
-    />
-    <overlay
-      v-show="isSubMenuActive"
-      :z-index="'z-20'"
-      @overlay-click="closeSubMenu"
-    />
     <component
       :is="$route.meta.layout || 'div'"
       class="h-screen"
@@ -23,9 +11,6 @@
   <AppSkeleton v-else />
 </template>
 <script>
-import MainMenu from '@/components/AsideMenu/MainMenu.vue'
-import SubMenu from '@/components/AsideMenu/SubMenu.vue'
-import Overlay from '@/components/modals/Overlay.vue'
 
 import AppSkeleton from '@/AppSkeleton.vue'
 
@@ -41,10 +26,7 @@ import initInspectorSocket from '@/inspector/index.js'
 // по этому консоль очищаем
 export default {
   components: {
-    MainMenu,
-    Overlay,
-    AppSkeleton,
-    SubMenu
+    AppSkeleton
   },
   data () {
     return {
@@ -54,9 +36,6 @@ export default {
   computed: {
     menu () {
       return this.$store.state.navigator.menu
-    },
-    isSubMenuActive () {
-      return this.$store.state.navigator.submenu.status
     },
     lastTab () {
       return this.$store.state.navigator.lastTab

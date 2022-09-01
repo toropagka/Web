@@ -44,6 +44,18 @@
     @cancel="cancelInviteModalBox"
   />
   <main-section class="h-full">
+    <MainMenu
+      v-if="!isFileRedirect && $store.state.auth.token"
+      class="fixed"
+    />
+    <SubMenu
+      v-if="isSubMenuActive"
+    />
+    <overlay
+      v-show="isSubMenuActive"
+      :z-index="'z-20'"
+      @overlay-click="closeSubMenu"
+    />
     <overlay
       v-if="!isFileRedirect"
       v-show="isAsideLgActive"
@@ -55,56 +67,23 @@
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
     <slot />
-    <TasksListNew
-      v-if="mainSectionState === 'tasks'"
-    />
-    <!-- Greed section -->
-    <div
-      v-if="mainSectionState === 'greed'"
-      :class="{ 'overflow-auto scroll-style relative': greedPath === 'doitnow', 'h-auto': greedPath === 'projects_children' }"
-    >
-      <doitnow
-        v-if="greedPath === 'doitnow'"
-      />
-      <clients
-        v-if="greedPath === 'clients'"
-      />
-      <other
-        v-if="greedPath === 'other'"
-      />
-      <NotificationTasks
-        v-if="greedPath === 'notifications'"
-      />
-      <TagWithChildren
-        v-if="greedPath === 'tags_children'"
-        :tags="greedSource"
-      />
-      <assignments
-        v-if="greedPath === 'new_delegate'"
-        :assignments="greedSource"
-      />
-    </div>
   </main-section>
 </template>
 
 <script>
+import MainMenu from '@/components/AsideMenu/MainMenu.vue'
+import SubMenu from '@/components/AsideMenu/SubMenu.vue'
+import Overlay from '@/components/modals/Overlay.vue'
+
 import { setLocalStorageItem, UID_TO_ACTION, visitChildren } from '@/store/helpers/functions'
 import PropertiesRight from '@/components/PropertiesRight.vue'
 import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
-import Overlay from '@/components/modals/Overlay.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
 
-import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
-import Clients from '@/components/Clients/Clients.vue'
-import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
-import Other from '@/components/Other.vue'
-import Doitnow from '@/components/Doitnow.vue'
-import TagWithChildren from '@/components/Tags/TagWithChildren.vue'
-import NotificationTasks from '@/components/NotificationTasks.vue'
 
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 import { USER_INVITE_ME } from '@/store/actions/user'
@@ -115,6 +94,8 @@ import initInspectorSocket from '@/inspector/index.js'
 
 export default {
   components: {
+    MainMenu,
+    SubMenu,
     ModalBoxNotificationInstruction,
     MainSection,
     Overlay,
@@ -122,13 +103,6 @@ export default {
     ErrorNotification,
     Notification,
     InspectorNotification,
-    TasksListNew,
-    Clients,
-    Doitnow,
-    Other,
-    TagWithChildren,
-    Assignments,
-    NotificationTasks,
     ModalBox
   },
   data () {
@@ -186,6 +160,9 @@ export default {
     }
   },
   methods: {
+    closeSubMenu () {
+      this.$store.state.navigator.submenu.status = false
+    },
     getNavigator () {
       if (this.$store.state.auth.token) {
         const data = {
