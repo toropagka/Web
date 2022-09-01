@@ -72,7 +72,6 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     setTaskFromQueue (uid) {
-      this.$router.push('/taskByUid/' + uid)
       this.$router.push('/task/' + uid)
       this.$store.state.tasks.taskFromQueue = uid
     }
