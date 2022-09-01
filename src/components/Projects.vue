@@ -61,10 +61,13 @@
             v-for="project in value.items"
             :key="project.uid"
           >
-            <ProjectBlocItem
-              :project="project"
-              @click.stop="gotoChildren(project)"
-            />
+            <router-link
+              :to="'/project/' + project.uid"
+            >
+              <ProjectBlocItem
+                :project="project"
+              />
+            </router-link>
           </template>
           <InputValue
             v-if="showAddProject && index === 0"
@@ -125,7 +128,6 @@ import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 
-import * as TASK from '@/store/actions/tasks'
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
@@ -144,12 +146,6 @@ export default {
     ProjectModalBoxProjectsLimit,
     EmptyTasksListPics
   },
-  props: {
-    items: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       showProjectsLimit: false,
@@ -159,6 +155,9 @@ export default {
     }
   },
   computed: {
+    items () {
+      return this.$store.getters.sortedNavigator.new_private_projects
+    },
     isGridView () {
       setLocalStorageItem('isGridView', true)
       return this.$store.state.isGridView
@@ -173,6 +172,15 @@ export default {
       return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
     }
   },
+  mounted () {
+    const navElem = {
+      name: 'Проекты',
+      key: 'greedSource',
+      greedPath: 'new_private_projects',
+      value: this.items
+    }
+    this.$store.commit('updateStackWithInitValue', navElem)
+  },
   created () {
     setLocalStorageItem('isGridView', true)
   },
@@ -180,28 +188,6 @@ export default {
     updateGridView (value) {
       this.$store.commit('basic', { key: 'isGridView', value: value })
       setLocalStorageItem('isGridView', value)
-    },
-    gotoChildren (project) {
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: project.name,
-        key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
-        greedPath: 'projects_children',
-        value: project.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     clickAddProject () {
       const user = this.$store.state.user.user
@@ -250,7 +236,7 @@ export default {
 
           this.$store.commit(PROJECT.PUSH_PROJECT, [project])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
-          this.gotoChildren(project)
+          this.$router.push('/project/' + project.uid)
         })
       }
     },

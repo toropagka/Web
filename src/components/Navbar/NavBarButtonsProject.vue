@@ -234,6 +234,9 @@ export default {
           this.$store.commit(REMOVE_PROJECT_REQUEST, this.projectUid)
           //
           this.$emit('popNavBar')
+          if (!this.$store.state.projects.projects[this.$route.params.id]) {
+            this.$router.push('/project')
+          }
         })
     },
     clickCompletedTasks () {
