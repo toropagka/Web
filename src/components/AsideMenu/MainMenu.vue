@@ -28,12 +28,6 @@
           :src="user?.foto_link"
         >
       </AsideMenuListItem>
-      <EventAlert
-        v-if="user?.tarif === 'trial' || user?.tarif === 'free'"
-        :bg-color="'#FFCA86'"
-        :message-text="user?.tarif === 'trial' ? 'Пробная версия' : 'У Вас истекла лицензия, пожалуйста, обновите тариф'"
-        :text-color="'white'"
-      />
       <AsideMenuListItem
         :selected="lastTab === 'doitnow'"
         title="Очередь"
@@ -161,6 +155,11 @@
         class="px-[12px] my-[16px]"
         title="Добавить задачу"
         @click="shouldShowInspector"
+      />
+      <EventAlert
+        v-if="user?.tarif === 'trial' || user?.tarif === 'free'"
+        :message-text="user?.tarif === 'trial' ? 'Пробная версия' : 'У Вас истекла лицензия, пожалуйста, обновите тариф'"
+        :tarif="user?.tarif"
       />
     </div>
   </aside>
