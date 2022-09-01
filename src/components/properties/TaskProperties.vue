@@ -55,9 +55,9 @@
     >
       <div />
       <div
-        v-if="selectedTask.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask.uid_parent]"
+        v-if="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent]"
         class="user_customer_custom"
-        :class="selectedTask.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask.uid_parent] ? 'mt-3' : 'mt-0.5'"
+        :class="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent] ? 'mt-3' : 'mt-0.5'"
       >
         <svg
           width="16"
@@ -73,9 +73,9 @@
         </svg>
         <a
           class="parent-name cursor-pointer dark:text-gray-100 mb-2"
-          @click="gotoParentNode(selectedTask.uid_parent)"
+          @click="gotoParentNode(selectedTask?.uid_parent)"
         >
-          {{ tasks[selectedTask.uid_parent].info.name }}
+          {{ tasks[selectedTask?.uid_parent]?.info?.name }}
         </a>
       </div>
       <div
@@ -87,7 +87,7 @@
             class="form-control taskName-custom dark:bg-gray-900 dark:text-gray-100 dark:border-gray-900"
             data-placeholder="Task Name"
             style="font-weight: bold; font-size: 18px"
-            :contenteditable="selectedTask.uid_customer === user?.current_user_uid"
+            :contenteditable="selectedTask?.uid_customer === user?.current_user_uid"
             @blur="changeName($event)"
             @keyup="changeName($event)"
             @focus="$refs.TaskName.focus()"
@@ -102,34 +102,34 @@
       >
         <!-- Кнопка Поручить / Взять на исполнение / Перепоручить -->
         <TaskPropsButtonPerform
-          v-if="selectedTask.status !== 3 && selectedTask.type !== 4 && !((selectedTask.uid_customer !== user?.current_user_uid) && (selectedTask.status === 1))"
-          :task-type="selectedTask.type"
+          v-if="selectedTask?.status !== 3 && selectedTask?.type !== 4 && !((selectedTask?.uid_customer !== user?.current_user_uid) && (selectedTask?.status === 1))"
+          :task-type="selectedTask?.type"
           :current-user-uid="user?.current_user_uid"
-          :performer-email="selectedTask.email_performer"
+          :performer-email="selectedTask?.email_performer"
           @changePerformer="onChangePerformer"
           @reAssign="onReAssignToUser"
           @click="shouldShowFreePerformer"
         />
         <!-- Кнопка Доступ -->
         <TaskPropsButtonAccess
-          v-if="isAccessVisible && !((selectedTask.uid_customer !== user?.current_user_uid) && (selectedTask.status === 1)) && selectedTask.emails ? selectedTask.emails.split('..') : [] > 0"
+          v-if="isAccessVisible && !((selectedTask?.uid_customer !== user?.current_user_uid) && (selectedTask?.status === 1)) && selectedTask?.emails ? selectedTask?.emails.split('..') : [] > 0"
           :current-user-uid="user?.current_user_uid"
-          :access-emails="selectedTask.emails ? selectedTask.emails.split('..') : []"
-          :can-edit="selectedTask.type === 1 || selectedTask.type === 2"
-          :is-customer="selectedTask.uid_customer === user?.current_user_uid"
+          :access-emails="selectedTask?.emails ? selectedTask?.emails.split('..') : []"
+          :can-edit="selectedTask?.type === 1 || selectedTask?.type === 2"
+          :is-customer="selectedTask?.uid_customer === user?.current_user_uid"
           @changeAccess="onChangeAccess"
         />
         <!-- Кнопка Выбрать дату -->
         <TaskPropsButtonSetDate
-          v-if="(selectedTask.type !== 4) && (selectedTask.type !== 5) && (selectedTask.status !== 1)"
-          :date-begin="selectedTask.date_begin"
-          :date-end="selectedTask.date_end"
-          :date-text="selectedTask.term_user"
+          v-if="(selectedTask?.type !== 4) && (selectedTask?.type !== 5) && (selectedTask?.status !== 1)"
+          :date-begin="selectedTask?.date_begin"
+          :date-end="selectedTask?.date_end"
+          :date-text="selectedTask?.term_user"
           @changeDates="onChangeDates"
         />
         <!-- Повтор -->
         <TaskRepeat
-          v-if="selectedTask.uid_customer === user.current_user_uid && selectedTask.SeriesType !== 0"
+          v-if="selectedTask?.uid_customer === user?.current_user_uid && selectedTask?.SeriesType !== 0"
           :class="isDark ? 'dark' : 'light'"
           @click="showFreeModalRepeat = (user.tarif === 'free')"
         />
@@ -142,21 +142,21 @@
         />
         <!-- Кнопка Цвет -->
         <TaskPropsButtonColor
-          v-if="(selectedTask.type === 1 || selectedTask.type === 2 || selectedTask.type === 3) && ((selectedTask.uid_customer === user?.current_user_uid || selectedTask.uid_performer === user?.current_user_uid) && (selectedTask.status !== 1))"
-          :selected-color="selectedTask.uid_marker"
-          :can-edit="selectedTask.uid_customer === user?.current_user_uid"
+          v-if="(selectedTask?.type === 1 || selectedTask?.type === 2 || selectedTask?.type === 3) && ((selectedTask?.uid_customer === user?.current_user_uid || selectedTask?.uid_performer === user?.current_user_uid) && (selectedTask?.status !== 1))"
+          :selected-color="selectedTask?.uid_marker"
+          :can-edit="selectedTask?.uid_customer === user?.current_user_uid"
           @changeColor="onChangeColor"
         />
         <!-- Кнопка Метки -->
         <TaskPropsButtonTags
-          v-if="(selectedTask.type === 1 || selectedTask.type === 2 || selectedTask.type === 3) && ((selectedTask.uid_customer === user?.current_user_uid || selectedTask.uid_performer === user?.current_user_uid) && (selectedTask.status !== 1))"
-          :selected-tags="selectedTask.tags"
-          :can-edit="selectedTask.uid_customer === user?.current_user_uid"
+          v-if="(selectedTask?.type === 1 || selectedTask?.type === 2 || selectedTask?.type === 3) && ((selectedTask?.uid_customer === user?.current_user_uid || selectedTask?.uid_performer === user?.current_user_uid) && (selectedTask?.status !== 1))"
+          :selected-tags="selectedTask?.tags"
+          :can-edit="selectedTask?.uid_customer === user?.current_user_uid"
           @changeTags="onChangeTags"
         />
         <!-- Чек лист -->
         <div
-          v-if="!selectedTask.checklist && selectedTask.type!== 4 && selectedTask.type !== 3 && ((selectedTask.uid_customer === user?.current_user_uid) && (selectedTask.status !== 1))"
+          v-if="!selectedTask?.checklist && selectedTask?.type!== 4 && selectedTask?.type !== 3 && ((selectedTask?.uid_customer === user?.current_user_uid) && (selectedTask?.status !== 1))"
           class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100"
           @click="createChecklist"
         >
@@ -179,14 +179,14 @@
         </div>
         <!-- Фокус -->
         <TaskPropsButtonFocus
-          v-if="!((selectedTask.uid_customer !== user?.current_user_uid) && (selectedTask.status === 1))"
+          v-if="!((selectedTask?.uid_customer !== user?.current_user_uid) && (selectedTask?.status === 1))"
           :focus="isInFocus"
-          @toggle-focus="changeFocus(selectedTask.uid, isInFocus ? 0 : 1)"
+          @toggle-focus="changeFocus(selectedTask?.uid, isInFocus ? 0 : 1)"
         />
         <!-- Три точки -->
         <TaskPropsButtonDots
-          :show-delete="selectedTask.type === 1 || selectedTask.type === 2"
-          :date-create="selectedTask.date_create"
+          :show-delete="selectedTask?.type === 1 || selectedTask?.type === 2"
+          :date-create="selectedTask?.date_create"
           :only-files="showOnlyFiles"
           @copyUrl="copyurl"
           @deleteTask="showConfirm = true"
@@ -197,7 +197,7 @@
       <TaskPropsChecklist
         v-if="selectedTask?.checklist || checklistshow || checklistSavedNow"
         class="mb-[20px] checklist-custom"
-        :checklist="selectedTask.checklist"
+        :checklist="selectedTask?.checklist"
         :can-edit="canEditChecklist"
         :can-check="canCheckChecklist"
         :add-new="checklistshow"
@@ -207,7 +207,7 @@
       <!-- Comment -->
       <TaskPropsCommentEditor
         v-if="canEditComment || selectedTask?.comment?.length > 0"
-        :comment="selectedTask.comment ?? ''"
+        :comment="selectedTask?.comment ?? ''"
         :can-edit="canEditComment"
         @changeComment="onChangeComment"
       />
@@ -287,7 +287,7 @@
     <CardMessageInput
       v-model="taskMsg"
       class="mt-[16px]"
-      :can-add-files="user.tarif !== 'free'"
+      :can-add-files="user?.tarif !== 'free'"
       @cantWriteMessages="showFreeModalChat = true"
       @createCardMessage="sendTaskMsg"
       @createCardFile="createTaskFile"
