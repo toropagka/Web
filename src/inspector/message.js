@@ -1,6 +1,5 @@
 import store from '@/store/index.js'
 
-// const NULL_MESSAGE_TYPE = 0
 const ORIGIN_MESSAGE_TYPE = 1
 const IGNORE_MESSAGE_TYPE = 2
 const OVERDUE_MESSAGE_TYPE = 3
@@ -28,7 +27,11 @@ function dateToTimeFormat (date) {
   return hours + ':' + seconds
 }
 
-export function getInspectorMessage (type, task) {
+export function isKnownInspectorMessageType (messageType) {
+  return [1, 2, 3, 4, 5, 511, 6, 7, 8, 9].includes(messageType)
+}
+
+export function getInspectorMessage (type, task, payload = 'performer') {
   const currentUser = store?.state?.user?.user?.current_user_uid
   const customer = store?.state?.employees?.employees[task.uid_customer]
   const performer = store?.state?.employees?.employees[task.uid_performer]
@@ -36,7 +39,7 @@ export function getInspectorMessage (type, task) {
   customer?.name.length > 30
     ? customer?.name.substring(0, 30) + '...'
     : customer?.name ??
-    '[Удаленный сотрудник]'
+    '[Удаленный сотрудник] '
   const performerName =
   performer?.name.length > 30
     ? performer?.name.substring(0, 30) + '...'
@@ -46,9 +49,19 @@ export function getInspectorMessage (type, task) {
     store?.state?.employees?.employees[task.uid_performer]?.phone.split(
       ' '
     )[0] ?? '[Неизвестный номер телефона]'
+
+  const customerPhone =
+    store?.state?.employees?.employees[task.uid_customer]?.phone.split(
+      ' '
+    )[0] ?? '[Неизвестный номер телефона]'
+
   if (!task) {
-    return 'Я не могу понять, что это за задача, такого не должно быть'
+    return '???'
   }
+
+  // простите, когда будет рефакторинг, буду переделывать
+  let textMessage
+
   switch (type) {
     case INFO_MESSAGE_TYPE:
       return (
@@ -85,7 +98,12 @@ export function getInspectorMessage (type, task) {
         ', как идут дела? Пожалуйста, приложите промежуточные результаты.'
       )
     case CALL_MESSAGE_TYPE:
-      return 'Я позвонил исполнителю на номер ' + performerPhone + '.'
+      if (payload === 'performer') {
+        textMessage = 'Я позвонил исполнителю на номер ' + performerPhone + '.'
+      } else if (payload === 'customer') {
+        textMessage = 'Исполнитель игнорирует задачу более 24 часов, я позвонил Заказчику на номер ' + customerPhone + '.'
+      }
+      return textMessage
     case PERFOMER_DOESNT_HAVE_PHONE_NUMBER_MESSAGE_TYPE:
       return (
         'Я уже хотел связаться с ' +

@@ -43,7 +43,9 @@
         <!-- Сообщение от инспектора -->
         <div>
           <div
-            v-if="message.isInspectorMessage && !showOnlyFiles"
+            v-if="message.isInspectorMessage &&
+              !showOnlyFiles &&
+              isKnownInspectorMessageType(message.type)"
           >
             <div
               v-if="isChangeCreator(index)"
@@ -60,7 +62,7 @@
               >
                 <div
                   v-linkify:options="{ className: 'text-blue-600' }"
-                  v-html="getInspectorMessage(message.type, (task.uid ? task : selectedTask)).replaceAll('\n', '<br/>')"
+                  v-html="getInspectorMessage(message.type, (task.uid ? task : selectedTask), message.json_payload?.user_to_call).replaceAll('\n', '<br/>')"
                 />
 
                 <div
@@ -153,7 +155,7 @@
 import TaskPropsChatMessageText from '@/components/TaskProperties/TaskPropsChatMessageText.vue'
 import TaskPropsChatMessageFile from '@/components/TaskProperties/TaskPropsChatMessageFile.vue'
 
-import { getInspectorMessage } from '@/inspector/message'
+import { getInspectorMessage, isKnownInspectorMessageType } from '@/inspector/message'
 import linkify from 'vue-linkify'
 
 import * as INSPECTOR from '@/store/actions/inspector'
@@ -195,7 +197,8 @@ export default {
   emits: ['answerMessage', 'sendTaskMsg', 'deleteTaskMsg', 'deleteFiles', 'onPasteEvent', 'readTask'],
   data: () => {
     return {
-      getInspectorMessage
+      getInspectorMessage,
+      isKnownInspectorMessageType
     }
   },
   computed: {
