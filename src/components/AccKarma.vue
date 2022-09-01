@@ -70,6 +70,11 @@ export default {
       const month = calendarDate.toLocaleString('default', { month: 'short' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
+    },
+    setTaskFromQueue (uid) {
+      this.$router.push('/taskByUid/' + uid)
+      this.$router.push('/task/' + uid)
+      this.$store.state.tasks.taskFromQueue = uid
     }
   }
 }
@@ -129,8 +134,8 @@ export default {
             <div class="flex items-center min-w-[40%]">
               <div class="flex items-center break-words min-w-[40%]">
                 <a
-                  class="text text-gray-500 text-sm min-w-[40%] hover:text-blue-500"
-                  :href="currentLocation + 'task/' + karma.taskJson.uid"
+                  class="text cursor-pointer text-gray-500 text-sm min-w-[40%] hover:text-blue-500"
+                  @click="setTaskFromQueue(karma.taskJson.uid)"
                 >
                   {{ karma.taskJson.name }}
                 </a>
