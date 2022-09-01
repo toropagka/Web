@@ -12,12 +12,12 @@
       />
       <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <template
-          v-for="(board, pindex) in boards"
-          :key="pindex"
+          v-for="(board) in subBoards"
+          :key="board.uid"
         >
           <BoardBlocItem
             :board="board"
-            @click.stop="selectAnotherBoard(board.uid)"
+            @click.stop="goToChildBoard(board)"
           />
         </template>
       </div>
@@ -45,43 +45,42 @@ export default {
     NavBar,
     Board
   },
-  props: {
-    boards: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       showAddBoard: false,
-      showBoardsLimit: false,
-      currentBoard: {}
+      showBoardsLimit: false
     }
   },
   computed: {
+    subBoards () {
+      return this.currentBoard?.children
+    },
     storeCards () {
       return this.$store.state.cards.cards
     },
     boardUid () {
       return this.$route.params.board_id
+    },
+    currentBoard () {
+      return this.$store.state.boards.boards[this.boardUid]
     }
   },
   watch: {
     boardUid (newUid) {
       if (newUid) {
-        this.selectAnotherBoard(newUid)
+        this.loadBoard()
       }
     }
   },
   mounted () {
-    this.selectAnotherBoard(this.boardUid)
+    this.loadBoard()
   },
   methods: {
     canAddChild () {
       const user = this.$store.state.user.user
       return this.currentBoard?.email_creator === user.current_user_email
     },
-    selectAnotherBoard (uid) {
+    loadBoard () {
       const navElemRoot = {
         name: 'Доски',
         key: 'greedSource',
@@ -89,7 +88,6 @@ export default {
         value: this.$store.state.navigator.navigator.new_private_boards
       }
       this.$store.commit('updateStackWithInitValue', navElemRoot)
-      this.currentBoard = this.$store.state.boards.boards[uid]
 
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'new_private_boards' })
@@ -116,6 +114,9 @@ export default {
         key: 'greedPath',
         value: 'boards_children'
       })
+    },
+    goToChildBoard (board) {
+      this.$router.push(`/board/${board.uid}`)
     }
   }
 }
