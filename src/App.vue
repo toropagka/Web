@@ -68,7 +68,7 @@ export default {
       return this.$store.state.navbar.navStack
     },
     isFileRedirect () {
-      return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
+      return (this.$route.name === 'taskfile' || this.$route.name === 'cardfile') && this.$route.params.id
     },
     isAuth () {
       return this.$store.getters.isAuthenticated
@@ -80,7 +80,11 @@ export default {
     }
   },
   mounted () {
-    this.initApplication()
+    if (this.ifFileRedirect) {
+      this.isContentLoaded = true
+    } else {
+      this.initApplication()
+    }
   },
   methods: {
     closeSubMenu () {

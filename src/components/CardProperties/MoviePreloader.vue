@@ -26,9 +26,9 @@ export default {
 </script>
 <template>
   <div class="flex space-x-[11px]">
-    <a
+    <router-link
       class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-      :href="'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
+      :to="{ name: 'cardfile', params: { id: fileUid }, query: { type: 'video', format: fileExtension }}"
       target="_blank"
     >
       <svg
@@ -47,15 +47,15 @@ export default {
           fill-opacity="0.5"
         />
       </svg>
-    </a>
+    </router-link>
     <div class="flex flex-col space-y-[2px]">
-      <a
+      <router-link
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-        :href="'cardfile/' + fileUid + '?type=video&format=' + fileExtension"
+        :to="{ name: 'cardfile', params: { id: fileUid }, query: { type: 'video', format: fileExtension }}"
         target="_blank"
       >
         {{ fileName }}
-      </a>
+      </router-link>
       <div class="flex justify-between items-center">
         <p class="text-[#7E7E80] text-[12px] leading-[14px] font-[400]">
           {{ fileSize }}
