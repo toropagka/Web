@@ -29,6 +29,7 @@ import TasksInWork from '@/components/TasksList/TasksInWork'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
+import TaskByUid from '@/components/TasksList/TaskByUid.vue'
 import Boards from '@/components/Boards'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -86,10 +87,10 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/task/:id',
-    name: 'task',
-    component: Home,
-    beforeEnter: ifAuthenticated
+    path: '/taskByUid/:id',
+    name: 'taskByUid',
+    component: TaskByUid,
+    beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
