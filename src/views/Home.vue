@@ -67,10 +67,6 @@
         v-if="greedPath === 'new_private_projects'"
         :items="greedSource"
       />
-      <boards
-        v-if="greedPath === 'new_private_boards'"
-        :boards="greedSource"
-      />
       <doitnow
         v-if="greedPath === 'doitnow'"
       />
@@ -108,7 +104,6 @@ import TasksListNew from '@/components/TasksListNew.vue'
 import MainSection from '@/components/MainSection.vue'
 import Projects from '@/components/Projects.vue'
 import Clients from '@/components/Clients/Clients.vue'
-import Boards from '@/components/Boards.vue'
 import Assignments from '@/components/Assignments.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 import Other from '@/components/Other.vue'
@@ -135,7 +130,6 @@ export default {
     TasksListNew,
     Projects,
     Clients,
-    Boards,
     Doitnow,
     Other,
     TagWithChildren,
