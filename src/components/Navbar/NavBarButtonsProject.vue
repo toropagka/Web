@@ -109,16 +109,9 @@ export default {
     project () {
       return this.$store.state.projects.projects[this.projectUid]
     },
-    currentProject () {
-      const projects = this.$store.state.projects.projects
-      const navStack = this.$store.state.navbar.navStack
-      const currProjectUid = navStack[navStack.length - 1].uid
-      const project = projects[currProjectUid]
-      return project
-    },
     canAddChild () {
       const user = this.$store.state.user.user
-      return this.currentProject?.email_creator === user.current_user_email
+      return this.project?.email_creator === user.current_user_email
     },
     canDelete () {
       return this.project?.email_creator === this.$store.state.user?.user?.current_user_email
@@ -182,7 +175,7 @@ export default {
       if (title) {
         // добавляем новый проект и переходим в него
         const maxOrder =
-          this.currentProject?.children?.reduce(
+          this.project?.children?.reduce(
             (maxOrder, child) =>
               child.order > maxOrder ? child.order : maxOrder,
             0
@@ -192,7 +185,7 @@ export default {
         const project = {
           uid: this.uuidv4(),
           name: title,
-          uid_parent: this.currentProject?.uid ?? '00000000-0000-0000-0000-000000000000',
+          uid_parent: this.project?.uid ?? '00000000-0000-0000-0000-000000000000',
           email_creator: user.current_user_email,
           order: maxOrder + 1,
           comment: '',
@@ -217,7 +210,7 @@ export default {
 
           this.$store.commit(PROJECT.PUSH_PROJECT, [project])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_PROJECT, [project])
-          this.gotoChildren(project)
+          this.$router.push('/project/' + project.uid)
         })
       }
     },
@@ -233,10 +226,7 @@ export default {
           // для актуального значения количества проектов
           this.$store.commit(REMOVE_PROJECT_REQUEST, this.projectUid)
           //
-          this.$emit('popNavBar')
-          if (!this.$store.state.projects.projects[this.$route.params.id]) {
-            this.$router.push('/project')
-          }
+          this.$router.push(this.project.uid_parent === '00000000-0000-0000-0000-000000000000' ? '/projects' : '/project/' + this.project.uid_parent)
         })
     },
     clickCompletedTasks () {

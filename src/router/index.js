@@ -332,9 +332,13 @@ const routes = [
   },
   {
     meta: {
-      layout: Home
+      layout: Home,
+      breadcrumb: {
+        name: 'Проекты',
+        to: '/projects'
+      }
     },
-    path: '/project',
+    path: '/projects',
     name: 'allProjects',
     component: Projects,
     beforeEnter: shouldRedirectToLogin
