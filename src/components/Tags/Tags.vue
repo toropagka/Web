@@ -161,28 +161,6 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
       this.$store.commit(SELECT_TAG, tag)
     },
-    gotoChildren (value) {
-      this.$store.dispatch(TASK.TAG_TASKS_REQUEST, value.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: value.global_property_uid, param: value.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: value.name,
-        key: 'greedSource',
-        uid: value.uid,
-        global_property_uid: value.global_property_uid,
-        greedPath: 'tags_children',
-        value: value.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: value.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'tags_children' })
-    },
     clickAddTag () {
       // если лицензия истекла
       if (Object.keys(this.$store.state.tasks.tags).length >= 3 && this.user.days_left <= 0) {
