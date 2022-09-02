@@ -28,12 +28,13 @@
             {{ getTarifText }}
           </p>
         </div>
-        <span class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px]">
-          <a
-            target="_blank"
-            href="https://www.leadertask.ru/compare"
-          >Купить</a>
-        </span>
+        <a
+          target="_blank"
+          href="https://www.leadertask.ru/compare"
+          class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px]"
+        >
+          Купить
+        </a>
       </div>
     </div>
   </div>
