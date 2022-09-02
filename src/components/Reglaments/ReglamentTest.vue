@@ -141,6 +141,7 @@ export default {
         localStorage.setItem('lastTab', 'doitnow')
         this.$router.push('/doitnow')
         this.$store.state.reglaments.returnDoitnow = false
+        return
       }
       if (val) {
         this.$store.dispatch('popNavStack')

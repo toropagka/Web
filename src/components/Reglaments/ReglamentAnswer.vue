@@ -154,7 +154,6 @@ export default {
     maxAnswerLength () {
       const maxLength = 280
       const answerInput = document.getElementById(this.answer.uid + 'input')
-      console.log(answerInput.innerHTML.length)
       if (answerInput.innerHTML.length > maxLength) {
         answerInput.innerHTML = answerInput.innerHTML.substr(0, maxLength)
         answerInput.blur()

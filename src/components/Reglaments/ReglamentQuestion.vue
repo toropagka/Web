@@ -182,7 +182,6 @@ export default {
     maxQuestionLength () {
       const maxLength = 280
       const questionInput = document.getElementById(this.question.uid + 'input')
-      console.log(questionInput.innerHTML.length)
       if (questionInput.innerHTML.length > maxLength) {
         questionInput.innerHTML = questionInput.innerHTML.substr(0, maxLength)
         questionInput.blur()
