@@ -409,8 +409,8 @@ export default {
     navStack () { return this.$store.state.navbar.navStack },
     isInFocus () { return this.selectedTask?.focus === 1 },
     isAccessVisible () {
-      if (this.selectedTask.emails) return true
-      if (this.selectedTask.type === 1 || this.selectedTask.type === 2) return true
+      if (this.selectedTask?.emails) return true
+      if (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) return true
       return false
     },
     modalBoxDeleteText () {
