@@ -6,7 +6,7 @@
     <div class="flex flex-col">
       <div class="text-[#7e7e80] text-[13px] leading-[18px] font-roboto whitespace-pre-line">
         <p class="font-semibold">
-          Инспектор - функция тарифа "Альфа"
+          Инспектор - функция тарифа "Бизнес+"
         </p>
         <p>
           Поручайте задачи коллегам, получайте уведомления об их готовности при помощи новой функции "Инспектор"!
