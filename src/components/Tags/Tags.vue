@@ -10,16 +10,16 @@
     >
       Метки
     </p>
-    <div
-      class="flex flex-col gap-[6px] mt-3"
-    >
-      <InputValue
+    <div class="flex flex-col gap-[6px] mt-[25px]">
+      <TagInput
         v-if="showAddTag"
+        class="place-self-start mb-[25px] w-[184px]"
         @save="createTag"
         @cancel="showAddTag = false"
       />
-      <AddTag
+      <TagAdd
         v-else
+        class="place-self-start mb-[25px] w-[184px]"
         @click="clickAddTag"
       />
       <template
@@ -43,21 +43,21 @@
 <script>
 import TagModalBoxTagsLimit from '@/components/Tags/TagModalBoxTagsLimit.vue'
 import TagItem from '@/components/Tags/TagItem.vue'
-import AddTag from '@/components/Tags/AddTag.vue'
+import TagAdd from '@/components/Tags/TagAdd.vue'
+import TagInput from '@/components/Tags/TagInput.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 import * as TASK from '@/store/actions/tasks'
 import { SELECT_TAG } from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
-import InputValue from '@/components/InputValue'
 import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
     TagItem,
-    AddTag,
+    TagAdd,
+    TagInput,
     TagModalBoxTagsLimit,
-    EmptyTasksListPics,
-    InputValue
+    EmptyTasksListPics
   },
   data () {
     return {
@@ -79,6 +79,9 @@ export default {
     }
   },
   computed: {
+    isPropertiesMobileExpanded () {
+      return this.$store.state.isPropertiesMobileExpanded
+    },
     tags () {
       return this.$store.getters.sortedNavigator.tags?.items
     },
@@ -89,12 +92,23 @@ export default {
       return !this.tags.length
     }
   },
+  watch: {
+    isPropertiesMobileExpanded: {
+      immediate: true,
+      handler: function (val) {
+        if (!val) {
+          this.focusedTag = ''
+        }
+      }
+    }
+  },
   methods: {
     openProperties (tag) {
       this.focusedTag = tag.uid
       this.$store.dispatch('asidePropertiesToggle', true)
       this.$store.commit('basic', { key: 'propertiesState', value: 'tag' })
       this.$store.commit(SELECT_TAG, tag)
+      console.log('select tag', tag)
     },
     clickAddTag () {
       // если лицензия истекла
@@ -112,23 +126,15 @@ export default {
 
       const randomIndex = Math.floor(Math.random() * this.randomColors.length - 1)
       const randomColor = this.randomColors[randomIndex]
-      const tag = {
-        uid_parent: '00000000-0000-0000-0000-000000000000',
+      const data = {
         back_color: randomColor,
-        comment: '',
-        collapsed: 0,
-        children: [],
-        order: 1,
-        group: 0,
-        show: 0,
-        favorite: 0,
         uid: uuidv4(),
-        name: title,
-        email_creator: this.user.current_user_email,
-        bold: 0
+        name: title
       }
-      this.$store.dispatch(TASK.CREATE_TAG_REQUEST, tag)
-        .then(() => {
+      this.$store.dispatch(TASK.CREATE_TAG_REQUEST, data)
+        .then((resp) => {
+          const tag = { ...resp.data }
+          console.log('CREATE_TAG_REQUEST', tag)
           tag.global_property_uid = '00a5b3de-9474-404d-b3ba-83f488ac6d30'
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_TAG, [tag])
           this.openProperties(tag)

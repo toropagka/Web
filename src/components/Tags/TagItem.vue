@@ -6,7 +6,7 @@
     <div class="flex items-center relative w-full">
       <div
         v-if="count > 0"
-        class="min-w-[13px] min-h-[13px] absolute rounded-[3px] bg-[#4c4c4d] -top-0.5 -left-0.5 flex items-center justify-center"
+        class="min-w-[13px] min-h-[13px] absolute rounded-[3px] bg-[#4c4c4d] -top-[3px] -left-[4px] flex items-center justify-center"
       >
         <span
           class="text-white font-['Roboto'] text-[10px] leading-[12px] font-medium px-0.5"
