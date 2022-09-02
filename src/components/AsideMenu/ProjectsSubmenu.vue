@@ -156,10 +156,6 @@ export default {
     }
   },
   methods: {
-    pushToRouter () {
-      localStorage.setItem('lastTab', 'new_private_projects')
-      this.$router.push('/tasks')
-    },
     onAddNewProject (name) {
       this.showAddProject = false
       const title = name.trim()
