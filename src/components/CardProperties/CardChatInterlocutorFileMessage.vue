@@ -25,7 +25,7 @@
     <DocPreloader
       v-else-if="FileIsDoc"
       :file-uid="message.uid"
-      :file-name="correctShortFileMessage"
+      :file-name="message.file_name"
       :file-extension="fileExtension"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
@@ -45,7 +45,7 @@
     <FilePreloader
       v-else
       :file-uid="message.uid"
-      :file-name="correctShortFileMessage"
+      :file-name="message.file_name"
       :file-extension="fileExtension"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
@@ -99,17 +99,6 @@ export default {
     },
     FileIsAudio () {
       return ['mp3', 'wav'].includes(this.fileExtension)
-    },
-    correctShortFileMessage () {
-      const fileMessageSplitForExtesion = this.message.file_name.split('.')
-      const shortName =
-        this.message.file_name.substring(0, 18) +
-        '.. .' +
-        fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
-
-      return this.message.file_name.length > 18
-        ? shortName
-        : this.message.file_name
     }
   },
   methods: {

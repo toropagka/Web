@@ -42,7 +42,7 @@
     <div class="flex flex-col space-y-[2px]">
       <p
         v-if="!fileIsDownloaded"
-        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] cursor-pointer"
+        class="text-[#4C4C4D] max-w-[100px] truncate text-[13px] leading-[15px] font-[700] cursor-pointer"
         style="word-break: break-word"
         @click.stop="loadFileFromInternet"
       >
@@ -55,7 +55,7 @@
         target="_blank"
         :download="fileName"
         style="word-break: break-word"
-        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
+        class="text-[#4C4C4D] max-w-[100px] truncate text-[13px] leading-[15px] font-[700]"
       >
         {{ fileName }}
       </a>

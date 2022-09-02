@@ -35,20 +35,20 @@
               v-if="movies.includes(file.file_name.split('.').pop())"
               :to="{ name: 'taskfile', params: { id: file.uid }, query: { type: 'video', format: file.file_name.split('.').pop().toLowerCase() }}"
               target="_blank"
-              class="table font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
+              class="table max-w-[160px] truncate font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
               style="word-break: break-word"
             >
-              {{ correctShortFileMessage }}
+              {{ fileName }}
             </router-link>
             <a
               v-else
               :href="!isAudio ? fileUrl : null"
               :src="isAudio ? fileUrl : null"
               :download="fileName"
-              class="flex w-full font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
+              class="flex max-w-[250px] truncate font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
               style="word-break: break-word"
             >
-              {{ correctShortFileMessage }}
+              {{ fileName }}
             </a>
             <div
               v-if="time && size"
@@ -166,7 +166,7 @@
             @setLink="setLink"
           />
 
-          <span>{{ correctShortFileMessage }}</span>
+          <span class="max-w-[180px] truncate">{{ fileName }}</span>
           <div
             v-if="time && size"
             class="group flex justify-between w-full text-[#7E7E80] dark:text-gray-300 "
@@ -375,14 +375,6 @@ export default {
       text = text.replaceAll('&lt;', '<')
       text = text.replaceAll('&gt;', '>')
       return text
-    },
-    correctShortFileMessage () {
-      const fileMessageSplitForExtesion = this.fileName.split('.')
-      const shortName = this.fileName.substring(0, 18) + '.. .' + fileMessageSplitForExtesion[fileMessageSplitForExtesion.length - 1]
-
-      return this.fileName.length > 18
-        ? shortName
-        : this.fileName
     }
   },
   methods: {

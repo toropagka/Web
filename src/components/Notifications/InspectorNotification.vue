@@ -58,10 +58,10 @@ export default {
                       height="40"
                     >
                     <a
-                      class="text-sm font-semibold text-blue-500 truncate"
+                      class="text-sm max-w-[200px] truncate font-semibold text-blue-500"
                       :href="currentLocation + 'task/' + notification.task.uid"
                     >
-                      {{ notification.task.name.length < 150 ? notification.task.name : notification.task.name.substring(0, 149) + '...' }}
+                      {{ notification.task.name }}
                     </a>
                   </div>
                 </div>
