@@ -5,7 +5,7 @@
   >
     <div class="flex flex-col">
       <div class="text-[#7e7e80] text-[13px] leading-[18px] font-roboto whitespace-pre-line">
-        Чтобы создать регламент необходимо обновить тариф до уровня "Альфа".
+        Чтобы создать регламент необходимо обновить тариф до уровня "Бизнес+".
       </div>
       <div class="gap-[4px] flex justify-end mt-4">
         <a
