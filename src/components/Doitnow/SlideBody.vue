@@ -251,7 +251,7 @@ export default {
     },
     clickAddEmployees () {
       this.$emit('nextTask')
-      this.$store.state.navigator.lastTab = 'directory'
+      this.$router.push('/employees')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
@@ -263,8 +263,6 @@ export default {
       }
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_emps })
-      this.$store.state.navigator.currentSettingsTab = 'directory'
-      localStorage.setItem('lastTab', 'directory')
     },
     clickAddReglament () {
       this.$emit('nextTask')
