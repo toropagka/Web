@@ -451,7 +451,7 @@ export default {
 }
 
 .ql-editor > * {
-  text-overflow: ellipsis;
+  word-break: break-word;
   overflow: hidden;
 }
 </style>

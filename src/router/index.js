@@ -30,6 +30,7 @@ import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
 import TaskByUid from '@/components/TasksList/TaskByUid.vue'
+import TasksByDate from '@/components/TasksList/TasksByDate.vue'
 import Boards from '@/components/Boards'
 import Search from '@/components/Search'
 
@@ -91,6 +92,15 @@ const routes = [
     path: '/task/:id',
     name: 'task',
     component: TaskByUid,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/tasks/:date',
+    name: 'tasksByDate',
+    component: TasksByDate,
     beforeEnter: shouldRedirectToLogin
   },
   {
