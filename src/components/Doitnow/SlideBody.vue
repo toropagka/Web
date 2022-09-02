@@ -252,7 +252,6 @@ export default {
     clickAddEmployees () {
       this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'directory'
-      this.$router.push('/directory')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
@@ -270,7 +269,6 @@ export default {
     clickAddReglament () {
       this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'directory'
-      this.$router.push('/directory')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })

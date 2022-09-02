@@ -292,13 +292,6 @@ const routes = [
   },
   {
     meta: {},
-    path: '/directory',
-    name: 'directory',
-    component: Home,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
     path: '/clients',
     name: 'clients',
     component: Empty,

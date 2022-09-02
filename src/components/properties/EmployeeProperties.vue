@@ -307,7 +307,6 @@ export default {
       console.log(msg, param)
     },
     clickReglament (reglamentUid) {
-      this.$router.push('/directory')
       this.closeProperties()
       this.$store.commit('updateStackWithInitValue', {
         name: 'Регламенты',
