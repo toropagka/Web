@@ -24,11 +24,11 @@
             ЛидерТаск – это система для совместной работы в команде, которая:
           </p>
           <ul class="list-decimal pl-10">
-            <li>запишет и сохранит все задачи; проекты, дела и встречи</li>
+            <li>запишет и сохранит все задачи проекты, дела и встречи;</li>
             <li>проследит за выполнением ваших поручений сотрудникам;</li>
-            <li>будет вести статистику; каждого участника команды</li>
+            <li>будет вести статистику каждого участника команды;</li>
             <li>автоматизирует внедрение новых сотрудников;</li>
-            <li>и многое другое</li>
+            <li>и многое другое.</li>
           </ul>
         </article>
       </div>
@@ -233,7 +233,7 @@ export default {
     clickAddAvatar () {
       this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'settings'
-      this.$router.push('/settings')
+      this.$router.push('/account')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('updateStackWithInitValue', {
         name: 'Аккаунт',
