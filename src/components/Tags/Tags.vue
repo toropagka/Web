@@ -89,18 +89,6 @@ export default {
       return !this.tags.length
     }
   },
-  mounted () {
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-    this.$store.commit('basic', { key: 'greedPath', value: 'tags' })
-    const navElem = {
-      name: 'Метки',
-      key: 'greedSource',
-      greedPath: 'tags',
-      value: this.$store.state.navigator.navigator.tags?.items
-    }
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-  },
   methods: {
     openProperties (tag) {
       this.focusedTag = tag.uid
