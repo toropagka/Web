@@ -109,7 +109,7 @@
         </div>
       </div>
       <template #menu>
-        <div class="max-h-[220px] overflow-y-auto w-[220px] scroll-style">
+        <div class="max-h-[220px] overflow-y-auto overflow-x-hidden w-[220px] scroll-style">
           <BoardPropsMenuItemUser
             v-for="user in usersCanAddToAccess"
             :key="user.email"

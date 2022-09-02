@@ -2,7 +2,7 @@
   <PopMenuItem
     style="padding-left: 8px;"
   >
-    <div class="flex items-center">
+    <div class="flex items-center max-w-[205px]">
       <img
         v-if="photo"
         :src="photo"
