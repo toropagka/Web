@@ -145,7 +145,6 @@
                 @keydown.enter="updateTask($event, props.node.info); props.node.info._isEditable = false;"
               />
             </div>
-
             <!-- Tags, Overdue, Customer, Performer -->
             <div
               v-if="props.node.info.uid_customer == '00000000-0000-0000-0000-000000000000' || props.node.info.email_performer || props.node.info.is_overdue || props.node.info.tags || props.node.info.uid_project == '00000000-0000-0000-0000-000000000000' || props.node.info.term_customer || props.node.info.checklist || props.node.info.has_files || props.node.info.has_msgs || props.node.info.comment || props.node.info.focus"
@@ -335,7 +334,7 @@ import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
-
+import { TASK_STATUS } from '@/constants'
 import NavBar from '@/components/NavBar.vue'
 
 import * as TASK from '@/store/actions/tasks'
@@ -1131,7 +1130,7 @@ export default {
     onChangeStatus (status, task) {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
-        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
+        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
           const restoredTasksArray = []
           Object.values(prevTasksArray).forEach((item) => {
