@@ -55,7 +55,6 @@
       @changePosition="onChangeAllCardsPosition"
     />
     <draggable
-      v-dragscroll.y="true"
       v-dragscroll:nochilddrag
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
       :list="storeCards"
