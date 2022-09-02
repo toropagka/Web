@@ -1137,6 +1137,11 @@ const mutations = {
   [TASK.UPDATE_TASK]: (state, task) => {
     if (state.newtasks[task.uid]) {
       state.newtasks[task.uid].info = task
+      const uidToOrder = state.newConfig.roots.map(taskUid => ({
+        uid: taskUid,
+        order: state.newtasks[taskUid].info.order_new
+      }))
+      state.newConfig.roots = uidToOrder.sort((a, b) => a.order - b.order).map(x => x.uid)
     }
     if (state.selectedTask?.uid === task.uid) {
       state.selectedTask = task
