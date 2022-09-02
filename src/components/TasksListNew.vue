@@ -1039,7 +1039,11 @@ export default {
       for (let i = 0; i < pool.length; i++) {
         if (pool[i] === taskUid) {
           if (i === 0 && this.storeTasks[taskUid]?.info) {
-            this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
+            if (this.storeTasks[pool[i + 1]]) {
+              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
+            } else {
+              this.storeTasks[pool[i]].info.order_new = 1
+            }
           } else if (i > 0 && i !== pool.length - 1 && this.storeTasks[pool[i + 1]]?.info) {
             this.storeTasks[pool[i]].info.order_new =
               (this.storeTasks[pool[i - 1]].info.order_new + this.storeTasks[pool[i + 1]].info.order_new) / 2
