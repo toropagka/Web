@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex items-center rounded-[8px] px-[20px] h-[40px] cursor-pointer"
-    :class="{ 'bg-white/60': selected }"
+    :class="{ 'border border-[#ff9123] bg-white -mx-px': selected, 'hover:bg-white/60': !selected }"
   >
     <div class="flex items-center relative w-full">
       <div
