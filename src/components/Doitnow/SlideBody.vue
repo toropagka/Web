@@ -233,7 +233,7 @@ export default {
     clickAddAvatar () {
       this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'settings'
-      this.$router.push('/settings')
+      this.$router.push('/account')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('updateStackWithInitValue', {
         name: 'Аккаунт',
