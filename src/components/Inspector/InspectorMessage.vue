@@ -559,7 +559,7 @@ export default {
       for (const empUid in this.employees) {
         if (
           empUid !== this.currentUserUid &&
-      this.includesWord(this.employees[empUid].name, inputLowerCase)
+          this.includesWord(this.employees[empUid].name, inputLowerCase)
         ) {
           newEmployees[empUid] = this.employees[empUid]
         }

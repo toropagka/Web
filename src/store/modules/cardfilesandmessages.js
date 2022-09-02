@@ -90,7 +90,7 @@ const actions = {
       axios({ url: url, method: 'DELETE' })
         .then(resp => {
           const data = { uid: fileUid, key: 'deleted', value: 1 }
-          commit(CARD_FILES_AND_MESSAGES.CHANGE_MESSAGE, data)
+          commit(CARD_FILES_AND_MESSAGES.REMOVE_MESSAGE_LOCALLY, data)
           resolve(resp)
         }).catch(err => {
           reject(err)
