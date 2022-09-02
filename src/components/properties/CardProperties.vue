@@ -509,7 +509,6 @@ export default {
     },
     changeCardCover (event) {
       const files = event.target.files
-      console.log('files -->', files)
       const formData = new FormData()
       for (let i = 0; i < files?.length; i++) {
         const file = files[i]
