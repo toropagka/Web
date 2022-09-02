@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-white min-h-[20px] flex items-center rounded-[6px] justify-center">
+  <div class="w-full bg-white min-h-[20px] flex items-center rounded-[6px]">
     <input
       ref="inputValue"
       v-model="currentValue"

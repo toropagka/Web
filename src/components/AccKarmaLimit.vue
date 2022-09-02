@@ -5,7 +5,9 @@
   >
     <div class="flex flex-col">
       <div class="text-[#7e7e80] text-[13px] leading-[18px] font-roboto whitespace-pre-line">
-        <p class="font-semibold">Карма - функция тарифа "Альфа"</p>
+        <p class="font-semibold">
+          Карма - функция тарифа "Бизнес+"
+        </p>
         <p>Хотите узнать продуктивен сотрудник или нет? Карма поможет в этом разобраться!</p>
       </div>
       <div class="gap-[4px] flex justify-end mt-4">

@@ -93,11 +93,8 @@
         <div
           class="group w-full flex items-center gap-[12px] px-[12px] h-[42px] border border-black/12 rounded-[6px] cursor-pointer"
         >
-          <div class="grow w-full font-roboto text-[#606061] text-[15px]">
-            {{
-              selectedEmployeeDep.length > 30
-                ? selectedEmployeeDep.substring(0, 30) + '...'
-                : selectedEmployeeDep || 'Вне отдела' }}
+          <div class="grow w-full max-w-[200px] truncate font-roboto text-[#606061] text-[15px]">
+            {{ selectedEmployeeDep }}
           </div>
           <svg
             width="12"
@@ -118,23 +115,19 @@
           <PopMenuItem
             v-for="(dep, index) in allDepartments"
             :key="index"
+            class="max-w-[150px] truncate"
             @click="setDepartment(index)"
           >
-            {{
-              dep.name .length > 30
-                ? dep.name .substring(0, 30) + '...'
-                : dep.name }}
+            {{ dep.name }}
           </PopMenuItem>
         </template>
       </PopMenu>
     </div>
     <div
       v-else
-      class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
+      class="mt-[15px] w-full max-w-[200px] truncate font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
     >
-      {{ selectedEmployeeDep.length > 30
-        ? selectedEmployeeDep.substring(0, 30) + '...'
-        : selectedEmployeeDep || 'Вне отдела' }}
+      {{ selectedEmployeeDep }}
     </div>
     <div
       v-if="openedReglaments.length"
@@ -307,7 +300,6 @@ export default {
       console.log(msg, param)
     },
     clickReglament (reglamentUid) {
-      this.$router.push('/directory')
       this.closeProperties()
       this.$store.commit('updateStackWithInitValue', {
         name: 'Регламенты',

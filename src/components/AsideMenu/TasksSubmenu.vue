@@ -237,9 +237,6 @@ import AsideMenuSkeleton from '@/components/AsideMenu/AsideMenuSkeleton.vue'
 import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
 import AsideMenuListTitle from '@/components/AsideMenu/AsideMenuListTitle.vue'
 import TasksSubmenuCalendar from '@/components/AsideMenu/TasksSubmenuCalendar.vue'
-import { UID_TO_ACTION } from '@/store/helpers/functions'
-
-import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
@@ -287,10 +284,6 @@ export default {
     }
   },
   methods: {
-    pushToRouter () {
-      localStorage.setItem('lastTab', 'tasks')
-      this.$router.push('/tasks')
-    },
     isUserSelected (user) {
       if (
         this.lastNavStack?.value?.uid === user.parentID &&
@@ -316,71 +309,11 @@ export default {
       }
       return false
     },
-    gotoToDate (date) {
-      this.pushToRouter()
-      this.$store.state.navigator.submenu.status = false
-      // если день уже выбран - ничего не делаем
-      if (this.isDateSelected(date)) return
-      //
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-      //
-      this.$store.dispatch(TASK.TASKS_REQUEST, new Date(date))
-      const day = date.getDate()
-      const month = date.toLocaleString('default', { month: 'short' })
-      const weekday = date.toLocaleString('default', { weekday: 'short' })
-      const dateLabelFormat = day + ' ' + month + ', ' + weekday
-      const navElem = {
-        name: dateLabelFormat,
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(date) },
-        typeVal: new Date(date),
-        type: 'date'
-      }
+    onDayClick (date) {
+      this.$router.push('/tasks/' + date)
+      localStorage.setItem('lastTab', 'tasks')
       this.$store.commit('setCalendarLastPicked', date)
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: new Date(date) } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-    },
-    gotoAction (uid, label) {
-      this.pushToRouter()
-      this.$store.state.navigator.submenu.status = false
-      // если уже выбран - ничего не делаем
-      if (this.isActionSelected(uid)) return
-      //
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-      //
-      if (UID_TO_ACTION[uid]) {
-        this.$store.dispatch(UID_TO_ACTION[uid])
-        const navElem = {
-          name: label,
-          key: 'taskListSource',
-          value: { uid: uid, param: new Date() },
-          typeVal: new Date(),
-          type: 'date'
-        }
-        this.$store.commit('setCalendarLastPicked', null)
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'taskListSource', value: { uid: uid, param: null } })
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      } else {
-        console.error(`gotoAction - ${label} > UID_TO_ACTION[${uid}] is null!!!`)
-      }
-    },
-    onDayClick (day) {
-      this.gotoToDate(day.date)
-    },
-    gotoReady () {
-      this.gotoAction('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0', 'Готово к сдаче')
+      this.closeMenu()
     },
     closeMenu () {
       this.$store.state.navigator.submenu.status = false

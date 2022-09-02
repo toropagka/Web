@@ -10,7 +10,7 @@
         width="24"
         height="24"
       >
-      <div class="ml-[2px] truncate">
+      <div class="ml-[2px] truncate w-[196px]">
         {{ name }}
       </div>
     </div>

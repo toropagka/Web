@@ -242,14 +242,6 @@ export default {
     },
     selectSubMenuItem (isSelected, cbOpenView) {
       localStorage.setItem('lastTab', 'directory')
-      //
-      // REMOVE: Убрать после перехода на vue-router. Нужно для того, чтобы при переходе менялся url, соответственно компонент vue-router бы анмаунтился
-      // Например без этой строки при урле '/colors', при переходе в другой раздел цвета всё равно остаются
-      //
-      this.$router.push('/directory')
-      //
-      // END REMOVE
-      //
       // закрываем сабменю
       this.$store.state.navigator.submenu.status = false
       // если вкладка не поменялась - ничего не делаем

@@ -12,12 +12,15 @@
     @click="onSelectAnswer"
   >
     <div
+      :id="answer.uid + 'input'"
       :ref="answer.uid + 'input'"
       :placeholder="answerPlaceholder(answer)"
+      spellcheck="false"
       class="font-[500] text-[14px] px-4 pt-4 leading-6 min-h-[60px] break-words"
       :class="{'cursor-editing': isEditing, 'invalid': answer.invalid }"
       :contenteditable="isEditing"
       @blur="false"
+      @input="maxAnswerLength"
       @keyup="false"
       @keydown.enter.exact.prevent="$emit('addAnswer')"
       @focusout="updateAnswerName"
@@ -147,6 +150,14 @@ export default {
         return 'Поле ответа не должно быть пустым'
       }
       return this.isEditing ? 'Текст ответа' : ''
+    },
+    maxAnswerLength () {
+      const maxLength = 280
+      const answerInput = document.getElementById(this.answer.uid + 'input')
+      if (answerInput.innerHTML.length > maxLength) {
+        answerInput.innerHTML = answerInput.innerHTML.substr(0, maxLength)
+        answerInput.blur()
+      }
     },
     deleteAnswer () {
       this.showDeleteAnswer = false

@@ -24,11 +24,11 @@
             ЛидерТаск – это система для совместной работы в команде, которая:
           </p>
           <ul class="list-decimal pl-10">
-            <li>запишет и сохранит все задачи; проекты, дела и встречи</li>
+            <li>запишет и сохранит все задачи проекты, дела и встречи;</li>
             <li>проследит за выполнением ваших поручений сотрудникам;</li>
-            <li>будет вести статистику; каждого участника команды</li>
+            <li>будет вести статистику каждого участника команды;</li>
             <li>автоматизирует внедрение новых сотрудников;</li>
-            <li>и многое другое</li>
+            <li>и многое другое.</li>
           </ul>
         </article>
       </div>
@@ -65,9 +65,9 @@
           <article class="font-[400] text-[18px] leading-[29px] text-left w-full text-[#4C4C4D] mb-[35px] pl-0">
             <p>
               1. Аватар поможет вашим коллегам быстрее найти Вас в списках <br>
-              (особенно, когда в вашей команде есть сотрудники с одинаковыми именами)
+              (особенно, когда в вашей команде есть сотрудники с одинаковыми именами);
             </p>
-            <p>2. Это просто эстетично и гораздо лучше стандартной серой картинки</p>
+            <p>2. это просто, эстетично и гораздо лучше стандартной серой картинки</p>
           </article>
         </div>
       </div>
@@ -233,7 +233,7 @@ export default {
     clickAddAvatar () {
       this.$emit('nextTask')
       this.$store.state.navigator.lastTab = 'settings'
-      this.$router.push('/settings')
+      this.$router.push('/account')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('updateStackWithInitValue', {
         name: 'Аккаунт',
@@ -251,8 +251,7 @@ export default {
     },
     clickAddEmployees () {
       this.$emit('nextTask')
-      this.$store.state.navigator.lastTab = 'directory'
-      this.$router.push('/directory')
+      this.$router.push('/employees')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
@@ -264,26 +263,21 @@ export default {
       }
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_emps })
-      this.$store.state.navigator.currentSettingsTab = 'directory'
-      localStorage.setItem('lastTab', 'directory')
     },
     clickAddReglament () {
       this.$emit('nextTask')
-      this.$store.state.navigator.lastTab = 'directory'
-      this.$router.push('/directory')
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+      this.$router.push('/reglaments')
       const navElem = {
-        name: 'Сотрудники',
+        name: 'Регламенты',
         key: 'greedSource',
         greedPath: 'reglaments',
         value: this.storeNavigator.reglaments
       }
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments.items })
-      this.$store.state.navigator.currentSettingsTab = 'directory'
-      localStorage.setItem('lastTab', 'directory')
     }
   }
 }

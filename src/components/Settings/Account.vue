@@ -1,4 +1,3 @@
-
 <template>
   <UploadAvatar
     v-if="changeAvatar"
@@ -103,10 +102,10 @@
       </p>
     </div>
   </ModalBox>
-  <form class="overscroll-auto bg-white p-2 rounded">
-    <div class="pl-[15px] pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
-      Аккаунт
-    </div>
+  <NavBarTemplate class="mt-[15px]">
+    Аккаунт
+  </NavBarTemplate>
+  <div class="overscroll-auto bg-white p-2 rounded-lg mt-1 pt-6">
     <div class="flex pb-3">
       <form class="text-left w-40">
         <div class="text-center mb-3 mr-5">
@@ -241,7 +240,7 @@
         </div>
       </form>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -252,6 +251,7 @@ import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import UsernameRename from '@/components/Settings/UsernameRename.vue'
 import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
+import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
 import UploadAvatar from '@/components/UploadAvatar'
 import * as SLIDES from '@/store/actions/slides.js'
 
@@ -260,7 +260,8 @@ export default {
     UploadAvatar,
     ModalBox,
     UsernameRename,
-    PhoneModalBoxRename
+    PhoneModalBoxRename,
+    NavBarTemplate
   },
   emits: ['AccLogout', 'currentSettingsTab'],
   data () {

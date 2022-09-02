@@ -302,6 +302,7 @@ export default {
       }
       this.$store.dispatch(AUTH_REGISTER, data)
         .then(() => {
+          window.ym(89796698, 'reachGoal', 'signup-new-web')
           localStorage.removeItem('slides')
           this.$router.push('/doitnow')
           const slides = {
@@ -454,7 +455,10 @@ export default {
         cid: cid
       }
       this.$store.dispatch(GOOGLE_AUTH_REQUEST, data)
-        .then(() => {
+        .then((resp) => {
+          if (resp?.data?.is_new_user) {
+            window.ym(89796698, 'reachGoal', 'signup-new-web')
+          }
           this.$router.push('/')
           this.$store.dispatch(USER_START_ONBOARDING)
         })

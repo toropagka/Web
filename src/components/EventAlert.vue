@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-[182px] w-[260px] flex flex-col py-[22px] px-[20px] border-[1px] bg-[#FFFFFF] border-[#F2B679] rounded-[10px]"
+    class="h-auto w-[260px] flex flex-col py-[22px] px-[20px] border-[1px] bg-[#FFFFFF] border-[#F2B679] rounded-[10px]"
   >
     <div class="flex">
       <div>
@@ -28,12 +28,13 @@
             {{ getTarifText }}
           </p>
         </div>
-        <span class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px]">
-          <a
-            target="_blank"
-            href="https://www.leadertask.ru/compare"
-          >Купить</a>
-        </span>
+        <a
+          target="_blank"
+          href="https://www.leadertask.ru/alpha"
+          class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px]"
+        >
+          Купить
+        </a>
       </div>
     </div>
   </div>
@@ -53,7 +54,7 @@ export default {
         case 'free':
           return 'Купите лицензию, чтобы использовать все функции приложения'
         case 'trial':
-          return 'Пробный период'
+          return 'Вам доступны все функции приложения. По истечении срока вы перейдет в режим ограниченной функциональности'
         default:
           return ''
       }

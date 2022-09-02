@@ -45,12 +45,15 @@
       <div class="px-1 flex justify-between items-center group">
         <div class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] min-w-[550px]">
           <div
+            :id="question.uid + 'input'"
             :ref="question.uid + 'input'"
             placeholder="Текст вопроса"
+            spellcheck="false"
             class="font-[500] text-[14px] mx-4 mt-4 leading-6 min-h-[60px] break-words"
             :contenteditable="isEditing && canEdit"
             @blur="changeQuestionName($event)"
             @keydown.enter.exact.prevent="$emit('addQuestion')"
+            @input="maxQuestionLength"
             v-text="question.name"
           />
           <div class="flex justify-end items-end pb-2 pr-2">
@@ -175,6 +178,14 @@ export default {
   methods: {
     gotoNode (uid) {
       this.$refs[uid][0].onFocus()
+    },
+    maxQuestionLength () {
+      const maxLength = 280
+      const questionInput = document.getElementById(this.question.uid + 'input')
+      if (questionInput.innerHTML.length > maxLength) {
+        questionInput.innerHTML = questionInput.innerHTML.substr(0, maxLength)
+        questionInput.blur()
+      }
     },
     questionPlaceholder (question) {
       if (question.name === '' && question.invalid) {

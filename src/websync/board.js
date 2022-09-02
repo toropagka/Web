@@ -34,3 +34,7 @@ export function removeBoard (obj) {
     router.push('/doitnow')
   }
 }
+
+export function addBoard (obj) {
+  store.commit(NAVIGATOR.NAVIGATOR_PUSH_COMMON_BOARD, obj)
+}

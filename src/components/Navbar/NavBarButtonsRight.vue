@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { PATCH_SETTINGS } from '@/store/actions/navigator'
+import { PATCH_SETTINGS, NAVIGATOR_UPDATE_ASSIGNMENTS } from '@/store/actions/navigator'
 import { visitChildren, UID_TO_ACTION } from '@/store/helpers/functions'
 import * as TASK from '@/store/actions/tasks'
 import * as BOARD from '@/store/actions/boards'
@@ -220,6 +220,7 @@ export default {
         }
       ).then(() => {
         this.requestLastVisitedNav()
+        this.$store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
       })
     },
     requestLastVisitedNav () {

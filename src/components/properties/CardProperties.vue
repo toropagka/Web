@@ -151,7 +151,7 @@
     <div class="flex flex-col fixed bottom-[0px] w-[340px] bg-white pt-2 pb-5">
       <CardMessageQuoteUnderInput
         v-if="currentQuote"
-        class="mb-[14px] mt-[19px]"
+        class="quote-request border-l-2 border-[#7E7E80] h-[40px]"
         :quote-message="currentQuote"
         :employee="employees[currentQuote.uid_creator]"
         @onClearQuote="currentQuote = false"
@@ -509,7 +509,6 @@ export default {
     },
     changeCardCover (event) {
       const files = event.target.files
-      console.log('files -->', files)
       const formData = new FormData()
       for (let i = 0; i < files?.length; i++) {
         const file = files[i]

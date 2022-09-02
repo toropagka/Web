@@ -155,6 +155,9 @@ export default {
     },
     showCompletedTasks () {
       return this.settings?.show_completed_tasks ?? false
+    },
+    user () {
+      return this.$store.state.user.user
     }
   },
   /**
@@ -172,6 +175,7 @@ export default {
     )
   },
   mounted () {
+    this.$store.state.navigator.lastTab = 'new_private_projects'
     if (!Object.keys(this.$store.state.projects.projects).includes(this.$route.params.project_id)) {
       this.$router.push('/projects')
       return
@@ -343,19 +347,9 @@ export default {
           const taskUid = this.searchText.slice(15, -1).toLowerCase()
           const link = `${window.location.origin}/task/${taskUid}`
           window.location = link
-          return
         }
-        const navElem = {
-          name: 'Поиск: ' + this.searchText,
-          key: 'taskListSource',
-          value: { uid: '11212e94-cedf-11ec-9d64-0242ac120002', param: this.searchText }
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-        this.$store.commit('basic', { key: 'taskListSource', value: navElem.value })
-        this.$store.dispatch(TASK.SEARCH_TASK, this.searchText).then((resp) => {
-          console.log('Search Tasks', resp)
-        })
+
+        this.$router.push({ path: '/search', query: { q: this.searchText } })
       } else {
         notify(
           {

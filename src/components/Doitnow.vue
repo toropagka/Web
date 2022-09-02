@@ -1,23 +1,10 @@
 <template>
   <div class="pt-[15px] w-full">
+    <NavBarTemplate class="xl:ml-[290px]">
+      Очередь
+    </NavBarTemplate>
     <div
-      v-if="!isLoading"
-      class="ml-0 xl:ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
-    >
-      <div
-        class="h-[24px] w-[24px] block xl:hidden"
-        @click="menuToggleMobile"
-      >
-        <icon
-          :box="'0 0 24 24'"
-          :path="menuToggleMobileIcon"
-          size="24"
-        />
-      </div>
-      <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs text-[#4C4C4D] font-[700]">Очередь</span>
-    </div>
-    <div
-      v-if="!isLoading"
+      v-if="!isLoading && !showLimitMessage"
       class="flex justify-between gap-[20px]"
     >
       <transition :name="taskTransition">
@@ -69,50 +56,54 @@
         </button>
       </div>
     </div>
+    <DoitnowLimit
+      v-if="showLimitMessage && !displayModal && !isLoading"
+      class="xl:ml-[290px]"
+    />
     <DoitnowSkeleton
       v-if="isLoading"
       class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
     />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
+      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
       class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
       @clickPlanning="goToNextDay"
     />
-  </div>
-  <div
-    v-if="displayModal && !isLoading"
-    class="max-w-xl mx-auto"
-  >
     <div
-      class="flex flex-col"
+      v-if="displayModal && !isLoading"
+      class="max-w-xl mx-auto flex-center flex-col items-center justify-center"
     >
-      <img
-        class="mx-auto mt-10"
-        width="320"
-        height="314"
-        src="@/assets/images/emptydoitnow.png"
-        alt="Empty task image"
+      <div
+        class="flex flex-col"
       >
-      <p class="font-bold p-3">
-        Работайте только с одной конкретной задачей и не отвлекайтесь на другие
-      </p>
-      <ul class="list-decimal pl-[30px]">
-        <li class="p-3 text-sm">
-          Очередь выдает по одной задаче в один момент времени
-        </li>
-        <li class="p-3 text-sm">
-          У вас нет возможности выбрать задачу и вы не знаете, какая будет следующей
-        </li>
-        <li class="p-3 text-sm">
-          В Очередь попадают непрочитанные и просроченные задачи и поручения, а также поручения и задачи на сегодня
-        </li>
-      </ul>
-      <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-        @click="okToModal"
-      >
-        Понятно
-      </button>
+        <img
+          class="mx-auto mt-10"
+          width="320"
+          height="314"
+          src="@/assets/images/emptydoitnow.png"
+          alt="Empty task image"
+        >
+        <p class="font-bold p-3">
+          Работайте только с одной конкретной задачей и не отвлекайтесь на другие
+        </p>
+        <ul class="list-decimal pl-[30px]">
+          <li class="p-3 text-sm">
+            Очередь выдает по одной задаче в один момент времени
+          </li>
+          <li class="p-3 text-sm">
+            У вас нет возможности выбрать задачу и вы не знаете, какая будет следующей
+          </li>
+          <li class="p-3 text-sm">
+            В Очередь попадают непрочитанные и просроченные задачи и поручения, а также поручения и задачи на сегодня
+          </li>
+        </ul>
+        <button
+          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
+          @click="okToModal"
+        >
+          Понятно
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -122,14 +113,11 @@ import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
-import {
-  mdiForwardburger,
-  mdiBackburger
-} from '@mdi/js'
 
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
+import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
@@ -137,14 +125,17 @@ import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
+import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
 
 export default {
   components: {
+    DoitnowLimit,
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
     Icon,
-    DoitnowNotificationTasks
+    DoitnowNotificationTasks,
+    NavBarTemplate
   },
   setup () {
     return {
@@ -168,9 +159,7 @@ export default {
     notifiesCopy: [],
     tasksLoaded: false,
     childrens: [],
-    isTaskMessagesLoading: false,
-    mdiForwardburger,
-    mdiBackburger
+    isTaskMessagesLoading: false
   }),
   computed: {
     tasksCount () {
@@ -256,11 +245,9 @@ export default {
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
     },
-    isAsideMobileExpanded () {
-      return this.$store.state.isAsideMobileExpanded
-    },
-    menuToggleMobileIcon () {
-      return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
+    showLimitMessage () {
+      const tarif = this.$store.state.user.user.tarif
+      return tarif !== 'business' && tarif !== 'alpha' && tarif !== 'trial'
     }
   },
   watch: {
@@ -395,7 +382,6 @@ export default {
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
-      this.setSlidesCopy()
       this.loadAllTasks()
     },
     readTask: function () {
@@ -470,9 +456,6 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
-    },
-    menuToggleMobile () {
-      this.$store.dispatch('asideMobileToggle')
     }
   }
 }

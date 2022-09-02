@@ -40,7 +40,7 @@
     <!-- Исполнитель -->
     <div
       v-else-if="taskType === 2"
-      class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+      class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close max-w-[330px]"
     >
       <img
         v-if="employeesByEmail[performerEmail]?.fotolink"
@@ -67,7 +67,7 @@
           fill="#22C55E"
         />
       </svg>
-      <span> {{ getEmpNameByEmail(performerEmail) }} </span>
+      <span class="truncate"> {{ getEmpNameByEmail(performerEmail) }} </span>
       <button
         class="btn-close-popover"
         @click.stop="setPerformerCurrentUser"
@@ -201,10 +201,10 @@
                     fill="#979899"
                   />
                 </svg>
-                <label class="employee-name-custom truncate ...">
+                <label class="employee-name-custom max-w-[300px] truncate">
                   <!-- 30 -->
-                  {{ emp.name}}
-                  <div class="popover-employee-email truncate ...">{{ emp.email}}</div>
+                  {{ emp.name }}
+                  <div class="popover-employee-email truncate">{{ emp.email }}</div>
                 </label>
                 <span
                   v-if="isCurrentPerformerEmail(emp.email)"

@@ -245,9 +245,6 @@
               </span>
 
               <span class="ql-formats">
-                <span
-                  class="ql-size"
-                />
                 <select class="ql-size">
                   <option value="small" />
                   <option selected="selected" />
@@ -257,9 +254,6 @@
               </span>
 
               <span class="ql-formats">
-                <span
-                  class="ql-header"
-                />
                 <select class="ql-header">
                   <option value="1" />
                   <option value="2" />
@@ -272,27 +266,15 @@
               </span>
 
               <span class="ql-formats">
-                <span
-                  class="ql-color"
-                />
                 <select class="ql-color" />
-                <span
-                  class="ql-background"
-                />
                 <select class="ql-background" />
               </span>
 
               <span class="ql-formats">
-                <span
-                  class="ql-font"
-                />
                 <select class="ql-font" />
               </span>
 
               <span class="ql-formats">
-                <span
-                  class="ql-align"
-                />
                 <select class="ql-align" />
               </span>
 

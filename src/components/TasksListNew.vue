@@ -39,10 +39,11 @@
       Понятно
     </button>
   </div>
+  <!-- TODO: что-то со стилями надо делать, внешние отступы не надо внутри компонента проставлять-->
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks'}"
+    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks' && !hideNavBar}"
   >
     <!-- Add task input -->
     <div
@@ -118,6 +119,12 @@
             :style="{ backgroundColor: getValidBackColor(colors[props.node.info?.uid_marker]?.back_color) }"
             :class="{ 'ring ring-orange-400': props.node.id === lastSelectedTaskUid}"
           >
+            <!-- Debug info -->
+            <!--
+            <pre class="text-[10px] leading-none">{{ props.node.id }}</pre>
+            <pre class="text-[10px] leading-none">{{ props.node.children }}</pre>
+            <pre class="text-[10px] leading-none">{{ props.node.info.order_new }}</pre>
+            -->
             <!-- Name, Status -->
             <div
               class="flex gap-[6px] items-center w-full"
@@ -144,7 +151,6 @@
                 @keydown.enter="updateTask($event, props.node.info); props.node.info._isEditable = false;"
               />
             </div>
-
             <!-- Tags, Overdue, Customer, Performer -->
             <div
               v-if="props.node.info.uid_customer == '00000000-0000-0000-0000-000000000000' || props.node.info.email_performer || props.node.info.is_overdue || props.node.info.tags || props.node.info.uid_project == '00000000-0000-0000-0000-000000000000' || props.node.info.term_customer || props.node.info.checklist || props.node.info.has_files || props.node.info.has_msgs || props.node.info.comment || props.node.info.focus"
@@ -334,7 +340,7 @@ import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
-
+import { TASK_STATUS } from '@/constants'
 import NavBar from '@/components/NavBar.vue'
 
 import * as TASK from '@/store/actions/tasks'
@@ -1017,7 +1023,7 @@ export default {
       if (!this.isPropertiesMobileExpanded && arg.info.name) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-      if (this.lastSelectedTaskUid !== arg.id) {
+      if (this.lastSelectedTaskUid !== arg.id || this.$store.state.propertiesState !== 'task') {
         this.$nextTick(() => {
           this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
@@ -1033,27 +1039,16 @@ export default {
       for (let i = 0; i < pool.length; i++) {
         if (pool[i] === taskUid) {
           if (i === 0 && this.storeTasks[taskUid]?.info) {
-            if (this.storeTasks[pool[i + 1]].info.order_new > 0) {
+            if (this.storeTasks[pool[i + 1]]) {
               this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
             } else {
-              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new + 0.1
+              this.storeTasks[pool[i]].info.order_new = 1
             }
           } else if (i > 0 && i !== pool.length - 1 && this.storeTasks[pool[i + 1]]?.info) {
-            if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-              this.storeTasks[pool[i]].info.order_new =
+            this.storeTasks[pool[i]].info.order_new =
               (this.storeTasks[pool[i - 1]].info.order_new + this.storeTasks[pool[i + 1]].info.order_new) / 2
-            } else {
-              this.storeTasks[pool[i]].info.order_new =
-              (this.storeTasks[pool[i - 1]].info.order_new - this.storeTasks[pool[i + 1]].info.order_new) / 2
-            }
-          } else {
-            if (this.storeTasks[pool[i + 1]]?.info) {
-              if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
-              } else {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new - 0.1
-              }
-            }
+          } else if (i > 0 && i === pool.length - 1) {
+            this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
           }
         }
       }
@@ -1130,7 +1125,7 @@ export default {
     onChangeStatus (status, task) {
       console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
-        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [1, 5, 7, 8].includes(status)) {
+        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
           const restoredTasksArray = []
           Object.values(prevTasksArray).forEach((item) => {

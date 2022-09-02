@@ -8,7 +8,6 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
-import { UID_TO_ACTION } from '@/store/helpers/functions'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -50,6 +49,7 @@ export default {
   },
   mounted () {
     this.selectAnotherEmployee(this.$route.params.employee_uid)
+    this.$store.commit('setCalendarLastPicked', null)
   },
   methods: {
     selectAnotherEmployee (uid) {
@@ -62,13 +62,11 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
       if (this.$route.name === 'tasksDelegateToMe') {
-        this.uid = '511d871c-c5e9-43f0-8b4c-e8c447e1a823'
+        this.$store.dispatch(TASK.DELEGATED_TO_USER_TASKS_REQUEST, employee?.email)
       }
       if (this.$route.name === 'tasksDelegateByMe') {
-        this.uid = '169d728b-b88b-462d-bd8e-3ac76806605b'
+        this.$store.dispatch(TASK.DELEGATED_TASKS_REQUEST, employee?.email)
       }
-      const action = UID_TO_ACTION[this.uid]
-      this.$store.dispatch(action, employee?.email)
       const navElem = {
         name: employee?.name,
         key: 'taskListSource',

@@ -136,16 +136,17 @@ export default {
       })
     },
     confirm (val) {
-      if (this.$store.state.reglaments.returnDoitnow === true) {
+      if (this.$store.state.reglaments.returnDoitnow === true && this.isPassed === 1) {
         this.$store.state.navigator.lastTab = 'doitnow'
         localStorage.setItem('lastTab', 'doitnow')
         this.$router.push('/doitnow')
         this.$store.state.reglaments.returnDoitnow = false
+        return
       }
       if (val) {
         this.$store.dispatch('popNavStack')
         this.$store.dispatch('asidePropertiesToggle', false)
-        return
+        this.$router.push('/reglaments')
       }
       // обнуляем значения, чтобы юзер ещё раз прочитал регламент
       this.showCompleteMessage = false
