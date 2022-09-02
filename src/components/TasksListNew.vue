@@ -1018,11 +1018,9 @@ export default {
       if (!this.isPropertiesMobileExpanded && arg.info.name) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-      if (this.$store.state.propertiesState !== 'task') {
-        this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
-      }
-      if (this.lastSelectedTaskUid !== arg.id) {
+      if (this.lastSelectedTaskUid !== arg.id || this.$store.state.propertiesState !== 'task') {
         this.$nextTick(() => {
+          this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
           this.$store.dispatch(TASK.SELECT_TASK, arg.info)
             .then(() => {
               setTimeout(() => {
@@ -1036,26 +1034,13 @@ export default {
       for (let i = 0; i < pool.length; i++) {
         if (pool[i] === taskUid) {
           if (i === 0 && this.storeTasks[taskUid]?.info) {
-            if (this.storeTasks[pool[i + 1]].info.order_new > 0) {
-              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
-            } else {
-              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new + 0.1
-            }
+            this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
           } else if (i > 0 && i !== pool.length - 1 && this.storeTasks[pool[i + 1]]?.info) {
-            if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-              this.storeTasks[pool[i]].info.order_new =
+            this.storeTasks[pool[i]].info.order_new =
               (this.storeTasks[pool[i - 1]].info.order_new + this.storeTasks[pool[i + 1]].info.order_new) / 2
-            } else {
-              this.storeTasks[pool[i]].info.order_new =
-              (this.storeTasks[pool[i - 1]].info.order_new - this.storeTasks[pool[i + 1]].info.order_new) / 2
-            }
           } else {
             if (this.storeTasks[pool[i + 1]]?.info) {
-              if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
-              } else {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new - 0.1
-              }
+              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
             }
           }
         }

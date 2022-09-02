@@ -1,21 +1,8 @@
 <template>
   <div class="pt-[15px] w-full">
-    <div
-      v-if="!isLoading"
-      class="ml-0 xl:ml-[290px] space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
-    >
-      <div
-        class="h-[24px] w-[24px] block xl:hidden"
-        @click="menuToggleMobile"
-      >
-        <icon
-          :box="'0 0 24 24'"
-          :path="menuToggleMobileIcon"
-          size="24"
-        />
-      </div>
-      <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs text-[#4C4C4D] font-[700]">Очередь</span>
-    </div>
+    <NavBarTemplate class="xl:ml-[290px]">
+      Очередь
+    </NavBarTemplate>
     <div
       v-if="!isLoading && !showLimitMessage"
       class="flex justify-between gap-[20px]"
@@ -126,14 +113,11 @@ import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
-import {
-  mdiForwardburger,
-  mdiBackburger
-} from '@mdi/js'
 
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
+import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
@@ -150,7 +134,8 @@ export default {
     DoitnowSkeleton,
     DoitnowTask,
     Icon,
-    DoitnowNotificationTasks
+    DoitnowNotificationTasks,
+    NavBarTemplate
   },
   setup () {
     return {
@@ -174,9 +159,7 @@ export default {
     notifiesCopy: [],
     tasksLoaded: false,
     childrens: [],
-    isTaskMessagesLoading: false,
-    mdiForwardburger,
-    mdiBackburger
+    isTaskMessagesLoading: false
   }),
   computed: {
     tasksCount () {
@@ -261,12 +244,6 @@ export default {
     },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
-    },
-    isAsideMobileExpanded () {
-      return this.$store.state.isAsideMobileExpanded
-    },
-    menuToggleMobileIcon () {
-      return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
     },
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
@@ -480,9 +457,6 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
-    },
-    menuToggleMobile () {
-      this.$store.dispatch('asideMobileToggle')
     }
   }
 }
