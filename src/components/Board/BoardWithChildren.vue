@@ -74,6 +74,7 @@ export default {
   },
   mounted () {
     this.loadBoard()
+    this.$store.state.navigator.lastTab = 'new_private_boards'
   },
   methods: {
     canAddChild () {

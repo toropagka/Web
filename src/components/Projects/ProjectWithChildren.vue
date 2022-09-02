@@ -175,6 +175,7 @@ export default {
     )
   },
   mounted () {
+    this.$store.state.navigator.lastTab = 'new_private_projects'
     if (!Object.keys(this.$store.state.projects.projects).includes(this.$route.params.project_id)) {
       this.$router.push('/projects')
       return
