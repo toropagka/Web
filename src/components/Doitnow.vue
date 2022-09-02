@@ -382,7 +382,6 @@ export default {
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
-      this.setSlidesCopy()
       this.loadAllTasks()
     },
     readTask: function () {
