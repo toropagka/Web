@@ -14,9 +14,13 @@
         v-for="project in favoriteProjects"
         :key="project.uid"
       >
-        <router-link :to="'/project/' + project.uid">
+        <router-link
+          v-slot="{ isActive }"
+          :to="'/project/' + project.uid"
+        >
           <ProjectsSubmenuItem
             :project="project"
+            :selected="isActive"
             @click="closeMenu"
           />
         </router-link>
@@ -32,8 +36,12 @@
           v-for="project in value.items"
           :key="project.uid"
         >
-          <router-link :to="'/project/' + project.uid">
+          <router-link
+            v-slot="{ isActive }"
+            :to="'/project/' + project.uid"
+          >
             <ProjectsSubmenuItem
+              :selected="isActive"
               :project="project"
               @click="closeMenu"
             />
