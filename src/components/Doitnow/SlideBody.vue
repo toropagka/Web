@@ -268,20 +268,18 @@ export default {
     },
     clickAddReglament () {
       this.$emit('nextTask')
-      this.$store.state.navigator.lastTab = 'directory'
       this.$store.commit(NAVIGATOR_SUCCESS)
       this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
       this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
+      this.$router.push('/reglaments')
       const navElem = {
-        name: 'Сотрудники',
+        name: 'Регламенты',
         key: 'greedSource',
         greedPath: 'reglaments',
         value: this.storeNavigator.reglaments
       }
       this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments.items })
-      this.$store.state.navigator.currentSettingsTab = 'directory'
-      localStorage.setItem('lastTab', 'directory')
     }
   }
 }
