@@ -79,7 +79,7 @@ export default {
       this.$store.commit('updateCalendarToday')
     },
     onDayClick (day) {
-      this.$emit('dayclick', day)
+      this.$emit('dayclick', day.id)
     }
   }
 }

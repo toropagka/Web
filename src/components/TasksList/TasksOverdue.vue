@@ -23,18 +23,20 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(UID_TO_ACTION[this.uid])
-    const navElem = {
-      name: this.label,
-      key: 'taskListSource',
-      value: { uid: this.uid, param: new Date() },
-      typeVal: new Date(),
-      type: 'date'
+    if (UID_TO_ACTION[this.uid]) {
+      this.$store.dispatch(UID_TO_ACTION[this.uid])
+      const navElem = {
+        name: this.label,
+        key: 'taskListSource',
+        value: { uid: this.uid, param: new Date() },
+        typeVal: new Date(),
+        type: 'date'
+      }
+      this.$store.commit('setCalendarLastPicked', null)
+      this.$store.commit('updateStackWithInitValue', navElem)
+      this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     }
-    this.$store.commit('setCalendarLastPicked', null)
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
   }
 }
 </script>

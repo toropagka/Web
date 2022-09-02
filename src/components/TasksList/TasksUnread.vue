@@ -33,12 +33,6 @@ export default {
     }
   },
   mounted () {
-    if (this.isPropertiesMobileExpanded) {
-      this.$store.dispatch('asidePropertiesToggle', false)
-    }
-    if (this.isAsideMobileExpanded) {
-      this.$store.dispatch('asideMobileToggle', false)
-    }
     if (UID_TO_ACTION[this.uid]) {
       this.$store.dispatch(UID_TO_ACTION[this.uid])
       const navElem = {
