@@ -49,6 +49,7 @@ export default {
   },
   mounted () {
     this.selectAnotherEmployee(this.$route.params.employee_uid)
+    this.$store.commit('setCalendarLastPicked', null)
   },
   methods: {
     selectAnotherEmployee (uid) {
