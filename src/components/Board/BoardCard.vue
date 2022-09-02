@@ -29,12 +29,6 @@
         >
           {{ card.name }}
         </p>
-        <p
-          v-if="card.comment"
-          class="text-[#4c4c4d] font-['Roboto'] text-[13px] leading-[17px] whitespace-pre-line break-words mt-2"
-        >
-          {{ card.comment }}
-        </p>
       </div>
       <!-- кнопка три точки -->
 
