@@ -15,10 +15,12 @@
         :key="board.uid"
       >
         <router-link
+          v-slot="{ isActive }"
           :to="'/board/' + board.uid"
         >
           <BoardsSubmenuItem
             :board="board"
+            :selected="isActive"
             @click="closeMenu"
           />
         </router-link>
@@ -31,10 +33,12 @@
         :key="board.uid"
       >
         <router-link
+          v-slot="{ isActive }"
           :to="'/board/' + board.uid"
         >
           <BoardsSubmenuItem
             :board="board"
+            :selected="isActive"
             @click="closeMenu"
           />
         </router-link>
@@ -75,9 +79,11 @@
         :key="board.uid"
       >
         <router-link
+          v-slot="{ isActive }"
           :to="'/board/' + board.uid"
         >
           <BoardsSubmenuItem
+            :selected="isActive"
             :board="board"
             @click="closeMenu"
           />

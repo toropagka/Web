@@ -2,7 +2,7 @@
   <AsideMenuListItem
     :count="project.children?.length ?? 0"
     :title="project.name"
-    :selected="isProjectSelected"
+    :selected="selected"
   >
     <svg
       v-if="project.members?.length > 1"
@@ -54,6 +54,10 @@ export default {
     project: {
       type: Object,
       default: () => ({})
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -63,10 +67,6 @@ export default {
     },
     lastNavStack () {
       return this.$store.getters.lastNavStackElement
-    },
-    isProjectSelected () {
-      return this.lastNavStack?.greedPath === 'projects_children' &&
-        this.lastNavStack?.uid === this.project.uid
     }
   }
 }

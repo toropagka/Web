@@ -2,7 +2,7 @@
   <AsideMenuListItem
     :count="board.children?.length ?? 0"
     :title="board.name"
-    :selected="isBoardSelected"
+    :selected="selected"
   >
     <svg
       v-if="board.members && Object.keys(board.members).length > 1"
@@ -56,6 +56,10 @@ export default {
     board: {
       type: Object,
       default: () => ({})
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -65,10 +69,6 @@ export default {
     },
     lastNavStack () {
       return this.$store.getters.lastNavStackElement
-    },
-    isBoardSelected () {
-      return this.lastNavStack?.greedPath === 'boards_children' &&
-        this.lastNavStack?.uid === this.board.uid
     }
   }
 }
