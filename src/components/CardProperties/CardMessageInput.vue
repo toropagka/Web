@@ -82,6 +82,7 @@
         id="card-message-textarea"
         ref="taskMsgEdit"
         v-model="computedValue"
+        :disabled="!canAddFiles"
         class="max-h-[100px] resize-none bg-[#F4F5F7] py-[10px] pr-[15px] pl-[10px] text-[#656566] w-full text-[14px] border-none focus:ring-0 scroll-style"
         rows="1"
         type="text"
