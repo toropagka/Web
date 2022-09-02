@@ -145,7 +145,7 @@ export default {
       if (val) {
         this.$store.dispatch('popNavStack')
         this.$store.dispatch('asidePropertiesToggle', false)
-        return
+        this.$router.push('/reglaments')
       }
       // обнуляем значения, чтобы юзер ещё раз прочитал регламент
       this.showCompleteMessage = false
