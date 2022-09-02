@@ -14,6 +14,7 @@ import { createTaskMessage } from '@/websync/task_message.js'
 import { createInvite } from '@/websync/invite.js'
 import * as TYPES from '@/websync/types.js'
 import { createDepartment } from '@/websync/departments'
+import { addBoard } from '@/websync/board'
 
 function currentUserUid () {
   return store?.state?.user?.user?.current_user_uid
@@ -123,6 +124,7 @@ export default function processCreate (obj) {
     case TYPES.TYPE_OBJECT_NOTIFICATION:
       break
     case TYPES.TYPE_OBJECT_BOARD:
+      addBoard(obj.obj)
       break
     case TYPES.TYPE_OBJECT_CARD:
       createCard(obj)

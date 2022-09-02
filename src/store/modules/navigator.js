@@ -8,6 +8,7 @@ import {
   NAVIGATOR_ERROR,
   NAVIGATOR_PUSH_BOARD,
   NAVIGATOR_PUSH_COLOR,
+  NAVIGATOR_PUSH_COMMON_BOARD,
   NAVIGATOR_PUSH_DEPARTAMENT,
   NAVIGATOR_PUSH_EMPLOYEE,
   NAVIGATOR_PUSH_PROJECT,
@@ -441,6 +442,22 @@ const mutations = {
           }
         })
       }
+    }
+  },
+  [NAVIGATOR_PUSH_COMMON_BOARD]: (state, board) => {
+    if (
+      !board.uid_parent ||
+        board.uid_parent === '00000000-0000-0000-0000-000000000000'
+    ) {
+      // adding projects to the root
+      state.navigator.new_private_boards[1].items.push(board)
+    } else {
+      // adding projects recursively to subarrays
+      visitChildren(state.navigator.new_private_boards[1].items, (value) => {
+        if (value.uid === board.uid_parent) {
+          value.children.push(board)
+        }
+      })
     }
   },
   [NAVIGATOR_PUSH_TAG]: (state, tags) => {
