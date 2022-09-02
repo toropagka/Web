@@ -82,10 +82,9 @@
           <!--заголовок -->
           <div
             class="px-1 flex justify-between items-start"
-            :class="{ 'draggable-column cursor-move': column.CanEditStage }"
+            :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
-              v-if="column.CanEditStage"
               class="w-full"
             >
               <BoardInputValue
@@ -98,28 +97,7 @@
               <p
                 v-else
                 class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
-                :style="{ color: getContrastYIQ(column.Color) }"
-              >
-                {{ column.Name }}
-              </p>
-            </div>
-            <div
-              v-else
-              class="w-full"
-              data-dragscroll
-            >
-              <BoardInputValue
-                v-if="showRenameColumn && column.UID === selectedColumn.UID"
-                data-dragscroll
-                :show="showRenameColumn && column.UID === selectedColumn.UID"
-                :value="selectedColumnName"
-                @cancel="showRenameColumn = false"
-                @save="onRenameColumn"
-              />
-              <p
-                v-else
-                data-dragscroll
-                class="text-[#424242] cursor-default font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
+                :class="{ 'cursor-default': !column.CanEditStage }"
                 :style="{ color: getContrastYIQ(column.Color) }"
               >
                 {{ column.Name }}
@@ -200,7 +178,6 @@
               class="flex items-center justify-between h-[16px]"
             >
               <PopMenu
-                data-dragscroll
                 :disabled="isReadOnlyBoard"
               >
                 <p
@@ -316,15 +293,11 @@
             />
             <button
               v-else
-              data-dragscroll
               class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.Color) }"
               @click="addCard(column)"
             >
-              <p
-                class="text-sm"
-                data-dragscroll
-              >
+              <p class="text-sm">
                 Добавить карточку
               </p>
               <svg
