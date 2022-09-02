@@ -119,6 +119,12 @@
             :style="{ backgroundColor: getValidBackColor(colors[props.node.info?.uid_marker]?.back_color) }"
             :class="{ 'ring ring-orange-400': props.node.id === lastSelectedTaskUid}"
           >
+            <!-- Debug info -->
+            <!--
+            <pre class="text-[10px] leading-none">{{ props.node.id }}</pre>
+            <pre class="text-[10px] leading-none">{{ props.node.children }}</pre>
+            <pre class="text-[10px] leading-none">{{ props.node.info.order_new }}</pre>
+            -->
             <!-- Name, Status -->
             <div
               class="flex gap-[6px] items-center w-full"
@@ -1033,27 +1039,12 @@ export default {
       for (let i = 0; i < pool.length; i++) {
         if (pool[i] === taskUid) {
           if (i === 0 && this.storeTasks[taskUid]?.info) {
-            if (this.storeTasks[pool[i + 1]].info.order_new > 0) {
-              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
-            } else {
-              this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new + 0.1
-            }
+            this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i + 1]].info.order_new - 0.1
           } else if (i > 0 && i !== pool.length - 1 && this.storeTasks[pool[i + 1]]?.info) {
-            if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-              this.storeTasks[pool[i]].info.order_new =
+            this.storeTasks[pool[i]].info.order_new =
               (this.storeTasks[pool[i - 1]].info.order_new + this.storeTasks[pool[i + 1]].info.order_new) / 2
-            } else {
-              this.storeTasks[pool[i]].info.order_new =
-              (this.storeTasks[pool[i - 1]].info.order_new - this.storeTasks[pool[i + 1]].info.order_new) / 2
-            }
-          } else {
-            if (this.storeTasks[pool[i + 1]]?.info) {
-              if (this.storeTasks[pool[i - 1]].info.order_new > 0) {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
-              } else {
-                this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new - 0.1
-              }
-            }
+          } else if (i > 0 && i === pool.length - 1) {
+            this.storeTasks[pool[i]].info.order_new = this.storeTasks[pool[i - 1]].info.order_new + 0.1
           }
         }
       }
