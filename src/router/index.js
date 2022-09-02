@@ -31,6 +31,7 @@ import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
 import TaskByUid from '@/components/TasksList/TaskByUid.vue'
 import Boards from '@/components/Boards'
+import Search from '@/components/Search'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -313,6 +314,18 @@ const routes = [
     path: '/employees',
     name: 'employees',
     component: Employees,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home,
+      breadcrumb: {
+        name: 'Поиск: '
+      }
+    },
+    path: '/search',
+    name: 'search',
+    component: Search,
     beforeEnter: shouldRedirectToLogin
   },
   {
