@@ -170,23 +170,21 @@ export default {
       <nav-bar-item
         v-for="(navItem, index) in navStack"
         :key="index"
-        class="px-1 group"
+        class="px-1 group max-w-[150px]"
         :non-clickable-element="nonClickableElement(index)"
       >
         <span
           v-if="navItem && navItem.name"
-          class="font-['Roboto'] font-[700] text-[#4C4C4D] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs"
+          class="font-['Roboto'] font-[700] text-[#4C4C4D] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] truncate"
           :class="index === 0 ? 'text-[#4C4C4D] font-[700]' : index+1 === navStack.length ? 'text-[#4C4C4D] font-[700]' : 'text-[#4C4C4D] font-[700]'"
           @click.stop="clickOnGridCard(navItem, index), closeProperties()"
         >
-          {{ navItem.name.length > 15
-            ? navItem.name.slice(0, 15) + '...'
-            : new Date(navItem.value?.param).getDate() === new Date().getDate() &&
-              new Date(navItem.value?.param).getMonth() === new Date().getMonth() &&
-              new Date(navItem.value?.param).getFullYear() === new Date().getFullYear() &&
-              navItem.value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b'
-              ? 'Сегодня'
-              : navItem.name
+          {{ new Date(navItem.value?.param).getDate() === new Date().getDate() &&
+            new Date(navItem.value?.param).getMonth() === new Date().getMonth() &&
+            new Date(navItem.value?.param).getFullYear() === new Date().getFullYear() &&
+            navItem.value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b'
+            ? 'Сегодня'
+            : navItem.name
           }}
         </span>
         <div>
