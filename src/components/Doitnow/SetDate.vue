@@ -301,9 +301,8 @@
         v-else
         class="flex items-center"
       >
-        <button class="btn-calendar" /><span class="w-[70px] text-center ml-8">Назначить дату</span>
         <svg
-          class="ml-8"
+          class="ml-[20px]"
           width="16"
           height="17"
           viewBox="0 0 16 17"
@@ -398,6 +397,7 @@
             fill-opacity="0.5"
           />
         </svg>
+        <button class="btn-calendar" /><span class="w-[70px] text-center ml-[10px]">Назначить дату</span>
       </span>
     </a>
   </Popper>
