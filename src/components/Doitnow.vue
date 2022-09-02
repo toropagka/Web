@@ -17,7 +17,7 @@
       <span class="font-['Roboto'] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[16px] breadcrumbs text-[#4C4C4D] font-[700]">Очередь</span>
     </div>
     <div
-      v-if="!isLoading"
+      v-if="!isLoading && !showLimitMessage"
       class="flex justify-between gap-[20px]"
     >
       <transition :name="taskTransition">
@@ -69,6 +69,10 @@
         </button>
       </div>
     </div>
+    <DoitnowLimit
+      v-if="showLimitMessage && !displayModal && !isLoading"
+      class="xl:ml-[290px]"
+    />
     <DoitnowSkeleton
       v-if="isLoading"
       class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
@@ -137,9 +141,11 @@ import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
+import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
 
 export default {
   components: {
+    DoitnowLimit,
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
@@ -261,6 +267,10 @@ export default {
     },
     menuToggleMobileIcon () {
       return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
+    },
+    showLimitMessage () {
+      const tarif = this.$store.state.user.user.tarif
+      return tarif !== 'business' && tarif !== 'alpha'
     }
   },
   watch: {
