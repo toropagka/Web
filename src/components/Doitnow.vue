@@ -65,7 +65,7 @@
       class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
     />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded)"
+      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
       class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
       @clickPlanning="goToNextDay"
     />
