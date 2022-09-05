@@ -44,7 +44,7 @@ export default {
 <template>
   <p
     v-if="!videoBlob"
-    class="cardfile-wait text-[40px] font-[700] ml-[27%] mt-5"
+    class="cardfile-wait text-[40px] font-[700] mt-10 ml-[18%]"
   >
     {{ text }} {{ dots }}
   </p>

@@ -15,12 +15,6 @@ export default {
     PropertiesRight
   },
   computed: {
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
-    },
-    isAsideMobileExpanded () {
-      return this.$store.state.isAsideMobileExpanded
-    },
     date () {
       return this.$route.params.date
     }

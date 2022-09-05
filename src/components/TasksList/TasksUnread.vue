@@ -21,17 +21,6 @@ export default {
       uid: 'fa042915-a3d2-469c-bd5a-708cf0339b89'
     }
   },
-  computed: {
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
-    },
-    isAsideMobileExpanded () {
-      return this.$store.state.isAsideMobileExpanded
-    }
-  },
   mounted () {
     if (UID_TO_ACTION[this.uid]) {
       this.$store.dispatch(UID_TO_ACTION[this.uid])

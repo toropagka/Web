@@ -328,8 +328,8 @@
       v-if="task && !task.visible"
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
-      <button
-        class="rounded-lg hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white  mb-[20px] whitespace-nowrap text-center "
+      <div
+        class="rounded-lg hover:cursor-pointer hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white  mb-[20px] whitespace-nowrap text-center "
         @click="nextTask"
       >
         <span class="ml-[44px] w-[70px]">Следующая задача</span>
@@ -340,11 +340,11 @@
           :box="arrowForw.viewBox"
           :path="arrowForw.path"
         />
-      </button>
+      </div>
       <!-- accept -->
-      <button
+      <div
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="accept"
       >
         <svg
@@ -366,29 +366,29 @@
         <span
           class="ml-[8px] w-[70px]"
         >{{ acceptBtnText }}</span>
-      </button>
+      </div>
       <!-- redo -->
-      <button
+      <div
         v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="reDo"
       >
         <Icon
-          :path="close.path"
-          :width="close.width"
-          :height="close.height"
-          :box="close.viewBox"
+          :path="cancelImproveRejectIcon('path')"
+          :width="cancelImproveRejectIcon('width')"
+          :height="cancelImproveRejectIcon('height')"
+          :box="cancelImproveRejectIcon('viewBox')"
           class="ml-5"
         />
         <span
           class="ml-[11px] w-[70px]"
         >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
         }}</span>
-      </button>
+      </div>
       <!-- decline -->
-      <button
+      <div
         v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="decline"
       >
         <Icon
@@ -399,10 +399,10 @@
           class="ml-[20px]"
         />
         <span class="ml-[8.7px] w-[70px]">Отложить</span>
-      </button>
+      </div>
       <PerformButton
         v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
-        class=" hover:cursor-pointer"
+        class="hover:cursor-pointer"
         :task-type="task.type"
         :current-user-uid="user?.current_user_uid"
         :performer-email="task.email_performer"
@@ -410,9 +410,9 @@
         @reAssign="onReAssignToUser"
       />
       <!-- Change access -->
-      <button
+      <div
         v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
-        class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
         @click="() => onChangeAccess(task.emails)"
       >
         <span
@@ -427,10 +427,10 @@
           :box="close.viewBox"
           class="ml-5"
         />
-      </button>
+      </div>
       <SetDate
         v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
-        class=" hover:cursor-pointer"
+        class="hover:cursor-pointer"
         :name="'Назначить срок'"
         :date-begin="task.date_begin"
         :date-end="task.date_end"
@@ -438,9 +438,9 @@
         @changeDates="onChangeDates"
       />
 
-      <button
+      <div
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex w-[221px] border border-transparent items-center text-sm hover:border hover:hover:bg-[#0000000a] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
+        class="flex w-[221px] hover:cursor-pointer border border-transparent items-center text-sm hover:border hover:bg-[#0000000a] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
         @click="setTaskFromQueue(task.uid)"
       >
         <Icon
@@ -455,7 +455,7 @@
         >
           Открыть задачу
         </span>
-      </button>
+      </div>
     </div>
   </div>
 </template>
@@ -1271,6 +1271,9 @@ export default {
         this.showStatusModal = false
         this.$emit('nextTask')
       })
+    },
+    cancelImproveRejectIcon (param) {
+      return this.task.uid_customer === this.user?.current_user_uid && this.task.uid_performer !== this.user?.current_user_uid ? this.improve[param] : this.close[param]
     }
   }
 }

@@ -55,7 +55,7 @@ export default {
     }
   },
   mounted () {
-    this.setBreadcrumbs(this.$route.matched.map(route => route.meta.breadcrumb))
+    this.setBreadcrumbs(this.$route.matched.map(route => route.meta.breadcrumb || {}))
   },
   methods: {
     ...mapMutations('navbarVueRouter', {

@@ -496,6 +496,35 @@ const actions = {
         })
     })
   },
+  [TASK.ACTION_GET_TASKS_DELEGATED_BY_ME]: (
+    { commit, dispatch, state },
+    userUid
+  ) => {
+    return new Promise((resolve, reject) => {
+      commit(TASK.TASKS_REQUEST)
+      const url =
+        process.env.VUE_APP_LEADERTASK_API +
+        'api/v1/tasks/delegate?uid=' +
+        userUid
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          commit(TASK.TASKS_SUCCESS, resp)
+          commit(TASK.CLEAN_UP_LOADED_TASKS)
+          if (resp.data.anothers_tags.length) {
+            commit(TASK.ADD_TASK_TAGS, resp.data.anothers_tags)
+          }
+          if (resp.data.anothers_markers.length) {
+            commit(PUSH_COLOR, resp.data.anothers_markers)
+          }
+          dispatch(TASK.GET_INSPECTABLE_TASKS, { uids: state.newConfig.roots })
+          resolve(resp)
+        })
+        .catch((err) => {
+          commit(TASK.TASKS_ERROR, err)
+          reject(err)
+        })
+    })
+  },
   [TASK.DELEGATED_TO_USER_TASKS_REQUEST]: (
     { commit, dispatch, state },
     email
@@ -506,6 +535,35 @@ const actions = {
         process.env.VUE_APP_LEADERTASK_API +
         'api/v1/tasks/delegateme?email=' +
         email
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          commit(TASK.TASKS_SUCCESS, resp)
+          commit(TASK.CLEAN_UP_LOADED_TASKS)
+          if (resp.data.anothers_tags.length) {
+            commit(TASK.ADD_TASK_TAGS, resp.data.anothers_tags)
+          }
+          if (resp.data.anothers_markers.length) {
+            commit(PUSH_COLOR, resp.data.anothers_markers)
+          }
+          dispatch(TASK.GET_INSPECTABLE_TASKS, { uids: state.newConfig.roots })
+          resolve(resp)
+        })
+        .catch((err) => {
+          commit(TASK.TASKS_ERROR, err)
+          reject(err)
+        })
+    })
+  },
+  [TASK.ACTION_GET_TASK_DELEGATE_ME]: (
+    { commit, dispatch, state },
+    userUid
+  ) => {
+    return new Promise((resolve, reject) => {
+      commit(TASK.TASKS_REQUEST)
+      const url =
+        process.env.VUE_APP_LEADERTASK_API +
+        'api/v1/tasks/delegateme?uid=' +
+        userUid
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           commit(TASK.TASKS_SUCCESS, resp)
@@ -1105,16 +1163,29 @@ const actions = {
       let nextSelectedTaskIndex = null
       const tasksArray = payload.tasks
       const tasksKeyArray = Object.keys(payload.tasks)
-      const currentSelectedTaskIndex = tasksKeyArray.indexOf(payload.prevTaskUid)
+      const currentSelectedTaskIndex = tasksKeyArray.indexOf(
+        payload.prevTaskUid
+      )
       const currentTask = tasksArray[payload.prevTaskUid]
       if (currentTask?.children?.length > 0) {
-        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + currentTask.children.length + 1] ? currentSelectedTaskIndex + currentTask.children.length + 1 : currentSelectedTaskIndex - 1
+        nextSelectedTaskIndex = tasksKeyArray[
+          currentSelectedTaskIndex + currentTask.children.length + 1
+        ]
+          ? currentSelectedTaskIndex + currentTask.children.length + 1
+          : currentSelectedTaskIndex - 1
       } else if (currentTask?.parent) {
         const parentItem = tasksArray[currentTask.parent]
-        const currentTaskIndex = parentItem.children.indexOf(payload.prevTaskUid)
-        nextSelectedTaskIndex = currentTaskIndex === parentItem.children.length - 1 ? currentSelectedTaskIndex - 1 : currentSelectedTaskIndex + 1
+        const currentTaskIndex = parentItem.children.indexOf(
+          payload.prevTaskUid
+        )
+        nextSelectedTaskIndex =
+          currentTaskIndex === parentItem.children.length - 1
+            ? currentSelectedTaskIndex - 1
+            : currentSelectedTaskIndex + 1
       } else {
-        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1] ? currentSelectedTaskIndex + 1 : currentSelectedTaskIndex - 1
+        nextSelectedTaskIndex = tasksKeyArray[currentSelectedTaskIndex + 1]
+          ? currentSelectedTaskIndex + 1
+          : currentSelectedTaskIndex - 1
       }
       const nextSelectedTaskUid = tasksKeyArray[nextSelectedTaskIndex]
       const nextSelectedTaskData = state.newtasks[nextSelectedTaskUid]
@@ -1137,11 +1208,13 @@ const mutations = {
   [TASK.UPDATE_TASK]: (state, task) => {
     if (state.newtasks[task.uid]) {
       state.newtasks[task.uid].info = task
-      const uidToOrder = state.newConfig.roots.map(taskUid => ({
+      const uidToOrder = state.newConfig.roots.map((taskUid) => ({
         uid: taskUid,
         order: state.newtasks[taskUid].info.order_new
       }))
-      state.newConfig.roots = uidToOrder.sort((a, b) => a.order - b.order).map(x => x.uid)
+      state.newConfig.roots = uidToOrder
+        .sort((a, b) => a.order - b.order)
+        .map((x) => x.uid)
     }
     if (state.selectedTask?.uid === task.uid) {
       state.selectedTask = task
@@ -1243,7 +1316,7 @@ const mutations = {
       task._isEditable = false
       state.newtasks[task.uid] = {
         info: task,
-        children: [],
+        children: task.has_children ? ['fake-uid'] : [],
         state: {
           checked: false,
           opened: false,

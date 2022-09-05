@@ -212,14 +212,6 @@
         @changeComment="onChangeComment"
       />
       <!-- Show all -->
-      <p
-        v-if="taskMessages.length > 2 && !showAllMessages"
-        class="text-gray-500 dark:text-gray-100 text-sm text-center cursor-pointer"
-        style="border-bottom: 1px dashed; padding-bottom: 0; width: 125px; margin: 0 auto;"
-        @click="scrollDown"
-      >
-        ПОКАЗАТЬ ВСЕ
-      </p>
       <!-- Chat messages -->
       <MessageSkeleton
         v-if="status == 'loading'"
@@ -365,7 +357,7 @@ export default {
       shouldAddTaskIntoList,
       close,
       isloading: false,
-      showAllMessages: false,
+      showAllMessages: true,
       showFreeModalCheck: false,
       showFreeModalRepeat: false,
       showFreeModalChat: false,
@@ -443,7 +435,6 @@ export default {
   watch: {
     selectedTaskUid (newval, oldval) {
       this.showOnlyFiles = false
-      this.showAllMessages = false
       this.currentAnswerMessageUid = ''
       this.taskMsg = ''
       // пересчитываем высоту плашки отправки сообщения
@@ -602,7 +593,6 @@ export default {
       this.selectedTask.name = taskName
     },
     scrollDown () {
-      this.showAllMessages = true
       this.infoComplete = true
       setTimeout(() => {
         const elmnt = document.getElementById('content').lastElementChild

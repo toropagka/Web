@@ -1,16 +1,18 @@
 <template>
   <div class="h-screen">
-    <NavBar />
+    <NavBarBoards class="pt-[8px]" />
     <div
       class="w-full h-full flex flex-col"
-      :class="{ 'pt-[30px]': !canAddChild, 'pt-[45px]' : canAddChild}"
     >
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
         @ok="showBoardsLimit = false"
       />
-      <div class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div
+        v-if="subBoardsCount > 0"
+        class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+      >
         <template
           v-for="(board) in subBoards"
           :key="board.uid"
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
+import NavBarBoards from '@/components/Navbar/NavBarBoards.vue'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
 import Board from '@/components/Board.vue'
@@ -42,7 +44,7 @@ export default {
   components: {
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
-    NavBar,
+    NavBarBoards,
     Board
   },
   data () {
@@ -54,6 +56,9 @@ export default {
   computed: {
     subBoards () {
       return this.currentBoard?.children
+    },
+    subBoardsCount () {
+      return this.subBoards?.length ?? 0
     },
     storeCards () {
       return this.$store.state.cards.cards
@@ -82,6 +87,11 @@ export default {
       return this.currentBoard?.email_creator === user.current_user_email
     },
     loadBoard () {
+      if (!this.currentBoard || !Object.keys(this.$store.state.boards.boards).includes(this.$route.params.board_id)) {
+        this.$router.push('/board')
+        return
+      }
+
       const navElemRoot = {
         name: 'Доски',
         key: 'greedSource',

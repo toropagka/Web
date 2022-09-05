@@ -1,9 +1,11 @@
 <script>
 import * as chartConfig from '@/components/Charts/chart.config.js'
 import LineChart from '@/components/Charts/LineChart.vue'
+import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
 
 export default {
   components: {
+    NavBarTemplate,
     LineChart
   },
   data () {
@@ -80,13 +82,16 @@ export default {
 </script>
 
 <template>
+  <NavBarTemplate class="py-[15px]">
+    Карма
+  </NavBarTemplate>
   <div
     v-if="user.tarif !== 'alpha' && user.tarif !== 'trial'"
     class="grid grid-cols-1 gap-4 p-5 bg-white rounded mt-2"
   >
     <div class="text-center">
       <h1 class="text-5xl text-gray-600 font-bold mb-5">
-        Карма - функция тарифа Bussines+
+        Карма - функция тарифа Бизнес+
       </h1>
       <h3 class="text-2xl mb-5">
         Узнайте свою личную продуктивность и продуктивность команды по выполненным поручениям в Лидертаск.
@@ -102,8 +107,9 @@ export default {
   </div>
   <div
     v-else
+    class="rounded-xl bg-white"
   >
-    <p class="text-center bg-white p-2 rounded">
+    <p class="text-center p-2">
       <span
         class="text-6xl tracking-tighter"
         :class="{'text-green-500': karmaQuantity, 'text-red-500': !karmaQuantity, 'text-gray-600': karmaQuantity === 0 }"
@@ -112,12 +118,12 @@ export default {
         {{ karmaQuantity }}
       </span>
     </p>
-    <p class="text-center mt-2 bg-white p-2 rounded">
+    <p class="text-center mt-2 p-2">
       <span class="text-sm text-gray-600">В срок:</span> <span class="text-xl mr-6 text-green-500"> {{ successQuantity }}</span>
       <span class="text-sm text-gray-600">Просроченныx:</span> <span class="text-xl text-red-500">{{ overdueQuantity }}</span>
     </p>
     <br>
-    <div class="grid grid-cols-1 gap-4 p-5 bg-white rounded">
+    <div class="grid grid-cols-1 gap-4 p-5">
       <div class="grid grid-cols-1 ">
         <p class="text-center text-2xl font-bold">
           Графики

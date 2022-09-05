@@ -10,7 +10,6 @@ import vue3GoogleLogin from 'vue3-google-login'
 import './css/main.css'
 
 const token = localStorage.getItem('user-token')
-const navStack = JSON.parse(localStorage.getItem('navStack'))
 const isGridView = JSON.parse(localStorage.getItem('isGridView'))
 
 function pad2 (n) {
@@ -94,12 +93,6 @@ axios.interceptors.response.use(
 )
 
 store.commit('basic', { key: 'isGridView', value: isGridView })
-
-if (navStack) {
-  for (const navElem of navStack) {
-    store.commit('pushIntoNavStack', navElem)
-  }
-}
 
 /* Default title tag */
 const defaultDocumentTitle = 'Leadertask 2.0'
