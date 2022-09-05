@@ -265,7 +265,7 @@
                   :card="element"
                   :show-date="board?.show_date !== 0 ?? false"
                   :read-only="isReadOnlyBoard"
-                  :selected="selectedCardUid === element.uid"
+                  :selected="$store.state.cards.selectedCardUid === element.uid"
                   class="mt-2"
                   @select="selectCard(element)"
                   @delete="deleteCard(element)"
@@ -417,7 +417,6 @@ export default {
       dragCardParam: null,
       showMoveCard: false,
       showMoveAllCards: false,
-      selectedCardUid: '',
       columnUid: '',
       dragColumnParam: null
     }
@@ -483,7 +482,7 @@ export default {
       immediate: true,
       handler: function (val) {
         this.$store.commit(BOARD.SELECT_BOARD, val)
-        this.selectedCardUid = ''
+        this.$store.state.cards.selectedCardUid = ''
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
     },
@@ -491,7 +490,7 @@ export default {
       immediate: true,
       handler: function (val) {
         if (!val) {
-          this.selectedCardUid = ''
+          this.$store.state.cards.selectedCardUid = ''
         }
       }
     }
@@ -699,10 +698,10 @@ export default {
       }
     },
     selectCard (card) {
-      if (this.selectedCardUid === card.uid) {
+      if (this.$store.state.cards.selectedCardUid === card.uid) {
         return
       }
-      this.selectedCardUid = card.uid
+      this.$store.state.cards.selectedCardUid = card.uid
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
       this.$store.commit(CARD.SELECT_CARD, card)
@@ -711,7 +710,7 @@ export default {
       this.$store.dispatch('asidePropertiesToggle', true)
     },
     closeProperties () {
-      this.selectedCardUid = ''
+      this.$store.state.cards.selectedCardUid = ''
       this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.commit(CARD.SELECT_CARD, false)
     },
