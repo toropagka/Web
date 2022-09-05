@@ -91,7 +91,7 @@ export default {
   >
     <div class="text-center">
       <h1 class="text-5xl text-gray-600 font-bold mb-5">
-        Карма - функция тарифа Bussines+
+        Карма - функция тарифа Бизнес+
       </h1>
       <h3 class="text-2xl mb-5">
         Узнайте свою личную продуктивность и продуктивность команды по выполненным поручениям в Лидертаск.
