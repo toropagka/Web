@@ -3,7 +3,7 @@
     class="ml-0 space-x-1 flex items-center grow-0 shrink-0 relative font-light text-gray-700 dark:text-white dark:hover:text-gray-400 px-3 group"
   >
     <div
-      class="h-[24px] w-[24px] block xl:hidden shrink-0"
+      class="h-[24px] w-[24px] block xl:hidden shrink-0 cursor-pointer"
       @click="menuToggleMobile"
     >
       <Icon
