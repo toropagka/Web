@@ -351,7 +351,10 @@ export default {
     }
   },
   mounted () {
-    if (!this.currReglament) return
+    if (!this.currReglament) {
+      this.$router.push('/reglaments')
+      return
+    }
 
     this.$store.commit('basic', {
       key: 'reglamentSource',

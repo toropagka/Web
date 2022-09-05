@@ -363,12 +363,15 @@ export default {
       Поздравляем, вы прошли регламент!
     </p>
     <div class="w-full flex justify-center">
-      <button
-        class="flex bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
-        @click="$emit('confirm', isPassed)"
+      <router-link
+        to="/reglaments"
       >
-        Завершить
-      </button>
+        <button
+          class="flex bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+        >
+          Завершить
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
