@@ -35,7 +35,7 @@ export default {
 </script>
 <template>
   {{ fileHasBeenLoaded }}
-  <p class="text-[40px] font-[700]">
+  <p class="text-[40px] font-[700] mt-10 ml-[18%]">
     {{ text }} {{ dots }}
   </p>
 </template>
