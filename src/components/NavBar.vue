@@ -144,9 +144,6 @@ export default {
     },
     menuToggleMobileIcon () {
       return this.isAsideMobileExpanded ? this.mdiBackburger : this.mdiForwardburger
-    },
-    lastTab () {
-      return this.$store.state.navigator.lastTab
     }
   },
   methods: {
