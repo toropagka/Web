@@ -21,9 +21,6 @@ import { setLocalStorageItem } from '@/store/helpers/functions'
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
 
-// очищаем консоль - по идее выше ошибки которые
-// мы не можем поправить из fm.websync и fm.min
-// по этому консоль очищаем
 export default {
   components: {
     AppSkeleton
@@ -79,6 +76,9 @@ export default {
       }
     },
     initApplication () {
+      // очищаем консоль - по идее выше ошибки которые
+      // мы не можем поправить из fm.websync и fm.min
+      // по этому консоль очищаем
       console.clear()
 
       this.checkCidParam()
