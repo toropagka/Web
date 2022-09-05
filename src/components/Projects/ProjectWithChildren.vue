@@ -227,7 +227,8 @@ export default {
       const pathProjects = this.getProjectsNavstackPath(uid)
       this.setBreadcrumbs([
         {
-          name: 'Проекты'
+          name: 'Проекты',
+          to: '/projects'
         },
         ...pathProjects
       ])
