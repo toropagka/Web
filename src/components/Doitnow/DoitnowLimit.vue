@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center py-6 px-5 bg-white rounded-lg max-w-[1030px]"
+    class="flex flex-col justify-center items-center py-6 px-5 bg-white rounded-lg max-w-full"
   >
     <p class="text-[25px] font-bold mb-[10px]">
       Обновите тариф
