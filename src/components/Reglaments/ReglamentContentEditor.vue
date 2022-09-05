@@ -7,8 +7,8 @@
       @cancel="showConfirm = false"
       @yes="removeReglament"
     />
-    <div class="w-full top-[45px] left-0 right-0 z-[6]">
-      <div class="top-0 bg-[#f4f5f7] pt-[5px]">
+    <div class="w-full top-[0px] sticky left-0 right-0 z-[5]">
+      <div class="bg-[#f4f5f7] pt-[5px]">
         <div
           class="flex flex-row justify-between items-center"
         >

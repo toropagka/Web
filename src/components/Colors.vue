@@ -145,26 +145,6 @@ export default {
       return !this.$store.getters.sortedNavigator.colors?.items.length
     }
   },
-  mounted () {
-    //
-    // REMOVE: убрать после полного перехода на vue-router, желательно полностью избавиться от использования greedPath/greedSource
-    // Также стоит переделать NavStack, чтобы он хотя бы отчасти ориентировался на url страницы (в досках наверное придётся так же хранить в localStorage или сторе)
-    //
-    localStorage.setItem('lastTab', 'directory')
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-    this.$store.commit('basic', { key: 'greedPath', value: 'colors' })
-    const navElem = {
-      name: 'Цвета',
-      key: 'greedSource',
-      greedPath: 'colors',
-      value: this.colors
-    }
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-    //
-    // END REMOVE
-    //
-  },
   methods: {
     addColor (text) {
       const user = this.$store.state.user.user

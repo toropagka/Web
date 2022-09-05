@@ -389,7 +389,6 @@ export default {
     }
   },
   mounted () {
-    localStorage.setItem('lastTab', 'directory')
     // открываем вид
     this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
     this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })

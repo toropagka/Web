@@ -19,7 +19,7 @@
     <div class="px-[16px] pt-[15px]">
       <AsideMenuListItem
         class="mb-[16px]"
-        :selected="lastTab === 'settings'"
+        :selected="isPathSelected('settings')"
         :title="user?.current_user_name"
         @click="gotoSettings"
       >
@@ -29,7 +29,7 @@
         >
       </AsideMenuListItem>
       <AsideMenuListItem
-        :selected="lastTab === 'doitnow'"
+        :selected="isPathSelected('doitnow')"
         title="Очередь"
         @click="gotoDoitnow"
       >
@@ -47,7 +47,7 @@
         </svg>
       </AsideMenuListItem>
       <AsideMenuListItem
-        :selected="lastTab === 'tasks'"
+        :selected="isPathSelected('tasks')"
         title="Задачи"
         @click="gotoTasks"
       >
@@ -70,7 +70,7 @@
         to="/reglaments"
       >
         <AsideMenuListItem
-          :selected="lastTab === 'reglaments'"
+          :selected="isPathSelected('reglaments')"
           title="Регламенты"
           @click="gotoReglaments"
         >
@@ -93,7 +93,7 @@
         </AsideMenuListItem>
       </router-link>
       <AsideMenuListItem
-        :selected="lastTab === 'new_private_projects'"
+        :selected="isPathSelected('project')"
         title="Проекты"
         @click="gotoProjects"
       >
@@ -111,7 +111,7 @@
         </svg>
       </AsideMenuListItem>
       <AsideMenuListItem
-        :selected="lastTab === 'new_private_boards'"
+        :selected="isPathSelected('board')"
         title="Доски"
         @click="gotoBoards"
       >
@@ -131,7 +131,7 @@
         </svg>
       </AsideMenuListItem>
       <AsideMenuListItem
-        :selected="lastTab === 'directory'"
+        :selected="isPathSelected('directory')"
         class="my-[16px]"
         title="Настройки"
         @click="gotoDirectory"
@@ -211,9 +211,24 @@ export default {
     isReglamentsSelected () {
       return this.lastNavStack?.greedPath === 'reglaments' ||
         this.lastNavStack?.global_property_uid === '92413f6c-2ef3-476e-9429-e76d7818685d'
+    },
+    lastRoute () {
+      return this.$router.currentRoute.value.path
+    },
+    lastRouteName () {
+      return this.$router.currentRoute.value.name
     }
   },
   methods: {
+    isPathSelected (code) {
+      if (code === 'directory') {
+        return ['colors', 'tags', 'employees', 'options', 'tarif', 'help'].includes(this.lastRouteName)
+      }
+      if (code === 'settings') {
+        return ['account', 'karma'].includes(this.lastRouteName)
+      }
+      return this.lastRoute?.includes(code)
+    },
     gotoProjects () {
       const elemToPush = {
         name: 'Проекты',

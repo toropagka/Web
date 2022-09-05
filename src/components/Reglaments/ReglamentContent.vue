@@ -439,7 +439,7 @@ export default {
 
 .ql-toolbar.ql-snow {
   position: sticky;
-  top: 0;
+  top: 83px;
   padding: 20px 0;
   z-index: 5;
   background: #f4f5f7;
