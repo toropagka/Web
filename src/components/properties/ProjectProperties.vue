@@ -23,9 +23,6 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
-          <PopMenuItem @click="copyLinkToProject">
-            Копировать ссылку на проект
-          </PopMenuItem>
           <PopMenuItem
             @click="favoriteToggle"
           >
@@ -155,7 +152,6 @@ import TaskPropsAccessLimitModalBox from '@/components/properties/TaskPropsAcces
 
 import * as PROJECT from '@/store/actions/projects'
 import { NAVIGATOR_REMOVE_PROJECT } from '@/store/actions/navigator'
-import { copyText } from 'vue3-clipboard'
 
 export default {
   components: {
@@ -398,19 +394,6 @@ export default {
           console.log('changeProjectMembers', resp, users)
         })
       }
-    },
-    copyLinkToProject () {
-      copyText(
-        `${window.location.origin}/project/${this.selectedProjectUid}`,
-        undefined,
-        (error, event) => {
-          if (error) {
-            console.log('copyLinkToProject error', error)
-          } else {
-            console.log('copyLinkToProject', event)
-          }
-        }
-      )
     }
   }
 }
