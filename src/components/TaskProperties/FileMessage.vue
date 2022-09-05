@@ -165,7 +165,7 @@ export default {
         'GIF'
       ],
       movies: ['mov', 'mp4', 'wmv', 'avi', 'avchd', 'mkv', 'webm', 'mpeg-2'],
-      docs: ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'],
+      docs: ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf', 'csv'],
       audio: ['mp3', 'wav'],
       isImageLoaded: false
     }
