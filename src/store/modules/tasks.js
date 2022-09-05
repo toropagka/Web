@@ -1316,7 +1316,7 @@ const mutations = {
       task._isEditable = false
       state.newtasks[task.uid] = {
         info: task,
-        children: [],
+        children: task.has_children ? ['fake-uid'] : [],
         state: {
           checked: false,
           opened: false,
