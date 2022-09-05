@@ -719,6 +719,7 @@ export default {
       this.validateReglamentQuestions()
       if (this.isFormInvalid && this.firstInvalidQuestionUid) {
         this.gotoNode(this.firstInvalidQuestionUid)
+        this.saveContentStatus = 1
         return
       }
 
