@@ -374,10 +374,10 @@
         @click="reDo"
       >
         <Icon
-          :path="close.path"
-          :width="close.width"
-          :height="close.height"
-          :box="close.viewBox"
+          :path="cancelImproveRejectIcon('path')"
+          :width="cancelImproveRejectIcon('width')"
+          :height="cancelImproveRejectIcon('height')"
+          :box="cancelImproveRejectIcon('viewBox')"
           class="ml-5"
         />
         <span
@@ -1271,6 +1271,9 @@ export default {
         this.showStatusModal = false
         this.$emit('nextTask')
       })
+    },
+    cancelImproveRejectIcon (param) {
+      return this.task.uid_customer === this.user?.current_user_uid && this.task.uid_performer !== this.user?.current_user_uid ? this.improve[param] : this.close[param]
     }
   }
 }
