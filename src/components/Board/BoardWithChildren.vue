@@ -82,6 +82,11 @@ export default {
       return this.currentBoard?.email_creator === user.current_user_email
     },
     loadBoard () {
+      if (!this.currentBoard) {
+        this.$router.push('/board')
+        return
+      }
+
       const navElemRoot = {
         name: 'Доски',
         key: 'greedSource',
