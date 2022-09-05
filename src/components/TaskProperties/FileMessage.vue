@@ -6,9 +6,13 @@
   >
     <a
       :id="'img_' + file.uid"
-      :href="'https://web.leadertask.com/User/Files/GetFile?uid=' + file.uid"
+      :href="imageSrc"
       target="_blank"
     >
+      <img
+        :src="imageSrc"
+        alt=""
+      >
       <ChatLoader
         v-if="!isImageLoaded"
         width="250px"
@@ -167,17 +171,17 @@ export default {
       movies: ['mov', 'mp4', 'wmv', 'avi', 'avchd', 'mkv', 'webm', 'mpeg-2'],
       docs: ['doc', 'docx', 'xls', 'xlsx', 'txt', 'pdf'],
       audio: ['mp3', 'wav'],
-      isImageLoaded: false
+      isImageLoaded: false,
+      imageSrc: ''
     }
   },
   mounted () {
     if (this.pics.includes(this.file.file_name.split('.').pop())) {
-      this.getImgUrl(
-        this.file.uid,
-        this.file.file_name.split('.').pop(),
-        this.file.file_name,
-        0
-      )
+      if (this.isFileInCache()) {
+        this.loadImageFromCache()
+      } else {
+        this.loadImageFromInternet()
+      }
     }
     if (this.docs.includes(this.file.file_name.split('.').pop())) {
       this.getDocUrl(
@@ -188,57 +192,31 @@ export default {
     }
   },
   methods: {
-    b64toBlob: (base64) => fetch(base64).then((res) => res.blob()),
-    getImgUrl (uid, extension, filename, counter) {
-      // computed value triggered after template change
-      if (this.isImageLoaded) return
-      const cachedImageBase64 = localStorage.getItem(uid)
-      if (cachedImageBase64) {
-        // we nee to wait until hidden messages will be drawn
-        this.$nextTick(() => {
-          this.b64toBlob(cachedImageBase64).then((blobImage) => {
-            // убираем дублирование при обновлении текущей задачи
-            // если процесс в фоне (получается что запускается одновременно два и более)
-            if (document.getElementById('img_' + uid)?.getElementsByTagName('img')?.length) {
-              this.isImageLoaded = true
-              return
-            }
-            const fileURL = window.URL.createObjectURL(blobImage)
-            const myImage = new Image()
-            myImage.src = cachedImageBase64
-            document.getElementById('img_' + uid).appendChild(myImage)
-            document.getElementById('img_' + uid).setAttribute('href', fileURL)
-            document.getElementById('img_' + uid).style.maxHeight = '100px'
-            this.isImageLoaded = true
-          })
-        })
-      } else {
-        this.$store
-          .dispatch(GET_FILE, uid)
-          .then((resp) => {
-            if (document.getElementById('img_' + uid)?.getElementsByTagName('img')?.length) {
-              this.isImageLoaded = true
-              return
-            }
-            writeCache(uid, new Blob([resp.data], { type: 'image/' + extension }))
-            const fileURL = window.URL.createObjectURL(
-              new Blob([resp.data], { type: 'image/' + extension })
-            )
-            const myImage = new Image()
-            myImage.src = fileURL
-            document.getElementById('img_' + uid).appendChild(myImage)
-            document.getElementById('img_' + uid).setAttribute('href', fileURL)
-            document.getElementById('img_' + uid).style.maxHeight = '100px'
-            this.isImageLoaded = true
-          })
-          .catch((e) => {
-            if (e?.message === 'Request failed with status code 404' && counter < 10) {
-              setTimeout(() => {
-                this.getImgUrl(uid, extension, filename, counter + 1)
-              }, 500)
-            }
-          })
-      }
+    loadImageFromInternet () {
+      this.$store.dispatch(GET_FILE, this.file.uid).then((resp) => {
+        const imageBlob = new Blob([resp.data], { type: 'image/' + this.file.file_name.split('.').pop() })
+        writeCache(this.file.uid, imageBlob)
+        const urlCreator = window.URL || window.webkitURL
+        const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.imageSrc = imageURL
+        this.imageLoaded = true
+      })
+    },
+    isFileInCache () {
+      return !!localStorage.getItem(this.file.uid)
+    },
+
+    b64toBlob (base64) {
+      return fetch(base64).then(res => res.blob())
+    },
+    loadImageFromCache () {
+      const cachedImageBase64 = localStorage.getItem(this.file.uid)
+      this.b64toBlob(cachedImageBase64).then(imageBlob => {
+        const urlCreator = window.URL || window.webkitURL
+        const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.imageSrc = imageURL
+        this.imageLoaded = true
+      })
     },
     getAnyUrl (uid, extension, filename) {
       this.$store.dispatch(GET_FILE, uid).then((resp) => {
