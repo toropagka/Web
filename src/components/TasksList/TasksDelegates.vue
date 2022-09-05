@@ -59,10 +59,10 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
       if (this.$route.name === 'tasksDelegateToMe') {
-        this.$store.dispatch(TASK.DELEGATED_TO_USER_TASKS_REQUEST, employee?.email)
+        this.$store.dispatch(TASK.ACTION_GET_TASK_DELEGATE_ME, uid)
       }
       if (this.$route.name === 'tasksDelegateByMe') {
-        this.$store.dispatch(TASK.DELEGATED_TASKS_REQUEST, employee?.email)
+        this.$store.dispatch(TASK.ACTION_GET_TASKS_DELEGATED_BY_ME, uid)
       }
       const navElem = {
         name: employee?.name,
