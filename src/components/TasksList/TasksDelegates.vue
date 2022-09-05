@@ -24,9 +24,6 @@ export default {
     }
   },
   computed: {
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },

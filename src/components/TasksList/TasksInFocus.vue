@@ -21,11 +21,6 @@ export default {
       uid: '6fc44cc6-9d45-4052-917e-25b1189ab141'
     }
   },
-  computed: {
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    }
-  },
   mounted () {
     if (UID_TO_ACTION[this.uid]) {
       this.$store.dispatch(UID_TO_ACTION[this.uid])
