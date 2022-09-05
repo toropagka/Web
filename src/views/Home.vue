@@ -43,7 +43,10 @@
     @decline="declineInviteModalBox"
     @cancel="cancelInviteModalBox"
   />
-  <main-section class="h-full">
+  <main-section
+    v-if="isContentLoaded"
+    class="h-full"
+  >
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
       class="fixed"
@@ -68,6 +71,7 @@
     <InspectorNotification v-if="!isFileRedirect" />
     <slot />
   </main-section>
+  <AppSkeleton v-else />
 </template>
 
 <script>
@@ -81,12 +85,13 @@ import ErrorNotification from '@/components/Notifications/ErrorNotification.vue'
 import Notification from '@/components/Notifications/Notification.vue'
 import InspectorNotification from '@/components/Notifications/InspectorNotification.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
+import AppSkeleton from '@/AppSkeleton.vue'
 
 import MainSection from '@/components/MainSection.vue'
 import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotificationInstruction.vue'
 
+import { USER_INVITE_ME, USER_REQUEST } from '@/store/actions/user'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
-import { USER_INVITE_ME } from '@/store/actions/user'
 
 import initWebSync from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
@@ -102,11 +107,13 @@ export default {
     ErrorNotification,
     Notification,
     InspectorNotification,
-    ModalBox
+    ModalBox,
+    AppSkeleton
   },
   data () {
     return {
-      shouldShowModalBox: false
+      shouldShowModalBox: false,
+      isContentLoaded: false
     }
   },
   computed: {
@@ -148,9 +155,42 @@ export default {
       return false
     }
   },
+  mounted () {
+    this.initApplication()
+  },
   methods: {
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
+    },
+    initApplication () {
+      // очищаем консоль - по идее выше ошибки которые
+      // мы не можем поправить из fm.websync и fm.min
+      // по этому консоль очищаем
+      console.clear()
+      const fm = document.createElement('script')
+      fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
+      fm.onload = () => {
+        // подключаем скрыпты в правильном порядке - сначала fm.min потом fm.websync.min
+        const websync = document.createElement('script')
+        websync.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.websync.min.js')
+        document.head.appendChild(websync)
+      }
+      document.head.appendChild(fm)
+
+      const userLoaded = this.$store.state.user.hasLoadedOnce
+      const navLoaded = this.$store.state.navigator.hasLoadedOnce
+      if (!userLoaded && !navLoaded) {
+        this.$store.dispatch(USER_REQUEST)
+          .then(resp => {
+            this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
+            this.getNavigator()
+          })
+          .catch(() => {
+            this.isContentLoaded = true
+          })
+      } else {
+        this.isContentLoaded = true
+      }
     },
     getNavigator () {
       if (this.$store.state.auth.token) {
@@ -164,7 +204,6 @@ export default {
           reglaments = resp.data
         }).finally(() => {
           this.$store.dispatch(NAVIGATOR_REQUEST).then((resp) => {
-            console.log(resp.data)
             this.storeNavigator.reglaments = {
               uid: 'fake-uid',
               items: reglaments
@@ -173,6 +212,7 @@ export default {
               initWebSync()
               initInspectorSocket()
             } catch (e) {}
+            this.isContentLoaded = true
           })
         })
       }

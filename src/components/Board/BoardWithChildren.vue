@@ -87,7 +87,7 @@ export default {
       return this.currentBoard?.email_creator === user.current_user_email
     },
     loadBoard () {
-      if (!this.currentBoard) {
+      if (!this.currentBoard || !Object.keys(this.$store.state.boards.boards).includes(this.$route.params.board_id)) {
         this.$router.push('/board')
         return
       }
