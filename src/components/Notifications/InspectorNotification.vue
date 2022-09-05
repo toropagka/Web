@@ -2,7 +2,7 @@
 export default {
   data () {
     return {
-      currentLocation: window.location.href
+      currentLocation: window.location.origin
     }
   },
   computed: {
@@ -59,7 +59,7 @@ export default {
                     >
                     <a
                       class="text-sm max-w-[200px] truncate font-semibold text-blue-500"
-                      :href="currentLocation + 'task/' + notification.task.uid"
+                      :href="currentLocation + '/task/' + notification.task.uid"
                     >
                       {{ notification.task.name }}
                     </a>
