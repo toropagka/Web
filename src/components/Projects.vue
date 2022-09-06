@@ -172,15 +172,6 @@ export default {
       return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
     }
   },
-  mounted () {
-    const navElem = {
-      name: 'Проекты',
-      key: 'greedSource',
-      greedPath: 'new_private_projects',
-      value: this.items
-    }
-    this.$store.commit('updateStackWithInitValue', navElem)
-  },
   created () {
     setLocalStorageItem('isGridView', true)
   },
