@@ -93,7 +93,7 @@
         <div
           class="group w-full flex items-center gap-[12px] px-[12px] h-[42px] border border-black/12 rounded-[6px] cursor-pointer"
         >
-          <div class="grow w-full max-w-[200px] truncate font-roboto text-[#606061] text-[15px]">
+          <div class="grow w-full truncate font-roboto text-[#606061] text-[15px]">
             {{ selectedEmployeeDep }}
           </div>
           <svg
