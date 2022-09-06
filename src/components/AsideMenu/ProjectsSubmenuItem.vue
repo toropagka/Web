@@ -64,9 +64,6 @@ export default {
     color () {
       if (this.project.color !== '' && this.project.color !== '#A998B6') return this.project.color
       return 'currentColor'
-    },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
     }
   }
 }

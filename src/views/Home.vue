@@ -141,9 +141,6 @@ export default {
     menu () {
       return this.$store.state.navigator.menu
     },
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
     },
