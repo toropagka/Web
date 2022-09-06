@@ -63,7 +63,6 @@ import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLi
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
-import * as TASK from '@/store/actions/tasks'
 
 import {
   REMOVE_PROJECT_REQUEST,
@@ -144,30 +143,6 @@ export default {
           (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
         ).toString(16)
       )
-    },
-    gotoChildren (project) {
-      this.$store.dispatch('asidePropertiesToggle', false)
-
-      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: project.global_property_uid, param: project.uid }
-      })
-
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: project.name,
-        key: 'greedSource',
-        uid: project.uid,
-        global_property_uid: project.global_property_uid,
-        greedPath: 'projects_children',
-        value: project.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: project.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     onAddNewProject (name) {
       this.showAdd = false
