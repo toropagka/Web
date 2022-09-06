@@ -94,7 +94,7 @@
           class="group w-full flex items-center gap-[12px] px-[12px] h-[42px] border border-black/12 rounded-[6px] cursor-pointer"
         >
           <div class="grow w-full truncate font-roboto text-[#606061] text-[15px]">
-            {{ selectedEmployeeDep }}
+            {{ selectedEmployeeDep || 'Вне отдела' }}
           </div>
           <svg
             width="12"
@@ -125,9 +125,9 @@
     </div>
     <div
       v-else
-      class="mt-[15px] w-full max-w-[200px] truncate font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
+      class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
     >
-      {{ selectedEmployeeDep }}
+      {{ selectedEmployeeDep || 'Вне отдела' }}
     </div>
     <div
       v-if="openedReglaments.length"
