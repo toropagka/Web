@@ -66,9 +66,6 @@ export default {
     color () {
       if (this.board.color !== '' && this.board.color !== '#A998B6') return this.board.color
       return 'currentColor'
-    },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
     }
   }
 }
