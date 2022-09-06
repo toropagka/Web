@@ -311,7 +311,7 @@
     </div>
 
     <EmptyTasksListPics
-      v-if="!Object.keys(storeTasks).length && status === 'success'"
+      v-if="!Object.keys(storeTasks).length && status === 'success' && $route.name === 'tasksToday'"
     />
     <!--
       Скрыто на первую версию!!
