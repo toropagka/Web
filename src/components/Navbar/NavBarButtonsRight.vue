@@ -342,21 +342,10 @@ export default {
           // поиск задачи по ссылке из лидертаска настольного
           if (this.searchText.startsWith('lt://planning?{')) {
             const taskUid = this.searchText.slice(15, -1).toLowerCase()
-            const link = `${window.location.origin}/task/${taskUid}`
-            window.location = link
+            this.$router.push({ path: `/task/${taskUid}` })
             return
           }
-          const navElem = {
-            name: 'Поиск: ' + this.searchText,
-            key: 'taskListSource',
-            value: { uid: '11212e94-cedf-11ec-9d64-0242ac120002', param: this.searchText }
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-          this.$store.commit('basic', { key: 'taskListSource', value: navElem.value })
-          this.$store.dispatch(TASK.SEARCH_TASK, this.searchText).then((resp) => {
-            console.log('Search Tasks', resp)
-          })
+          this.$router.push({ path: '/search', query: { q: this.searchText } })
         } else {
           notify(
             {

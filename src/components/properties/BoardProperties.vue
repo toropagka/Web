@@ -317,9 +317,6 @@ export default {
         }
       }
       return users
-    },
-    navStack () {
-      return this.$store.state.navbar.navStack
     }
   },
   watch: {
@@ -343,7 +340,6 @@ export default {
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
-          this.$store.dispatch('popNavStack')
           this.$router.push('/board')
         })
     },
@@ -368,11 +364,10 @@ export default {
         uid_user: this.$store.state.user.user.current_user_uid
       })
         .then((resp) => {
-          console.log('quitBoard', resp)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
-          this.$store.dispatch('popNavStack')
+          this.$router.push('/board')
         })
     },
     closeProperties () {
@@ -386,12 +381,6 @@ export default {
           .dispatch(BOARD.CHANGE_BOARD_NAME, {
             boardUid: this.selectedBoardUid,
             newBoardTitle: title
-          })
-          .then((resp) => {
-            console.log('changeBoardName', resp, title)
-            const lastNavEl = JSON.parse(JSON.stringify(this.navStack[this.navStack.length - 1]))
-            this.$store.commit('removeAllFromStackAfterIndex', 0)
-            this.$store.commit('pushIntoNavStack', { ...lastNavEl, name: title })
           })
       }
     },

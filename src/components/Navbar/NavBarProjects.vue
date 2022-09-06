@@ -19,7 +19,6 @@
 
 <script>
 import { PATCH_SETTINGS, NAVIGATOR_UPDATE_ASSIGNMENTS } from '@/store/actions/navigator'
-import { SEARCH_TASK } from '@/store/actions/tasks'
 import { notify } from 'notiwind'
 
 import NavBarButtonsProject from '@/components/Navbar/NavBarButtonsProject.vue'
@@ -76,21 +75,10 @@ export default {
         // поиск задачи по ссылке из лидертаска настольного
         if (text.startsWith('lt://planning?{')) {
           const taskUid = text.slice(15, -1).toLowerCase()
-          const link = `${window.location.origin}/task/${taskUid}`
-          window.location = link
+          this.$router.push({ path: `/task/${taskUid}` })
           return
         }
-        const navElem = {
-          name: 'Поиск: ' + text,
-          key: 'taskListSource',
-          value: { uid: '11212e94-cedf-11ec-9d64-0242ac120002', param: text }
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-        this.$store.commit('basic', { key: 'taskListSource', value: navElem.value })
-        this.$store.dispatch(SEARCH_TASK, text).then((resp) => {
-          console.log('Search Tasks', resp)
-        })
+        this.$router.push({ path: '/search', query: { q: text } })
       } else {
         notify(
           {
