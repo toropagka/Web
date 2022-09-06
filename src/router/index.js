@@ -352,10 +352,10 @@ const routes = [
       layout: Home,
       breadcrumb: {
         name: 'Проекты',
-        to: '/projects'
+        to: '/project'
       }
     },
-    path: '/projects',
+    path: '/project',
     name: 'allProjects',
     component: Projects,
     beforeEnter: shouldRedirectToLogin
