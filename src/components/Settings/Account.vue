@@ -172,7 +172,7 @@
             </div>
             <button
               type="button"
-              class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+              class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
               @click="showEditname = true"
             >
               Изменить имя
@@ -201,7 +201,7 @@
             </p>
             <div
               contenteditable="false"
-              class="text-[13px] landing-[13px] text-[#606061]"
+              class="text-[14px] landing-[13px] text-[#606061]"
             >
               {{ $store.state.user.user?.current_user_email }}
             </div>
