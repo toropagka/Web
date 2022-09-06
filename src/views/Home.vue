@@ -182,7 +182,6 @@ export default {
       if (!userLoaded && !navLoaded) {
         this.$store.dispatch(USER_REQUEST)
           .then(resp => {
-            this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
             this.getNavigator()
           })
           .catch(() => {
@@ -212,6 +211,7 @@ export default {
               initWebSync()
               initInspectorSocket()
             } catch (e) {}
+            this.$store.dispatch('GET_SOUND_SETTING', this.$store?.state?.user?.user?.current_user_uid)
             this.isContentLoaded = true
           })
         })

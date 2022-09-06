@@ -72,7 +72,9 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'sound-setting?uid_user=' + uidUser
       axios({ url: url, method: 'GET' })
         .then(resp => {
-          commit(INSPECTOR.GET_SOUND_SETTING, resp.data.is_notification_sound_on)
+          if ('is_notification_sound_on' in resp.data) {
+            commit(INSPECTOR.GET_SOUND_SETTING, resp.data.is_notification_sound_on)
+          }
           resolve(resp)
         }).catch(err => {
           reject(err)
