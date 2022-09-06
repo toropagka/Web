@@ -5,8 +5,7 @@
       :key="breadcrumb.to"
     >
       <NavBarBreadcrumb
-        :breadcrumb="breadcrumb"
-        :show-next="index !== breadcrumbs.length - 1"
+        :breadcrumb="{ ...breadcrumb, showNext: index !== breadcrumbs.length - 1 }"
       />
     </template>
   </div>

@@ -1,15 +1,15 @@
 <template>
   <router-link
     v-if="breadcrumb?.to"
-    class="flex gap-[10px] items-center font-roboto text-[16px] text-[#7E7E80] hover:text-[#4C4C4D] font-medium"
+    class="flex gap-[10px] items-center font-roboto text-[16px] text-[#7E7E80] hover:text-[#4C4C4D] font-medium overflow-hidden"
     :to="breadcrumb?.to"
   >
-    <span>
+    <span class="flex-initial truncate">
       {{ breadcrumb?.name }}
     </span>
     <svg
-      v-if="showNext"
-      class="mt-[1px]"
+      v-if="breadcrumb?.showNext"
+      class="flex-none mt-[1px]"
       width="6"
       height="10"
       viewBox="0 0 6 10"
@@ -26,14 +26,15 @@
   </router-link>
   <div
     v-else
-    class="flex gap-[10px] items-center font-roboto text-[16px] text-[#7E7E80] font-medium"
+    class="flex gap-[10px] items-center font-roboto text-[16px] font-medium overflow-hidden"
+    :class="{ 'text-[#7E7E80]': !breadcrumb?.selected, 'text-[#4C4C4D]': breadcrumb?.selected }"
   >
-    <span>
+    <span class="flex-initial truncate">
       {{ breadcrumb?.name }}
     </span>
     <svg
-      v-if="showNext"
-      class="mt-[1px]"
+      v-if="breadcrumb?.showNext"
+      class="flex-none mt-[1px]"
       width="6"
       height="10"
       viewBox="0 0 6 10"
@@ -56,10 +57,6 @@ export default {
     breadcrumb: {
       type: Object,
       default: () => ({})
-    },
-    showNext: {
-      type: Boolean,
-      default: false
     }
   }
 }

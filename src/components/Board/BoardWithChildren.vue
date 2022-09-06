@@ -1,6 +1,9 @@
 <template>
   <div class="h-screen">
-    <NavBarBoards class="pt-[8px]" />
+    <NavBarBoards
+      class="pt-[8px]"
+      :board-uid="boardUid"
+    />
     <div
       class="w-full h-[calc(100%-56px)] flex flex-col"
     >
