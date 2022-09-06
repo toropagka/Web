@@ -94,40 +94,7 @@ export default {
         this.$router.push('/board')
         return
       }
-
-      const navElemRoot = {
-        name: 'Доски',
-        key: 'greedSource',
-        greedPath: 'new_private_boards',
-        value: this.$store.state.navigator.navigator.new_private_boards
-      }
-      this.$store.commit('updateStackWithInitValue', navElemRoot)
-
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_boards' })
-      this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_boards })
-
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.currentBoard.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: this.currentBoard.global_property_uid, param: this.currentBoard.uid }
-      })
-
-      const navElem = {
-        name: this.currentBoard.name,
-        key: 'greedSource',
-        uid: this.currentBoard.uid,
-        global_property_uid: this.currentBoard.global_property_uid,
-        greedPath: 'boards_children',
-        value: this.currentBoard.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: this.currentBoard.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
     },
     goToChildBoard (board) {
       this.$router.push(`/board/${board.uid}`)
