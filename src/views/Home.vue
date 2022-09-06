@@ -45,7 +45,7 @@
   />
   <main-section
     v-if="isContentLoaded"
-    class="flex overflow-auto h-full"
+    class="flex xl:ml-[292px] overflow-auto h-full"
   >
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
