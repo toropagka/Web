@@ -4,9 +4,9 @@
     <template v-if="status == 'success'">
       <router-link to="/account/myaccount">
         <AsideMenuListItem
-          :selected="isAccountSelected"
+          :selected="isTabSelected('myaccount')"
           title="Аккаунт"
-          @click="$store.state.navigator.submenu.status = false"
+          @click="closeSubmenu"
         >
           <svg
             width="30"
@@ -26,9 +26,9 @@
       </router-link>
       <router-link to="/account/karma">
         <AsideMenuListItem
-          :selected="isKarmaSelected"
+          :selected="isTabSelected('karma')"
           title="Карма"
-          @click="$store.state.navigator.submenu.status = false"
+          @click="closeSubmenu"
         >
           <svg
             width="30"
@@ -66,26 +66,14 @@ export default {
   computed: {
     status () {
       return this.$store.state.navigator.status
-    },
-    isAccountSelected () {
-      return this.$store.state.navigator.currentSettingsTab === 'account'
-    },
-    isKarmaSelected () {
-      return this.$store.state.navigator.currentSettingsTab === 'karma'
     }
   },
   methods: {
-    gotoSettingsTab (type, label, uid) {
-      this.$store.state.navigator.currentSettingsTab = type
-      localStorage.setItem('currentSettingsTab', type)
-      // закрываем сабменю и меняем роут
+    isTabSelected (tab) {
+      return this.$route.path.includes(tab)
+    },
+    closeSubmenu () {
       this.$store.state.navigator.submenu.status = false
-    },
-    gotoAccount () {
-      this.gotoSettingsTab('account', 'Аккаунт', '9d3ba501-c173-462d-9b5f-0db97c06a026')
-    },
-    gotoKarma () {
-      this.gotoSettingsTab('karma', 'Карма', '5cda53e7-f859-4bac-b76c-4ad330a65a9a')
     }
   }
 }
