@@ -389,19 +389,6 @@ export default {
       }
     }
   },
-  mounted () {
-    // открываем вид
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-    this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
-    const navElem = {
-      name: 'Сотрудники',
-      key: 'greedSource',
-      greedPath: 'new_emps',
-      value: this.$store.getters.sortedNavigator.new_emps
-    }
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-  },
   methods: {
     print (msg, val) {
       console.log(msg, val)
@@ -427,11 +414,6 @@ export default {
       this.$store.commit(EMPLOYEE.SELECT_EMPLOYEE, this.$store.state.employees.employees[user.uid])
     },
     clickAddDep () {
-      // ограничение на добавление отдела на аккаунте с истекшей лицензией(не удалять)
-      // if (this.user.days_left <= 0) {
-      //   this.showUsersLimit = true
-      //   return
-      // }
       this.showAddDep = true
     },
     onAddNewDep (name) {
