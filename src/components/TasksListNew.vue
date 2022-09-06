@@ -392,6 +392,7 @@ export default {
       default: false
     }
   },
+  emits: ['changeTaskStatus'],
   data () {
     return {
       createTaskText: '',
@@ -1145,6 +1146,8 @@ export default {
             // фокусим следующий итем и открываем его свойства
             document.getElementById(data.id).focus({ preventScroll: false })
           })
+        } else {
+          this.$emit('changeTaskStatus', status, task)
         }
       })
     }
