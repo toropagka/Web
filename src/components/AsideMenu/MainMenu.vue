@@ -13,7 +13,7 @@
   <aside
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="w-[292px] fixed top-0 z-30 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm xl:left-0"
+    class="min-w-[292px] h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm xl:left-0 z-30"
     :class="isAsideMobileExpanded ? 'left-0' : '-left-full'"
   >
     <div class="px-[16px] pt-[15px]">
@@ -196,21 +196,11 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
     isAsideMobileExpanded () {
       return this.$store.state.isAsideMobileExpanded
-    },
-    isReglamentsSelected () {
-      return this.lastNavStack?.greedPath === 'reglaments' ||
-        this.lastNavStack?.global_property_uid === '92413f6c-2ef3-476e-9429-e76d7818685d'
     },
     lastRoute () {
       return this.$router.currentRoute.value.path
@@ -307,15 +297,6 @@ export default {
       }
       if (this.lastTab !== tab.code) {
         this.$store.dispatch(SWITCH_TAB, tab)
-      }
-    },
-    checkOnWhichTab (item) {
-      const lastNavStack = this.navStack[this.navStack.length - 1]
-      if (lastNavStack?.value?.uid === item.uid ||
-        lastNavStack?.uid === item.uid ||
-        lastNavStack?.name === item.label ||
-        (lastNavStack.name && item.name && lastNavStack?.name === item.name)) {
-        return true
       }
     },
     closeMenu () {

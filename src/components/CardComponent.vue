@@ -271,7 +271,7 @@
 <script>
 import { mdiCog } from '@mdi/js'
 import Icon from '@/components/Icon.vue'
-import AccKarmaLimit from '@/components/AccKarmaLimit'
+import AccKarmaLimit from '@/components/Settings/AccKarmaLimit'
 
 export default {
   components: {

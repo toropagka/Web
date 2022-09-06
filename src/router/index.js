@@ -2,7 +2,6 @@ import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
 import Doitnow from '@/components/Doitnow.vue'
-import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
@@ -22,7 +21,7 @@ import Account from '@/components/Settings/Account.vue'
 import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Support from '@/components/Settings/Support.vue'
-import AccKarma from '@/components/AccKarma.vue'
+import AccKarma from '@/components/Settings/AccKarma.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksInWork from '@/components/TasksList/TasksInWork'
@@ -296,22 +295,6 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/tasks',
-    name: 'tasks',
-    component: Home,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
-    path: '/clients',
-    name: 'clients',
-    component: Empty,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {
-      layout: Home
-    },
     path: '/tags',
     name: 'tags',
     component: Tags,
@@ -352,10 +335,10 @@ const routes = [
       layout: Home,
       breadcrumb: {
         name: 'Проекты',
-        to: '/projects'
+        to: '/project'
       }
     },
-    path: '/projects',
+    path: '/project',
     name: 'allProjects',
     component: Projects,
     beforeEnter: shouldRedirectToLogin

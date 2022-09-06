@@ -98,10 +98,8 @@ store.commit('basic', { key: 'isGridView', value: isGridView })
 const defaultDocumentTitle = 'Leadertask 2.0'
 
 /* Collapse mobile aside menu on route change */
-router.beforeEach((to) => {
-  if (to.path === '/doitnow') {
-    store.dispatch('asideMobileToggle', false)
-  }
+router.beforeEach((to, from) => {
+  store.dispatch('asidePropertiesToggle', false)
 })
 
 router.afterEach((to) => {

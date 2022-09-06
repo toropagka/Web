@@ -4,6 +4,7 @@ import * as CARD from '../actions/cards'
 const state = {
   cards: [],
   selectedCard: false,
+  selectedCardUid: '',
   boardUid: '',
   status: ''
 }

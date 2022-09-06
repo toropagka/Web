@@ -45,11 +45,10 @@
   />
   <main-section
     v-if="isContentLoaded"
-    class="h-full"
+    class="flex overflow-auto h-full"
   >
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
-      class="fixed"
     />
     <SubMenu
       v-if="isSubMenuActive"
@@ -69,7 +68,9 @@
     <ErrorNotification v-if="!isFileRedirect" />
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
-    <slot />
+    <div class="flex-1 px-3 overflow-auto">
+      <slot />
+    </div>
   </main-section>
   <AppSkeleton v-else />
 </template>
@@ -141,9 +142,6 @@ export default {
     menu () {
       return this.$store.state.navigator.menu
     },
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
     },
@@ -182,7 +180,6 @@ export default {
       if (!userLoaded && !navLoaded) {
         this.$store.dispatch(USER_REQUEST)
           .then(resp => {
-            this.$store.dispatch('GET_SOUND_SETTING', resp.data.current_user_uid)
             this.getNavigator()
           })
           .catch(() => {
@@ -212,6 +209,7 @@ export default {
               initWebSync()
               initInspectorSocket()
             } catch (e) {}
+            this.$store.dispatch('GET_SOUND_SETTING', this.$store?.state?.user?.user?.current_user_uid)
             this.isContentLoaded = true
           })
         })

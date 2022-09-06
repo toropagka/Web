@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex items-center justify-center rounded-[8px] border border-black/12 cursor-pointer h-[48px]"
+    class="flex items-center gap-[8px] px-[8px] rounded-[8px] border border-black/12 cursor-pointer h-[48px]"
+    :class="{ 'justify-center': !title }"
   >
     <svg
       width="30"
@@ -8,7 +9,7 @@
       viewBox="0 0 30 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class="dark:text-gray-100"
+      class="flex-none"
     >
       <rect
         x="0"
@@ -23,12 +24,23 @@
         fill="#4c4c4d"
       />
     </svg>
+    <div
+      v-if="title"
+      class="w-full font-roboto text-[13px] leading-[15px] text-[#7e7e80] font-medium truncate"
+    >
+      {{ title }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    title: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 

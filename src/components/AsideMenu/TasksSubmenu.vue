@@ -34,6 +34,7 @@
         to="/tasks/overdue"
       >
         <AsideMenuListItem
+          v-if="$store.state.navigator?.navigator?.settings.nav_show_overdue"
           :selected="isOverdueSelected"
           title="Просроченные"
           @click="closeMenu"

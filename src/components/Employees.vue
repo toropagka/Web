@@ -224,6 +224,7 @@
           </template>
           <ListBlocAdd
             v-if="index === 0 && isCanChangeEmployees"
+            title="Добавить сотрудника"
             @click.stop="clickAddEmployee"
           />
         </div>

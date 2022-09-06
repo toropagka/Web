@@ -184,7 +184,7 @@ export default {
       }
       this.$store.dispatch(CREATE_COLOR_REQUEST, color).then(() => {
         this.onCancel()
-        this.$store.state.greedSource.unshift(color)
+        this.$store.commit('NAVIGATOR_PUSH_COLOR', [color])
         this.openProperties(color)
       })
     },

@@ -1,14 +1,14 @@
 <template>
-  <div class="pt-[15px] w-full">
-    <NavBarTemplate class="xl:ml-[290px]">
-      Очередь
-    </NavBarTemplate>
+  <div class="pt-[8px] w-full">
+    <NavBar
+      title="Очередь"
+    />
     <div
       v-if="!isLoading && !showLimitMessage"
       class="flex justify-between gap-[20px]"
     >
       <transition :name="taskTransition">
-        <div class="ml-0 xl:ml-[290px] z-[2] grow">
+        <div class="ml-0 z-[2] grow">
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
@@ -58,15 +58,14 @@
     </div>
     <DoitnowLimit
       v-if="showLimitMessage && !displayModal && !isLoading"
-      class="xl:ml-[290px]"
     />
     <DoitnowSkeleton
       v-if="isLoading"
-      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+      class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowEmpty
       v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
-      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+      class="ml-0 pt-[15px] z-[2] grow"
       @clickPlanning="goToNextDay"
     />
     <div
@@ -117,7 +116,7 @@ import * as TASK from '@/store/actions/tasks.js'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
-import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
+import NavBar from '@/components/Navbar/NavBar.vue'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
@@ -135,7 +134,7 @@ export default {
     DoitnowTask,
     Icon,
     DoitnowNotificationTasks,
-    NavBarTemplate
+    NavBar
   },
   setup () {
     return {

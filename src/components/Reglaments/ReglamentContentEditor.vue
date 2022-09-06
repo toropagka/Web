@@ -3,7 +3,7 @@
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить регламент"
-      :text="`Вы действительно хотите удалить регламент\n ${greedSource.name}?`"
+      :text="`Вы действительно хотите удалить регламент\n ${currReglament.name}?`"
       @cancel="showConfirm = false"
       @yes="removeReglament"
     />
@@ -490,9 +490,6 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    greedSource () {
-      return this.$store.state.greedSource
-    },
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
     },
@@ -805,14 +802,13 @@ export default {
       })
     },
     removeReglament () {
+      // копия регламента, нужна для NAVIGATOR_REMOVE_REGLAMENT, он при удалении регламента использовал greedSource.
+      const reglamentCopy = this.reglament
       this.buttonDisabled = true
       this.showConfirm = false
-      this.$store.dispatch(REGLAMENTS.DELETE_REGLAMENT_REQUEST, this.greedSource.uid).then(() => {
+      this.$store.dispatch(REGLAMENTS.DELETE_REGLAMENT_REQUEST, this.currReglament.uid).then(() => {
         this.$store.dispatch('asidePropertiesToggle', false)
-        this.$store.commit(NAVIGATOR_REMOVE_REGLAMENT, this.greedSource)
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-        this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
+        this.$store.commit(NAVIGATOR_REMOVE_REGLAMENT, reglamentCopy)
         this.buttonDisabled = false
         this.$router.push('/reglaments')
       })

@@ -162,6 +162,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'board' })
       this.$store.commit(BOARD.SELECT_BOARD, this.board)
+      this.$store.state.cards.selectedCardUid = ''
     },
     clickDeleteBoard () {
       this.showDeleteBoard = true
@@ -254,7 +255,6 @@ export default {
           this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
           //
           this.$emit('popNavBar')
-          this.$router.push('/board')
         })
     },
     clickBoardMyCards () {

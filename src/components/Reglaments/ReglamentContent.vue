@@ -356,28 +356,10 @@ export default {
       return
     }
 
-    this.$store.commit('basic', {
-      key: 'reglamentSource',
-      value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.currReglament.uid }
-    })
-
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-    const navElem = {
-      name: this.currReglament.name,
-      key: 'greedSource',
-      uid: this.currReglament.uid,
-      global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
-      greedPath: 'reglament_content',
-      value: []
-    }
-
-    this.$store.commit('pushIntoNavStack', navElem)
-    this.$store.commit('basic', { key: 'greedSource', value: this.currReglament })
-    this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
-
     this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
+
     try {
       if (!this.isEditing) {
         document.querySelector('div.ql-toolbar').remove()
@@ -409,12 +391,6 @@ export default {
     },
     clearContributors () {
       this.$store.dispatch(REGLAMENTS.DELETE_USERS_REGLAMENT_ANSWERS, this.reglament.uid)
-    },
-    getBack () {
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-      this.$store.commit('basic', { key: 'greedSource', value: this.$store.getters.sortedNavigator.reglaments.items })
-      this.$store.dispatch('popNavStack')
     }
   }
 }

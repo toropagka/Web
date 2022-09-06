@@ -102,9 +102,10 @@
       </p>
     </div>
   </ModalBox>
-  <NavBarTemplate class="mt-[15px]">
-    Аккаунт
-  </NavBarTemplate>
+  <NavBar
+    class="mt-[8px]"
+    title="Аккаунт"
+  />
   <div class="overscroll-auto bg-white p-2 rounded-lg mt-1 pt-6">
     <div class="flex pb-3">
       <form class="text-left w-40">
@@ -172,7 +173,7 @@
             </div>
             <button
               type="button"
-              class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+              class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
               @click="showEditname = true"
             >
               Изменить имя
@@ -201,7 +202,7 @@
             </p>
             <div
               contenteditable="false"
-              class="text-[13px] landing-[13px] text-[#606061]"
+              class="text-[14px] landing-[13px] text-[#606061]"
             >
               {{ $store.state.user.user?.current_user_email }}
             </div>
@@ -251,7 +252,7 @@ import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import UsernameRename from '@/components/Settings/UsernameRename.vue'
 import PhoneModalBoxRename from './PhoneModalBoxRename.vue'
 import ModalBox from '@/components/modals/ModalBox.vue'
-import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
+import NavBar from '@/components/Navbar/NavBar.vue'
 import UploadAvatar from '@/components/UploadAvatar'
 import * as SLIDES from '@/store/actions/slides.js'
 
@@ -261,7 +262,7 @@ export default {
     ModalBox,
     UsernameRename,
     PhoneModalBoxRename,
-    NavBarTemplate
+    NavBar
   },
   emits: ['AccLogout', 'currentSettingsTab'],
   data () {
