@@ -1,43 +1,24 @@
 <template>
-  <nav
+  <NavBar
     id="NavBarBoards"
-    class="flex items-center h-[56px]"
+    title="Доски"
+    route="/board"
+    :breadcrumbs="breadcrumbs"
   >
-    <NavBarButtonToggleMenu class="flex-1 items-stretch" />
-    <div class="flex gap-[12px] items-center w-full overflow-hidden">
-      <NavBarBreadcrumb
-        :breadcrumb="{ name: 'Доски', to: '/board', showNext: true }"
-        class="flex-none"
-      />
-      <NavBarBreadcrumb
-        v-if="showDots"
-        :breadcrumb="{ name: '...', showNext: true }"
-        class="flex-none"
-      />
-      <NavBarBreadcrumb
-        v-for="(breadcrumb, index) in breadcrumbs"
-        :key="index"
-        :breadcrumb="breadcrumb"
-        class="flex-initial"
-      />
-    </div>
-    <div class="flex-none flex gap-[10px] items-center px-[12px]">
-      <NavBarSearch
-        @change="onSearch"
-      />
-      <NavBarButtonsBoard
-        :board-uid="boardUid"
-        @popNavBar="popNavBar"
-      />
-    </div>
-  </nav>
+    <NavBarSearch
+      @change="onSearch"
+    />
+    <NavBarButtonsBoard
+      :board-uid="boardUid"
+      @popNavBar="popNavBar"
+    />
+  </NavBar>
 </template>
 
 <script>
 import NavBarButtonsBoard from '@/components/Navbar/NavBarButtonsBoard.vue'
 import NavBarSearch from '@/components/Navbar/NavBarSearch.vue'
-import NavBarButtonToggleMenu from '@/components/Navbar/NavBarButtonToggleMenu.vue'
-import NavBarBreadcrumb from '@/components/Navbar/NavBarBreadcrumb.vue'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 import * as BOARD from '@/store/actions/boards'
 
@@ -45,8 +26,7 @@ export default {
   components: {
     NavBarButtonsBoard,
     NavBarSearch,
-    NavBarButtonToggleMenu,
-    NavBarBreadcrumb
+    NavBar
   },
   props: {
     boardUid: {
@@ -58,7 +38,7 @@ export default {
     boards () {
       return this.$store.state.boards.boards
     },
-    breadcrumbsAll () {
+    breadcrumbs () {
       let board = this.boards[this.boardUid]
       if (!board) return [{ name: '???', selected: true }]
 
@@ -73,12 +53,6 @@ export default {
       }
 
       return arrResult
-    },
-    showDots () {
-      return this.breadcrumbsAll.length > 2
-    },
-    breadcrumbs () {
-      return this.breadcrumbsAll.slice(-2)
     }
   },
   methods: {
