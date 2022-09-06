@@ -99,7 +99,7 @@ const defaultDocumentTitle = 'Leadertask 2.0'
 
 /* Collapse mobile aside menu on route change */
 router.beforeEach((to, from) => {
-  store.dispatch('asideMobileToggle', false)
+  store.dispatch('asidePropertiesToggle', false)
 })
 
 router.afterEach((to) => {
