@@ -182,15 +182,8 @@ export default {
     }
     this.selectAnotherProject(this.$route.params.project_id)
     this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
-    this.$store.commit('basic', {
-      key: 'taskListSource',
-      value: { uid: this.currentProject.global_property_uid, param: this.currentProject.uid }
-    })
 
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-    this.$store.commit('basic', { key: 'greedSource', value: this.currentProject.children })
-    this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
   },
   methods: {
     ...mapMutations('navbarVueRouter', {
@@ -236,19 +229,9 @@ export default {
       console.log(pathProjects)
       this.currentProject = this.$store.state.projects.projects[uid]
 
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_private_projects' })
-      this.$store.commit('basic', { key: 'greedSource', value: this.$store.state.navigator.navigator.new_private_projects?.items })
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: this.currentProject.global_property_uid, param: this.currentProject.uid }
-      })
 
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      this.$store.commit('basic', { key: 'greedSource', value: this.currentProject.children })
-      this.$store.commit('basic', { key: 'greedPath', value: 'projects_children' })
     },
     clickAddProject () {
       const user = this.$store.state.user.user
