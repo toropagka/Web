@@ -1,11 +1,11 @@
 <script>
 import * as chartConfig from '@/components/Charts/chart.config.js'
 import LineChart from '@/components/Charts/LineChart.vue'
-import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 export default {
   components: {
-    NavBarTemplate,
+    NavBar,
     LineChart
   },
   data () {
@@ -82,9 +82,10 @@ export default {
 </script>
 
 <template>
-  <NavBarTemplate class="py-[15px]">
-    Карма
-  </NavBarTemplate>
+  <NavBar
+    class="mt-[8px]"
+    title="Карма"
+  />
   <div
     v-if="user.tarif !== 'alpha' && user.tarif !== 'trial'"
     class="grid grid-cols-1 gap-4 p-5 bg-white rounded mt-2"

@@ -1,8 +1,9 @@
 <template>
-  <div class="pt-[15px] w-full">
-    <NavBarTemplate class="xl:ml-[290px]">
-      Очередь
-    </NavBarTemplate>
+  <div class="pt-[8px] w-full">
+    <NavBar
+      class="xl:ml-[290px]"
+      title="Очередь"
+    />
     <div
       v-if="!isLoading && !showLimitMessage"
       class="flex justify-between gap-[20px]"
@@ -117,7 +118,7 @@ import * as TASK from '@/store/actions/tasks.js'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
-import NavBarTemplate from '@/components/Navbar/NavBarTemplate'
+import NavBar from '@/components/Navbar/NavBar.vue'
 import Icon from '@/components/Icon.vue'
 
 import arrowForw from '@/icons/arrow-forw-sm.js'
@@ -135,7 +136,7 @@ export default {
     DoitnowTask,
     Icon,
     DoitnowNotificationTasks,
-    NavBarTemplate
+    NavBar
   },
   setup () {
     return {
