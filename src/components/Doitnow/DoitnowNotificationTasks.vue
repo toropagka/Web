@@ -40,16 +40,6 @@ export default {
       localStorage.setItem('lastTab', 'directory')
       this.$store.state.navigator.lastTab = localStorage.getItem('lastTab')
       this.$store.commit('NAVIGATOR_SUCCESS')
-      this.$store.commit('updateStackWithInitValue', {
-        name: 'Регламенты',
-        key: 'greedSource',
-        greedPath: 'reglaments',
-        value: this.storeNavigator.reglaments?.items
-      })
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
     }
   }
 }
