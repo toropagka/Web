@@ -232,13 +232,6 @@ export default {
       this.$store.state.navigator.lastTab = 'settings'
       this.$router.push('/account')
       this.$store.commit(NAVIGATOR_SUCCESS)
-      this.$store.commit('updateStackWithInitValue', {
-        name: 'Аккаунт',
-        value: { uid: '9d3ba501-c173-462d-9b5f-0db97c06a026', param: new Date() },
-        typeVal: new Date(),
-        type: 'account'
-      })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'settings' })
       this.$store.state.navigator.currentSettingsTab = 'account'
       localStorage.setItem('lastTab', 'settings')
     },
@@ -250,31 +243,11 @@ export default {
       this.$emit('nextTask')
       this.$router.push('/employees')
       this.$store.commit(NAVIGATOR_SUCCESS)
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'new_emps' })
-      const navElem = {
-        name: 'Сотрудники',
-        key: 'greedSource',
-        greedPath: 'new_emps',
-        value: this.storeNavigator.new_emps
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.new_emps })
     },
     clickAddReglament () {
       this.$emit('nextTask')
-      this.$store.commit(NAVIGATOR_SUCCESS)
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
       this.$router.push('/reglaments')
-      const navElem = {
-        name: 'Регламенты',
-        key: 'greedSource',
-        greedPath: 'reglaments',
-        value: this.storeNavigator.reglaments
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments.items })
+      this.$store.commit(NAVIGATOR_SUCCESS)
     }
   }
 }
