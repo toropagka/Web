@@ -4,7 +4,6 @@ import { useStore } from 'vuex'
 import TaskProperties from '@/components/properties/TaskProperties.vue'
 import CardProperties from '@/components/properties/CardProperties.vue'
 import ProjectProperties from '@/components/properties/ProjectProperties.vue'
-import ReglamentProperties from '@/components/properties/ReglamentProperties.vue'
 import BoardProperties from '@/components/properties/BoardProperties.vue'
 import ColorProperties from '@/components/properties/ColorProperties.vue'
 import TagProperties from '@/components/properties/TagProperties.vue'
@@ -15,7 +14,6 @@ export default {
     TaskProperties,
     CardProperties,
     ProjectProperties,
-    ReglamentProperties,
     BoardProperties,
     ColorProperties,
     TagProperties,
@@ -53,9 +51,6 @@ export default {
       />
       <ProjectProperties
         v-if="propertiesState == 'project'"
-      />
-      <ReglamentProperties
-        v-if="propertiesState == 'reglament'"
       />
       <BoardProperties
         v-if="propertiesState == 'board'"

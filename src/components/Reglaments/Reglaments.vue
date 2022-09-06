@@ -268,9 +268,6 @@ export default {
       this.$store.commit('basic', { key: 'isGridView', value: value })
       setLocalStorageItem('isGridView', value)
     },
-    gotoReglamentContent (reglament) {
-      this.$store.commit('basic', { key: 'greedSource', value: reglament })
-    },
     clickShowAll () {
       this.$store.state.reglaments.showAll = !this.showAllReglaments
     },
