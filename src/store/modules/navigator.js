@@ -42,10 +42,6 @@ const getDefaultState = () => {
       status: false,
       activeTab: ''
     },
-    currentSettingsTab:
-      localStorage.getItem('lastTab') === 'settings'
-        ? localStorage.getItem('currentSettingsTab')
-        : '',
     status: '',
     computedNavigator: false,
     hasLoadedOnce: false,

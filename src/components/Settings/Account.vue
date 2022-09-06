@@ -263,7 +263,7 @@ export default {
     PhoneModalBoxRename,
     NavBar
   },
-  emits: ['AccLogout', 'currentSettingsTab'],
+  emits: ['AccLogout'],
   data () {
     return {
       oldPassword: '',
@@ -302,7 +302,6 @@ export default {
   },
   methods: {
     changeCurrentTab (tabName) {
-      this.$emit('currentSettingsTab', tabName)
       this.$store.commit('updateStackWithInitValue', {
         name: 'Тариф',
         value: { uid: '0853812c-cf1c-4037-b2b6-b7020cb68105', param: new Date() },
