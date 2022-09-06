@@ -2,7 +2,7 @@
   <div class="h-screen">
     <NavBarBoards class="pt-[8px]" />
     <div
-      class="w-full h-full flex flex-col"
+      class="w-full h-[calc(100%-56px)] flex flex-col"
     >
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
