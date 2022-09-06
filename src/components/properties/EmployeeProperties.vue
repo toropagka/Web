@@ -94,7 +94,7 @@
           class="group w-full flex items-center gap-[12px] px-[12px] h-[42px] border border-black/12 rounded-[6px] cursor-pointer"
         >
           <div class="grow w-full truncate font-roboto text-[#606061] text-[15px]">
-            {{ selectedEmployeeDep }}
+            {{ selectedEmployeeDep || 'Вне отдела' }}
           </div>
           <svg
             width="12"
@@ -125,9 +125,9 @@
     </div>
     <div
       v-else
-      class="mt-[15px] w-full max-w-[200px] truncate font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
+      class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
     >
-      {{ selectedEmployeeDep }}
+      {{ selectedEmployeeDep || 'Вне отдела' }}
     </div>
     <div
       v-if="openedReglaments.length"
@@ -139,11 +139,11 @@
       v-if="openedReglaments.length"
       class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
     >
-      <div
+      <router-link
         v-for="reglament in openedReglaments"
         :key="reglament.uid"
+        :to="{ name: 'currentReglament', params: { id: reglament.uid } }"
         class="w-full h-[34px] flex items-center border-[2px] px-2 mb-1 rounded cursor-pointer"
-        @click="clickReglament(reglament.uid)"
       >
         <span class="grow font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] overflow-hidden truncate">
           {{ reglament.name }}
@@ -162,7 +162,7 @@
             fill="#44944A"
           />
         </svg>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -298,35 +298,6 @@ export default {
   methods: {
     print (msg, param) {
       console.log(msg, param)
-    },
-    clickReglament (reglamentUid) {
-      this.closeProperties()
-      this.$store.commit('updateStackWithInitValue', {
-        name: 'Регламенты',
-        key: 'greedSource',
-        greedPath: 'reglaments',
-        value: this.storeNavigator.reglaments?.items
-      })
-      this.$store.commit('basic', { key: 'greedSource', value: this.storeNavigator.reglaments?.items })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-      const reglament = this.$store.state.reglaments.reglaments[reglamentUid]
-      this.$store.commit('basic', {
-        key: 'reglamentSource',
-        value: { uid: '92413f6c-2ef3-476e-9429-e76d7818685d', param: this.uid }
-      })
-      const navElem = {
-        name: this.name,
-        key: 'greedSource',
-        uid: this.uid,
-        global_property_uid: '92413f6c-2ef3-476e-9429-e76d7818685d',
-        greedPath: 'reglament_content',
-        value: []
-      }
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: reglament })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-      this.$store.commit('basic', { key: 'greedPath', value: 'reglament_content' })
     },
     removeEmployee () {
       this.showConfirm = false

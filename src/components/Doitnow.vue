@@ -1,7 +1,6 @@
 <template>
   <div class="pt-[8px] w-full">
     <NavBar
-      class="xl:ml-[290px]"
       title="Очередь"
     />
     <div
@@ -9,7 +8,7 @@
       class="flex justify-between gap-[20px]"
     >
       <transition :name="taskTransition">
-        <div class="ml-0 xl:ml-[290px] z-[2] grow">
+        <div class="ml-0 z-[2] grow">
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
@@ -59,15 +58,14 @@
     </div>
     <DoitnowLimit
       v-if="showLimitMessage && !displayModal && !isLoading"
-      class="xl:ml-[290px]"
     />
     <DoitnowSkeleton
       v-if="isLoading"
-      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+      class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowEmpty
       v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
-      class="ml-0 pt-[15px] xl:ml-[290px] z-[2] grow"
+      class="ml-0 pt-[15px] z-[2] grow"
       @clickPlanning="goToNextDay"
     />
     <div

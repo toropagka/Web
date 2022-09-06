@@ -751,12 +751,10 @@ export default {
           this.selectedTask.type = resp.data.type
         }
       )
-      if (this.navStack.length && this.navStack.length > 0) {
-        const navStackUid = this.navStack[0]?.uid
-        if (navStackUid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-          this.$store.commit(TASK.REMOVE_TASK, taskUid)
-          this.$store.dispatch('asidePropertiesToggle', false)
-        }
+
+      if (this.$route.name === 'tasksToday') {
+        this.$store.commit(TASK.REMOVE_TASK, taskUid)
+        this.$store.dispatch('asidePropertiesToggle', false)
       }
     },
     onChangeDates: function (begin, end) {

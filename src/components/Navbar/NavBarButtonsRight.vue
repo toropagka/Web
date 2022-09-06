@@ -5,7 +5,6 @@
   />
   <div class="flex gap-[10px] items-center px-3">
     <div
-      v-if="!showSearchBar && lastGreedPath !== 'reglament_content' && lastGreedPath !== 'reglaments' && lastGreedPath !== 'new_delegate' && lastGreedPath !== 'new_private_boards' && lastGreedPath !== 'new_private_projects'"
       class="flex-none flex gap-[5px] p-[8px] cursor-pointer text-[#7e7e80] hover:text-[#7e7e80]/75"
       @click="onShowSearchBar"
     >
@@ -342,21 +341,10 @@ export default {
           // поиск задачи по ссылке из лидертаска настольного
           if (this.searchText.startsWith('lt://planning?{')) {
             const taskUid = this.searchText.slice(15, -1).toLowerCase()
-            const link = `${window.location.origin}/task/${taskUid}`
-            window.location = link
+            this.$router.push({ path: `/task/${taskUid}` })
             return
           }
-          const navElem = {
-            name: 'Поиск: ' + this.searchText,
-            key: 'taskListSource',
-            value: { uid: '11212e94-cedf-11ec-9d64-0242ac120002', param: this.searchText }
-          }
-          this.$store.commit('updateStackWithInitValue', navElem)
-          this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-          this.$store.commit('basic', { key: 'taskListSource', value: navElem.value })
-          this.$store.dispatch(TASK.SEARCH_TASK, this.searchText).then((resp) => {
-            console.log('Search Tasks', resp)
-          })
+          this.$router.push({ path: '/search', query: { q: this.searchText } })
         } else {
           notify(
             {

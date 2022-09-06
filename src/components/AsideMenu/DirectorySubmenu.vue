@@ -211,21 +211,6 @@ export default {
     },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
-    },
-    isEmpsSelected () {
-      return this.lastNavStack?.greedPath === 'new_emps'
-    },
-    isTagsSelected () {
-      return this.lastNavStack?.greedPath === 'tags'
-    },
-    isColorsSelected () {
-      return this.lastNavStack?.greedPath === 'colors'
-    },
-    isSupportSelected () {
-      return this.$store.state.navigator.currentSettingsTab === 'support'
-    },
-    isOptionSelected () {
-      return this.$store.state.navigator.currentSettingsTab === 'option'
     }
   },
   methods: {
@@ -254,36 +239,6 @@ export default {
         this.$store.dispatch('asideMobileToggle', false)
       }
       cbOpenView()
-    },
-    gotoColors () {
-      this.selectSubMenuItem(this.isColorsSelected, () => {
-        // открываем вид
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'colors' })
-        const navElem = {
-          name: 'Цвета',
-          key: 'greedSource',
-          greedPath: 'colors',
-          value: this.storeNavigator.colors?.items
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-      })
-    },
-    gotoReglaments () {
-      this.selectSubMenuItem(this.isReglamentsSelected, () => {
-        // открываем вид
-        this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-        this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-        const navElem = {
-          name: 'Регламенты',
-          key: 'greedSource',
-          greedPath: 'reglaments',
-          value: this.storeNavigator.reglaments?.items
-        }
-        this.$store.commit('updateStackWithInitValue', navElem)
-        this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-      })
     }
   }
 }
