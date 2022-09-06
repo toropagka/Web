@@ -56,6 +56,7 @@ function wipeCachedFilesFromLocalStorage () {
       localStorage.removeItem(key)
     }
   }
+  localStorage.removeItem('navStack')
 }
 
 export function setLocalStorageItem (key, value) {
