@@ -42,7 +42,7 @@
         @change="onSearch"
       />
       <NavBarButtonsBoard
-        :board-uid="lastNavStackUid"
+        :board-uid="boardUid"
         @popNavBar="popNavBar"
       />
     </div>
@@ -78,6 +78,9 @@ export default {
   computed: {
     navStack () {
       return this.$store.state.navbar.navStack
+    },
+    boardUid () {
+      return this.$route.params.board_id
     }
   },
   methods: {

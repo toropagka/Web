@@ -203,6 +203,7 @@ export default {
           this.$store.commit(BOARD.PUSH_BOARD, [board])
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_BOARD, [board])
           this.$router.push('/board/' + board.uid)
+          this.closeMenu()
         })
       }
     },
