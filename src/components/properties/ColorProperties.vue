@@ -304,7 +304,7 @@ export default {
           this.$store.commit(REMOVE_MYCOLOR_REQUEST, this.selectedColorUid)
           this.$store.commit(NAVIGATOR_REMOVE_COLOR, this.selectedColor)
           // выходим выше на один уровень навигации (надеемся что этот цвет последний в стеке)
-          this.$store.dispatch('popNavStack')
+          this.$router.push('/colors')
         })
     },
     closeProperties () {
