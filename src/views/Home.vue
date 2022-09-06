@@ -127,9 +127,6 @@ export default {
     lastTab () {
       return this.$store.state.navigator.lastTab
     },
-    greedPath () {
-      return this.$store.state.greedPath
-    },
     greedSource () {
       return this.$store.state.greedSource
     },
