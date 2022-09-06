@@ -16,7 +16,6 @@ export default {
       const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
       window.location.href = link
       this.$store.commit(NAVIGATOR_SUCCESS)
-      localStorage.setItem('lastTab', 'tasks')
     }
   }
 }

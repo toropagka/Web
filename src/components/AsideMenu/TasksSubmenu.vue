@@ -312,12 +312,10 @@ export default {
     },
     onDayClick (date) {
       this.$router.push('/tasks/' + date)
-      localStorage.setItem('lastTab', 'tasks')
       this.$store.commit('setCalendarLastPicked', date)
       this.closeMenu()
     },
     closeMenu () {
-      localStorage.setItem('lastTab', 'tasks')
       this.$store.state.navigator.submenu.status = false
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)

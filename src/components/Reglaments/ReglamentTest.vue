@@ -137,8 +137,6 @@ export default {
     },
     confirm (val) {
       if (this.$store.state.reglaments.returnDoitnow === true && this.isPassed === 1) {
-        this.$store.state.navigator.lastTab = 'doitnow'
-        localStorage.setItem('lastTab', 'doitnow')
         this.$router.push('/doitnow')
         this.$store.state.reglaments.returnDoitnow = false
         return

@@ -73,7 +73,6 @@ export default {
       this.$store.commit('basic', { key: 'taskListSource', value: { uid: employee?.parentID, param: employee?.email } })
       this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-      localStorage.setItem('lastTab', 'tasks')
     }
   }
 }

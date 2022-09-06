@@ -57,7 +57,6 @@ export default {
   },
   mounted () {
     this.loadProject()
-    this.$store.state.navigator.lastTab = 'new_private_projects'
   },
   methods: {
     loadProject () {

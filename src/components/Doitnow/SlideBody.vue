@@ -229,11 +229,8 @@ export default {
   methods: {
     clickAddAvatar () {
       this.$emit('nextTask')
-      this.$store.state.navigator.lastTab = 'settings'
-      this.$router.push('/account')
+      this.$router.push('/account/myaccount')
       this.$store.commit(NAVIGATOR_SUCCESS)
-      this.$store.state.navigator.currentSettingsTab = 'account'
-      localStorage.setItem('lastTab', 'settings')
     },
     clickSuccess () {
       this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: false })
@@ -241,7 +238,7 @@ export default {
     },
     clickAddEmployees () {
       this.$emit('nextTask')
-      this.$router.push('/employees')
+      this.$router.push('/settings/employees')
       this.$store.commit(NAVIGATOR_SUCCESS)
     },
     clickAddReglament () {

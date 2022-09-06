@@ -40,9 +40,8 @@ const getDefaultState = () => {
     navigator: false,
     submenu: {
       status: false,
-      path: ''
+      activeTab: ''
     },
-    lastTab: localStorage.getItem('lastTab') ?? 'doitnow',
     currentSettingsTab:
       localStorage.getItem('lastTab') === 'settings'
         ? localStorage.getItem('currentSettingsTab')

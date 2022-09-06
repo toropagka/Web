@@ -124,9 +124,6 @@ export default {
     isSubMenuActive () {
       return this.$store.state.navigator.submenu.status
     },
-    lastTab () {
-      return this.$store.state.navigator.lastTab
-    },
     greedSource () {
       return this.$store.state.greedSource
     },
@@ -152,8 +149,26 @@ export default {
   },
   mounted () {
     this.initApplication()
+    this.initActiveTab()
   },
   methods: {
+    initActiveTab () {
+      const allPaths = [
+        'tasks',
+        'account',
+        'reglaments',
+        'project',
+        'board',
+        'settings',
+        'doitnow'
+      ]
+      for (let i = 0; i < allPaths.length; i++) {
+        if (this.$route.path.includes(allPaths[i])) {
+          this.$store.state.navigator.submenu.activeTab = allPaths[i]
+          return
+        }
+      }
+    },
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
     },

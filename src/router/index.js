@@ -53,14 +53,7 @@ const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
     if (window.location.pathname.includes('task') && !window.location.pathname.includes('tasks')) {
       next()
-      return
     }
-    const lastTab = localStorage.getItem('lastTab')
-    if (lastTab === null) {
-      next('/doitnow')
-      return
-    }
-    next(`/${lastTab}`)
   } else {
     next('/login')
   }
@@ -142,8 +135,8 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/account',
-    name: 'account',
+    path: '/account/myaccount',
+    name: 'myaccount',
     component: Account,
     beforeEnter: shouldRedirectToLogin
   },
@@ -151,7 +144,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/help',
+    path: '/settings/help',
     name: 'help',
     component: Support,
     beforeEnter: shouldRedirectToLogin
@@ -160,7 +153,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/karma',
+    path: '/account/karma',
     name: 'karma',
     component: AccKarma,
     beforeEnter: shouldRedirectToLogin
@@ -169,7 +162,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/tarif',
+    path: '/settings/tarif',
     name: 'tarif',
     component: Tarif,
     beforeEnter: shouldRedirectToLogin
@@ -178,7 +171,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/options',
+    path: '/settings/options',
     name: 'options',
     component: Options,
     beforeEnter: shouldRedirectToLogin
@@ -295,7 +288,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/tags',
+    path: '/settings/tags',
     name: 'tags',
     component: Tags,
     beforeEnter: shouldRedirectToLogin
@@ -304,7 +297,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/employees',
+    path: '/settings/employees',
     name: 'employees',
     component: Employees,
     beforeEnter: shouldRedirectToLogin
@@ -325,7 +318,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/colors',
+    path: '/settings/colors',
     name: 'colors',
     component: Colors,
     beforeEnter: shouldRedirectToLogin
