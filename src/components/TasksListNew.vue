@@ -498,26 +498,14 @@ export default {
     storeTasks () {
       return this.$store.state.tasks.newtasks
     },
-    overdue () {
-      return this.$store.state.tasks.overdue
-    },
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
     settings () {
       return this.$store.state.navigator.navigator.settings
-    },
-    lastVisitedDate () {
-      return (this.navStack && this.navStack.length && this.navStack[this.navStack.length - 1] && this.navStack[this.navStack.length - 1].uid && this.navStack[this.navStack.length - 1].uid === '901841d9-0016-491d-ad66-8ee42d2b496b' && this.navStack[this.navStack.length - 1].param ? new Date(this.navStack[this.navStack.length - 1].param) : new Date())
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
     copiedTasks () {
       return this.$store.state.tasks.copiedTasks
-    },
-    date () {
-      return this.lastVisitedDate.getDate() + '-' + this.lastVisitedDate.getMonth() + '-' + this.lastVisitedDate.getFullYear()
     },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
@@ -853,7 +841,7 @@ export default {
           // выделяем добавленную задачу
           // и отображаем её свойства
             this.nodeSelected({ id: data.uid, info: resp.data })
-            if (this.navStack && this.navStack[this.navStack.length - 1].value.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
+            if (this.$route.name === 'tasksToday') {
               this.$store.commit('addDot', new Date(data.date_begin))
             }
             document.getElementById('task').firstElementChild.focus({ preventScroll: false })
