@@ -2,7 +2,6 @@ import store from '@/store'
 import CardFile from '@/views/CardFile'
 import Home from '@/views/Home'
 import Doitnow from '@/components/Doitnow.vue'
-import Empty from '@/components/Empty.vue'
 import TaskFile from '@/views/TaskFile'
 import Colors from '@/components/Colors.vue'
 import Employees from '@/components/Employees.vue'
@@ -290,22 +289,6 @@ const routes = [
     path: '/doitnow',
     name: 'doitnow',
     component: Doitnow,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {
-      layout: Home
-    },
-    path: '/tasks',
-    name: 'tasks',
-    component: Home,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {},
-    path: '/clients',
-    name: 'clients',
-    component: Empty,
     beforeEnter: shouldRedirectToLogin
   },
   {
