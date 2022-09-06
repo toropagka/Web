@@ -260,19 +260,6 @@ export default {
       return !this.$store.state.onboarding.visitedModals?.includes('reglaments') && this.$store.state.onboarding.showModals
     }
   },
-  mounted () {
-    localStorage.setItem('lastTab', 'directory')
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'greed' })
-    this.$store.commit('basic', { key: 'greedPath', value: 'reglaments' })
-    const navElem = {
-      name: 'Регламенты',
-      key: 'greedSource',
-      greedPath: 'reglaments',
-      value: this.$store.state.navigator.navigator.reglaments?.items
-    }
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'greedSource', value: navElem.value })
-  },
   created () {
     setLocalStorageItem('isGridView', true)
   },
