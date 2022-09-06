@@ -78,6 +78,7 @@
           />
           <ListBlocAdd
             v-else-if="reg.is_my_dep"
+            title="Добавить регламент"
             @click.stop="clickAddReglament(reg.uid)"
           />
         </div>
