@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen">
+  <div class="h-screen overflow-auto">
     <NavBarBoards
       class="pt-[8px]"
       :board-uid="boardUid"

@@ -45,11 +45,10 @@
   />
   <main-section
     v-if="isContentLoaded"
-    class="h-full"
+    class="flex overflow-auto h-full"
   >
     <MainMenu
       v-if="!isFileRedirect && $store.state.auth.token"
-      class="fixed"
     />
     <SubMenu
       v-if="isSubMenuActive"
@@ -69,7 +68,9 @@
     <ErrorNotification v-if="!isFileRedirect" />
     <Notification v-if="!isFileRedirect" />
     <InspectorNotification v-if="!isFileRedirect" />
-    <slot />
+    <div class="flex-1 px-3 overflow-auto">
+      <slot />
+    </div>
   </main-section>
   <AppSkeleton v-else />
 </template>
