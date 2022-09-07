@@ -119,26 +119,14 @@ export default {
     }
   },
   computed: {
-    mainSectionState () {
-      return this.$store.state.mainSectionState
-    },
     isSubMenuActive () {
       return this.$store.state.navigator.submenu.status
-    },
-    greedSource () {
-      return this.$store.state.greedSource
     },
     isAsideLgActive () {
       return this.$store.state.isAsideLgActive
     },
-    menu () {
-      return this.$store.state.navigator.menu
-    },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
-    },
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
     },
     showInviteModalBox () {
       if (this.$store.state.navigator.navigator?.invite_me?.uid && this.$store.state.navigator.navigator?.invite_me?.uid !== '00000000-0000-0000-0000-000000000000') return true
