@@ -10,13 +10,12 @@ function isTaskIsSharedForMe (task) {
 }
 
 export function shouldAddTaskIntoList (task) {
-  // если у задачи есть uid_parent то сначала попытаться его вставить его в родительскую задачу текущего списка
-
   // Adding new task by date request
   // first look date_end in selected day
   //  check type 2 then check date_end < than selected date then add, if date_end > then throw away
 
   if (
+    ifTaskHasParent(task) ||
     checkShouldAddByDateRequest(task) ||
     checkShouldAddTaskToAssignToRequest(task) ||
     checkShouldAddTaskToAssignByRequest(task) ||
@@ -25,7 +24,6 @@ export function shouldAddTaskIntoList (task) {
     checkShouldAddTaskToOverdueRequest(task) ||
     checkShouldAddTaskToUnreadRequest(task) ||
     checkShouldAddTaskToFocusRequest(task) ||
-    ifTaskHasParent(task) ||
     addToUnsortedList()
   ) {
     return true
