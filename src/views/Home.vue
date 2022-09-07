@@ -95,7 +95,7 @@ import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotific
 import { USER_INVITE_ME, USER_REQUEST } from '@/store/actions/user'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 
-import initWebSync from '@/websync/index.js'
+import initWebSync, { disconnectWebSync } from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
 
 export default {
@@ -136,6 +136,9 @@ export default {
   mounted () {
     this.initApplication()
     this.initActiveTab()
+  },
+  unmounted () {
+    disconnectWebSync()
   },
   methods: {
     initActiveTab () {

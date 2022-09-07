@@ -1,6 +1,6 @@
+// import router from '@/router'
 import router from '@/router'
 import { setLocalStorageItem } from '@/store/helpers/functions'
-import { disconnectWebSync } from '@/websync/index.js'
 import axios from 'axios'
 import {
   AUTH_CHANGE_PASSWORD, AUTH_ERROR,
@@ -104,7 +104,6 @@ const actions = {
       localStorage.removeItem('user-token')
       localStorage.removeItem('user-refresh-token')
       localStorage.removeItem('visitedModals')
-      disconnectWebSync()
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
       commit(RESET_STATE_NAVIGATOR)
       commit(RESET_STATE_TASKS)

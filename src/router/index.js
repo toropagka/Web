@@ -33,6 +33,7 @@ import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TasksInWork from '@/components/TasksList/TasksInWork'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import Login from '@/views/Login'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -357,7 +358,7 @@ const routes = [
     },
     path: '/login',
     name: 'login',
-    component: () => import('@/views/Login.vue'),
+    component: Login,
     beforeEnter: ifNotAuthenticated
   },
   {
