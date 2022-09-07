@@ -1,6 +1,11 @@
 <template>
-  <div class="mr-3">
-    <TasksListNew />
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarInFocus"
+      class="pt-[8px]"
+      title="Задачи в фокусе"
+    />
+    <TasksListNew hide-nav-bar />
     <propertiesRight />
   </div>
 </template>
@@ -8,12 +13,15 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {
