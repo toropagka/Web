@@ -223,6 +223,7 @@ export default {
     },
     selectTab (tab) {
       this.$store.state.navigator.submenu.activeTab = tab
+      this.$store.state.navigator.submenu.status = false
     },
     changeTab (tab) {
       // активация сабменю
