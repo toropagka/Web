@@ -5,7 +5,7 @@
       class="pt-[8px]"
       title="Задачи в фокусе"
     />
-    <TasksListNew hide-nav-bar />
+    <TasksListNew />
     <propertiesRight />
   </div>
 </template>

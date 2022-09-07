@@ -12,7 +12,6 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <NavBar v-if="!hideNavBar" />
   <div
     v-if="displayModal"
     class="flex flex-col items-center max-w-[600px] mx-auto"
@@ -43,7 +42,7 @@
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks' && !hideNavBar}"
+    :class="{'mr-96': isPropertiesMobileExpanded}"
   >
     <!-- Add task input -->
     <div
@@ -340,7 +339,6 @@ import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
 import { TASK_STATUS } from '@/constants'
-import NavBar from '@/components/NavBar.vue'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -369,7 +367,6 @@ import linkify from 'vue-linkify'
 export default {
   components: {
     tree: treeview,
-    NavBar,
     TaskListIconLabel,
     TaskListTagLabel,
     TaskListEdit,
@@ -386,10 +383,6 @@ export default {
     linkify
   },
   props: {
-    hideNavBar: {
-      type: Boolean,
-      default: false
-    },
     hideInput: {
       type: Boolean,
       defalut: false

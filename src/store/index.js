@@ -4,7 +4,6 @@ import { darkModeKey } from '@/config.js'
 import auth from './modules/auth'
 import navigator from './modules/navigator'
 import calendar from './modules/calendar'
-import navbarVueRouter from './modules/navbar_vue_router'
 import navbar from './modules/navbar'
 import user from './modules/user'
 import onboarding from '@/store/modules/onboarding.js'
@@ -151,7 +150,6 @@ export default createStore({
     tasks,
     slides,
     navbar,
-    navbarVueRouter,
     taskfilesandmessages,
     cardfilesandmessages,
     employees,
