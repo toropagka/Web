@@ -1,37 +1,38 @@
-import store from '@/store'
-import CardFile from '@/views/CardFile'
-import Home from '@/views/Home'
-import Doitnow from '@/components/Doitnow.vue'
-import TaskFile from '@/views/TaskFile'
+import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 import Colors from '@/components/Colors.vue'
+import Doitnow from '@/components/Doitnow.vue'
 import Employees from '@/components/Employees.vue'
 import Projects from '@/components/Projects.vue'
 import Tags from '@/components/Tags/Tags.vue'
-import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+import store from '@/store'
+import CardFile from '@/views/CardFile'
+import Home from '@/views/Home'
+import TaskFile from '@/views/TaskFile'
 
-import Reglaments from '@/components/Reglaments/Reglaments.vue'
-import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
-import TasksToday from '@/components/TasksList/TasksToday.vue'
-import TasksReady from '@/components/TasksList/TasksReady.vue'
-import TasksUnread from '@/components/TasksList/TasksUnread.vue'
+import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
+import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
+import TasksReady from '@/components/TasksList/TasksReady.vue'
+import TasksToday from '@/components/TasksList/TasksToday.vue'
+import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 
+import AccKarma from '@/components/Settings/AccKarma.vue'
 import Account from '@/components/Settings/Account.vue'
-import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Support from '@/components/Settings/Support.vue'
-import AccKarma from '@/components/Settings/AccKarma.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
 
-import { createRouter, createWebHistory } from 'vue-router'
-import TasksInWork from '@/components/TasksList/TasksInWork'
-import TasksInFocus from '@/components/TasksList/TasksInFocus'
-import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
-import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
-import TaskByUid from '@/components/TasksList/TaskByUid.vue'
-import TasksByDate from '@/components/TasksList/TasksByDate.vue'
 import Boards from '@/components/Boards'
 import Search from '@/components/Search'
+import TaskByUid from '@/components/TasksList/TaskByUid.vue'
+import TasksByDate from '@/components/TasksList/TasksByDate.vue'
+import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
+import TasksDelegateToMe from '@/components/TasksList/TasksDelegateToMe.vue'
+import TasksInFocus from '@/components/TasksList/TasksInFocus'
+import TasksInWork from '@/components/TasksList/TasksInWork'
+import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -51,7 +52,10 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    if (window.location.pathname.includes('task') && !window.location.pathname.includes('tasks')) {
+    if (
+      window.location.pathname.includes('task') &&
+      !window.location.pathname.includes('tasks')
+    ) {
       next()
     }
     next('/doitnow')
@@ -120,7 +124,7 @@ const routes = [
     },
     path: '/tasks/delegate-to-me/:employee_uid',
     name: 'tasksDelegateToMe',
-    component: TasksDelegates,
+    component: TasksDelegateToMe,
     beforeEnter: shouldRedirectToLogin
   },
   {
