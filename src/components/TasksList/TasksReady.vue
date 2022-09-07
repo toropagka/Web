@@ -8,7 +8,6 @@
     <TasksListNew
       hide-input
       hide-nav-bar
-      @changeTaskStatus="changeTaskStatus"
     />
     <PropertiesRight />
   </div>
@@ -20,8 +19,6 @@ import PropertiesRight from '../PropertiesRight.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 import * as TASK from '@/store/actions/tasks.js'
-import { REMOVE_TASK } from '@/store/actions/tasks.js'
-import { TASK_STATUS } from '@/constants'
 
 export default {
   components: {
@@ -47,13 +44,6 @@ export default {
     this.$store.commit('updateStackWithInitValue', navElem)
     this.$store.commit('basic', { key: 'taskListSource', value: { uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0', param: null } })
     this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-  },
-  methods: {
-    changeTaskStatus (status, task) {
-      if (status !== TASK_STATUS.TASK_READY) {
-        this.$store.commit(REMOVE_TASK, task.uid)
-      }
-    }
   }
 }
 </script>
