@@ -20,6 +20,7 @@ export function shouldAddTaskIntoList (task) {
     checkShouldAddByDateRequest(task) ||
     checkShouldAddTaskToAssignToRequest(task) ||
     checkShouldAddTaskToAssignByRequest(task) ||
+    checkShouldAddTaskToReady(task) ||
     checkShouldAddTaskToProjectRequest(task) ||
     checkShouldAddTaskToOverdueRequest(task) ||
     checkShouldAddTaskToUnreadRequest(task) ||
@@ -153,6 +154,18 @@ function checkShouldAddTaskToOverdueRequest (task) {
     }
   }
 }
+
+function checkShouldAddTaskToReady (task) {
+  if (router.currentRoute.value.name === 'tasksReady') {
+    if (
+      task.uid_customer === user.value.current_user_uid &&
+      task.status === TASK_STATUS.TASK_READY
+    ) {
+      return true
+    }
+  }
+}
+
 function checkShouldAddTaskToUnreadRequest (task) {
   // Adding new task by unread flag
   if (router.currentRoute.value.name === 'tasksUnread') {
