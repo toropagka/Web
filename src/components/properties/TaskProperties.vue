@@ -411,9 +411,9 @@ export default {
       }
       return text
     },
-    canEditChecklist () { return (this.selectedTask.type === 1 || this.selectedTask.type === 2) && this.user.tarif !== 'free' },
-    canCheckChecklist () { return (this.canEditChecklist || this.selectedTask.type === 3) && this.user.tarif !== 'free' },
-    canEditComment () { return (this.selectedTask.type === 1 || this.selectedTask.type === 2) },
+    canEditChecklist () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free' },
+    canCheckChecklist () { return (this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free' },
+    canEditComment () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) },
     messageQuoteUser () {
       if (!this.currentAnswerMessageUid) return ''
       const quotedMessage = this.taskMessages.find(message => message.uid === this.currentAnswerMessageUid)
@@ -490,7 +490,7 @@ export default {
 
       this.$store.dispatch(CREATE_FILES_REQUEST, data).then(
         resp => {
-          if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+          if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
             if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
               this.selectedTask.status = TASK_STATUS.TASK_REFINE
             }
@@ -659,7 +659,7 @@ export default {
               })
             }
             this.selectedTask.has_msgs = true
-            if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+            if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
               if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
                 if (
                   (this.selectedTask.uid_customer === this.user?.current_user_uid) &&
@@ -696,7 +696,7 @@ export default {
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(
             resp => {
               // ставим статус "на доработку" когда прикладываем файл
-              if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+              if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
                 if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
                   if (((this.selectedTask.uid_customer === this.user?.current_user_uid) && ((this.selectedTask.status === TASK_STATUS.TASK_COMPLETED)))) {
                     this.selectedTask.status = TASK_STATUS.TASK_REFINE
