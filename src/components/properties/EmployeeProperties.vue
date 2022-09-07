@@ -236,7 +236,7 @@ export default {
       const employees = this.$store.state.employees.employees
       const user = this.$store.state.user.user
       const userType = employees[user.current_user_uid].type
-      return userType === 1
+      return userType === 1 || userType === 2
     },
     isCanDeleteEmp () {
       const employees = this.$store.state.employees.employees
