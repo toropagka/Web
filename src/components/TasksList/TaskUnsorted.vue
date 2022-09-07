@@ -1,18 +1,26 @@
 <template>
-  <div class="mr-3">
-    <TasksListNew />
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarUnsorted"
+      class="pt-[8px]"
+      title="Неразобранные"
+    />
+    <TasksListNew hide-nav-bar />
     <PropertiesRight />
   </div>
 </template>
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+
 import { UID_TO_ACTION } from '@/store/helpers/functions'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {
