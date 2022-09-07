@@ -48,7 +48,8 @@ axios.interceptors.response.use(
       'the employee is the director of the organization',
       'the employee is already present in this organization',
       'limit. invalid license.',
-      'Request failed with status code 404'
+      'Request failed with status code 404',
+      'Request aborted'
     ]
     if (typeof errorMessage === 'string') {
       if (errorMessage === 'canceled') return

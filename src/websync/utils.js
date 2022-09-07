@@ -10,21 +10,20 @@ function isTaskIsSharedForMe (task) {
 }
 
 export function shouldAddTaskIntoList (task) {
-  // если у задачи есть uid_parent то сначала попытаться его вставить его в родительскую задачу текущего списка
-
   // Adding new task by date request
   // first look date_end in selected day
   //  check type 2 then check date_end < than selected date then add, if date_end > then throw away
 
   if (
+    ifTaskHasParent(task) ||
     checkShouldAddByDateRequest(task) ||
     checkShouldAddTaskToAssignToRequest(task) ||
     checkShouldAddTaskToAssignByRequest(task) ||
+    checkShouldAddTaskToReady(task) ||
     checkShouldAddTaskToProjectRequest(task) ||
     checkShouldAddTaskToOverdueRequest(task) ||
     checkShouldAddTaskToUnreadRequest(task) ||
     checkShouldAddTaskToFocusRequest(task) ||
-    ifTaskHasParent(task) ||
     addToUnsortedList()
   ) {
     return true
@@ -93,7 +92,7 @@ function checkShouldAddByDateRequest (task) {
 }
 
 // Поручено мной
-function checkShouldAddTaskToAssignToRequest (lastNavStackElement, task) {
+function checkShouldAddTaskToAssignToRequest (task) {
   // Adding new task by assigned to property
   if (
     router.currentRoute.value.name === 'tasksDelegateByMe' &&
@@ -153,6 +152,18 @@ function checkShouldAddTaskToOverdueRequest (task) {
     }
   }
 }
+
+function checkShouldAddTaskToReady (task) {
+  if (router.currentRoute.value.name === 'tasksReady') {
+    if (
+      task.uid_customer === user.value.current_user_uid &&
+      task.status === TASK_STATUS.TASK_READY
+    ) {
+      return true
+    }
+  }
+}
+
 function checkShouldAddTaskToUnreadRequest (task) {
   // Adding new task by unread flag
   if (router.currentRoute.value.name === 'tasksUnread') {

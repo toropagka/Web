@@ -153,11 +153,10 @@
           <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
         <div class="mt-2">
-          <router-link to="/tarif">
+          <router-link to="/settings/tarif">
             <button
               type="button"
               class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
-              @click="$store.state.navigator.lastTab = 'directory'"
             >
               Управление тарифом
             </button>
@@ -264,7 +263,7 @@ export default {
     PhoneModalBoxRename,
     NavBar
   },
-  emits: ['AccLogout', 'currentSettingsTab'],
+  emits: ['AccLogout'],
   data () {
     return {
       oldPassword: '',
@@ -303,7 +302,6 @@ export default {
   },
   methods: {
     changeCurrentTab (tabName) {
-      this.$emit('currentSettingsTab', tabName)
       this.$store.commit('updateStackWithInitValue', {
         name: 'Тариф',
         value: { uid: '0853812c-cf1c-4037-b2b6-b7020cb68105', param: new Date() },
@@ -316,8 +314,6 @@ export default {
     },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
-      this.$store.state.navigator.lastTab = 'doitnow'
-      localStorage.setItem('lastTab', 'doitnow')
       this.$router.push('/doitnow')
       this.startSlides()
     },

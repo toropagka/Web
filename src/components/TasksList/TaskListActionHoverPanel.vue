@@ -95,13 +95,6 @@
           Копировать
         </PopMenuItem>
         <PopMenuItem
-          v-if="isMyTask"
-          icon="cut"
-          @click="cutTask"
-        >
-          Вырезать
-        </PopMenuItem>
-        <PopMenuItem
           v-if="canPaste"
           icon="copy"
           @click="paste"
@@ -193,9 +186,6 @@ export default {
     },
     tomorrow () {
       this.$emit('tomorrow')
-    },
-    cutTask () {
-      this.$emit('cut')
     },
     paste () {
       this.$emit('paste')

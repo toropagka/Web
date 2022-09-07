@@ -1,5 +1,10 @@
 <template>
-  <div class="mr-3">
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarToday"
+      class="pt-[8px]"
+      title="Сегодня"
+    />
     <TasksListNew />
     <PropertiesRight />
   </div>
@@ -8,11 +13,13 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {

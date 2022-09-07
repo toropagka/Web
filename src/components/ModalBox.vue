@@ -38,7 +38,7 @@ export default {
     hasButton: Boolean
   },
 
-  emits: ['update:modelValue', 'cancel', 'confirm', 'currentSettingsTab'],
+  emits: ['update:modelValue', 'cancel', 'confirm'],
 
   computed: {
     value: {
@@ -58,9 +58,6 @@ export default {
     confirmCancel (mode) {
       this.value = false
       this.$emit(mode)
-    },
-    changeCurrentTab (tabName) {
-      this.$emit('currentSettingsTab', tabName)
     },
     confirm () {
       return this.confirmCancel('confirm')

@@ -1,6 +1,6 @@
 <template>
   <!-- DATE -->
-  <div v-if="shouldShowEmptyPics">
+  <div v-if="isTasks">
     <div
       class="max-w-xl mx-auto"
     >
@@ -286,7 +286,7 @@ export default {
   data () {
     return {
       ready,
-
+      tomorrow: '',
       DATE_UID: '901841d9-0016-491d-ad66-8ee42d2b496b',
       COLOR_UID: 'ed8039ae-f3de-4369-8f32-829d401056e9',
 
@@ -294,17 +294,10 @@ export default {
     }
   },
   computed: {
-    navStack () { return this.$store.state.navbar.navStack },
-    navStackLastPath () { return this.navStack[this.navStack.length - 1]?.greedPath },
-    shouldShowEmptyPics () {
-      const lastNavStackElement = this.navStack[this.navStack.length - 1]
-      if (lastNavStackElement?.value?.uid === this.DATE_UID && new Date(lastNavStackElement?.value.param).toDateString() === new Date().toDateString()) {
-        return true
-      } else { return false }
-    },
-    isTags () { return this.navStackLastPath === 'tags' || this.navStackLastPath === 'tags_children' },
-    isProjects () { return this.navStackLastPath === 'new_private_projects' || this.navStackLastPath === 'projects_children' },
-    isColors () { return this.navStackLastPath === 'colors' || this.navStack[this.navStack.length - 1]?.value?.uid === this.COLOR_UID },
+    isTags () { return this.$route.name === 'tags' },
+    isProjects () { return this.$route.name === 'project' },
+    isColors () { return this.$route.name === 'colors' },
+    isTasks () { return this.$route.name === 'tasksToday' },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('tasks') && this.$store.state.onboarding.showModals
     }
@@ -318,25 +311,15 @@ export default {
       })
       return day + ' ' + month + ', ' + weekday
     },
+    getTomorrow () {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      this.tomorrow = `${tomorrow.getFullYear()}-${('0' + (tomorrow.getMonth() + 1)).slice(-2)}-${('0' + (tomorrow.getDate())).slice(-2)}`
+      console.log(this.tomorrow)
+    },
     goToNextDay () {
-      const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
-
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.dispatch(TASK.TASKS_REQUEST, tomorrow)
-      // hardcoded and messy
-      const navElem = {
-        name: this.dateToLabelFormat(tomorrow),
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow },
-        typeVal: tomorrow,
-        type: 'date'
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow }
-      })
+      this.getTomorrow()
+      this.$router.push('/tasks/' + this.tomorrow)
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     okToModal () {

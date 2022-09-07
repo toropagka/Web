@@ -12,7 +12,6 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <NavBar v-if="!hideNavBar" />
   <div
     v-if="displayModal"
     class="flex flex-col items-center max-w-[600px] mx-auto"
@@ -43,11 +42,11 @@
   <div
     v-if="!displayModal"
     class="lg:mr-0"
-    :class="{'mr-96': isPropertiesMobileExpanded, 'pt-[60px]': mainSectionState === 'tasks' && !hideNavBar}"
+    :class="{'mr-96': isPropertiesMobileExpanded}"
   >
     <!-- Add task input -->
     <div
-      v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid] && $route.name !== 'tasksDelegateToMe'"
+      v-if="taskListSource && !hideInput"
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <div
@@ -300,7 +299,6 @@
               @tomorrow="moveTaskTomorrow(props.node.info)"
               @copyName="copyTaskName(props.node.info)"
               @copy="copyTask(props.node.info)"
-              @cut="cutTask(props.node.info)"
               @changeTaskPosition="changeTaskPosition"
               @paste="pasteCopiedTasks(props.node.id)"
               @delete="clickDeleteTask(props.node.info)"
@@ -311,7 +309,7 @@
     </div>
 
     <EmptyTasksListPics
-      v-if="!Object.keys(storeTasks).length && status === 'success'"
+      v-if="!Object.keys(storeTasks).length && status === 'success' && $route.name === 'tasksToday'"
     />
     <!--
       Скрыто на первую версию!!
@@ -341,7 +339,6 @@ import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
 import { TASK_STATUS } from '@/constants'
-import NavBar from '@/components/NavBar.vue'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -370,7 +367,6 @@ import linkify from 'vue-linkify'
 export default {
   components: {
     tree: treeview,
-    NavBar,
     TaskListIconLabel,
     TaskListTagLabel,
     TaskListEdit,
@@ -387,9 +383,9 @@ export default {
     linkify
   },
   props: {
-    hideNavBar: {
+    hideInput: {
       type: Boolean,
-      default: false
+      defalut: false
     }
   },
   emits: ['changeTaskStatus'],
@@ -400,12 +396,8 @@ export default {
       orderNewSubtask: 0,
       showConfirm: false,
       showTasksLimit: false,
-      stop: true
-    }
-  },
-  computed: {
-    DONT_SHOW_TASK_INPUT_UIDS () {
-      return {
+      stop: true,
+      DONT_SHOW_TASK_INPUT_UIDS: {
         '46418722-a720-4c9e-b255-16db4e590c34': TASK.OVERDUE_TASKS_REQUEST,
         '017a3e8c-79ac-452c-abb7-6652deecbd1c': TASK.OPENED_TASKS_REQUEST,
         'fa042915-a3d2-469c-bd5a-708cf0339b89': TASK.UNREAD_TASKS_REQUEST,
@@ -414,10 +406,8 @@ export default {
         '511d871c-c5e9-43f0-8b4c-e8c447e1a823': TASK.DELEGATED_TO_USER_TASKS_REQUEST,
         '11212e94-cedf-11ec-9d64-0242ac120002': TASK.SEARCH_TASK,
         '47a38aa5-19c4-40d0-b8c0-56c3a420935d': TASK.ONE_TASK_REQUEST
-      }
-    },
-    SHOW_TASK_INPUT_UIDS () {
-      return {
+      },
+      SHOW_TASK_INPUT_UIDS: {
         '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
         '5183b619-3968-4c3a-8d87-3190cfaab014': TASK.UNSORTED_TASKS_REQUEST,
         '6fc44cc6-9d45-4052-917e-25b1189ab141': TASK.IN_FOCUS_TASKS_REQUEST,
@@ -428,7 +418,9 @@ export default {
         'ed8039ae-f3de-4369-8f32-829d401056e9': TASK.COLOR_TASKS_REQUEST,
         '00a5b3de-9474-404d-b3ba-83f488ac6d30': TASK.TAG_TASKS_REQUEST
       }
-    },
+    }
+  },
+  computed: {
     loadedTasks () {
       return this.$store.state.tasks.loadedTasks
     },
@@ -1036,13 +1028,6 @@ export default {
     copyTask (task) {
       const copiedTask = { ...task }
       copiedTask._deleteAfterPaste = false
-      this.$store.commit(TASK.COPY_TASK, copiedTask)
-    },
-    cutTask (task) {
-      this.$store.commit(TASK.REMOVE_TASK, task.uid)
-      const copiedTask = { ...task }
-      copiedTask._originTaskUid = task.uid
-      copiedTask._deleteAfterPaste = true
       this.$store.commit(TASK.COPY_TASK, copiedTask)
     },
     nodeSelected (arg) {

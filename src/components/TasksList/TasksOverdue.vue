@@ -1,6 +1,13 @@
 <template>
-  <div class="mr-3">
-    <TasksListNew />
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarOverdue"
+      class="pt-[8px]"
+      title="Просроченные"
+    />
+    <TasksListNew
+      hide-input
+    />
     <PropertiesRight />
   </div>
 </template>
@@ -8,35 +15,35 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
-import { UID_TO_ACTION } from '@/store/helpers/functions'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+
+import * as TASK from '@/store/actions/tasks.js'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {
       date: new Date(),
-      uid: '46418722-a720-4c9e-b255-16db4e590c34',
-      label: 'Просроченные'
+      uid: '46418722-a720-4c9e-b255-16db4e590c34'
     }
   },
   mounted () {
-    if (UID_TO_ACTION[this.uid]) {
-      this.$store.dispatch(UID_TO_ACTION[this.uid])
-      const navElem = {
-        name: this.label,
-        key: 'taskListSource',
-        value: { uid: this.uid, param: new Date() },
-        typeVal: new Date(),
-        type: 'date'
-      }
-      this.$store.commit('setCalendarLastPicked', null)
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+    this.$store.dispatch(TASK.OVERDUE_TASKS_REQUEST)
+    const navElem = {
+      name: 'Просроченные',
+      key: 'taskListSource',
+      value: { uid: this.uid, param: null },
+      typeVal: new Date(),
+      type: 'date'
     }
+    this.$store.commit('setCalendarLastPicked', null)
+    this.$store.commit('updateStackWithInitValue', navElem)
+    this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
+    this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
   }
 }
 </script>

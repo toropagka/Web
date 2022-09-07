@@ -1,5 +1,10 @@
 <template>
-  <div class="mr-3">
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarByDate"
+      class="pt-[8px]"
+      :title="dateLabel"
+    />
     <TasksListNew />
     <PropertiesRight />
   </div>
@@ -8,15 +13,25 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   computed: {
     date () {
       return this.$route.params.date
+    },
+    dateLabel () {
+      const date = new Date(this.date)
+      const day = date.getDate()
+      const month = date.toLocaleString('default', { month: 'short' })
+      const weekday = date.toLocaleString('default', { weekday: 'short' })
+      const dateLabelFormat = day + ' ' + month + ', ' + weekday
+      return dateLabelFormat
     }
   },
   watch: {
@@ -32,12 +47,8 @@ export default {
   methods: {
     loadTasks () {
       const date = new Date(this.date)
-      const day = date.getDate()
-      const month = date.toLocaleString('default', { month: 'short' })
-      const weekday = date.toLocaleString('default', { weekday: 'short' })
-      const dateLabelFormat = day + ' ' + month + ', ' + weekday
       const navElem = {
-        name: dateLabelFormat,
+        name: this.dateLabel,
         key: 'taskListSource',
         value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: date },
         typeVal: date,

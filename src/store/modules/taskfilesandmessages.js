@@ -245,7 +245,7 @@ const mutations = {
     state.messages.push(data)
   },
   [DELETE_FILE_REQUEST]: (state, data) => {
-    state.messages.splice(state.messages.indexOf(data), 1)
+    state.messages.splice(state.messages.findIndex(message => message.uid === data.uid), 1)
   },
   [FILES_REQUEST]: (state) => {
     state.status = 'loading'

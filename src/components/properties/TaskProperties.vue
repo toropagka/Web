@@ -53,7 +53,6 @@
       id="generalscroll"
       class="column-resize relative overflow-hidden"
     >
-      <div />
       <div
         v-if="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent]"
         class="user_customer_custom"
@@ -135,9 +134,9 @@
         />
         <!-- Кнопка Проект -->
         <TaskPropsButtonProject
-          v-if="(selectedTask.type === 1 || selectedTask.type === 2 || (selectedTask.uid_project !== '00000000-0000-0000-0000-000000000000')) && ((selectedTask.uid_customer === user?.current_user_uid) && (selectedTask.status !== 1))"
-          :selected-project="selectedTask.uid_project"
-          :can-edit="selectedTask.type === 1 || selectedTask.type === 2"
+          v-if="(selectedTask?.type === 1 || selectedTask?.type === 2 || (selectedTask?.uid_project !== '00000000-0000-0000-0000-000000000000')) && ((selectedTask?.uid_customer === user?.current_user_uid) && (selectedTask?.status !== 1))"
+          :selected-project="selectedTask?.uid_project"
+          :can-edit="selectedTask?.type === 1 || selectedTask?.type === 2"
           @changeProject="onChangeProject"
         />
         <!-- Кнопка Цвет -->
@@ -412,9 +411,9 @@ export default {
       }
       return text
     },
-    canEditChecklist () { return (this.selectedTask.type === 1 || this.selectedTask.type === 2) && this.user.tarif !== 'free' },
-    canCheckChecklist () { return (this.canEditChecklist || this.selectedTask.type === 3) && this.user.tarif !== 'free' },
-    canEditComment () { return (this.selectedTask.type === 1 || this.selectedTask.type === 2) },
+    canEditChecklist () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free' },
+    canCheckChecklist () { return (this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free' },
+    canEditComment () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) },
     messageQuoteUser () {
       if (!this.currentAnswerMessageUid) return ''
       const quotedMessage = this.taskMessages.find(message => message.uid === this.currentAnswerMessageUid)
@@ -491,7 +490,7 @@ export default {
 
       this.$store.dispatch(CREATE_FILES_REQUEST, data).then(
         resp => {
-          if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+          if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
             if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
               this.selectedTask.status = TASK_STATUS.TASK_REFINE
             }
@@ -501,12 +500,9 @@ export default {
             // to refine
             this.selectedTask.status = TASK_STATUS.TASK_REFINE
           }
+          this.scrollToBottom()
         })
-      this.infoComplete = true
-      setTimeout(() => {
-        const element = document.getElementById('content').lastElementChild
-        element.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
+      this.scrollToBottom()
     },
     deleteTask () {
       this.showConfirm = false
@@ -592,12 +588,11 @@ export default {
       const taskName = event.target.innerText
       this.selectedTask.name = taskName
     },
-    scrollDown () {
-      this.infoComplete = true
-      setTimeout(() => {
-        const elmnt = document.getElementById('content').lastElementChild
-        elmnt.scrollIntoView()
-      }, 200)
+    scrollToBottom () {
+      this.$nextTick(() => {
+        const messages = document.getElementsByClassName('messages')
+        messages[messages.length - 1].scrollIntoView(false)
+      })
     },
     createChecklist () {
       if (this.user.tarif === 'free') {
@@ -664,7 +659,7 @@ export default {
               })
             }
             this.selectedTask.has_msgs = true
-            if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+            if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
               if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
                 if (
                   (this.selectedTask.uid_customer === this.user?.current_user_uid) &&
@@ -674,9 +669,8 @@ export default {
                 }
               }
               this.selectedTask.msg = decodeURIComponent(this.taskMsg)
-              const wrapperElement = document.getElementById('content').lastElementChild
-              wrapperElement.scrollIntoView({ behavior: 'smooth' })
             }
+            this.scrollToBottom()
           })
       }
       this.currentAnswerMessageUid = ''
@@ -702,18 +696,14 @@ export default {
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(
             resp => {
               // ставим статус "на доработку" когда прикладываем файл
-              if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
+              if (this.selectedTask?.type === 2 || this.selectedTask?.type === 3) {
                 if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
                   if (((this.selectedTask.uid_customer === this.user?.current_user_uid) && ((this.selectedTask.status === TASK_STATUS.TASK_COMPLETED)))) {
                     this.selectedTask.status = TASK_STATUS.TASK_REFINE
                   }
                 }
               }
-              // прокручиваем до файла
-              setTimeout(() => {
-                const elmnt = document.getElementById('content')?.lastElementChild
-                elmnt?.scrollIntoView({ behavior: 'smooth' })
-              }, 100)
+              this.scrollToBottom()
             }).finally(() => {
             this.setFileLoading(false)
           })
@@ -1242,6 +1232,6 @@ export default {
   border: 1px solid #aaaaaa;
 }
 #generalscroll {
-  scrollbar-width: none;
+   scrollbar-width: none;
 }
 </style>

@@ -1,37 +1,39 @@
-import store from '@/store'
-import CardFile from '@/views/CardFile'
-import Home from '@/views/Home'
-import Doitnow from '@/components/Doitnow.vue'
-import TaskFile from '@/views/TaskFile'
+import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 import Colors from '@/components/Colors.vue'
+import Doitnow from '@/components/Doitnow.vue'
 import Employees from '@/components/Employees.vue'
 import Projects from '@/components/Projects.vue'
 import Tags from '@/components/Tags/Tags.vue'
-import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+import store from '@/store'
+import CardFile from '@/views/CardFile'
+import Home from '@/views/Home'
+import TaskFile from '@/views/TaskFile'
 
-import Reglaments from '@/components/Reglaments/Reglaments.vue'
-import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
 import ProjectWithChildren from '@/components/Projects/ProjectWithChildren.vue'
-import TasksToday from '@/components/TasksList/TasksToday.vue'
-import TasksReady from '@/components/TasksList/TasksReady.vue'
-import TasksUnread from '@/components/TasksList/TasksUnread.vue'
+import ReglamentContent from '@/components/Reglaments/ReglamentContent.vue'
+import Reglaments from '@/components/Reglaments/Reglaments.vue'
 import TasksOverdue from '@/components/TasksList/TasksOverdue.vue'
+import TasksReady from '@/components/TasksList/TasksReady.vue'
+import TasksToday from '@/components/TasksList/TasksToday.vue'
+import TasksUnread from '@/components/TasksList/TasksUnread.vue'
 
+import AccKarma from '@/components/Settings/AccKarma.vue'
 import Account from '@/components/Settings/Account.vue'
-import Tarif from '@/components/Settings/Tarif.vue'
 import Options from '@/components/Settings/Options.vue'
 import Support from '@/components/Settings/Support.vue'
-import AccKarma from '@/components/Settings/AccKarma.vue'
+import Tarif from '@/components/Settings/Tarif.vue'
 
-import { createRouter, createWebHistory } from 'vue-router'
-import TasksInWork from '@/components/TasksList/TasksInWork'
-import TasksInFocus from '@/components/TasksList/TasksInFocus'
-import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
-import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
-import TaskByUid from '@/components/TasksList/TaskByUid.vue'
-import TasksByDate from '@/components/TasksList/TasksByDate.vue'
 import Boards from '@/components/Boards'
 import Search from '@/components/Search'
+import TaskByUid from '@/components/TasksList/TaskByUid.vue'
+import TasksByDate from '@/components/TasksList/TasksByDate.vue'
+import TasksDelegateByMe from '@/components/TasksList/TasksDelegateByMe.vue'
+import TasksDelegateToMe from '@/components/TasksList/TasksDelegateToMe.vue'
+import TasksInFocus from '@/components/TasksList/TasksInFocus'
+import TasksInWork from '@/components/TasksList/TasksInWork'
+import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import Login from '@/views/Login'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -51,16 +53,13 @@ const shouldRedirectToLogin = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    if (window.location.pathname.includes('task') && !window.location.pathname.includes('tasks')) {
+    if (
+      window.location.pathname.includes('task') &&
+      !window.location.pathname.includes('tasks')
+    ) {
       next()
-      return
     }
-    const lastTab = localStorage.getItem('lastTab')
-    if (lastTab === null) {
-      next('/doitnow')
-      return
-    }
-    next(`/${lastTab}`)
+    next('/doitnow')
   } else {
     next('/login')
   }
@@ -126,7 +125,7 @@ const routes = [
     },
     path: '/tasks/delegate-to-me/:employee_uid',
     name: 'tasksDelegateToMe',
-    component: TasksDelegates,
+    component: TasksDelegateToMe,
     beforeEnter: shouldRedirectToLogin
   },
   {
@@ -135,15 +134,15 @@ const routes = [
     },
     path: '/tasks/delegate-by-me/:employee_uid',
     name: 'tasksDelegateByMe',
-    component: TasksDelegates,
+    component: TasksDelegateByMe,
     beforeEnter: shouldRedirectToLogin
   },
   {
     meta: {
       layout: Home
     },
-    path: '/account',
-    name: 'account',
+    path: '/account/myaccount',
+    name: 'myaccount',
     component: Account,
     beforeEnter: shouldRedirectToLogin
   },
@@ -151,7 +150,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/help',
+    path: '/settings/help',
     name: 'help',
     component: Support,
     beforeEnter: shouldRedirectToLogin
@@ -160,7 +159,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/karma',
+    path: '/account/karma',
     name: 'karma',
     component: AccKarma,
     beforeEnter: shouldRedirectToLogin
@@ -169,7 +168,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/tarif',
+    path: '/settings/tarif',
     name: 'tarif',
     component: Tarif,
     beforeEnter: shouldRedirectToLogin
@@ -178,7 +177,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/options',
+    path: '/settings/options',
     name: 'options',
     component: Options,
     beforeEnter: shouldRedirectToLogin
@@ -295,7 +294,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/tags',
+    path: '/settings/tags',
     name: 'tags',
     component: Tags,
     beforeEnter: shouldRedirectToLogin
@@ -304,7 +303,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/employees',
+    path: '/settings/employees',
     name: 'employees',
     component: Employees,
     beforeEnter: shouldRedirectToLogin
@@ -325,7 +324,7 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/colors',
+    path: '/settings/colors',
     name: 'colors',
     component: Colors,
     beforeEnter: shouldRedirectToLogin
@@ -359,7 +358,7 @@ const routes = [
     },
     path: '/login',
     name: 'login',
-    component: () => import('@/views/Login.vue'),
+    component: Login,
     beforeEnter: ifNotAuthenticated
   },
   {

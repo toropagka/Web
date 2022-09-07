@@ -1,6 +1,13 @@
 <template>
-  <div class="mr-3">
-    <TasksListNew @changeTaskStatus="changeTaskStatus" />
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarReady"
+      class="pt-[8px]"
+      title="Готово к сдаче"
+    />
+    <TasksListNew
+      hide-input
+    />
     <PropertiesRight />
   </div>
 </template>
@@ -8,18 +15,20 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+
 import * as TASK from '@/store/actions/tasks.js'
-import { REMOVE_TASK } from '@/store/actions/tasks.js'
-import { TASK_STATUS } from '@/constants'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {
-      date: new Date()
+      date: new Date(),
+      uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0'
     }
   },
   mounted () {
@@ -27,21 +36,14 @@ export default {
     const navElem = {
       name: 'Готово к сдаче',
       key: 'taskListSource',
-      value: { uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0', param: null },
+      value: { uid: this.uid, param: null },
       typeVal: new Date(),
       type: 'date'
     }
     this.$store.commit('setCalendarLastPicked', null)
     this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'taskListSource', value: { uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0', param: null } })
+    this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
     this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-  },
-  methods: {
-    changeTaskStatus (status, task) {
-      if (status !== TASK_STATUS.TASK_READY) {
-        this.$store.commit(REMOVE_TASK, task.uid)
-      }
-    }
   }
 }
 </script>

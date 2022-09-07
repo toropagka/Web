@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="selectedBoard">
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить доску"
@@ -18,9 +18,6 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
-          <PopMenuItem @click="copyLinkToBoard">
-            Копировать ссылку на доску
-          </PopMenuItem>
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
@@ -185,6 +182,16 @@
       @writer="setMemberStatus(user.uid, 2)"
     />
   </div>
+  <div v-else>
+    <div class="flex justify-end items-center">
+      <PropsButtonClose @click="closeProperties" />
+    </div>
+    <div
+      class="mt-[25px] w-full font-roboto font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap"
+    >
+      Доска не найдена
+    </div>
+  </div>
 </template>
 
 <script>
@@ -199,7 +206,6 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
-import { copyText } from 'vue3-clipboard'
 
 export default {
   components: {
@@ -451,19 +457,6 @@ export default {
           console.log('changeBoardMembers', resp, users)
         })
       }
-    },
-    copyLinkToBoard () {
-      copyText(
-        `${window.location.origin}/board/${this.selectedBoardUid}`,
-        undefined,
-        (error, event) => {
-          if (error) {
-            console.log('copyLinkToBoard error', error)
-          } else {
-            console.log('copyLinkToBoard', event)
-          }
-        }
-      )
     }
   }
 }

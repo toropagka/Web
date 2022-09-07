@@ -94,7 +94,6 @@ import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
-import * as CARD from '@/store/actions/cards'
 
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
 import { uuidv4 } from '@/helpers/functions'
@@ -218,43 +217,20 @@ export default {
         })
       }
     },
-    gotoChildren (board) {
-      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, board.uid)
-      this.$store.commit('basic', {
-        key: 'cardSource',
-        value: { uid: board.global_property_uid, param: board.uid }
-      })
-      // store.commit(TASK.CLEAN_UP_LOADED_TASKS)
-
-      const navElem = {
-        name: board.name,
-        key: 'greedSource',
-        uid: board.uid,
-        global_property_uid: board.global_property_uid,
-        greedPath: 'boards_children',
-        value: board.children
-      }
-
-      this.$store.commit('pushIntoNavStack', navElem)
-      this.$store.commit('basic', { key: 'greedSource', value: board.children })
-      this.$store.commit('basic', {
-        key: 'greedPath',
-        value: 'boards_children'
-      })
-    },
     onDeleteBoard () {
       this.showDeleteBoard = false
       //
       this.$store.dispatch(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
         .then(() => {
+          // надо отправлять сначала - иначе не сработает если доска удалена
+          this.$emit('popNavBar')
+          //
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(BOARD.SELECT_BOARD, undefined)
           //
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.board)
           // для актуального значения количества досок
           this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
-          //
-          this.$emit('popNavBar')
         })
     },
     clickBoardMyCards () {

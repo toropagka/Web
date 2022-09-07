@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-[400px]">
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить регламент"
@@ -57,6 +57,24 @@
               >
                 <path
                   d="M6.92308 2.64286H9.07692C9.07692 2.3587 8.96346 2.08617 8.7615 1.88524C8.55954 1.68431 8.28562 1.57143 8 1.57143C7.71438 1.57143 7.44046 1.68431 7.2385 1.88524C7.03654 2.08617 6.92308 2.3587 6.92308 2.64286ZM5.84615 2.64286C5.84615 2.07454 6.07308 1.52949 6.477 1.12763C6.88093 0.725765 7.42876 0.5 8 0.5C8.57124 0.5 9.11907 0.725765 9.523 1.12763C9.92692 1.52949 10.1538 2.07454 10.1538 2.64286H14.4615C14.6043 2.64286 14.7413 2.6993 14.8423 2.79976C14.9433 2.90023 15 3.03649 15 3.17857C15 3.32065 14.9433 3.45691 14.8423 3.55738C14.7413 3.65784 14.6043 3.71429 14.4615 3.71429H13.8542L12.5565 13.1836C12.4684 13.8253 12.1497 14.4135 11.6593 14.8394C11.1688 15.2653 10.5399 15.5 9.88892 15.5H6.11108C5.4601 15.5 4.83116 15.2653 4.34072 14.8394C3.85028 14.4135 3.53155 13.8253 3.44354 13.1836L2.14585 3.71429H1.53846C1.39565 3.71429 1.25869 3.65784 1.15771 3.55738C1.05673 3.45691 1 3.32065 1 3.17857C1 3.03649 1.05673 2.90023 1.15771 2.79976C1.25869 2.6993 1.39565 2.64286 1.53846 2.64286H5.84615ZM6.92308 6.39286C6.92308 6.25078 6.86635 6.11452 6.76537 6.01405C6.66438 5.91358 6.52742 5.85714 6.38462 5.85714C6.24181 5.85714 6.10485 5.91358 6.00387 6.01405C5.90288 6.11452 5.84615 6.25078 5.84615 6.39286V11.75C5.84615 11.8921 5.90288 12.0283 6.00387 12.1288C6.10485 12.2293 6.24181 12.2857 6.38462 12.2857C6.52742 12.2857 6.66438 12.2293 6.76537 12.1288C6.86635 12.0283 6.92308 11.8921 6.92308 11.75V6.39286ZM9.61539 5.85714C9.75819 5.85714 9.89515 5.91358 9.99614 6.01405C10.0971 6.11452 10.1538 6.25078 10.1538 6.39286V11.75C10.1538 11.8921 10.0971 12.0283 9.99614 12.1288C9.89515 12.2293 9.75819 12.2857 9.61539 12.2857C9.47258 12.2857 9.33562 12.2293 9.23463 12.1288C9.13365 12.0283 9.07692 11.8921 9.07692 11.75V6.39286C9.07692 6.25078 9.13365 6.11452 9.23463 6.01405C9.33562 5.91358 9.47258 5.85714 9.61539 5.85714ZM4.51077 13.0389C4.56362 13.4239 4.75485 13.7768 5.04906 14.0322C5.34328 14.2877 5.72056 14.4285 6.11108 14.4286H9.88892C10.2796 14.4288 10.6572 14.2881 10.9516 14.0326C11.246 13.7771 11.4374 13.4241 11.4903 13.0389L12.7675 3.71429H3.23246L4.51077 13.0389Z"
+                  fill="#4C4C4D"
+                />
+              </svg>
+            </ReglamentSmallButton>
+            <ReglamentSmallButton
+              :disabled="disabledButtons"
+              :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
+              @click="onSaveReglamentButtonClick"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.6727 6.17275L13.8273 3.32725C13.696 3.196 13.535 3.09975 13.36 3.04725V3H3.56C3.25025 3 3 3.25025 3 3.56V16.44C3 16.7498 3.25025 17 3.56 17H16.44C16.7498 17 17 16.7498 17 16.44V6.96375C17 6.66625 16.8827 6.38275 16.6727 6.17275ZM7.76 4.26H12.24V6.08H7.76V4.26ZM15.74 15.74H4.26V4.26H6.64V6.64C6.64 6.94975 6.89025 7.2 7.2 7.2H12.8C13.1097 7.2 13.36 6.94975 13.36 6.64V4.6415L15.74 7.0215V15.74ZM10 8.775C8.60875 8.775 7.48 9.90375 7.48 11.295C7.48 12.6862 8.60875 13.815 10 13.815C11.3912 13.815 12.52 12.6862 12.52 11.295C12.52 9.90375 11.3912 8.775 10 8.775ZM10 12.695C9.2265 12.695 8.6 12.0685 8.6 11.295C8.6 10.5215 9.2265 9.895 10 9.895C10.7735 9.895 11.4 10.5215 11.4 11.295C11.4 12.0685 10.7735 12.695 10 12.695Z"
                   fill="#4C4C4D"
                 />
               </svg>
@@ -175,146 +193,10 @@
         <QuillEditor
           v-model:content="currText"
           content-type="html"
-          toolbar="#my-toolbar"
+          :toolbar="'full'"
           class="h-auto mb-5 bg-white"
           @paste="pasteEvent"
-        >
-          <template #toolbar>
-            <div id="my-toolbar">
-              <span class="ql-formats">
-                <button class="ql-bold" />
-                <button class="ql-italic" />
-                <button class="ql-underline" />
-                <button class="ql-strike" />
-              </span>
-
-              <span class="ql-formats">
-                <button class="ql-blockquote" />
-                <button class="ql-code-block" />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-header"
-                  value="1"
-                />
-                <button
-                  class="ql-header"
-                  value="2"
-                />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-list"
-                  value="ordered"
-                />
-                <button
-                  class="ql-list"
-                  value="bullet"
-                />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-script"
-                  value="sub"
-                />
-                <button
-                  class="ql-script"
-                  value="super"
-                />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-indent"
-                  value="-1"
-                />
-                <button
-                  class="ql-indent"
-                  value="+1"
-                />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-direction"
-                  value="rtl"
-                />
-              </span>
-
-              <span class="ql-formats">
-                <select class="ql-size">
-                  <option value="small" />
-                  <option selected="selected" />
-                  <option value="large" />
-                  <option value="huge" />
-                </select>
-              </span>
-
-              <span class="ql-formats">
-                <select class="ql-header">
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                  <option value="4" />
-                  <option value="5" />
-                  <option value="6" />
-                  <option selected="selected" />
-                </select>
-              </span>
-
-              <span class="ql-formats">
-                <select class="ql-color" />
-                <select class="ql-background" />
-              </span>
-
-              <span class="ql-formats">
-                <select class="ql-font" />
-              </span>
-
-              <span class="ql-formats">
-                <select class="ql-align" />
-              </span>
-
-              <span class="ql-formats">
-                <button
-                  class="ql-link"
-                />
-                <button
-                  class="ql-video"
-                />
-                <button
-                  class="ql-image"
-                />
-              </span>
-              <span class="ql-formats">
-                <button
-                  class="ql-clean"
-                />
-                <button
-                  :disabled="disabledButtons"
-                  :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
-                  @click="onSaveReglamentButtonClick"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 1 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16.6727 6.17275L13.8273 3.32725C13.696 3.196 13.535 3.09975 13.36 3.04725V3H3.56C3.25025 3 3 3.25025 3 3.56V16.44C3 16.7498 3.25025 17 3.56 17H16.44C16.7498 17 17 16.7498 17 16.44V6.96375C17 6.66625 16.8827 6.38275 16.6727 6.17275ZM7.76 4.26H12.24V6.08H7.76V4.26ZM15.74 15.74H4.26V4.26H6.64V6.64C6.64 6.94975 6.89025 7.2 7.2 7.2H12.8C13.1097 7.2 13.36 6.94975 13.36 6.64V4.6415L15.74 7.0215V15.74ZM10 8.775C8.60875 8.775 7.48 9.90375 7.48 11.295C7.48 12.6862 8.60875 13.815 10 13.815C11.3912 13.815 12.52 12.6862 12.52 11.295C12.52 9.90375 11.3912 8.775 10 8.775ZM10 12.695C9.2265 12.695 8.6 12.0685 8.6 11.295C8.6 10.5215 9.2265 9.895 10 9.895C10.7735 9.895 11.4 10.5215 11.4 11.295C11.4 12.0685 10.7735 12.695 10 12.695Z"
-                      fill="#4C4C4D"
-                    />
-                  </svg>
-                </button>
-              </span>
-            </div>
-          </template>
-        </QuillEditor>
+        />
       </div>
       <hr class="border-[1px] mr-10 ml-10">
       <div

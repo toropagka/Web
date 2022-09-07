@@ -12,23 +12,10 @@
 import { setLocalStorageItem } from '@/store/helpers/functions'
 
 export default {
-  computed: {
-    isAuth () {
-      return this.$store.getters.isAuthenticated
-    }
-  },
-  watch: {
-    isAuth (newval, oldval) {
-      location.reload()
-    }
-  },
   mounted () {
     this.checkCidParam()
   },
   methods: {
-    closeSubMenu () {
-      this.$store.state.navigator.submenu.status = false
-    },
     checkCidParam () {
       // здесь не использую this.$router, потому что не получилось нормально достать url param
       const params = new Proxy(new URLSearchParams(window.location.search), {

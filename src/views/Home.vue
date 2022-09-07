@@ -45,10 +45,10 @@
   />
   <main-section
     v-if="isContentLoaded"
-    class="flex overflow-auto h-full"
+    class="flex xl:ml-[292px] overflow-auto h-full"
   >
     <MainMenu
-      v-if="!isFileRedirect && $store.state.auth.token"
+      v-if="$store.state.auth.token"
     />
     <SubMenu
       v-if="isSubMenuActive"
@@ -59,15 +59,16 @@
       @overlay-click="closeSubMenu"
     />
     <overlay
-      v-if="!isFileRedirect"
       v-show="isAsideLgActive"
       :z-index="'z-20'"
       @overlay-click="overlayClick"
     />
-    <properties-right v-if="!isFileRedirect" />
-    <ErrorNotification v-if="!isFileRedirect" />
-    <Notification v-if="!isFileRedirect" />
-    <InspectorNotification v-if="!isFileRedirect" />
+    <properties-right />
+
+    <ErrorNotification />
+    <Notification />
+    <InspectorNotification />
+
     <div class="flex-1 px-3 overflow-auto">
       <slot />
     </div>
@@ -94,7 +95,7 @@ import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotific
 import { USER_INVITE_ME, USER_REQUEST } from '@/store/actions/user'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 
-import initWebSync from '@/websync/index.js'
+import initWebSync, { disconnectWebSync } from '@/websync/index.js'
 import initInspectorSocket from '@/inspector/index.js'
 
 export default {
@@ -118,35 +119,14 @@ export default {
     }
   },
   computed: {
-    mainSectionState () {
-      return this.$store.state.mainSectionState
-    },
     isSubMenuActive () {
       return this.$store.state.navigator.submenu.status
-    },
-    lastTab () {
-      return this.$store.state.navigator.lastTab
-    },
-    greedPath () {
-      return this.$store.state.greedPath
-    },
-    greedSource () {
-      return this.$store.state.greedSource
     },
     isAsideLgActive () {
       return this.$store.state.isAsideLgActive
     },
-    isFileRedirect () {
-      return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
-    },
-    menu () {
-      return this.$store.state.navigator.menu
-    },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
-    },
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
     },
     showInviteModalBox () {
       if (this.$store.state.navigator.navigator?.invite_me?.uid && this.$store.state.navigator.navigator?.invite_me?.uid !== '00000000-0000-0000-0000-000000000000') return true
@@ -155,8 +135,29 @@ export default {
   },
   mounted () {
     this.initApplication()
+    this.initActiveTab()
+  },
+  unmounted () {
+    disconnectWebSync()
   },
   methods: {
+    initActiveTab () {
+      const allPaths = [
+        'tasks',
+        'account',
+        'reglaments',
+        'project',
+        'board',
+        'settings',
+        'doitnow'
+      ]
+      for (let i = 0; i < allPaths.length; i++) {
+        if (this.$route.path.includes(allPaths[i])) {
+          this.$store.state.navigator.submenu.activeTab = allPaths[i]
+          return
+        }
+      }
+    },
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
     },

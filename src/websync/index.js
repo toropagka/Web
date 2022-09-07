@@ -25,6 +25,7 @@ function parseObject (obj) {
 export default function initWebSync () {
   const clientProperty = 'client'
   const websync = window?.fm?.websync
+
   if (!websync) {
     setTimeout(() => initWebSync(), 2500)
     console.log('initWebSync - websync is not loaded, try reconnect...')
@@ -32,9 +33,11 @@ export default function initWebSync () {
   }
   const client = new websync[clientProperty](
     process.env.VUE_APP_SYNC_LEADERTASK_API +
-      'websync.ashx?uid_session=' +
-      storeNavigator.value.push_channel
+        'websync.ashx?uid_session=' +
+        storeNavigator.value.push_channel
   )
+
+  // client в перемунную и в функции использовать
   client.connect({
     onSuccess: function (e) {
       console.log('websync connected success!')
@@ -76,4 +79,13 @@ export default function initWebSync () {
       }
     }
   })
+}
+
+export function disconnectWebSync () {
+  console.log('websync disconnected')
+  const websync = window?.fm?.websync
+
+  const client = websync?.client
+
+  return client.disconnect
 }
