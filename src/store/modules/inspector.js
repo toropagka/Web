@@ -72,7 +72,6 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'sound-setting?uid_user=' + uidUser
       axios({ url: url, method: 'GET' })
         .then(resp => {
-          console.log(resp)
           if (typeof resp.data.is_notification_sound_on !== 'undefined') {
             commit(INSPECTOR.GET_SOUND_SETTING, resp.data.is_notification_sound_on)
           }
