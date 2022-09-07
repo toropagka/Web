@@ -39,9 +39,6 @@ export default {
     attrs () {
       return this.$store.getters.attrsCalendar
     },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
     getNavigatorLanguage () {
       return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en'
     },
@@ -71,8 +68,12 @@ export default {
   },
   methods: {
     setLastPickedDate () {
-      if (this.lastNavStack?.value?.uid === '901841d9-0016-491d-ad66-8ee42d2b496b') {
-        this.$store.commit('setCalendarLastPicked', this.lastNavStack.value.param)
+      if (this.$route.name === 'tasksByDate') {
+        this.$store.commit('setCalendarLastPicked', this.$route.params.date)
+      } else if (this.$route.name === 'tasksToday') {
+        this.$store.commit('setCalendarLastPicked', new Date())
+      } else {
+        this.$store.commit('setCalendarLastPicked', null)
       }
     },
     onNewDay () {

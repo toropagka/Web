@@ -77,7 +77,6 @@ export default {
       this.$store.dispatch(DELETE_REGLAMENT_REQUEST, this.currentReglament.uid).then(() => {
         this.$store.dispatch('asidePropertiesToggle', false)
         this.$store.commit(NAVIGATOR_REMOVE_REGLAMENT, this.currentReglament)
-        this.$store.dispatch('popNavStack')
       })
     },
     сlickCopyLink () {

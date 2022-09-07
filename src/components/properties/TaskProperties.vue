@@ -397,7 +397,6 @@ export default {
     status () { return this.$store.state.taskfilesandmessages.status },
     tasks () { return this.$store.state.tasks.newtasks },
     isDark () { return this.$store.state.darkMode },
-    navStack () { return this.$store.state.navbar.navStack },
     isInFocus () { return this.selectedTask?.focus === 1 },
     isAccessVisible () {
       if (this.selectedTask?.emails) return true

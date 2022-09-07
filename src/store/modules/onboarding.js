@@ -30,15 +30,6 @@ const actions = {
     commit(USER_JUST_REGISTERED_TOGGLE, true)
 
     dispatch(TASK.TASKS_REQUEST)
-    const navElem = {
-      name: 'Очередь',
-      value: { uid: '2cf6b167-6506-4b05-bc34-70a8d88e3b25', param: new Date() },
-      typeVal: new Date(),
-      type: 'date'
-    }
-    commit('updateStackWithInitValue', navElem)
-    commit('basic', { key: 'mainSectionState', value: 'greed' })
-    commit('basic', { key: 'greedPath', value: 'doitnow' })
   }
 }
 

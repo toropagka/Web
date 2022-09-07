@@ -47,17 +47,7 @@ export default {
   methods: {
     loadTasks () {
       const date = new Date(this.date)
-      const navElem = {
-        name: this.dateLabel,
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: date },
-        typeVal: date,
-        type: 'date'
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.dispatch('TASKS_REQUEST', date)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: date } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
     }
   }
 }

@@ -32,7 +32,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch(TASK.IN_WORK_TASKS_REQUEST)
-    this.$store.commit('setCalendarLastPicked', null)
   }
 }
 

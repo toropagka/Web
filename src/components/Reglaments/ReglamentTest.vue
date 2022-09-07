@@ -142,7 +142,6 @@ export default {
         return
       }
       if (val) {
-        this.$store.dispatch('popNavStack')
         this.$store.dispatch('asidePropertiesToggle', false)
         this.$router.push('/reglaments')
       }

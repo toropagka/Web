@@ -33,7 +33,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch(TASK.UNREAD_TASKS_REQUEST)
-    this.$store.commit('setCalendarLastPicked', null)
   }
 }
 </script>

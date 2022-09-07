@@ -152,17 +152,9 @@ export default {
     'delete'
   ],
   computed: {
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
+    // переписать отображение кнопки "завтра" в ховере задачи без навстака
     showTomorrow () {
-      let today = new Date()
-      let navVal = new Date(this.navStack[0]?.typeVal)
-      today.setHours(0, 0, 0, 0)
-      navVal.setHours(0, 0, 0, 0)
-      today = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear()
-      navVal = navVal.getDate() + '-' + navVal.getMonth() + '-' + navVal.getFullYear()
-      return today === navVal
+      return this.$route.name === 'tasksToday'
     }
   },
   methods: {

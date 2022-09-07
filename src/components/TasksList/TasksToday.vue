@@ -28,7 +28,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch('TASKS_REQUEST', new Date(this.date))
-    this.$store.commit('setCalendarLastPicked', this.date)
   }
 }
 </script>

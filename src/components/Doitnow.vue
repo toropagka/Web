@@ -66,7 +66,6 @@
     <DoitnowEmpty
       v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
       class="ml-0 pt-[15px] z-[2] grow"
-      @clickPlanning="goToNextDay"
     />
     <div
       v-if="displayModal && !isLoading"
@@ -431,25 +430,6 @@ export default {
       for (const elem in objWithValues) {
         this.firstTask[elem] = objWithValues[elem]
       }
-    },
-    goToNextDay: function () {
-      const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
-
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.dispatch(TASK.TASKS_REQUEST, tomorrow)
-      // hardcoded and messy
-      const navElem = {
-        name: this.dateToLabelFormat(tomorrow),
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow }
-      })
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     onClickTask: function (task) {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
