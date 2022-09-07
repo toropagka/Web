@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="selectedBoard">
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить доску"
@@ -181,6 +181,16 @@
       @reader="setMemberStatus(user.uid, 0)"
       @writer="setMemberStatus(user.uid, 2)"
     />
+  </div>
+  <div v-else>
+    <div class="flex justify-end items-center">
+      <PropsButtonClose @click="closeProperties" />
+    </div>
+    <div
+      class="mt-[25px] w-full font-roboto font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap"
+    >
+      Доска не найдена
+    </div>
   </div>
 </template>
 
