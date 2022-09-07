@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-[48px]">
-    <NavBarItem
-      type="flex lg:hidden"
+    <div
+      class="flex lg:hidden items-center grow-0 shrink-0 relative cursor-pointer px-3"
       @click.prevent="menuToggleMobile"
     >
       <Icon
@@ -9,19 +9,17 @@
         :path="menuToggleMobileIcon"
         size="24"
       />
-    </NavBarItem>
+    </div>
   </div>
 </template>
 
 <script>
-import NavBarItem from '@/components/NavBarItem.vue'
 import Icon from '@/components/Icon.vue'
 
 import { mdiForwardburger, mdiBackburger } from '@mdi/js'
 
 export default {
   components: {
-    NavBarItem,
     Icon
   },
   data () {
