@@ -30,8 +30,18 @@ export default {
       return this.$route.params.employee_uid
     },
     employee () {
+      // сделано так, потому что у нас могут быть поручения сотрудникам
+      // не из нашей организации
       const emps = this.$store.state.navigator?.navigator?.new_delegate[1]?.items ?? []
-      return emps.find(emp => emp.uid === this.employeeUid)
+      const emp = emps.find(emp => emp.uid === this.employeeUid)
+      if (emp) return emp
+      //
+      const emps2 = this.$store.state.navigator?.navigator?.delegate_to_me?.items ?? []
+      const emp2 = emps2.find(emp => emp.uid === this.employeeUid)
+      if (emp2) return emp2
+      //
+      const emps3 = this.$store.state.employees?.employees ?? {}
+      return emps3[this.employeeUid]
     },
     employeeName () {
       return this.employee?.name ?? '???'
