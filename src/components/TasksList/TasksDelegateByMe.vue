@@ -1,14 +1,11 @@
 <template>
   <div class="w-full">
     <NavBarTasks
-      id="NavBarDelegateToMe"
+      id="NavBarDelegateByMe"
       class="pt-[8px]"
-      :title="'Поручено мне: ' + employeeName"
+      :title="'Поручено мной: ' + employeeName"
     />
-    <TasksListNew
-      hide-input
-      hide-nav-bar
-    />
+    <TasksListNew hide-nav-bar />
     <PropertiesRight />
   </div>
 </template>
@@ -31,7 +28,7 @@ export default {
       return this.$route.params.employee_uid
     },
     employee () {
-      const emps = this.$store.state.navigator?.navigator?.new_delegate[1]?.items ?? []
+      const emps = this.$store.state.navigator?.navigator?.new_delegate[0]?.items ?? []
       return emps.find(emp => emp.uid === this.employeeUid)
     },
     employeeName () {
@@ -51,7 +48,7 @@ export default {
   },
   methods: {
     selectAnotherEmployee (uid) {
-      this.$store.dispatch(TASK.ACTION_GET_TASK_DELEGATE_ME, uid)
+      this.$store.dispatch(TASK.ACTION_GET_TASKS_DELEGATED_BY_ME, uid)
       //
       const navElem = {
         name: this.employee?.name,

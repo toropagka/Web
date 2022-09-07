@@ -27,7 +27,7 @@ import Boards from '@/components/Boards'
 import Search from '@/components/Search'
 import TaskByUid from '@/components/TasksList/TaskByUid.vue'
 import TasksByDate from '@/components/TasksList/TasksByDate.vue'
-import TasksDelegates from '@/components/TasksList/TasksDelegates.vue'
+import TasksDelegateByMe from '@/components/TasksList/TasksDelegateByMe.vue'
 import TasksDelegateToMe from '@/components/TasksList/TasksDelegateToMe.vue'
 import TasksInFocus from '@/components/TasksList/TasksInFocus'
 import TasksInWork from '@/components/TasksList/TasksInWork'
@@ -133,7 +133,7 @@ const routes = [
     },
     path: '/tasks/delegate-by-me/:employee_uid',
     name: 'tasksDelegateByMe',
-    component: TasksDelegates,
+    component: TasksDelegateByMe,
     beforeEnter: shouldRedirectToLogin
   },
   {
