@@ -53,7 +53,6 @@
       id="generalscroll"
       class="column-resize relative overflow-hidden"
     >
-      <div />
       <div
         v-if="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent]"
         class="user_customer_custom"
@@ -501,12 +500,9 @@ export default {
             // to refine
             this.selectedTask.status = TASK_STATUS.TASK_REFINE
           }
+          this.scrollToBottom()
         })
-      this.infoComplete = true
-      setTimeout(() => {
-        const element = document.getElementById('content').lastElementChild
-        element.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
+      this.scrollToBottom()
     },
     deleteTask () {
       this.showConfirm = false
@@ -592,12 +588,11 @@ export default {
       const taskName = event.target.innerText
       this.selectedTask.name = taskName
     },
-    scrollDown () {
-      this.infoComplete = true
-      setTimeout(() => {
-        const elmnt = document.getElementById('content').lastElementChild
-        elmnt.scrollIntoView()
-      }, 200)
+    scrollToBottom () {
+      this.$nextTick(() => {
+        const messages = document.getElementsByClassName('messages')
+        messages[messages.length - 1].scrollIntoView(false)
+      })
     },
     createChecklist () {
       if (this.user.tarif === 'free') {
@@ -674,9 +669,8 @@ export default {
                 }
               }
               this.selectedTask.msg = decodeURIComponent(this.taskMsg)
-              const wrapperElement = document.getElementById('content').lastElementChild
-              wrapperElement.scrollIntoView({ behavior: 'smooth' })
             }
+            this.scrollToBottom()
           })
       }
       this.currentAnswerMessageUid = ''
@@ -709,11 +703,7 @@ export default {
                   }
                 }
               }
-              // прокручиваем до файла
-              setTimeout(() => {
-                const elmnt = document.getElementById('content')?.lastElementChild
-                elmnt?.scrollIntoView({ behavior: 'smooth' })
-              }, 100)
+              this.scrollToBottom()
             }).finally(() => {
             this.setFileLoading(false)
           })
@@ -1242,6 +1232,6 @@ export default {
   border: 1px solid #aaaaaa;
 }
 #generalscroll {
-  scrollbar-width: none;
+   scrollbar-width: none;
 }
 </style>
