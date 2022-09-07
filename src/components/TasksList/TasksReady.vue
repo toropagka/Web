@@ -28,7 +28,8 @@ export default {
   },
   data () {
     return {
-      date: new Date()
+      date: new Date(),
+      uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0'
     }
   },
   mounted () {
@@ -36,13 +37,13 @@ export default {
     const navElem = {
       name: 'Готово к сдаче',
       key: 'taskListSource',
-      value: { uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0', param: null },
+      value: { uid: this.uid, param: null },
       typeVal: new Date(),
       type: 'date'
     }
     this.$store.commit('setCalendarLastPicked', null)
     this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'taskListSource', value: { uid: 'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0', param: null } })
+    this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
     this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
   }
 }
