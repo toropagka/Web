@@ -300,7 +300,6 @@
               @tomorrow="moveTaskTomorrow(props.node.info)"
               @copyName="copyTaskName(props.node.info)"
               @copy="copyTask(props.node.info)"
-              @cut="cutTask(props.node.info)"
               @changeTaskPosition="changeTaskPosition"
               @paste="pasteCopiedTasks(props.node.id)"
               @delete="clickDeleteTask(props.node.info)"
@@ -1032,13 +1031,6 @@ export default {
     copyTask (task) {
       const copiedTask = { ...task }
       copiedTask._deleteAfterPaste = false
-      this.$store.commit(TASK.COPY_TASK, copiedTask)
-    },
-    cutTask (task) {
-      this.$store.commit(TASK.REMOVE_TASK, task.uid)
-      const copiedTask = { ...task }
-      copiedTask._originTaskUid = task.uid
-      copiedTask._deleteAfterPaste = true
       this.$store.commit(TASK.COPY_TASK, copiedTask)
     },
     nodeSelected (arg) {
