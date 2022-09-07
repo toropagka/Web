@@ -322,7 +322,7 @@ const mutations = {
       state.reglaments[reglament.uid] = reglament
     }
   },
-  [REGLAMENTS.ADD_REGLAMENT]: (state, reglament) => {
+  [REGLAMENTS.CHANGE_REGLAMENT]: (state, reglament) => {
     state.reglaments[reglament.uid] = reglament
   },
   RemoveReglamentByUid: (state, reglamentUid) => {
