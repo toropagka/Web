@@ -417,7 +417,7 @@ export default {
   position: sticky;
   top: 83px;
   padding: 20px 0;
-  z-index: 5;
+  z-index: 1;
   background: #f4f5f7;
   border: none;
 }
