@@ -1119,7 +1119,6 @@ export default {
     },
     reDo () {
       if (this.childrens?.length) {
-        this.showStatusModal = true
         if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
           this.lastSelectedStatus = 7
         }
@@ -1129,6 +1128,7 @@ export default {
         if (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
           this.lastSelectedStatus = 9
         }
+        this.changeStatus(this.lastSelectedStatus, true)
         return
       }
       this.readTask()
