@@ -13,10 +13,10 @@
   <aside
     id="aside"
     style="overflow-x:hidden; scrollbar-width: none;"
-    class="min-w-[292px] fixed top-0 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm xl:left-0 z-30"
+    class="w-[292px] fixed top-0 h-screen transition-position bg-[#f4f5f7] font-SfProDisplayNormal text-sm xl:left-0 z-30"
     :class="isAsideMobileExpanded ? 'left-0' : '-left-full'"
   >
-    <div class="px-[16px] pt-[15px]">
+    <div class="px-[16px] w-full pt-[15px]">
       <AsideMenuListItem
         class="mb-[16px]"
         :selected="isPathSelected('account')"
