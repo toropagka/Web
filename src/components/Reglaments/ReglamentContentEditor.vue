@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-[400px]">
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить регламент"
