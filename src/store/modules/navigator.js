@@ -421,6 +421,27 @@ const mutations = {
       }
     }
   },
+  [NAVIGATOR_PUSH_PROJECT]: (state, projects) => {
+    for (const project of projects) {
+      if (
+        !project.uid_parent ||
+        project.uid_parent === '00000000-0000-0000-0000-000000000000'
+      ) {
+        // adding projects to the root
+        state.navigator.new_private_projects[1].items.push(project)
+      } else {
+        // adding projects recursively to subarrays
+        visitChildren(
+          state.navigator.new_private_projects[1].items,
+          (value) => {
+            if (value.uid === project.uid_parent) {
+              value.children.push(project)
+            }
+          }
+        )
+      }
+    }
+  },
   [NAVIGATOR_PUSH_BOARD]: (state, boards) => {
     for (const board of boards) {
       if (

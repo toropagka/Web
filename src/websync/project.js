@@ -1,10 +1,14 @@
 import store from '@/store/index.js'
+import router from '@/router'
 
 export function createProject (obj) {
-  store.commit('NAVIGATOR_PUSH_PROJECT', [obj.obj])
+  store.commit('NAVIGATOR_PUSH_COMMON_PROJECT', [obj.obj])
 }
 
 export function removeProject (obj) {
+  if (router.currentRoute.value.fullPath === `/project/${obj.uid}`) {
+    router.push('/doitnow')
+  }
   store.commit('NAVIGATOR_REMOVE_PROJECT', { uid_parent: '', uid: obj.uid })
 }
 
