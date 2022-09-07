@@ -48,7 +48,7 @@
     class="flex xl:ml-[292px] overflow-auto h-full"
   >
     <MainMenu
-      v-if="!isFileRedirect && $store.state.auth.token"
+      v-if="$store.state.auth.token"
     />
     <SubMenu
       v-if="isSubMenuActive"
@@ -59,15 +59,16 @@
       @overlay-click="closeSubMenu"
     />
     <overlay
-      v-if="!isFileRedirect"
       v-show="isAsideLgActive"
       :z-index="'z-20'"
       @overlay-click="overlayClick"
     />
-    <properties-right v-if="!isFileRedirect" />
-    <ErrorNotification v-if="!isFileRedirect" />
-    <Notification v-if="!isFileRedirect" />
-    <InspectorNotification v-if="!isFileRedirect" />
+    <properties-right />
+
+    <ErrorNotification />
+    <Notification />
+    <InspectorNotification />
+
     <div class="flex-1 px-3 overflow-auto">
       <slot />
     </div>
@@ -129,9 +130,6 @@ export default {
     },
     isAsideLgActive () {
       return this.$store.state.isAsideLgActive
-    },
-    isFileRedirect () {
-      return (this.$router.currentRoute.value.name === 'taskfile' || this.$router.currentRoute.value.name === 'cardfile') && this.$router.currentRoute.value.params.id
     },
     menu () {
       return this.$store.state.navigator.menu
