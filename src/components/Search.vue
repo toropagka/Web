@@ -1,58 +1,59 @@
 <template>
-  <div class="mt-3 mr-3">
-    <NavBarVueRouter class="mb-3" />
-    <TasksListNew hide-nav-bar />
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarSearch"
+      class="pt-[8px]"
+      :title="'Поиск: ' + searchText"
+    />
+    <TasksListNew
+      hide-input
+    />
     <PropertiesRight />
   </div>
 </template>
 <script>
 import TasksListNew from '@/components/TasksListNew.vue'
 import PropertiesRight from '@/components/PropertiesRight.vue'
-import NavBarVueRouter from '@/components/NavBarVueRouter.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 import * as TASK from '@/store/actions/tasks'
-
-import { mapMutations } from 'vuex'
 
 export default {
   components: {
     TasksListNew,
     PropertiesRight,
-    NavBarVueRouter
+    NavBarTasks
   },
   computed: {
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
-    },
-    isAsideMobileExpanded () {
-      return this.$store.state.isAsideMobileExpanded
-    },
     searchText () {
       return this.$route.query.q ?? ''
     }
   },
-  mounted () {
-    this.setBreadcrumbs([{
-      name: 'Поиск: ' + this.searchText
-    }])
-
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-    this.$store.commit('basic', {
-      key: 'taskListSource',
-      value: {
-        uid: '11212e94-cedf-11ec-9d64-0242ac120002',
-        param: this.searchText
+  watch: {
+    searchText (text) {
+      if (text) {
+        this.searchTasks(text)
       }
-    })
-
-    this.$store.dispatch(TASK.SEARCH_TASK, this.searchText).then((resp) => {
-      console.log('Search Tasks', resp)
-    })
+    }
+  },
+  mounted () {
+    this.searchTasks(this.searchText)
   },
   methods: {
-    ...mapMutations('navbarVueRouter', {
-      setBreadcrumbs: 'set'
-    })
+    searchTasks (text) {
+      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+      this.$store.commit('basic', {
+        key: 'taskListSource',
+        value: {
+          uid: '11212e94-cedf-11ec-9d64-0242ac120002',
+          param: text
+        }
+      })
+
+      this.$store.dispatch(TASK.SEARCH_TASK, text).then((resp) => {
+        console.log('Search Tasks', resp)
+      })
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@
       class="pt-[8px]"
       title="Неразобранные"
     />
-    <TasksListNew hide-nav-bar />
+    <TasksListNew />
     <PropertiesRight />
   </div>
 </template>

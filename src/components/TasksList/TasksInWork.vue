@@ -7,7 +7,6 @@
     />
     <TasksListNew
       hide-input
-      hide-nav-bar
     />
     <propertiesRight />
   </div>

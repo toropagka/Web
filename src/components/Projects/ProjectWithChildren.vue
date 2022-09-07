@@ -23,7 +23,6 @@
     </div>
     <TasksListNew
       class="pt-[8px]"
-      hide-nav-bar="true"
     />
   </div>
 </template>
