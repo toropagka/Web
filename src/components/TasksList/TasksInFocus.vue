@@ -31,17 +31,7 @@ export default {
   },
   mounted () {
     this.$store.dispatch(TASK.IN_FOCUS_TASKS_REQUEST)
-    const navElem = {
-      name: 'В фокусе',
-      key: 'taskListSource',
-      value: { uid: this.uid, param: null },
-      typeVal: new Date(),
-      type: 'date'
-    }
     this.$store.commit('setCalendarLastPicked', null)
-    this.$store.commit('updateStackWithInitValue', navElem)
-    this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.uid, param: null } })
-    this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
   }
 }
 

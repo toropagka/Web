@@ -61,15 +61,6 @@ export default {
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASK_DELEGATE_ME, uid)
-      //
-      const navElem = {
-        name: this.employee?.name,
-        key: 'taskListSource',
-        value: { uid: this.employee?.parentID, param: this.employee?.email }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.employee?.parentID, param: this.employee?.email } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     }
   }

@@ -430,9 +430,6 @@ export default {
     employees () {
       return this.$store.state.employees.employees
     },
-    mainSectionState () {
-      return this.$store.state.mainSectionState
-    },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
     },
