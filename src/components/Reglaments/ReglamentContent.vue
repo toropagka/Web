@@ -413,6 +413,14 @@ export default {
   background: #f4f5f7;
 }
 
+.ql-snow .ql-editor h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+  line-height: 140%;
+  color: #424242;
+}
+
 .ql-toolbar.ql-snow {
   position: sticky;
   top: 83px;
