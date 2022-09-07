@@ -1,16 +1,17 @@
+import router from '@/router'
 import { setLocalStorageItem } from '@/store/helpers/functions'
+import { disconnectWebSync } from '@/websync/index.js'
 import axios from 'axios'
 import {
   AUTH_CHANGE_PASSWORD, AUTH_ERROR,
   AUTH_LOGOUT, AUTH_REFRESH_TOKEN, AUTH_REGISTER,
   AUTH_REQUEST,
   GOOGLE_AUTH_REQUEST,
-  AUTH_RESET,
   AUTH_SUCCESS
 } from '../actions/auth'
 import { RESET_STATE_NAVIGATOR } from '../actions/navigator'
 import { RESET_STATE_PROJECT } from '../actions/projects'
-import { PROJECT_TASKS_REQUEST, RESET_STATE_TASKS } from '../actions/tasks'
+import { RESET_STATE_TASKS } from '../actions/tasks'
 
 const state = {
   token: localStorage.getItem('user-token') || '',
@@ -103,14 +104,11 @@ const actions = {
       localStorage.removeItem('user-token')
       localStorage.removeItem('user-refresh-token')
       localStorage.removeItem('visitedModals')
-      localStorage.removeItem('navStack')
+      disconnectWebSync()
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
       commit(RESET_STATE_NAVIGATOR)
       commit(RESET_STATE_TASKS)
       commit(RESET_STATE_PROJECT)
-      commit(PROJECT_TASKS_REQUEST)
-      commit(AUTH_REQUEST)
-      commit(AUTH_RESET)
       axios
         .get(url)
         .then((resp) => {
@@ -164,10 +162,7 @@ const mutations = {
   },
   [AUTH_LOGOUT]: (state) => {
     state.token = ''
-    window.location.href += 'login'
-  },
-  [AUTH_RESET]: (state, index) => {
-    localStorage.removeItem('navStack')
+    router.push('/login')
   }
 }
 
