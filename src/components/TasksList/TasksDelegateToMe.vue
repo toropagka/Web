@@ -41,7 +41,7 @@ export default {
   watch: {
     employeeUid: {
       handler: function (val) {
-        this.selectAnotherEmployee(val)
+        if (val) this.selectAnotherEmployee(val)
       }
     }
   },
