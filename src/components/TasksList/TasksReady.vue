@@ -1,7 +1,13 @@
 <template>
-  <div class="mr-3">
+  <div class="w-full">
+    <NavBarTasks
+      id="NavBarReady"
+      class="pt-[8px]"
+      title="Готово к сдаче"
+    />
     <TasksListNew
       hide-input
+      hide-nav-bar
       @changeTaskStatus="changeTaskStatus"
     />
     <PropertiesRight />
@@ -11,6 +17,8 @@
 <script>
 import TasksListNew from '../TasksListNew.vue'
 import PropertiesRight from '../PropertiesRight.vue'
+import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+
 import * as TASK from '@/store/actions/tasks.js'
 import { REMOVE_TASK } from '@/store/actions/tasks.js'
 import { TASK_STATUS } from '@/constants'
@@ -18,7 +26,8 @@ import { TASK_STATUS } from '@/constants'
 export default {
   components: {
     TasksListNew,
-    PropertiesRight
+    PropertiesRight,
+    NavBarTasks
   },
   data () {
     return {
