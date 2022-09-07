@@ -2,7 +2,6 @@
   <div class="px-[16px] pt-[15px]">
     <AsideMenuSkeleton v-if="status == 'loading'" />
     <div v-if="status == 'success'">
-      <pre>{{ $route.params }}</pre>
       <TasksSubmenuCalendar
         class="pl-[6px] mb-[10px]"
         @dayclick="onDayClick"
