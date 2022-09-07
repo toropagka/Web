@@ -76,7 +76,7 @@
         </PopMenuItem>
         <PopMenuDivider v-if="showMoveButton" />
         <PopMenuItem
-          v-if="isMyTask && showTomorrow"
+          v-if="isMyTask && showTomorrow()"
           icon="tomorrow"
           @click="tomorrow"
         >
@@ -151,13 +151,12 @@ export default {
     'paste',
     'delete'
   ],
-  computed: {
-    // переписать отображение кнопки "завтра" в ховере задачи без навстака
-    showTomorrow () {
-      return this.$route.name === 'tasksToday'
-    }
-  },
   methods: {
+    showTomorrow () {
+      if (this.$route.name !== 'tasksByDate' && this.$route.name !== 'tasksDelegateToMe' && this.$route.name !== 'tasksDelegateByMe') {
+        return true
+      }
+    },
     copyTaskName () {
       this.$emit('copyName')
     },
