@@ -222,14 +222,15 @@ export default {
       //
       this.$store.dispatch(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
         .then(() => {
+          // надо отправлять сначала - иначе не сработает если доска удалена
+          this.$emit('popNavBar')
+          //
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(BOARD.SELECT_BOARD, undefined)
           //
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.board)
           // для актуального значения количества досок
           this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.boardUid)
-          //
-          this.$emit('popNavBar')
         })
     },
     clickBoardMyCards () {
