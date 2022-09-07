@@ -18,9 +18,6 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
-          <PopMenuItem @click="copyLinkToBoard">
-            Копировать ссылку на доску
-          </PopMenuItem>
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
@@ -199,7 +196,6 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
-import { copyText } from 'vue3-clipboard'
 
 export default {
   components: {
@@ -451,19 +447,6 @@ export default {
           console.log('changeBoardMembers', resp, users)
         })
       }
-    },
-    copyLinkToBoard () {
-      copyText(
-        `${window.location.origin}/board/${this.selectedBoardUid}`,
-        undefined,
-        (error, event) => {
-          if (error) {
-            console.log('copyLinkToBoard error', error)
-          } else {
-            console.log('copyLinkToBoard', event)
-          }
-        }
-      )
     }
   }
 }
