@@ -421,7 +421,7 @@ const mutations = {
       }
     }
   },
-  [NAVIGATOR_PUSH_PROJECT]: (state, projects) => {
+  [NAVIGATOR_PUSH_COMMON_BOARD]: (state, projects) => {
     for (const project of projects) {
       if (
         !project.uid_parent ||
