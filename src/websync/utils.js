@@ -93,7 +93,7 @@ function checkShouldAddByDateRequest (task) {
 }
 
 // Поручено мной
-function checkShouldAddTaskToAssignToRequest (lastNavStackElement, task) {
+function checkShouldAddTaskToAssignToRequest (task) {
   // Adding new task by assigned to property
   if (
     router.currentRoute.value.name === 'tasksDelegateByMe' &&
