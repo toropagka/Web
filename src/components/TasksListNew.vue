@@ -47,7 +47,7 @@
   >
     <!-- Add task input -->
     <div
-      v-if="taskListSource && !DONT_SHOW_TASK_INPUT_UIDS[taskListSource.uid] && $route.name !== 'tasksDelegateToMe'"
+      v-if="taskListSource && !hideInput"
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <div
@@ -389,6 +389,10 @@ export default {
     hideNavBar: {
       type: Boolean,
       default: false
+    },
+    hideInput: {
+      type: Boolean,
+      defalut: false
     }
   },
   emits: ['changeTaskStatus'],

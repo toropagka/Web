@@ -1,6 +1,6 @@
 <template>
   <div class="mr-3">
-    <TasksListNew />
+    <TasksListNew :hide-input="$route.name === 'tasksDelegateToMe'" />
     <PropertiesRight />
   </div>
 </template>

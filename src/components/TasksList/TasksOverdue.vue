@@ -1,6 +1,6 @@
 <template>
   <div class="mr-3">
-    <TasksListNew />
+    <TasksListNew hide-input />
     <PropertiesRight />
   </div>
 </template>

@@ -1,6 +1,9 @@
 <template>
   <div class="mr-3">
-    <TasksListNew @changeTaskStatus="changeTaskStatus" />
+    <TasksListNew
+      hide-input
+      @changeTaskStatus="changeTaskStatus"
+    />
     <PropertiesRight />
   </div>
 </template>
