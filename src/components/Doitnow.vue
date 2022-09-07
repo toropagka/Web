@@ -246,7 +246,7 @@ export default {
     },
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
-      return tarif !== 'business' && tarif !== 'alpha' && tarif !== 'trial'
+      return tarif !== 'alpha' && tarif !== 'trial'
     }
   },
   watch: {
