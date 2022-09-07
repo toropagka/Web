@@ -396,6 +396,10 @@ export default {
 }
 </script>
 <style>
+.ql-snow * {
+  font-family: "Roboto", sans-serif;
+}
+
 .ql-snow.ql-container {
   border: none;
 }
@@ -413,12 +417,45 @@ export default {
   background: #f4f5f7;
 }
 
-.ql-snow .ql-editor h1 {
-  font-family: "Roboto", sans-serif;
+.ql-snow .ql-editor h1,
+.ql-snow .ql-editor h2,
+.ql-snow .ql-editor h3,
+.ql-snow .ql-editor h4 {
   font-weight: bold;
-  font-size: 25px;
   line-height: 140%;
   color: #424242;
+}
+
+.ql-snow .ql-editor h1 {
+  font-size: 25px;
+}
+
+.ql-snow .ql-editor h2 {
+  font-size: 22px;
+}
+
+.ql-snow .ql-editor h3 {
+  font-size: 19px;
+}
+
+.ql-snow .ql-editor h4 {
+  font-size: 17px;
+}
+
+.ql-snow .ql-editor p,
+.ql-snow .ql-editor ol {
+  line-height: 155%;
+  font-weight: 400;
+  font-size: 17px;
+  color: #4C4C4D;
+}
+
+.ql-snow .ql-editor a {
+  font-weight: 400;
+}
+
+.ql-snow a {
+  color: #007BE5;
 }
 
 .ql-toolbar.ql-snow {
