@@ -54,6 +54,7 @@ const ifAuthenticated = (to, from, next) => {
     if (window.location.pathname.includes('task') && !window.location.pathname.includes('tasks')) {
       next()
     }
+    next('/doitnow')
   } else {
     next('/login')
   }
