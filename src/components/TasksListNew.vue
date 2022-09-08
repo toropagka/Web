@@ -12,35 +12,12 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <div
+  <TaskListUnboardingCard
     v-if="displayModal"
-    class="flex flex-col items-center max-w-[600px] mx-auto"
-  >
-    <img
-      class="mx-auto mt-10"
-
-      width="320"
-      height="314"
-
-      src="/img/emptytask2.a127e727.png"
-      alt="Empty task image"
-    >
-    <p class="font-bold p-3">
-      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
-    </p>
-    <p class="text-sm p-3">
-      Запишите сюда все ваши рабочие дела и встречи, а также выполняйте поручения от коллег, которые ждут от вас результатов сегодня
-    </p>
-    <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-      @click="okToModal"
-    >
-      Понятно
-    </button>
-  </div>
-  <!-- TODO: что-то со стилями надо делать, внешние отступы не надо внутри компонента проставлять-->
+    @ok="okToModal"
+  />
   <div
-    v-if="!displayModal"
+    v-else
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
   >
@@ -311,14 +288,6 @@
     <EmptyTasksListPics
       v-if="!Object.keys(storeTasks).length && status === 'success' && $route.name === 'tasksToday'"
     />
-    <!--
-      Скрыто на первую версию!!
-
-      <onBoarding
-    v-if="showOnboarding"
-    :steps="steps"
-    @shouldShowOnboarding="shouldShowOnboarding"
-    /> -->
   </div>
 </template>
 
@@ -334,6 +303,7 @@ import TaskListIconLabel from '@/components/TasksList/TaskListIconLabel.vue'
 import TaskListTagLabel from '@/components/TasksList/TaskListTagLabel.vue'
 import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHoverPanel.vue'
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
+import TaskListUnboardingCard from '@/components/TasksList/TaskListUnboardingCard.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
@@ -376,8 +346,8 @@ export default {
     TaskStatus,
     contenteditable,
     TaskListActionHoverPanel,
-    TaskListModalBoxLicenseLimit
-    // onBoarding
+    TaskListModalBoxLicenseLimit,
+    TaskListUnboardingCard
   },
   directives: {
     linkify
