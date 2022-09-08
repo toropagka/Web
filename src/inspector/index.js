@@ -48,6 +48,7 @@ export function initInspectorSocket () {
     socket.send(JSON.stringify(auth))
   }
   socket.onmessage = function (event) {
+    if (process.env.VUE_APP_EXTENDED_LOGS) console.log('inspector obj', event.data)
     parseMessage(event.data)
   }
   socket.onclose = function (event) {
