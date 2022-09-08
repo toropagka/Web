@@ -189,9 +189,10 @@
               </div>
               <template #menu>
                 <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-                  <BoardPropsMenuItemUser
+                  <ReglamentPropsMenuItemUser
                     v-for="editor in usersCanAddToAccess"
                     :key="editor.email"
+                    :class="editor.email === usersCanAddToAccess[0].email ? '': 'mt-[13px]'"
                     :show-check-mark="checkEditor(editor.email)"
                     :user-email="editor.email"
                     @click="addReglamentEditor(editor.email)"
@@ -324,12 +325,12 @@
 import { QuillEditor } from '@vueup/vue-quill'
 
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
+import ReglamentPropsMenuItemUser from '@/components/Reglaments/ReglamentPropsMenuItemUser.vue'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import { NAVIGATOR_REMOVE_REGLAMENT } from '@/store/actions/navigator'
-import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 import ReglamentQuestion from '@/components/Reglaments/ReglamentQuestion'
 import { uuidv4 } from '@/helpers/functions'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -344,7 +345,7 @@ export default {
     PopMenu,
     ModalBoxDelete,
     PopMenuItem,
-    BoardPropsMenuItemUser,
+    ReglamentPropsMenuItemUser,
     ReglamentQuestion,
     EmployeeProfile
   },
