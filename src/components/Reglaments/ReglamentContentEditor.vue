@@ -108,7 +108,7 @@
           <span class="font-medium">Отдел:</span>
           <PopMenu>
             <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-              <div class="mr-1 shrink-0">
+              <div class="mr-1 shrink-0 max-w-[250px] truncate">
                 {{ currDepTitle }}
               </div>
               <svg
@@ -138,7 +138,9 @@
                   :key="dep.uid"
                   @click="currDep = dep.uid"
                 >
-                  {{ dep.name }}
+                  <span class="truncate">
+                    {{ dep.name }}
+                  </span>
                 </PopMenuItem>
               </div>
             </template>
