@@ -7,15 +7,6 @@ const state = {
   selectedProject: undefined
 }
 const getters = {}
-const getDefaultState = () => {
-  return {
-    projects: false,
-    status: '',
-    computedNavigator: false,
-    hasLoadedOnce: false,
-    selectedProject: undefined
-  }
-}
 
 const actions = {
   [PROJECT.CREATE_PROJECT_REQUEST]: ({ commit, dispatch }, data) => {
@@ -152,7 +143,8 @@ const mutations = {
     state.selectedProject = project
   },
   [PROJECT.RESET_STATE_PROJECT]: (state) => {
-    Object.assign(state, getDefaultState())
+    state.projects = {}
+    state.selectedProject = undefined
   }
 }
 export default {
