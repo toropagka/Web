@@ -33,8 +33,8 @@ export function initWebSync () {
   }
   const client = new websync[clientProperty](
     process.env.VUE_APP_SYNC_LEADERTASK_API +
-        'websync.ashx?uid_session=' +
-        storeNavigator.value.push_channel
+      'websync.ashx?uid_session=' +
+      storeNavigator.value.push_channel
   )
   window.fm.websync.currentClient = client
   // client в перемунную и в функции использовать
@@ -82,5 +82,8 @@ export function initWebSync () {
 }
 
 export function disconnectWebSync () {
-  window?.fm?.websync?.currentClient.disconnect()
+  if (window?.fm?.websync?.currentClient) {
+    window.fm.websync.currentClient.disconnect()
+    delete window.fm.websync.currentClient
+  }
 }

@@ -2,10 +2,10 @@ import axios from 'axios'
 import Notifications, { notify } from 'notiwind'
 import { createApp } from 'vue'
 import linkify from 'vue-linkify'
+import vue3GoogleLogin from 'vue3-google-login'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import vue3GoogleLogin from 'vue3-google-login'
 
 import './css/main.css'
 
@@ -32,6 +32,12 @@ axios.defaults.headers.common.LocalDate = formattedDate
 
 if (token) {
   axios.defaults.headers.common.Authorization = token
+  if (process.env.VUE_APP_EXTENDED_LOGS) {
+    console.log(
+      'set axios authorization',
+      axios.defaults.headers.common.Authorization
+    )
+  }
 }
 
 // Add a response interceptor
@@ -132,18 +138,21 @@ window.onerror = function (msg, url, lineNo, columnNo, error) {
     line: lineNo,
     column: columnNo
   }
-  axios({
-    url: process.env.VUE_APP_LEADERTASK_API + 'api/v1/errors/front',
-    method: 'POST',
-    data: data
-  })
+  if (axios.defaults.headers.common.Authorization) {
+    axios({
+      url: process.env.VUE_APP_LEADERTASK_API + 'api/v1/errors/front',
+      method: 'POST',
+      data: data
+    })
+  }
 }
 
 createApp(App)
   .use(store)
   .use(router)
   .use(vue3GoogleLogin, {
-    clientId: '770584674672-8vif3lutuhc786suh8vuomht37t1uah8.apps.googleusercontent.com'
+    clientId:
+      '770584674672-8vif3lutuhc786suh8vuomht37t1uah8.apps.googleusercontent.com'
   })
   .use(Notifications)
   .directive('linkified', linkify)

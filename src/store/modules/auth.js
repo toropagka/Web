@@ -3,11 +3,14 @@ import router from '@/router'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import axios from 'axios'
 import {
-  AUTH_CHANGE_PASSWORD, AUTH_ERROR,
-  AUTH_LOGOUT, AUTH_REFRESH_TOKEN, AUTH_REGISTER,
+  AUTH_CHANGE_PASSWORD,
+  AUTH_ERROR,
+  AUTH_LOGOUT,
+  AUTH_REFRESH_TOKEN,
+  AUTH_REGISTER,
   AUTH_REQUEST,
-  GOOGLE_AUTH_REQUEST,
-  AUTH_SUCCESS
+  AUTH_SUCCESS,
+  GOOGLE_AUTH_REQUEST
 } from '../actions/auth'
 
 const state = {
@@ -30,12 +33,25 @@ const actions = {
           setLocalStorageItem('user-token', resp.data.access_token)
           setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
           axios.defaults.headers.common.Authorization = resp.data.access_token
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'set axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           commit(AUTH_SUCCESS, resp)
           resolve(resp)
         })
         .catch((err) => {
           commit(AUTH_ERROR, err)
           localStorage.removeItem('user-token')
+          delete axios.defaults.headers.common.Authorization
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'clear axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           reject(err)
         })
     })
@@ -49,12 +65,25 @@ const actions = {
           setLocalStorageItem('user-token', resp.data.access_token)
           setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
           axios.defaults.headers.common.Authorization = resp.data.access_token
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'set axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           commit(AUTH_SUCCESS, resp)
           resolve(resp)
         })
         .catch((err) => {
           commit(AUTH_ERROR, err)
           localStorage.removeItem('user-token')
+          delete axios.defaults.headers.common.Authorization
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'clear axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           reject(err)
         })
     })
@@ -68,12 +97,25 @@ const actions = {
           setLocalStorageItem('user-token', resp.data.access_token)
           setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
           axios.defaults.headers.common.Authorization = resp.data.access_token
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'set axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           commit(AUTH_SUCCESS, resp)
           resolve(resp)
         })
         .catch((err) => {
           commit(AUTH_ERROR, err)
           localStorage.removeItem('user-token')
+          delete axios.defaults.headers.common.Authorization
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'clear axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           reject(err)
         })
     })
@@ -87,6 +129,12 @@ const actions = {
           setLocalStorageItem('user-token', resp.data.access_token)
           setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
           axios.defaults.headers.common.Authorization = resp.data.access_token
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'set axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           resolve(resp)
         })
         .catch((err) => {
@@ -105,10 +153,24 @@ const actions = {
       axios
         .get(url)
         .then((resp) => {
+          delete axios.defaults.headers.common.Authorization
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'clear axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           resolve(resp)
         })
         .catch((err) => {
           commit(AUTH_ERROR, err)
+          delete axios.defaults.headers.common.Authorization
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'clear axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           reject(err)
         })
     })
@@ -124,6 +186,12 @@ const actions = {
           setLocalStorageItem('user-token', resp.data.access_token)
           setLocalStorageItem('user-refresh-token', resp.data.refresh_token)
           axios.defaults.headers.common.Authorization = resp.data.access_token
+          if (process.env.VUE_APP_EXTENDED_LOGS) {
+            console.log(
+              'set axios authorization',
+              axios.defaults.headers.common.Authorization
+            )
+          }
           resolve(resp)
         })
         .catch((err) => {
