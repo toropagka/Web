@@ -445,14 +445,14 @@ export default {
 }
 
 .ql-snow .ql-editor h4 {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .ql-snow .ql-editor p,
 .ql-snow .ql-editor ol {
   line-height: 155%;
   font-weight: 400;
-  font-size: 17px;
+  font-size: 16px;
   color: #4C4C4D;
 }
 
