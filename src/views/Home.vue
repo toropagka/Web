@@ -163,10 +163,6 @@ export default {
       this.$store.state.navigator.submenu.status = false
     },
     initApplication () {
-      // очищаем консоль - по идее выше ошибки которые
-      // мы не можем поправить из fm.websync и fm.min
-      // по этому консоль очищаем
-      console.clear()
       const fm = document.createElement('script')
       fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
       fm.onload = () => {

@@ -79,13 +79,14 @@ export function initWebSync () {
       }
     }
   })
+
+  // вставляем магию - если не сделать то WebSync падает при дисконнекте
+  client.raiseUnsubscribeSuccess = function (e) {}
 }
 
 export function disconnectWebSync () {
   if (window?.fm?.websync?.currentClient) {
     window.fm.websync.currentClient.disconnect()
-    // вставляем магию - если не сделать то WebSync падает при дисконнекте
-    window.fm.websync.currentClient.raiseActionManual = function (e) {}
     delete window.fm.websync.currentClient
   }
 }
