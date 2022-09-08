@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store/index'
 import { PUSH_BOARD } from '../actions/boards'
 import { PUSH_COLOR, PUSH_MYCOLOR } from '../actions/colors'
 import { PUSH_DEPARTMENT } from '../actions/departments'
@@ -366,7 +367,50 @@ const mutations = {
     const indexEmps = state.navigator.new_emps.findIndex(
       (emps) => emps.dep.uid === department.uid
     )
+
     if (indexEmps !== -1) {
+      // Очень проблемная задача. Единственное, с чем работаем это массив emails, и он может либо придти пустым, либо быть пустым в сторе
+      let changedEmail
+      for (let i = 0; i < state.navigator.new_emps[indexEmps].dep.emails.length; i++) {
+        if (!department.emails.includes(state.navigator.new_emps[indexEmps].dep.emails[i])) {
+          changedEmail = state.navigator.new_emps[indexEmps].dep.emails[i]
+          break
+        }
+      }
+
+      for (let i = 0; i < department.emails.length; i++) {
+        if (!state.navigator.new_emps[indexEmps].dep.emails.includes(department.emails[i])) {
+          changedEmail = department.emails[i]
+          break
+        }
+      }
+
+      if (changedEmail) {
+        let changedEmployee, oldDepartmentUid
+        for (let i = 0; i < state.navigator.new_emps.length; i++) {
+          changedEmployee = state.navigator.new_emps[i].items.find(employee => employee.email === changedEmail)
+          if (changedEmployee) {
+            oldDepartmentUid = state.navigator.new_emps[i].dep.uid
+            break
+          }
+        }
+
+        // Т. к. при смене из отдела в отдел приходит 2 вебсинка, нужна проверка на emails. Если происходит смена из отдела во "Вне отдела", то придёт только один вебсинк
+        // с пустым emails, и мы запишем его во "Вне отдела". При двух вебсинках сотрудник сначала запишется во "Вне отдела", а потом куда надо
+        let uidDepartmentNew
+        if (department.emails && department.emails.includes(changedEmployee.email)) {
+          uidDepartmentNew = state.navigator.new_emps[indexEmps].dep.uid
+        } else {
+          uidDepartmentNew = '00000000-0000-0000-0000-000000000000'
+        }
+
+        store.commit(NAVIGATOR_CHANGE_EMPLOYEE_DEPARTMENT, {
+          uidDepartmentOld: oldDepartmentUid,
+          uidDepartmentNew: uidDepartmentNew,
+          uidEmp: changedEmployee.uid
+        })
+      }
+
       state.navigator.new_emps[indexEmps].dep = department
     }
 
