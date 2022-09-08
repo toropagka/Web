@@ -188,23 +188,11 @@ export default {
     showInspector: false
   }),
   computed: {
-    menu () {
-      return this.$store.state.navigator.menu
-    },
     user () {
       return this.$store.state.user.user
     },
-    storeNavigator () {
-      return this.$store.state.navigator.navigator
-    },
     isAsideMobileExpanded () {
       return this.$store.state.isAsideMobileExpanded
-    },
-    lastRoute () {
-      return this.$router.currentRoute.value.path
-    },
-    lastRouteName () {
-      return this.$router.currentRoute.value.name
     },
     activeTab () {
       return this.$store.state.navigator.submenu.activeTab
@@ -239,16 +227,6 @@ export default {
       // изменение текущей вкладки
       this.selectTab(tab)
       this.$store.state.navigator.submenu.status = true
-    },
-    closeMenu () {
-      this.$store.state.navigator.submenu.status = false
-
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
     }
   }
 }
