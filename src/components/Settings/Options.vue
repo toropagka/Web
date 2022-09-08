@@ -1,8 +1,8 @@
 <template>
-  <form class="px-5 bg-white py-2 rounded pb-[200px]">
-    <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
-      Основные
-    </div>
+  <NavBar
+    title="Основные"
+  />
+  <form class="px-5 bg-white py-2 pb-[200px] rounded-xl">
     <div class="my-2">
       <div class="flex mt-[15px]">
         <div
@@ -128,8 +128,10 @@
 <script>
 import { UPDATE_SOUND_SETTING } from '@/store/actions/inspector'
 import { PATCH_SETTINGS } from '@/store/actions/navigator'
+import NavBar from '@/components/Navbar/NavBar'
 
 export default {
+  components: { NavBar },
   data () {
     return {
       isNotificationSoundOn: this.$store.state.inspector.is_notification_sound_on,

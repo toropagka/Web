@@ -1,4 +1,5 @@
 <template>
+  <NavBar class="flex lg:hidden" />
   <div
     class="w-full pb-[28px] pt-[30px]"
   >
@@ -270,6 +271,8 @@ import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import EmployeesModalBoxAlreadyExist from '@/components/Employees/EmployeesModalBoxAlreadyExist'
 
+import NavBar from '@/components/Navbar/NavBar.vue'
+
 import * as EMPLOYEE from '@/store/actions/employees'
 import * as DEPARTMENT from '@/store/actions/departments'
 
@@ -292,6 +295,7 @@ export default {
     EmployeesModalBoxUsersLimit,
     EmployeesModalBoxOtherOrg,
     PopMenu,
+    NavBar,
     PopMenuItem
   },
   data () {

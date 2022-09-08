@@ -88,7 +88,10 @@
         class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
         @click.stop="clickShowAll"
       >
-        <p class="font-roboto text-[17px] leading-[22px]">
+        <p
+          v-if="items.length"
+          class="font-roboto text-[17px] leading-[22px]"
+        >
           {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
         </p>
       </div>

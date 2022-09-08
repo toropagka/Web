@@ -1,8 +1,8 @@
 <template>
-  <form class="px-5 text-lg bg-white p-2 rounded pb-[150px]">
-    <div class="pt-[35px] text-[#424242] text-[16px] font-[700] pb-[23px]">
-      Тариф
-    </div>
+  <NavBar
+    title="Тариф"
+  />
+  <form class="px-5 text-lg bg-white p-2 rounded-xl pb-[150px]">
     <div class="font-medium text-[roboto] mb-4 text-base landing-[19px]">
       Тип аккаунта
     </div>
@@ -137,7 +137,9 @@
 </template>
 
 <script>
+import NavBar from '../Navbar/NavBar.vue'
 export default {
+  components: { NavBar },
   computed: {
     user () {
       return this.$store.state.user?.user

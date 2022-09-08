@@ -188,7 +188,7 @@
         >
           <router-link :to="'/tasks/delegate-by-me/' + userDelegate.uid">
             <AsideMenuListItem
-              :selected="isUserSelected(userDelegate)"
+              :selected="isUserDelegateByMeSelected(userDelegate)"
               :title="userDelegate.name"
               @click="closeMenu"
             >
@@ -214,7 +214,7 @@
         >
           <router-link :to="'/tasks/delegate-to-me/' + userDelegate.uid">
             <AsideMenuListItem
-              :selected="isUserSelected(userDelegate)"
+              :selected="isUserDelegateToMeSelected(userDelegate)"
               :title="userDelegate.name"
               @click="closeMenu"
             >
@@ -259,54 +259,44 @@ export default {
     delegate () {
       return this.$store.getters.sortedNavigator.new_delegate
     },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
     isTodaySelected () {
-      return this.isDateSelected(new Date())
+      return this.$route.name === 'tasksToday'
     },
     isOverdueSelected () {
-      return this.isActionSelected('46418722-a720-4c9e-b255-16db4e590c34')
+      return this.$route.name === 'tasksOverdue'
     },
     isUnsortedSelected () {
-      return this.isActionSelected('5183b619-3968-4c3a-8d87-3190cfaab014')
+      return this.$route.name === 'tasksUnsorted'
     },
     isUnreadSelected () {
-      return this.isActionSelected('fa042915-a3d2-469c-bd5a-708cf0339b89')
+      return this.$route.name === 'tasksUnread'
     },
     isInWorkSelected () {
-      return this.isActionSelected('2a5cae4b-e877-4339-8ca1-bd61426864ec')
+      return this.$route.name === 'tasksInWork'
     },
     isFocusSelected () {
-      return this.isActionSelected('6fc44cc6-9d45-4052-917e-25b1189ab141')
+      return this.$route.name === 'tasksInFocus'
     },
     isReadySelected () {
-      return this.isActionSelected('d35fe0bc-1747-4eb1-a1b2-3411e07a92a0')
+      return this.$route.name === 'tasksReady'
     }
   },
   methods: {
-    isUserSelected (user) {
+    isUserDelegateToMeSelected (user) {
       if (
-        this.lastNavStack?.value?.uid === user.parentID &&
-        this.lastNavStack?.value?.param === user.email
+        this.$route.name === 'tasksDelegateToMe' &&
+        this.$route.params.employee_uid === user.uid
       ) {
         return true
       }
       return false
     },
-    isActionSelected (uid) {
-      return this.lastNavStack?.value?.uid === uid
-    },
-    isDateSelected (date) {
+    isUserDelegateByMeSelected (user) {
       if (
-        this.lastNavStack?.value?.uid === '901841d9-0016-491d-ad66-8ee42d2b496b' &&
-        this.lastNavStack?.value?.param
+        this.$route.name === 'tasksDelegateByMe' &&
+        this.$route.params.employee_uid === user.uid
       ) {
-        const compareDate = new Date(date)
-        const selectedDate = new Date(this.lastNavStack?.value?.param)
-        return compareDate.getDate() === selectedDate.getDate() &&
-               compareDate.getMonth() === selectedDate.getMonth() &&
-               compareDate.getFullYear() === selectedDate.getFullYear()
+        return true
       }
       return false
     },
@@ -318,7 +308,6 @@ export default {
       } else {
         this.$router.push('/tasks/' + date)
       }
-      this.$store.commit('setCalendarLastPicked', date)
       this.closeMenu()
     },
     closeMenu () {

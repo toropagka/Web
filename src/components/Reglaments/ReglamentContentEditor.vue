@@ -108,7 +108,7 @@
           <span class="font-medium">Отдел:</span>
           <PopMenu>
             <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-              <div class="mr-1 shrink-0">
+              <div class="mr-1 shrink-0 max-w-[250px] truncate">
                 {{ currDepTitle }}
               </div>
               <svg
@@ -138,7 +138,30 @@
                   :key="dep.uid"
                   @click="currDep = dep.uid"
                 >
-                  {{ dep.name }}
+                  <div class="flex justify-between w-full items-center">
+                    <span
+                      class="truncate"
+                      :class="currDepTitle === dep.name ? 'font-bold' : ''"
+                    >
+                      {{ dep.name }}
+                    </span>
+                    <svg
+                      v-if="currDepTitle === dep.name"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M13.3346 4L6.0013 11.3333L2.66797 8"
+                        stroke="#1CA345"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
                 </PopMenuItem>
               </div>
             </template>
@@ -149,7 +172,7 @@
             <span class="font-medium pr-3">Редакторы:</span>
             <PopMenu v-if="!editorsCanEdit">
               <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-                <span class="mr-1 shrink-0">Добавить редактора</span>
+                <span class="mr-1 shrink-0">Добавить</span>
                 <svg
                   class="mr-3"
                   width="12"
@@ -166,9 +189,10 @@
               </div>
               <template #menu>
                 <div class="max-h-[220px] overflow-y-auto scroll-style max-w-[260px]">
-                  <BoardPropsMenuItemUser
+                  <ReglamentPropsMenuItemUser
                     v-for="editor in usersCanAddToAccess"
                     :key="editor.email"
+                    :class="editor.email === usersCanAddToAccess[0].email ? '': 'mt-[13px]'"
                     :show-check-mark="checkEditor(editor.email)"
                     :user-email="editor.email"
                     @click="addReglamentEditor(editor.email)"
@@ -301,12 +325,12 @@
 import { QuillEditor } from '@vueup/vue-quill'
 
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
+import ReglamentPropsMenuItemUser from '@/components/Reglaments/ReglamentPropsMenuItemUser.vue'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import { NAVIGATOR_REMOVE_REGLAMENT } from '@/store/actions/navigator'
-import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 import ReglamentQuestion from '@/components/Reglaments/ReglamentQuestion'
 import { uuidv4 } from '@/helpers/functions'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -321,7 +345,7 @@ export default {
     PopMenu,
     ModalBoxDelete,
     PopMenuItem,
-    BoardPropsMenuItemUser,
+    ReglamentPropsMenuItemUser,
     ReglamentQuestion,
     EmployeeProfile
   },

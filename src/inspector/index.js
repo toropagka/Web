@@ -33,8 +33,9 @@ function parseObject (obj) {
       break
   }
 }
-export default function initInspectorSocket () {
+export function initInspectorSocket () {
   const socket = new WebSocket(process.env.VUE_APP_INSPECTOR_WS)
+  window.inspectorSocket = socket
   socket.onopen = function (event) {
     const auth = {
       type: 'auth',
@@ -47,6 +48,7 @@ export default function initInspectorSocket () {
     socket.send(JSON.stringify(auth))
   }
   socket.onmessage = function (event) {
+    if (process.env.VUE_APP_EXTENDED_LOGS) console.log('inspector obj', event.data)
     parseMessage(event.data)
   }
   socket.onclose = function (event) {
@@ -95,4 +97,8 @@ function createNotificationAndInspectorMessage (parsedData) {
     obj: parsedData.message_obj
   }
   createTaskMessage(message)
+}
+
+export function disconnectInspectorSocket () {
+  window.inspectorSocket.close()
 }

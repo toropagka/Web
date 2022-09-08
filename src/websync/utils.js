@@ -1,6 +1,6 @@
 import store from '@/store/index.js'
+import router from '@/router/index.js'
 import { computed } from 'vue'
-import router from '@/router'
 import { TASK_STATUS } from '@/constants'
 
 const user = computed(() => store.state.user.user)
@@ -33,13 +33,16 @@ export function shouldAddTaskIntoList (task) {
 
 // Проверяет
 function checkShouldAddByDateRequest (task) {
+  // Костыльно исправляем случай, когда редактируем задачу в поиске
+  if (router.currentRoute.value.name === 'task') {
+    return true
+  }
+
   if (!['tasksToday', 'tasksByDate'].includes(router.currentRoute.value.name)) {
     return
   }
-
-  const selectedDate = router.currentRoute.name === 'tasksToday' ? new Date() : new Date(router.currentRoute.value.params.date)
+  const selectedDate = router.currentRoute.value.name === 'tasksToday' ? new Date() : new Date(router.currentRoute.value.params.date)
   selectedDate.setHours(0, 0, 0, 0)
-
   const isTaskCompleted = (task.status === TASK_STATUS.TASK_COMPLETED || task.status === TASK_STATUS.TASK_CANCELLED) ||
         (task.type === 3 && (task.status === TASK_STATUS.TASK_READY || task.status === TASK_STATUS.TASK_REJECTED))
 
@@ -87,8 +90,6 @@ function checkShouldAddByDateRequest (task) {
       }
     }
   }
-
-  return false
 }
 
 // Поручено мной

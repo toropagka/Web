@@ -1,4 +1,5 @@
 <template>
+  <NavBar class="flex lg:hidden" />
   <div class="w-full pt-[30px]">
     <div>
       <ColorModalBoxColorsLimit
@@ -89,6 +90,7 @@
 <script>
 import ColorModalBoxColorsLimit from '@/components/ColorModalBoxColorsLimit.vue'
 import Icon from '@/components/Icon.vue'
+import NavBar from '@/components/Navbar/NavBar.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ListBlocItem from '@/components/Common/ListBlocItem.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
@@ -105,6 +107,7 @@ export default {
     Icon,
     ListBlocAdd,
     ListBlocItem,
+    NavBar,
     ColorModalBoxColorsLimit,
     EmptyTasksListPics
   },
@@ -137,9 +140,6 @@ export default {
     },
     user () {
       return this.$store.state.user.user
-    },
-    greed () {
-      return this.$store.state.greedSource
     },
     isEmpty () {
       return !this.$store.getters.sortedNavigator.colors?.items.length

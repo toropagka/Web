@@ -22,7 +22,7 @@ function parseObject (obj) {
   }
 }
 
-export default function initWebSync () {
+export function initWebSync () {
   const clientProperty = 'client'
   const websync = window?.fm?.websync
 
@@ -33,10 +33,10 @@ export default function initWebSync () {
   }
   const client = new websync[clientProperty](
     process.env.VUE_APP_SYNC_LEADERTASK_API +
-        'websync.ashx?uid_session=' +
-        storeNavigator.value.push_channel
+      'websync.ashx?uid_session=' +
+      storeNavigator.value.push_channel
   )
-
+  websync.currentClient = client
   // client в перемунную и в функции использовать
   client.connect({
     onSuccess: function (e) {
@@ -79,13 +79,14 @@ export default function initWebSync () {
       }
     }
   })
+
+  // вставляем магию - если не сделать то WebSync падает при дисконнекте
+  client.raiseUnsubscribeSuccess = function (e) {}
 }
 
 export function disconnectWebSync () {
-  console.log('websync disconnected')
-  const websync = window?.fm?.websync
-
-  const client = websync?.client
-
-  return client.disconnect
+  if (window?.fm?.websync?.currentClient) {
+    window.fm.websync.currentClient.disconnect()
+    delete window.fm.websync.currentClient
+  }
 }

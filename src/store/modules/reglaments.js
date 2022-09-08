@@ -325,6 +325,15 @@ const mutations = {
   [REGLAMENTS.CHANGE_REGLAMENT]: (state, reglament) => {
     state.reglaments[reglament.uid] = reglament
   },
+  [REGLAMENTS.RESET_REGLAMENTS_STATE]: (state) => {
+    state.reglaments = {}
+    state.returnDoitnow = false
+    state.showAll = false
+    state.reglamentQuestions = [] // вопросы по текущему регламенту
+    state.contributors = [] // сотрудники, прошедшие текущий регламент
+    state.questionsToDelete = []
+    state.answersToDelete = []
+  },
   RemoveReglamentByUid: (state, reglamentUid) => {
     delete state.reglaments[reglamentUid]
   }

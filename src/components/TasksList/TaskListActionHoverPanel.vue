@@ -76,7 +76,7 @@
         </PopMenuItem>
         <PopMenuDivider v-if="showMoveButton" />
         <PopMenuItem
-          v-if="isMyTask && showTomorrow"
+          v-if="isMyTask && showTomorrow()"
           icon="tomorrow"
           @click="tomorrow"
         >
@@ -151,21 +151,12 @@ export default {
     'paste',
     'delete'
   ],
-  computed: {
-    navStack () {
-      return this.$store.state.navbar.navStack
-    },
-    showTomorrow () {
-      let today = new Date()
-      let navVal = new Date(this.navStack[0]?.typeVal)
-      today.setHours(0, 0, 0, 0)
-      navVal.setHours(0, 0, 0, 0)
-      today = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear()
-      navVal = navVal.getDate() + '-' + navVal.getMonth() + '-' + navVal.getFullYear()
-      return today === navVal
-    }
-  },
   methods: {
+    showTomorrow () {
+      if (this.$route.name === 'tasksToday') {
+        return true
+      }
+    },
     copyTaskName () {
       this.$emit('copyName')
     },

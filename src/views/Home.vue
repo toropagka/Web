@@ -45,7 +45,7 @@
   />
   <main-section
     v-if="isContentLoaded"
-    class="flex xl:ml-[292px] overflow-auto h-full"
+    class="flex xl:ml-[292px] overflow-auto h-screen"
   >
     <MainMenu
       v-if="$store.state.auth.token"
@@ -95,8 +95,8 @@ import ModalBoxNotificationInstruction from '@/components/modals/ModalBoxNotific
 import { USER_INVITE_ME, USER_REQUEST } from '@/store/actions/user'
 import { NAVIGATOR_REQUEST } from '@/store/actions/navigator'
 
-import initWebSync, { disconnectWebSync } from '@/websync/index.js'
-import initInspectorSocket from '@/inspector/index.js'
+import { initWebSync, disconnectWebSync } from '@/websync/index.js'
+import { initInspectorSocket, disconnectInspectorSocket } from '@/inspector/index.js'
 
 export default {
   components: {
@@ -135,37 +135,16 @@ export default {
   },
   mounted () {
     this.initApplication()
-    this.initActiveTab()
   },
   unmounted () {
+    disconnectInspectorSocket()
     disconnectWebSync()
   },
   methods: {
-    initActiveTab () {
-      const allPaths = [
-        'tasks',
-        'account',
-        'reglaments',
-        'project',
-        'board',
-        'settings',
-        'doitnow'
-      ]
-      for (let i = 0; i < allPaths.length; i++) {
-        if (this.$route.path.includes(allPaths[i])) {
-          this.$store.state.navigator.submenu.activeTab = allPaths[i]
-          return
-        }
-      }
-    },
     closeSubMenu () {
       this.$store.state.navigator.submenu.status = false
     },
     initApplication () {
-      // очищаем консоль - по идее выше ошибки которые
-      // мы не можем поправить из fm.websync и fm.min
-      // по этому консоль очищаем
-      console.clear()
       const fm = document.createElement('script')
       fm.setAttribute('src', process.env.VUE_APP_LEADERTASK_API + 'scripts/websync/fm.min.js')
       fm.onload = () => {
@@ -176,19 +155,10 @@ export default {
       }
       document.head.appendChild(fm)
 
-      const userLoaded = this.$store.state.user.hasLoadedOnce
-      const navLoaded = this.$store.state.navigator.hasLoadedOnce
-      if (!userLoaded && !navLoaded) {
-        this.$store.dispatch(USER_REQUEST)
-          .then(resp => {
-            this.getNavigator()
-          })
-          .catch(() => {
-            this.isContentLoaded = true
-          })
-      } else {
-        this.isContentLoaded = true
-      }
+      this.$store.dispatch(USER_REQUEST)
+        .then(resp => {
+          this.getNavigator()
+        })
     },
     getNavigator () {
       if (this.$store.state.auth.token) {
@@ -206,10 +176,8 @@ export default {
               uid: 'fake-uid',
               items: reglaments
             }
-            try {
-              initWebSync()
-              initInspectorSocket()
-            } catch (e) {}
+            initWebSync()
+            initInspectorSocket()
             this.$store.dispatch('GET_SOUND_SETTING', this.$store?.state?.user?.user?.current_user_uid)
             this.isContentLoaded = true
           })

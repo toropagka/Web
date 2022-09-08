@@ -311,6 +311,15 @@ const mutations = {
     board.stages.forEach((stage, index) => {
       stage.Order = index
     })
+  },
+  [BOARD.RESET_STATE_BOARD]: (state) => {
+    state.boards = {}
+    state.selectedBoard = undefined
+    state.showArchive = false
+    state.showOnlyCardsWhereIAmResponsible = false
+    state.showOnlyCardsWithNoResponsible = false
+    state.showOnlyMyCreatedCards = false
+    state.searchText = undefined
   }
 }
 

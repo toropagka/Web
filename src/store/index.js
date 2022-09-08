@@ -4,7 +4,6 @@ import { darkModeKey } from '@/config.js'
 import auth from './modules/auth'
 import navigator from './modules/navigator'
 import calendar from './modules/calendar'
-import navbar from './modules/navbar'
 import user from './modules/user'
 import onboarding from '@/store/modules/onboarding.js'
 import slides from '@/store/modules/slides.js'
@@ -31,9 +30,6 @@ export default createStore({
   state: {
     /* Main section state. Possible values: 'tasks', 'greed' */
     mainSectionState: 'tasks',
-    greedPath: null,
-    greedSource: null,
-    taskListSource: null,
     isGridView: true,
 
     /* Properties state: (project, task, color, tag, empmloyee) */
@@ -149,7 +145,6 @@ export default createStore({
     user,
     tasks,
     slides,
-    navbar,
     taskfilesandmessages,
     cardfilesandmessages,
     employees,

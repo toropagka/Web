@@ -5,7 +5,7 @@
       class="pt-[8px]"
       :title="dateLabel"
     />
-    <TasksListNew />
+    <TasksListNew :new-task-props="newTaskProps" />
     <PropertiesRight />
   </div>
 </template>
@@ -32,6 +32,13 @@ export default {
       const weekday = date.toLocaleString('default', { weekday: 'short' })
       const dateLabelFormat = day + ' ' + month + ', ' + weekday
       return dateLabelFormat
+    },
+    newTaskProps () {
+      const date = new Date(this.date)
+      return ({
+        date_begin: this.getDateString(date) + 'T00:00:00',
+        date_end: this.getDateString(date) + 'T23:59:59'
+      })
     }
   },
   watch: {
@@ -47,17 +54,16 @@ export default {
   methods: {
     loadTasks () {
       const date = new Date(this.date)
-      const navElem = {
-        name: this.dateLabel,
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: date },
-        typeVal: date,
-        type: 'date'
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
       this.$store.dispatch('TASKS_REQUEST', date)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: date } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
+    },
+    pad2 (n) {
+      return (n < 10 ? '0' : '') + n
+    },
+    getDateString (date) {
+      const month = this.pad2(date.getMonth() + 1)
+      const day = this.pad2(date.getDate())
+      const year = this.pad2(date.getFullYear())
+      return year + '-' + month + '-' + day
     }
   }
 }

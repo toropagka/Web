@@ -12,45 +12,21 @@
     @cancel="showTasksLimit = false"
     @ok="showTasksLimit = false"
   />
-  <div
+  <TaskListUnboardingCard
     v-if="displayModal"
-    class="flex flex-col items-center max-w-[600px] mx-auto"
-  >
-    <img
-      class="mx-auto mt-10"
-
-      width="320"
-      height="314"
-
-      src="/img/emptytask2.a127e727.png"
-      alt="Empty task image"
-    >
-    <p class="font-bold p-3">
-      Работайте с задачами и поручениями, которые должны быть выполнены сегодня
-    </p>
-    <p class="text-sm p-3">
-      Запишите сюда все ваши рабочие дела и встречи, а также выполняйте поручения от коллег, которые ждут от вас результатов сегодня
-    </p>
-    <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-      @click="okToModal"
-    >
-      Понятно
-    </button>
-  </div>
-  <!-- TODO: что-то со стилями надо делать, внешние отступы не надо внутри компонента проставлять-->
+    @ok="okToModal"
+  />
   <div
-    v-if="!displayModal"
+    v-else
     class="lg:mr-0"
     :class="{'mr-96': isPropertiesMobileExpanded}"
   >
     <!-- Add task input -->
     <div
-      v-if="taskListSource && !hideInput"
+      v-if="!hideInput"
       class="fixed-create z-[2] flex bg-[#f4f5f7] px-[3px] pt-px relative lg:static top-0"
     >
       <div
-        id="step1"
         class="flex items-center bg-[#FAFAFB] border dark:bg-gray-700 rounded-[8px] w-full"
       >
         <div
@@ -229,7 +205,7 @@
               </template>
               <!-- Project -->
               <TaskListTagLabel
-                v-if="taskListSource && props.node.info.uid_project != '00000000-0000-0000-0000-000000000000' && projects[props.node.info.uid_project] && props.node.info.uid_project !== taskListSource.param"
+                v-if="props.node.info.uid_project != '00000000-0000-0000-0000-000000000000' && projects[props.node.info.uid_project]"
                 :icon-path="project.path"
                 :icon-box="project.viewBox"
                 :text="projects[props.node.info.uid_project].name"
@@ -311,14 +287,6 @@
     <EmptyTasksListPics
       v-if="!Object.keys(storeTasks).length && status === 'success' && $route.name === 'tasksToday'"
     />
-    <!--
-      Скрыто на первую версию!!
-
-      <onBoarding
-    v-if="showOnboarding"
-    :steps="steps"
-    @shouldShowOnboarding="shouldShowOnboarding"
-    /> -->
   </div>
 </template>
 
@@ -334,6 +302,7 @@ import TaskListIconLabel from '@/components/TasksList/TaskListIconLabel.vue'
 import TaskListTagLabel from '@/components/TasksList/TaskListTagLabel.vue'
 import TaskListActionHoverPanel from '@/components/TasksList/TaskListActionHoverPanel.vue'
 import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBoxLicenseLimit.vue'
+import TaskListUnboardingCard from '@/components/TasksList/TaskListUnboardingCard.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
@@ -376,8 +345,8 @@ export default {
     TaskStatus,
     contenteditable,
     TaskListActionHoverPanel,
-    TaskListModalBoxLicenseLimit
-    // onBoarding
+    TaskListModalBoxLicenseLimit,
+    TaskListUnboardingCard
   },
   directives: {
     linkify
@@ -385,7 +354,11 @@ export default {
   props: {
     hideInput: {
       type: Boolean,
-      defalut: false
+      default: false
+    },
+    newTaskProps: {
+      type: Object,
+      default: () => ({})
     }
   },
   emits: ['changeTaskStatus'],
@@ -396,28 +369,7 @@ export default {
       orderNewSubtask: 0,
       showConfirm: false,
       showTasksLimit: false,
-      stop: true,
-      DONT_SHOW_TASK_INPUT_UIDS: {
-        '46418722-a720-4c9e-b255-16db4e590c34': TASK.OVERDUE_TASKS_REQUEST,
-        '017a3e8c-79ac-452c-abb7-6652deecbd1c': TASK.OPENED_TASKS_REQUEST,
-        'fa042915-a3d2-469c-bd5a-708cf0339b89': TASK.UNREAD_TASKS_REQUEST,
-        '2a5cae4b-e877-4339-8ca1-bd61426864ec': TASK.IN_WORK_TASKS_REQUEST,
-        'd35fe0bc-1747-4eb1-a1b2-3411e07a92a0': TASK.READY_FOR_COMPLITION_TASKS_REQUEST,
-        '511d871c-c5e9-43f0-8b4c-e8c447e1a823': TASK.DELEGATED_TO_USER_TASKS_REQUEST,
-        '11212e94-cedf-11ec-9d64-0242ac120002': TASK.SEARCH_TASK,
-        '47a38aa5-19c4-40d0-b8c0-56c3a420935d': TASK.ONE_TASK_REQUEST
-      },
-      SHOW_TASK_INPUT_UIDS: {
-        '901841d9-0016-491d-ad66-8ee42d2b496b': TASK.TASKS_REQUEST, // get today's day
-        '5183b619-3968-4c3a-8d87-3190cfaab014': TASK.UNSORTED_TASKS_REQUEST,
-        '6fc44cc6-9d45-4052-917e-25b1189ab141': TASK.IN_FOCUS_TASKS_REQUEST,
-        '169d728b-b88b-462d-bd8e-3ac76806605b': TASK.DELEGATED_TASKS_REQUEST,
-        '7af232ff-0e29-4c27-a33b-866b5fd6eade': TASK.PROJECT_TASKS_REQUEST, // private
-        '431a3531-a77a-45c1-8035-f0bf75c32641': TASK.PROJECT_TASKS_REQUEST, // shared
-        'd28e3872-9a23-4158-aea0-246e2874da73': TASK.EMPLOYEE_TASKS_REQUEST,
-        'ed8039ae-f3de-4369-8f32-829d401056e9': TASK.COLOR_TASKS_REQUEST,
-        '00a5b3de-9474-404d-b3ba-83f488ac6d30': TASK.TAG_TASKS_REQUEST
-      }
+      stop: true
     }
   },
   computed: {
@@ -429,9 +381,6 @@ export default {
     },
     employees () {
       return this.$store.state.employees.employees
-    },
-    mainSectionState () {
-      return this.$store.state.mainSectionState
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
@@ -454,9 +403,6 @@ export default {
         text = 'Вы действительно хотите удалить задачу с подзадачами в количестве: ' + this.storeTasks[this.lastSelectedTaskUid].children.length + '?'
       }
       return text
-    },
-    taskListSource () {
-      return this.$store.state.taskListSource
     },
     projects () {
       return this.$store.state.projects.projects
@@ -815,31 +761,6 @@ export default {
           _addToList: true
         }
       }
-
-      switch (this.SHOW_TASK_INPUT_UIDS[this.taskListSource.uid]) {
-        case TASK.TASKS_REQUEST:
-          data.date_begin = this.getTodaysDate(this.taskListSource.param) + 'T00:00:00'
-          data.date_end = this.getTodaysDate(this.taskListSource.param) + 'T23:59:59'
-          break
-        case TASK.IN_FOCUS_TASKS_REQUEST:
-          data.focus = 1
-          break
-        case TASK.DELEGATED_TASKS_REQUEST:
-          data.email_performer = this.taskListSource.param
-          break
-        case TASK.PROJECT_TASKS_REQUEST:
-          data.uid_project = this.taskListSource.param
-          break
-        case TASK.EMPLOYEE_TASKS_REQUEST:
-          data.email_performer = this.employees[this.taskListSource.param]?.email
-          break
-        case TASK.COLOR_TASKS_REQUEST:
-          data.uid_marker = this.taskListSource.param
-          break
-        case TASK.TAG_TASKS_REQUEST:
-          data.tags = [this.taskListSource.param]
-          break
-      }
       return data
     },
     pasteCopiedTasks (uidParent) {
@@ -865,10 +786,8 @@ export default {
       e.target.focus()
       const title = data.name.trim()
       if (title) {
+        Object.assign(data, this.newTaskProps)
         data.name = title
-        if (this.$route.name === 'tasksDelegateByMe') {
-          data.email_performer = this.$store.state?.employees?.employees[this.$route?.params?.employee_uid]?.email
-        }
         this.$store.dispatch(TASK.CREATE_TASK, data)
           .then((resp) => {
           // выделяем добавленную задачу

@@ -129,7 +129,7 @@
             >
             <label
               for="iconfile"
-              class="text-[13px] mr-3 justify-center cursor-pointer text-[#606061]"
+              class="text-[14px] mr-3 justify-center cursor-pointer text-[#606061]"
             >
               Изменить фото
             </label>
@@ -156,7 +156,7 @@
           <router-link to="/settings/tarif">
             <button
               type="button"
-              class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+              class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
             >
               Управление тарифом
             </button>
@@ -188,7 +188,7 @@
               </div>
               <button
                 type="button"
-                class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+                class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
                 @click="showEditphone = true"
               >
                 Изменить телефон
@@ -213,7 +213,7 @@
               </p>
               <button
                 type="button"
-                class="mt-2 text-[13px] landing-[13px] text-[#007BE5]"
+                class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
                 @click="showPasswordModalBox"
               >
                 Изменить пароль
@@ -301,14 +301,6 @@ export default {
     }
   },
   methods: {
-    changeCurrentTab (tabName) {
-      this.$store.commit('updateStackWithInitValue', {
-        name: 'Тариф',
-        value: { uid: '0853812c-cf1c-4037-b2b6-b7020cb68105', param: new Date() },
-        typeVal: new Date(),
-        type: 'tarif'
-      })
-    },
     logout () {
       this.$store.dispatch(AUTH_LOGOUT)
     },

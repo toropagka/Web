@@ -92,8 +92,11 @@
       class="mt-[15px] p-7 bg-white rounded-[28px]"
     >
       <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
-        <div class="pr-2 border-r border-gray-200">
-          <span class="font-medium pr-3">Отдел:</span><span class="text-[12px]">{{ reglamentDep }}</span>
+        <div
+          class="pr-2 border-r border-gray-200 overflow-y-auto scroll-style max-w-[200px] truncate"
+        >
+          <span class="font-medium pr-3">Отдел:</span>
+          <span class="text-[12px] ">{{ reglamentDep }}</span>
         </div>
         <div class="ml-2 flex">
           <span class="font-medium pr-3">Автор:</span>
@@ -283,7 +286,10 @@ export default {
       return this.$store?.state?.reglaments?.contributors
     },
     contributorsInfo () {
-      return this.contributors.map((contributor) => {
+      return this.contributors.filter(contributor => {
+        const user = this.$store.state.employees.employees[contributor.uid_user]
+        return typeof user !== 'undefined'
+      }).map((contributor) => {
         const user = this.$store.state.employees.employees[contributor.uid_user]
         return {
           uid: contributor.uid_user,
@@ -404,7 +410,7 @@ export default {
   border: none;
 }
 .ql-snow .ql-tooltip {
-  @apply z-30
+  @apply z-30 ml-[150px]
 }
 .ql-snow .ql-tooltip[data-mode=link]::before {
   content: "Введите ссылку:";
@@ -439,19 +445,21 @@ export default {
 }
 
 .ql-snow .ql-editor h4 {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .ql-snow .ql-editor p,
 .ql-snow .ql-editor ol {
   line-height: 155%;
   font-weight: 400;
-  font-size: 17px;
+  font-size: 16px;
   color: #4C4C4D;
 }
 
 .ql-snow .ql-editor a {
-  font-weight: 400;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: underline;
 }
 
 .ql-snow a {

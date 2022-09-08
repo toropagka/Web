@@ -5,7 +5,7 @@
       class="pt-[8px]"
       :title="'Поручено мной: ' + employeeName"
     />
-    <TasksListNew />
+    <TasksListNew :new-task-props="newTaskProps" />
     <PropertiesRight />
   </div>
 </template>
@@ -43,6 +43,14 @@ export default {
     },
     employeeName () {
       return this.employee?.name ?? '???'
+    },
+    newTaskProps () {
+      if (this.employee?.email) {
+        return ({
+          email_performer: this.employee.email
+        })
+      }
+      return ({})
     }
   },
   watch: {
@@ -54,20 +62,10 @@ export default {
   },
   mounted () {
     this.selectAnotherEmployee(this.employeeUid)
-    this.$store.commit('setCalendarLastPicked', null)
   },
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASKS_DELEGATED_BY_ME, uid)
-      //
-      const navElem = {
-        name: this.employee?.name,
-        key: 'taskListSource',
-        value: { uid: this.employee?.parentID, param: this.employee?.email }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', { key: 'taskListSource', value: { uid: this.employee?.parentID, param: this.employee?.email } })
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     }
   }

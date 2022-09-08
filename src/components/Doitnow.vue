@@ -66,7 +66,6 @@
     <DoitnowEmpty
       v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
       class="ml-0 pt-[15px] z-[2] grow"
-      @clickPlanning="goToNextDay"
     />
     <div
       v-if="displayModal && !isLoading"
@@ -334,27 +333,29 @@ export default {
               if (resp.data.anothers_tags.length) {
                 this.$store.commit(TASK.ADD_TASK_TAGS, resp.data.anothers_tags)
               }
-              for (let i = 0; i < resp.data.tasks; i++) {
+              for (let i = 0; i < resp.data.tasks.length; i++) {
                 if (resp.data.tasks[i].readed) {
                   this.readyTasksReaded.push(resp.data.tasks[i])
                 }
               }
             })
-          // Отправляем в главный массив (непрочитанное) отсортированные массивы по очереди
-          this.unreadTasks = [...this.unreadDelegateByMe, ...this.unreadDelegateToMe,
-            ...this.readyTasksUnreaded, ...this.projectTasks, ...this.unsortedTasks]
-          // Отправляем в главный массив (просрочено) отсортированные данные
-          this.overdueTasks = [...this.overdueReaded]
-          // Отправляем в главный массив (готовые) отсортированные данные
-          this.readyTasks = [...this.readyTasksReaded]
-          this.todayTasks = [...result[2]]
-          this.openedTasks = [...this.openedTasks]
-          // удаляем из массивов задачи со статусом "завершено"
-          this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+            .then(() => {
+              // Отправляем в главный массив (непрочитанное) отсортированные массивы по очереди
+              this.unreadTasks = [...this.unreadDelegateByMe, ...this.unreadDelegateToMe,
+                ...this.readyTasksUnreaded, ...this.projectTasks, ...this.unsortedTasks]
+              // Отправляем в главный массив (просрочено) отсортированные данные
+              this.overdueTasks = [...this.overdueReaded]
+              // Отправляем в главный массив (готовые) отсортированные данные
+              this.readyTasks = [...this.readyTasksReaded]
+              this.todayTasks = [...result[2]]
+              this.openedTasks = [...this.openedTasks]
+              // удаляем из массивов задачи со статусом "завершено"
+              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+            })
         })
         .then(() => {
           this.tasksLoaded = true
@@ -431,25 +432,6 @@ export default {
       for (const elem in objWithValues) {
         this.firstTask[elem] = objWithValues[elem]
       }
-    },
-    goToNextDay: function () {
-      const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
-
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.dispatch(TASK.TASKS_REQUEST, tomorrow)
-      // hardcoded and messy
-      const navElem = {
-        name: this.dateToLabelFormat(tomorrow),
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow }
-      }
-      this.$store.commit('updateStackWithInitValue', navElem)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: '901841d9-0016-491d-ad66-8ee42d2b496b', param: tomorrow }
-      })
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     onClickTask: function (task) {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })

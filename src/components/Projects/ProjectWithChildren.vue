@@ -23,6 +23,7 @@
     </div>
     <TasksListNew
       class="pt-[8px]"
+      :new-task-props="newTaskProps"
     />
   </div>
 </template>
@@ -45,6 +46,14 @@ export default {
     },
     currentProject () {
       return this.$store.state.projects.projects[this.projectUid]
+    },
+    newTaskProps () {
+      if (this.currentProject?.uid) {
+        return ({
+          uid_project: this.currentProject.uid
+        })
+      }
+      return ({})
     }
   },
   watch: {
@@ -65,10 +74,6 @@ export default {
         return
       }
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: this.currentProject.global_property_uid, param: this.currentProject.uid }
-      })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     }
   }

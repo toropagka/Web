@@ -167,8 +167,6 @@
   </aside>
 </template>
 <script>
-import * as TASK from '@/store/actions/tasks.js'
-
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import EventAlert from '@/components/EventAlert.vue'
@@ -188,29 +186,50 @@ export default {
     showInspector: false
   }),
   computed: {
-    menu () {
-      return this.$store.state.navigator.menu
-    },
     user () {
       return this.$store.state.user.user
-    },
-    storeNavigator () {
-      return this.$store.state.navigator.navigator
     },
     isAsideMobileExpanded () {
       return this.$store.state.isAsideMobileExpanded
     },
-    lastRoute () {
-      return this.$router.currentRoute.value.path
-    },
-    lastRouteName () {
-      return this.$router.currentRoute.value.name
-    },
     activeTab () {
       return this.$store.state.navigator.submenu.activeTab
+    },
+    submenuStatus () {
+      return this.$store.state.navigator.submenu.status
     }
   },
+  watch: {
+    $route (to, from) {
+      this.initActiveTab()
+    },
+    submenuStatus (newValue, oldValue) {
+      if (!newValue) {
+        this.initActiveTab()
+      }
+    }
+  },
+  mounted () {
+    this.initActiveTab()
+  },
   methods: {
+    initActiveTab () {
+      const allPaths = [
+        'tasks',
+        'account',
+        'reglaments',
+        'project',
+        'board',
+        'settings',
+        'doitnow'
+      ]
+      for (let i = 0; i < allPaths.length; i++) {
+        if (this.$route.path.includes(allPaths[i])) {
+          this.$store.state.navigator.submenu.activeTab = allPaths[i]
+          return
+        }
+      }
+    },
     isPathSelected (code) {
       return this.activeTab === code
     },
@@ -226,29 +245,9 @@ export default {
       this.$store.state.navigator.submenu.status = false
     },
     changeTab (tab) {
-      // активация сабменю
-      if (tab === 'tasks') {
-        this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          .then(() => {
-            // изменение текущей вкладки
-            this.selectTab(tab)
-            this.$store.state.navigator.submenu.status = true
-          })
-        return
-      }
       // изменение текущей вкладки
       this.selectTab(tab)
       this.$store.state.navigator.submenu.status = true
-    },
-    closeMenu () {
-      this.$store.state.navigator.submenu.status = false
-
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
     }
   }
 }

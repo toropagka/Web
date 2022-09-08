@@ -206,9 +206,6 @@ export default {
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    lastNavStack () {
-      return this.$store.getters.lastNavStackElement
-    },
     storeNavigator () {
       return this.$store.getters.sortedNavigator
     }

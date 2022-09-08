@@ -8,12 +8,10 @@
     <TasksListNew
       hide-input
     />
-    <PropertiesRight />
   </div>
 </template>
 <script>
 import TasksListNew from '@/components/TasksListNew.vue'
-import PropertiesRight from '@/components/PropertiesRight.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 import * as TASK from '@/store/actions/tasks'
@@ -21,7 +19,6 @@ import * as TASK from '@/store/actions/tasks'
 export default {
   components: {
     TasksListNew,
-    PropertiesRight,
     NavBarTasks
   },
   computed: {
@@ -41,15 +38,6 @@ export default {
   },
   methods: {
     searchTasks (text) {
-      this.$store.commit('basic', { key: 'mainSectionState', value: 'tasks' })
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: {
-          uid: '11212e94-cedf-11ec-9d64-0242ac120002',
-          param: text
-        }
-      })
-
       this.$store.dispatch(TASK.SEARCH_TASK, text).then((resp) => {
         console.log('Search Tasks', resp)
       })
