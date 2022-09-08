@@ -30,8 +30,6 @@ export default createStore({
   state: {
     /* Main section state. Possible values: 'tasks', 'greed' */
     mainSectionState: 'tasks',
-    greedPath: null,
-    greedSource: null,
     isGridView: true,
 
     /* Properties state: (project, task, color, tag, empmloyee) */

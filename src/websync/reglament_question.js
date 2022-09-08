@@ -1,18 +1,11 @@
 import store from '@/store/index.js'
 import * as REGLAMENT from '@/store/actions/reglaments'
+import router from '@/router'
 
-function shouldDoAnything (navElement, reglamentUid) {
-  if (
-    navElement.greedPath &&
-    navElement.greedPath === 'reglament_content' &&
-    navElement.uid === reglamentUid
-  ) return true
-  return false
-}
+const shouldDoAnything = (reglamentUid) => router.currentRoute.value.fullPath === `/reglaments/${reglamentUid}`
 
 export function createReglamentQuestion (obj) {
-  const lastNavStack = store.getters.lastNavStackElement
-  if (shouldDoAnything(lastNavStack, obj.obj.uid_reglament)) {
+  if (shouldDoAnything(obj.obj.uid_reglament)) {
     obj.obj.answers = [] // здесь добавляем, потому что в вопросе нужен изначально пустой массив ответов
     store.commit(REGLAMENT.REGLAMENT_PUSH_QUESTION, obj.obj)
   }
@@ -23,8 +16,7 @@ export function deleteReglamentQuestion (obj) {
 }
 
 export function updateReglamentQuestion (obj) {
-  const lastNavStack = store.getters.lastNavStackElement
-  if (shouldDoAnything(lastNavStack, obj.obj.uid_reglament)) {
+  if (shouldDoAnything(obj.obj.uid_reglament)) {
     store.commit(REGLAMENT.REGLAMENT_UPDATE_QUESTION, obj.obj)
   }
 }

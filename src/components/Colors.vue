@@ -138,9 +138,6 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    greed () {
-      return this.$store.state.greedSource
-    },
     isEmpty () {
       return !this.$store.getters.sortedNavigator.colors?.items.length
     }
