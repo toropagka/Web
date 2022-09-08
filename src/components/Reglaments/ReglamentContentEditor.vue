@@ -151,7 +151,7 @@
             <span class="font-medium pr-3">Редакторы:</span>
             <PopMenu v-if="!editorsCanEdit">
               <div class="flex flex-row items-center cursor-pointer hover:transition hover:opacity-[0.8]">
-                <span class="mr-1 shrink-0">Добавить редактора</span>
+                <span class="mr-1 shrink-0">Добавить</span>
                 <svg
                   class="mr-3"
                   width="12"
