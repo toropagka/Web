@@ -138,7 +138,7 @@
                   :key="dep.uid"
                   @click="currDep = dep.uid"
                 >
-                  <div class="flex justify-between w-full">
+                  <div class="flex justify-between w-full items-center">
                     <span
                       class="truncate"
                       :class="currDepTitle === dep.name ? 'font-bold' : ''"
