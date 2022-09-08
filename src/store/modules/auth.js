@@ -14,6 +14,7 @@ import {
 } from '../actions/auth'
 import { RESET_STATE_BOARD } from '../actions/boards'
 import { RESET_STATE_PROJECT } from '../actions/projects'
+import { RESET_REGLAMENTS_STATE } from '../actions/reglaments'
 
 const state = {
   token: localStorage.getItem('user-token') || '',
@@ -154,6 +155,7 @@ const actions = {
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
       commit(RESET_STATE_BOARD)
       commit(RESET_STATE_PROJECT)
+      commit(RESET_REGLAMENTS_STATE)
       axios
         .get(url)
         .then((resp) => {
