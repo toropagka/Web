@@ -200,6 +200,9 @@ export default {
     }
   },
   watch: {
+    $route (to, from) {
+      this.initActiveTab()
+    },
     submenuStatus (newValue, oldValue) {
       if (!newValue) {
         this.initActiveTab()
