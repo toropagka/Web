@@ -33,6 +33,11 @@ export function shouldAddTaskIntoList (task) {
 
 // Проверяет
 function checkShouldAddByDateRequest (task) {
+  // Костыльно исправляем случай, когда редактируем задачу в поиске
+  if (router.currentRoute.value.name === 'task') {
+    return true
+  }
+
   if (!['tasksToday', 'tasksByDate'].includes(router.currentRoute.value.name)) {
     return
   }

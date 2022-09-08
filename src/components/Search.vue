@@ -8,12 +8,10 @@
     <TasksListNew
       hide-input
     />
-    <PropertiesRight />
   </div>
 </template>
 <script>
 import TasksListNew from '@/components/TasksListNew.vue'
-import PropertiesRight from '@/components/PropertiesRight.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 import * as TASK from '@/store/actions/tasks'
@@ -21,7 +19,6 @@ import * as TASK from '@/store/actions/tasks'
 export default {
   components: {
     TasksListNew,
-    PropertiesRight,
     NavBarTasks
   },
   computed: {
