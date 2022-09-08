@@ -12,6 +12,7 @@ import {
   AUTH_SUCCESS,
   GOOGLE_AUTH_REQUEST
 } from '../actions/auth'
+import { RESET_STATE_BOARD } from '../actions/boards'
 
 const state = {
   token: localStorage.getItem('user-token') || '',
@@ -150,6 +151,7 @@ const actions = {
       localStorage.removeItem('user-refresh-token')
       localStorage.removeItem('visitedModals')
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
+      commit(RESET_STATE_BOARD)
       axios
         .get(url)
         .then((resp) => {
