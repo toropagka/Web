@@ -167,8 +167,6 @@
   </aside>
 </template>
 <script>
-import * as TASK from '@/store/actions/tasks.js'
-
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import InspectorLimit from '@/components/TasksList/InspectorLimit.vue'
 import EventAlert from '@/components/EventAlert.vue'
@@ -208,6 +206,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this.initActiveTab()
+  },
   methods: {
     initActiveTab () {
       const allPaths = [
@@ -241,16 +242,6 @@ export default {
       this.$store.state.navigator.submenu.status = false
     },
     changeTab (tab) {
-      // активация сабменю
-      if (tab === 'tasks') {
-        this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-          .then(() => {
-            // изменение текущей вкладки
-            this.selectTab(tab)
-            this.$store.state.navigator.submenu.status = true
-          })
-        return
-      }
       // изменение текущей вкладки
       this.selectTab(tab)
       this.$store.state.navigator.submenu.status = true
