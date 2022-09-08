@@ -457,7 +457,9 @@ export default {
 }
 
 .ql-snow .ql-editor a {
-  font-weight: 400;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: underline;
 }
 
 .ql-snow a {
