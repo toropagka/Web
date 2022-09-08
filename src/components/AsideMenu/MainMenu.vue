@@ -196,9 +196,36 @@ export default {
     },
     activeTab () {
       return this.$store.state.navigator.submenu.activeTab
+    },
+    submenuStatus () {
+      return this.$store.state.navigator.submenu.status
+    }
+  },
+  watch: {
+    submenuStatus (newValue, oldValue) {
+      if (!newValue) {
+        this.initActiveTab()
+      }
     }
   },
   methods: {
+    initActiveTab () {
+      const allPaths = [
+        'tasks',
+        'account',
+        'reglaments',
+        'project',
+        'board',
+        'settings',
+        'doitnow'
+      ]
+      for (let i = 0; i < allPaths.length; i++) {
+        if (this.$route.path.includes(allPaths[i])) {
+          this.$store.state.navigator.submenu.activeTab = allPaths[i]
+          return
+        }
+      }
+    },
     isPathSelected (code) {
       return this.activeTab === code
     },
