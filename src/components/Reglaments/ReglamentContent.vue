@@ -286,7 +286,10 @@ export default {
       return this.$store?.state?.reglaments?.contributors
     },
     contributorsInfo () {
-      return this.contributors.map((contributor) => {
+      return this.contributors.filter(contributor => {
+        const user = this.$store.state.employees.employees[contributor.uid_user]
+        return typeof user !== 'undefined'
+      }).map((contributor) => {
         const user = this.$store.state.employees.employees[contributor.uid_user]
         return {
           uid: contributor.uid_user,
