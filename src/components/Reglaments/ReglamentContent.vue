@@ -410,7 +410,7 @@ export default {
   border: none;
 }
 .ql-snow .ql-tooltip {
-  @apply z-30
+  @apply z-30 ml-[150px]
 }
 .ql-snow .ql-tooltip[data-mode=link]::before {
   content: "Введите ссылку:";
