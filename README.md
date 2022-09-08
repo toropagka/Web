@@ -49,6 +49,8 @@
 ### API Documentation 
 [https://web.leadertask.com/docs/ver1](https://web.leadertask.com/docs/ver1)
 
+[websync](http://docs.frozenmountain.com/websync4/index.html#class=websync-getting-started-creating-a-client-30_javascript)
+
 ## Правила написания кода
 
 1. Вёрстку делаем на Tailwind - не используем CSS по максимуму
