@@ -1,4 +1,5 @@
 <template>
+  <NavBar class="flex lg:hidden" />
   <TagModalBoxTagsLimit
     v-if="showTagsLimit"
     @cancel="showTagsLimit = false"
@@ -51,11 +52,14 @@ import { SELECT_TAG } from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
 import { uuidv4 } from '@/helpers/functions'
 
+import NavBar from '@/components/Navbar/NavBar.vue'
+
 export default {
   components: {
     TagItem,
     TagAdd,
     TagInput,
+    NavBar,
     TagModalBoxTagsLimit,
     EmptyTasksListPics
   },
