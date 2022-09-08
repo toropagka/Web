@@ -66,6 +66,10 @@ const mutations = {
   [DEPARTMENTS.SELECT_DEPARTMENT]: (state, department) => {
     state.selectedDepartment = department
   },
+  [DEPARTMENTS.RESET_DEPARTMENTS_STATE]: (state) => {
+    state.deps = {}
+    state.selectedDepartment = null
+  },
   RemoveDepartment: (state, uid) => {
     delete state.deps[uid]
   }
