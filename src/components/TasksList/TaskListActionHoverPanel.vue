@@ -153,7 +153,7 @@ export default {
   ],
   methods: {
     showTomorrow () {
-      if (this.$route.name !== 'tasksByDate' && this.$route.name !== 'tasksDelegateToMe' && this.$route.name !== 'tasksDelegateByMe') {
+      if (this.$route.name === 'tasksToday') {
         return true
       }
     },

@@ -32,7 +32,6 @@ export default createStore({
     mainSectionState: 'tasks',
     greedPath: null,
     greedSource: null,
-    taskListSource: null,
     isGridView: true,
 
     /* Properties state: (project, task, color, tag, empmloyee) */

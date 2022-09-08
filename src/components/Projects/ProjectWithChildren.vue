@@ -65,10 +65,6 @@ export default {
         return
       }
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)
-      this.$store.commit('basic', {
-        key: 'taskListSource',
-        value: { uid: this.currentProject.global_property_uid, param: this.currentProject.uid }
-      })
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     }
   }

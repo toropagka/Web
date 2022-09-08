@@ -431,9 +431,6 @@ export default {
       }
       return text
     },
-    taskListSource () {
-      return this.$store.state.taskListSource
-    },
     projects () {
       return this.$store.state.projects.projects
     },
