@@ -198,10 +198,8 @@ export default {
               uid: 'fake-uid',
               items: reglaments
             }
-            try {
-              initWebSync()
-              initInspectorSocket()
-            } catch (e) {}
+            initWebSync()
+            initInspectorSocket()
             this.$store.dispatch('GET_SOUND_SETTING', this.$store?.state?.user?.user?.current_user_uid)
             this.isContentLoaded = true
           })
