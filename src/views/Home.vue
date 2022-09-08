@@ -176,19 +176,10 @@ export default {
       }
       document.head.appendChild(fm)
 
-      const userLoaded = this.$store.state.user.hasLoadedOnce
-      const navLoaded = this.$store.state.navigator.hasLoadedOnce
-      if (!userLoaded && !navLoaded) {
-        this.$store.dispatch(USER_REQUEST)
-          .then(resp => {
-            this.getNavigator()
-          })
-          .catch(() => {
-            this.isContentLoaded = true
-          })
-      } else {
-        this.isContentLoaded = true
-      }
+      this.$store.dispatch(USER_REQUEST)
+        .then(resp => {
+          this.getNavigator()
+        })
     },
     getNavigator () {
       if (this.$store.state.auth.token) {
