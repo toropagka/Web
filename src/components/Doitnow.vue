@@ -333,27 +333,29 @@ export default {
               if (resp.data.anothers_tags.length) {
                 this.$store.commit(TASK.ADD_TASK_TAGS, resp.data.anothers_tags)
               }
-              for (let i = 0; i < resp.data.tasks; i++) {
+              for (let i = 0; i < resp.data.tasks.length; i++) {
                 if (resp.data.tasks[i].readed) {
                   this.readyTasksReaded.push(resp.data.tasks[i])
                 }
               }
             })
-          // Отправляем в главный массив (непрочитанное) отсортированные массивы по очереди
-          this.unreadTasks = [...this.unreadDelegateByMe, ...this.unreadDelegateToMe,
-            ...this.readyTasksUnreaded, ...this.projectTasks, ...this.unsortedTasks]
-          // Отправляем в главный массив (просрочено) отсортированные данные
-          this.overdueTasks = [...this.overdueReaded]
-          // Отправляем в главный массив (готовые) отсортированные данные
-          this.readyTasks = [...this.readyTasksReaded]
-          this.todayTasks = [...result[2]]
-          this.openedTasks = [...this.openedTasks]
-          // удаляем из массивов задачи со статусом "завершено"
-          this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-          this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+            .then(() => {
+              // Отправляем в главный массив (непрочитанное) отсортированные массивы по очереди
+              this.unreadTasks = [...this.unreadDelegateByMe, ...this.unreadDelegateToMe,
+                ...this.readyTasksUnreaded, ...this.projectTasks, ...this.unsortedTasks]
+              // Отправляем в главный массив (просрочено) отсортированные данные
+              this.overdueTasks = [...this.overdueReaded]
+              // Отправляем в главный массив (готовые) отсортированные данные
+              this.readyTasks = [...this.readyTasksReaded]
+              this.todayTasks = [...result[2]]
+              this.openedTasks = [...this.openedTasks]
+              // удаляем из массивов задачи со статусом "завершено"
+              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+            })
         })
         .then(() => {
           this.tasksLoaded = true
