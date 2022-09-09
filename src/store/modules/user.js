@@ -24,7 +24,6 @@ const getters = {
     const [dayExp, monthExp, yearExp] = dateExp.split('.')
     dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
     const dateExpired = new Date(dateExpiredString)
-    console.log('isLicenseExpired', dateExpired, dateExpiredString)
     const dateNow = new Date()
     return dateNow.getTime() > dateExpired.getTime()
   }
