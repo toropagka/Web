@@ -86,6 +86,7 @@
         @nodeOpened="nodeExpanding"
         @nodeFocus="nodeSelected"
         @nodeDragend="nodeDragEnd"
+        @keyup.esc.stop="onTaskTreeEsc"
       >
         <template #before-input="props">
           <div
@@ -291,7 +292,6 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 // import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
@@ -305,9 +305,9 @@ import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBo
 import TaskListUnboardingCard from '@/components/TasksList/TaskListUnboardingCard.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
+import { shouldAddTaskIntoList } from '@/websync/utils'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
-import { TASK_STATUS } from '@/constants'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -361,7 +361,6 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['changeTaskStatus'],
   data () {
     return {
       createTaskText: '',
@@ -519,17 +518,13 @@ export default {
       }
     }
   },
-  mounted () {
-    window.getSelection().removeAllRanges()
-    // не удалять, без объявление сторы через useStore не работает закрытие на escape
-    const store = useStore()
-    document.addEventListener('keyup', function (evt) {
-      if (evt.keyCode === 27) {
-        store.dispatch('asidePropertiesToggle', false)
-      }
-    })
-  },
   methods: {
+    onTaskTreeEsc () {
+      // делаем закрытие тут по keyup - потому что компонент tree
+      // полностью перехватывает keydown где то внутри себя
+      // смотри обработку document.addEventListener('keydown') в main.js
+      this.$store.dispatch('asidePropertiesToggle', false)
+    },
     sortTaskChildren (task) {
       const sortedChildrens = []
       for (let i = 0; i < this.storeTasks[task].children.length; i++) {
@@ -866,6 +861,7 @@ export default {
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
+      this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(
         TASK.CHANGE_TASK_DATE,
         {
@@ -895,7 +891,6 @@ export default {
       this.$store.dispatch(TASK.REMOVE_TASK, uid)
         .then(() => {
           this.showConfirm = false
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
         })
     },
     gotoNode (uid) {
@@ -1057,9 +1052,9 @@ export default {
       }
     },
     onChangeStatus (status, task) {
-      console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
-        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
+        task.status = status
+        if (!shouldAddTaskIntoList(task)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
           const restoredTasksArray = []
           Object.values(prevTasksArray).forEach((item) => {
@@ -1070,7 +1065,6 @@ export default {
             }
           })
           this.$store.commit(TASK.REMOVE_TASK, task.uid)
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: restoredTasksArray }).then(data => {
             if (!data) {
               this.$store.dispatch('asidePropertiesToggle', false)
@@ -1079,8 +1073,6 @@ export default {
             // фокусим следующий итем и открываем его свойства
             document.getElementById(data.id).focus({ preventScroll: false })
           })
-        } else {
-          this.$emit('changeTaskStatus', status, task)
         }
       })
     }

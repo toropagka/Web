@@ -113,7 +113,7 @@
     <div class="flex justify-start mb-[25px] space-x-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
-        :employees-by-email="employeesByEmail"
+        :org-employees="orgEmployees"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
@@ -245,12 +245,13 @@ export default {
   computed: {
     status () { return this.$store.state.cardfilesandmessages.status },
     selectedCard () { return this.$store.state.cards.selectedCard },
+    selectedCardUid () { return this.selectedCard?.uid },
     user () { return this.$store.state.user.user },
     selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
-    employeesByEmail () { return this.$store.state.employees.employeesByEmail },
+    orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
     cardMessages () { return this.$store.state.cardfilesandmessages.messages },
-    canAddFiles () { return this.user?.days_left > 0 },
+    canAddFiles () { return !this.$store.getters.isLicenseExpired },
     canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
     selectedColumnName () {
       const columnUid = this.selectedCard?.uid_stage
@@ -292,7 +293,7 @@ export default {
     }
   },
   watch: {
-    selectedCard (oldValue, newValue) {
+    selectedCardUid (oldValue, newValue) {
       this.currentQuote = false
       this.cardMessageInputValue = ''
     }
@@ -426,7 +427,7 @@ export default {
     },
     createCardMessage () {
       // если лицензия истекла
-      if (this.user.days_left <= 0) {
+      if (this.$store.getters.isLicenseExpired) {
         this.showMessagesLimit = true
         return
       }

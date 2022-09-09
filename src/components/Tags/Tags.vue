@@ -1,17 +1,15 @@
 <template>
-  <NavBar class="flex lg:hidden" />
   <TagModalBoxTagsLimit
     v-if="showTagsLimit"
     @cancel="showTagsLimit = false"
     @ok="showTagsLimit = false"
   />
   <div id="tags">
-    <p
-      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold pt-[30px]"
-    >
-      Метки
-    </p>
-    <div class="flex flex-col gap-[6px] mt-[25px]">
+    <NavBar
+      class="pt-[8px]"
+      title="Метки"
+    />
+    <div class="flex flex-col gap-[6px] pb-[30px]">
       <TagInput
         v-if="showAddTag"
         class="place-self-start mb-[25px] w-[184px]"
@@ -116,7 +114,7 @@ export default {
     },
     clickAddTag () {
       // если лицензия истекла
-      if (this.tags.length >= 3 && this.user.days_left <= 0) {
+      if (this.tags.length >= 3 && this.$store.getters.isLicenseExpired) {
         this.showTagsLimit = true
         return
       }

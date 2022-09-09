@@ -18,6 +18,10 @@ function pad2 (n) {
 
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
+    if (store.state.navigator.submenu.status === true) {
+      store.state.navigator.submenu.status = false
+      return
+    }
     store.dispatch('asidePropertiesToggle', false)
   }
 })

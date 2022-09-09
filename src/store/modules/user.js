@@ -1,19 +1,33 @@
+import * as SLIDES from '@/store/actions/slides.js'
+import store from '@/store/index.js'
 import axios from 'axios'
 import {
   USER_CHANGE_PHONE,
   USER_CHANGE_PHOTO,
-  USER_ERROR, USER_INVITE_ME, USER_REQUEST,
+  USER_ERROR,
+  USER_INVITE_ME,
+  USER_REQUEST,
   USER_SUCCESS
 } from '../actions/user'
-import * as SLIDES from '@/store/actions/slides.js'
-import store from '@/store/index.js'
 
 const state = {
   user: null,
   status: ''
 }
 
-const getters = {}
+const getters = {
+  isLicenseExpired: (state) => {
+    if (!state.user?.date_expired) return true
+    // добавляем Z в конец, чтобы он посчитал что это UTC время
+    let dateExpiredString = state.user?.date_expired
+    const [dateExp, timeExp] = dateExpiredString.split(' ')
+    const [dayExp, monthExp, yearExp] = dateExp.split('.')
+    dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
+    const dateExpired = new Date(dateExpiredString)
+    const dateNow = new Date()
+    return dateNow.getTime() > dateExpired.getTime()
+  }
+}
 
 const actions = {
   [USER_REQUEST]: ({ commit }) => {
@@ -25,7 +39,10 @@ const actions = {
           commit('ChangeCurrentUserObj', resp.data)
           commit(USER_SUCCESS, resp)
           if (state.user.current_user_email !== state.user.owner_email) {
-            commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: false })
+            commit(SLIDES.CHANGE_VISIBLE, {
+              name: 'addEmployees',
+              visible: false
+            })
           }
           resolve(resp)
         })
@@ -97,7 +114,13 @@ const actions = {
 const mutations = {
   [USER_CHANGE_PHOTO]: (state, data) => {
     state.user.foto_link = state.user.foto_link + '&Z=' + Date.now()
-    store.state.employees.employeesByEmail[state.user.current_user_email].fotolink = store.state.employees.employeesByEmail[state.user.current_user_email].fotolink + '&Z=' + Date.now()
+    store.state.employees.employeesByEmail[
+      state.user.current_user_email
+    ].fotolink =
+      store.state.employees.employeesByEmail[state.user.current_user_email]
+        .fotolink +
+      '&Z=' +
+      Date.now()
   },
   [USER_REQUEST]: (state) => {
     state.status = 'loading'

@@ -200,7 +200,7 @@ export default {
     },
     clickAddProject () {
       // если лицензия истекла
-      if (Object.keys(this.$store.state.projects.projects).length >= 10 && this.user.days_left <= 0) {
+      if (Object.keys(this.$store.state.projects.projects).length >= 10 && this.$store.getters.isLicenseExpired) {
         this.showProjectsLimit = true
         return
       }

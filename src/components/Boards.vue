@@ -1,9 +1,40 @@
 <template>
   <div class="w-full">
-    <div
-      v-if="!displayModal"
-      class="pt-[30px]"
-    >
+    <div class="flex items-center justify-between w-full]">
+      <NavBar
+        class="w-full pt-[8px]"
+        title="Доски"
+      />
+      <div
+        class="flex flex-none px-[12px] pt-[8px]"
+      >
+        <icon
+          :path="listView.path"
+          :width="listView.width"
+          :height="listView.height"
+          :box="listView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': !isGridView,
+            'text-gray-400': isGridView
+          }"
+          @click="updateGridView(false)"
+        />
+        <icon
+          :path="gridView.path"
+          :width="gridView.width"
+          :height="gridView.height"
+          :box="gridView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': isGridView,
+            'text-gray-400': !isGridView
+          }"
+          @click="updateGridView(true)"
+        />
+      </div>
+    </div>
+    <div v-if="!displayModal">
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
@@ -20,35 +51,6 @@
           <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
             {{ value.dep }}
           </p>
-          <div
-            v-if="index == 0"
-            class="flex"
-          >
-            <icon
-              :path="listView.path"
-              :width="listView.width"
-              :height="listView.height"
-              :box="listView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': !isGridView,
-                'text-gray-400': isGridView
-              }"
-              @click="updateGridView(false)"
-            />
-            <icon
-              :path="gridView.path"
-              :width="gridView.width"
-              :height="gridView.height"
-              :box="gridView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': isGridView,
-                'text-gray-400': !isGridView
-              }"
-              @click="updateGridView(true)"
-            />
-          </div>
         </div>
         <div
           class="grid gap-2 mt-3 grid-cols-1"
@@ -131,6 +133,7 @@ import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import BoardInputValue from './Board/BoardInputValue.vue'
 import { uuidv4 } from '@/helpers/functions'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 export default {
   components: {
@@ -138,7 +141,8 @@ export default {
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
     ListBlocAdd,
-    BoardInputValue
+    BoardInputValue,
+    NavBar
   },
   data () {
     return {
@@ -174,9 +178,8 @@ export default {
       this.$router.push(`/board/${board.uid}`)
     },
     clickAddBoard () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
-      if (Object.keys(this.$store.state.boards.boards).length >= 3 && user.days_left <= 0) {
+      if (Object.keys(this.$store.state.boards.boards).length >= 3 && this.$store.getters.isLicenseExpired) {
         this.showBoardsLimit = true
         return
       }

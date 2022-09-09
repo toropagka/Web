@@ -4,6 +4,7 @@
       id="NavBarDelegateToMe"
       class="pt-[8px]"
       :title="'Поручено мне: ' + employeeName"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -55,12 +56,15 @@ export default {
     }
   },
   mounted () {
-    this.selectAnotherEmployee(this.employeeUid)
+    this.reload()
   },
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASK_DELEGATE_ME, uid)
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+    },
+    reload () {
+      this.selectAnotherEmployee(this.employeeUid)
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
   <NavBar
+    class="pt-[8px]"
     title="Тариф"
   />
   <form class="px-5 text-lg bg-white p-2 rounded-xl pb-[150px]">

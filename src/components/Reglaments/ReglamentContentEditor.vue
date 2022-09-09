@@ -218,7 +218,7 @@
           v-model:content="currText"
           content-type="html"
           :toolbar="'full'"
-          class="h-auto mb-5 bg-white"
+          class="h-auto mb-5 bg-white reglament-editor"
           @paste="pasteEvent"
         />
       </div>
@@ -404,6 +404,9 @@ export default {
     },
     editorsCanEdit () {
       return this.currReglament?.editors?.includes(this.$store.state.user.user.current_user_email)
+    },
+    userType () {
+      return this.$store.state.employees.employees[this.$store.state.user.user.current_user_uid].type
     },
     canEdit () {
       return (this.currReglament?.email_creator === this.user.current_user_email) || (this.editorsCanEdit) || (this.userType === 2 || this.userType === 1)
@@ -728,3 +731,8 @@ export default {
   }
 }
 </script>
+<style>
+  .ql-container.reglament-editor > .ql-editor {
+    padding: 12px 145px;
+  }
+</style>

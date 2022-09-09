@@ -189,12 +189,12 @@
           <router-link :to="'/tasks/delegate-by-me/' + userDelegate.uid">
             <AsideMenuListItem
               :selected="isUserDelegateByMeSelected(userDelegate)"
-              :title="userDelegate.name"
+              :title="getDelegateName(userDelegate.uid) || '???'"
               @click="closeMenu"
             >
               <img
                 :src="userDelegate.fotolink"
-                :alt="userDelegate.name"
+                :alt="getDelegateName(userDelegate.uid) || '???'"
                 height="28"
                 width="28"
                 class="rounded-[6px] border-2 border-green-500"
@@ -215,12 +215,12 @@
           <router-link :to="'/tasks/delegate-to-me/' + userDelegate.uid">
             <AsideMenuListItem
               :selected="isUserDelegateToMeSelected(userDelegate)"
-              :title="userDelegate.name"
+              :title="getDelegateName(userDelegate.uid) || '???'"
               @click="closeMenu"
             >
               <img
                 :src="userDelegate.fotolink"
-                :alt="userDelegate.name"
+                :alt="getDelegateName(userDelegate.uid) || '???'"
                 height="28"
                 width="28"
                 class="rounded-[6px] border-2 border-red-500"
@@ -318,6 +318,9 @@ export default {
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
+    },
+    getDelegateName (uid) {
+      return this.$store.state.employees.employees[uid]?.name
     }
   }
 }

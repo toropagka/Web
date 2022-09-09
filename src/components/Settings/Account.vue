@@ -49,7 +49,7 @@
           type="text"
           style="-webkit-text-security: disc;"
           autocomplete=""
-          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
       </div>
       <p
@@ -73,7 +73,7 @@
           type="text"
           style="-webkit-text-security: disc;"
           autocomplete=""
-          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
       </div>
       <div>
@@ -85,7 +85,7 @@
           type="text"
           style="-webkit-text-security: disc;"
           autocomplete=""
-          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
       </div>
       <p
@@ -137,26 +137,28 @@
           </div>
         </div>
       </form>
-      <form class="text-left w-64">
-        <div class="font-medium text-[roboto] mb-4 text-base landing-[19px]">
+      <form class="text-left">
+        <div class="text-base font-medium mb-2 text-[#4C4C4D]">
           Тип аккаунта
         </div>
         <p
-          class="text-sm font-medium landing-4"
+          class="text-sm landing-4 font-medium text-[#606061]"
         >
           {{ tarifText }}
         </p>
         <p
           v-if="$store.state.user.user?.date_expired"
-          class="mt-1 text-sm font-normal font-[Roboto] landing-5 text-[#606061]"
+          class="text-sm landing-4 mt-1 font-normal text-[#606061]"
         >
-          <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+          <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
         <div class="mt-2">
           <router-link to="/settings/tarif">
             <button
               type="button"
-              class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
+              class="text-[14px] landing-[13px] text-[#007BE5]"
             >
               Управление тарифом
             </button>
@@ -191,7 +193,7 @@
                 class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
                 @click="showEditphone = true"
               >
-                Изменить телефон
+                {{ userPhone().length ? 'Изменить номер телефона' : 'Добавить номер телефона' }}
               </button>
             </form>
           </div>
@@ -283,12 +285,15 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.state.user.user
+    },
     tarifText () {
-      switch (this.$store.state.user.user?.tarif) {
+      switch (this.user?.tarif) {
         case 'trial':
           return 'Пробная версия'
         case 'free':
-          return 'Лицензия истекла'
+          return '<Бесплатный тариф ЛидерТаск>'
         case 'expert':
           return 'Премиум'
         case 'business':
@@ -296,13 +301,23 @@ export default {
         case 'alpha':
           return 'Бизнес+'
         default:
-          return this.$store.state.user.user?.tarif
+          return this.user?.tarif
       }
     }
   },
   methods: {
     logout () {
       this.$store.dispatch(AUTH_LOGOUT)
+    },
+    getDateExpired () {
+      if (!this.user?.date_expired) return true
+      // добавляем Z в конец, чтобы он посчитал что это UTC время
+      let dateExpiredString = this.user?.date_expired
+      const [dateExp, timeExp] = dateExpiredString.split(' ')
+      const [dayExp, monthExp, yearExp] = dateExp.split('.')
+      dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
+      const dateExpired = new Date(dateExpiredString).toLocaleString('default', { year: 'numeric', month: 'numeric', day: 'numeric' })
+      return dateExpired
     },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)

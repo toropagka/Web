@@ -4,6 +4,7 @@
       id="NavBarInWork"
       class="pt-[8px]"
       title="В работе"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -24,14 +25,13 @@ export default {
     PropertiesRight,
     NavBarTasks
   },
-  data () {
-    return {
-      date: new Date(),
-      uid: '2a5cae4b-e877-4339-8ca1-bd61426864ec'
-    }
-  },
   mounted () {
-    this.$store.dispatch(TASK.IN_WORK_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.IN_WORK_TASKS_REQUEST)
+    }
   }
 }
 

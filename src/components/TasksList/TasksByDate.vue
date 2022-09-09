@@ -4,8 +4,11 @@
       id="NavBarByDate"
       class="pt-[8px]"
       :title="dateLabel"
+      @reload="loadTasks"
     />
-    <TasksListNew :new-task-props="newTaskProps" />
+    <TasksListNew
+      :new-task-props="newTaskProps"
+    />
     <PropertiesRight />
   </div>
 </template>

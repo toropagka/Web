@@ -4,8 +4,11 @@
       id="NavBarToday"
       class="pt-[8px]"
       title="Сегодня"
+      @reload="reload"
     />
-    <TasksListNew :new-task-props="newTaskProps" />
+    <TasksListNew
+      :new-task-props="newTaskProps"
+    />
     <PropertiesRight />
   </div>
 </template>
@@ -35,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('TASKS_REQUEST', new Date(this.date))
+    this.reload()
   },
   methods: {
     pad2 (n) {
@@ -46,6 +49,9 @@ export default {
       const day = this.pad2(date.getDate())
       const year = this.pad2(date.getFullYear())
       return year + '-' + month + '-' + day
+    },
+    reload () {
+      this.$store.dispatch('TASKS_REQUEST', new Date(this.date))
     }
   }
 }

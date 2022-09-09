@@ -16,6 +16,7 @@ import { RESET_STATE_BOARD } from '../actions/boards'
 import { RESET_STATE_PROJECT } from '../actions/projects'
 import { RESET_REGLAMENTS_STATE } from '../actions/reglaments'
 import { RESET_DEPARTMENTS_STATE } from '../actions/departments'
+import { RESET_EMPLOYEE_STATE } from '../actions/employees'
 
 const state = {
   token: localStorage.getItem('user-token') || '',
@@ -158,6 +159,7 @@ const actions = {
       commit(RESET_STATE_PROJECT)
       commit(RESET_REGLAMENTS_STATE)
       commit(RESET_DEPARTMENTS_STATE)
+      commit(RESET_EMPLOYEE_STATE)
       axios
         .get(url)
         .then((resp) => {

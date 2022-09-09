@@ -4,8 +4,11 @@
       id="NavBarDelegateByMe"
       class="pt-[8px]"
       :title="'Поручено мной: ' + employeeName"
+      @reload="reload"
     />
-    <TasksListNew :new-task-props="newTaskProps" />
+    <TasksListNew
+      :new-task-props="newTaskProps"
+    />
     <PropertiesRight />
   </div>
 </template>
@@ -61,12 +64,15 @@ export default {
     }
   },
   mounted () {
-    this.selectAnotherEmployee(this.employeeUid)
+    this.reload()
   },
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASKS_DELEGATED_BY_ME, uid)
       this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+    },
+    reload () {
+      this.selectAnotherEmployee(this.employeeUid)
     }
   }
 }

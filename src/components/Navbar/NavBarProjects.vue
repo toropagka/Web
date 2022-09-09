@@ -24,6 +24,7 @@ import { notify } from 'notiwind'
 import NavBarButtonsProject from '@/components/Navbar/NavBarButtonsProject.vue'
 import NavBarSearch from '@/components/Navbar/NavBarSearch.vue'
 import NavBar from '@/components/Navbar/NavBar.vue'
+import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
@@ -112,13 +113,18 @@ export default {
           compact_mode: this.settings.compact_mode ? 1 : 0
         }
       ).then(() => {
-        this.requestLastVisitedNav()
+        this.reload()
         this.$store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
       })
     },
     onChangeCompletedTasks () {
       this.settings.show_completed_tasks = !this.showCompletedTasks
       this.updateSettings()
+    },
+    reload () {
+      const project = this.$route.params.project_id
+      console.log(project)
+      this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, project)
     }
   }
 }

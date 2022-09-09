@@ -32,6 +32,7 @@ export default {
       default: ''
     }
   },
+  emits: ['reload'],
   computed: {
     settings () {
       return this.$store.state.navigator.navigator.settings
@@ -83,8 +84,8 @@ export default {
           compact_mode: this.settings.compact_mode ? 1 : 0
         }
       ).then(() => {
-        this.requestLastVisitedNav()
         this.$store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
+        this.$emit('reload')
       })
     },
     onChangeCompletedTasks () {

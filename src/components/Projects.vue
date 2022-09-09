@@ -1,9 +1,40 @@
 <template>
   <div class="w-full">
-    <div
-      v-if="!displayModal"
-      class="pt-[30px]"
-    >
+    <div class="flex items-center justify-between w-full pt-[8px]">
+      <NavBar
+        class="w-full"
+        title="Проекты"
+      />
+      <div
+        class="flex flex-none px-[12px] pt-[8px]"
+      >
+        <icon
+          :path="listView.path"
+          :width="listView.width"
+          :height="listView.height"
+          :box="listView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': !isGridView,
+            'text-gray-400': isGridView
+          }"
+          @click="updateGridView(false)"
+        />
+        <icon
+          :path="gridView.path"
+          :width="gridView.width"
+          :height="gridView.height"
+          :box="gridView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': isGridView,
+            'text-gray-400': !isGridView
+          }"
+          @click="updateGridView(true)"
+        />
+      </div>
+    </div>
+    <div v-if="!displayModal">
       <ProjectModalBoxProjectsLimit
         v-if="showProjectsLimit"
         @cancel="showProjectsLimit = false"
@@ -20,35 +51,6 @@
           <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
             {{ value.dep }}
           </p>
-          <div
-            v-if="index == 0"
-            class="flex"
-          >
-            <icon
-              :path="listView.path"
-              :width="listView.width"
-              :height="listView.height"
-              :box="listView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': !isGridView,
-                'text-gray-400': isGridView
-              }"
-              @click="updateGridView(false)"
-            />
-            <icon
-              :path="gridView.path"
-              :width="gridView.width"
-              :height="gridView.height"
-              :box="gridView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': isGridView,
-                'text-gray-400': !isGridView
-              }"
-              @click="updateGridView(true)"
-            />
-          </div>
         </div>
         <div
           class="grid gap-2 mt-3 grid-cols-1"
@@ -127,6 +129,7 @@ import { setLocalStorageItem } from '@/store/helpers/functions'
 import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -144,7 +147,8 @@ export default {
     ProjectBlocItem,
     ListBlocAdd,
     ProjectModalBoxProjectsLimit,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    NavBar
   },
   data () {
     return {
@@ -181,9 +185,8 @@ export default {
       setLocalStorageItem('isGridView', value)
     },
     clickAddProject () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
-      if (Object.keys(this.$store.state.projects.projects).length >= 10 && user.days_left <= 0) {
+      if (Object.keys(this.$store.state.projects.projects).length >= 10 && this.$store.getters.isLicenseExpired) {
         this.showProjectsLimit = true
         return
       }

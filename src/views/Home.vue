@@ -69,7 +69,7 @@
     <Notification />
     <InspectorNotification />
 
-    <div class="flex-1 px-3 overflow-auto">
+    <div class="flex-1 px-3 overflow-auto scroll-style">
       <slot />
     </div>
   </main-section>

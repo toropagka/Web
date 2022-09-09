@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-[48px]">
     <div
-      class="flex lg:hidden items-center grow-0 shrink-0 relative cursor-pointer px-3"
+      class="flex xl:hidden items-center grow-0 shrink-0 relative cursor-pointer px-3"
       @click.prevent="menuToggleMobile"
     >
       <Icon

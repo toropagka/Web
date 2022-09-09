@@ -34,7 +34,11 @@ const actions = {
   },
   [EMPLOYEE.SET_ADMIN_STATUS_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/emp/admin?email=' + data.email + '&flag=true'
+      const url =
+        process.env.VUE_APP_LEADERTASK_API +
+        'api/v1/emp/admin?email=' +
+        data.email +
+        '&flag=true'
       axios({ url: url, method: 'PATCH', data: data })
         .then((resp) => {
           resolve(resp)
@@ -46,7 +50,11 @@ const actions = {
   },
   [EMPLOYEE.REMOVE_ADMIN_STATUS_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/emp/admin?email=' + data.email + '&flag=false'
+      const url =
+        process.env.VUE_APP_LEADERTASK_API +
+        'api/v1/emp/admin?email=' +
+        data.email +
+        '&flag=false'
       axios({ url: url, method: 'PATCH', data: data })
         .then((resp) => {
           resolve(resp)
@@ -121,6 +129,14 @@ const mutations = {
   [EMPLOYEE.REMOVE_ADMIN_STATUS_REQUEST]: (state) => {
     state.selectedEmployee.type = 3
   },
+  [EMPLOYEE.PUSH_EMPLOYEE_IF_NEED]: (state, employee) => {
+    if (!state.employees[employee.uid]) {
+      state.employees[employee.uid] = employee
+    }
+    if (!state.employeesByEmail[employee.email.toLowerCase()]) {
+      state.employeesByEmail[employee.email.toLowerCase()] = employee
+    }
+  },
   [EMPLOYEE.PUSH_EMPLOYEE]: (state, employee) => {
     state.employees[employee.uid] = employee
   },
@@ -132,6 +148,11 @@ const mutations = {
   },
   [EMPLOYEE.SELECT_EMPLOYEE]: (state, employee) => {
     state.selectedEmployee = employee
+  },
+  [EMPLOYEE.RESET_EMPLOYEE_STATE]: (state) => {
+    state.employees = {}
+    state.employeesByEmail = {}
+    state.selectedEmployee = null
   },
   ChangeEmployeeName: (state, data) => {
     const employee = state.employeesByEmail[data.email.toLowerCase()]

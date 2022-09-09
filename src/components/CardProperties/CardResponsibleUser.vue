@@ -68,7 +68,7 @@
     >
       <div class="max-h-[156px] max-w-[300px] overflow-y-scroll scroll-style">
         <div
-          v-for="(employee, index) in employeesByEmail"
+          v-for="(employee, index) in orgEmployees"
           :key="index"
         >
           <div
@@ -105,13 +105,16 @@ export default {
       type: Boolean,
       default: false
     },
-    employeesByEmail: {
-      type: Object,
-      default: () => ({})
+    orgEmployees: {
+      type: Array,
+      default: () => ([])
     }
   },
   emits: ['changeResponsible'],
   computed: {
+    employeesByEmail () {
+      return this.$store.state.employees.employeesByEmail
+    },
     userName () {
       return this.employeesByEmail[this.responsible.toLowerCase()]?.name || this.responsible
     },
