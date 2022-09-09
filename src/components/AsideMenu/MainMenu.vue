@@ -209,6 +209,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this.initActiveTab()
+  },
   methods: {
     initActiveTab () {
       const allPaths = [
