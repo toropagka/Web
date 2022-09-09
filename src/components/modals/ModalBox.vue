@@ -8,12 +8,12 @@
         class="rounded-xl shadow-lg p-[24px] bg-white z-50"
         :style="{ width: width + 'px' }"
       >
-        <div class="flex items-start">
-          <div class="flex-1 text-[#4c4c4d] font-medium text-[14px] leading-[16px] font-roboto">
+        <div class="flex">
+          <div class="flex-1 self-center text-[#4c4c4d] font-medium text-[14px] leading-[16px] font-roboto">
             {{ title }}
           </div>
           <div
-            class="flex-none hover:cursor-pointer"
+            class="flex-none self-start hover:cursor-pointer"
             @click="onCancel"
           >
             <svg
