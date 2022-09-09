@@ -133,6 +133,11 @@ const mutations = {
   [EMPLOYEE.SELECT_EMPLOYEE]: (state, employee) => {
     state.selectedEmployee = employee
   },
+  [EMPLOYEE.RESET_EMPLOYEE_STATE]: (state) => {
+    state.employees = {}
+    state.employeesByEmail = {}
+    state.selectedEmployee = null
+  },
   ChangeEmployeeName: (state, data) => {
     const employee = state.employeesByEmail[data.email.toLowerCase()]
     employee.name = data.name
