@@ -114,7 +114,7 @@ export default {
     },
     clickAddTag () {
       // если лицензия истекла
-      if (this.tags.length >= 3 && this.user.days_left <= 0) {
+      if (this.tags.length >= 3 && this.$store.getters.isLicenseExpired) {
         this.showTagsLimit = true
         return
       }
