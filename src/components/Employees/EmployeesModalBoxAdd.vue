@@ -14,7 +14,7 @@
         v-model="currentValueName"
         maxlength="50"
         type="text"
-        class="bg-[#f4f5f7]/50 rounded-[6px] border border-black/12 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-black/12 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         @keyup.enter="onNext"
         @keyup.esc="onCancel"
       >
@@ -26,7 +26,7 @@
         ref="inputValueEmail"
         v-model="currentValueEmail"
         type="text"
-        class="bg-[#f4f5f7]/50 rounded-[6px] border border-black/12 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-black/12 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         @keyup.enter="onSave"
         @keyup.esc="onCancel"
       >
