@@ -137,7 +137,7 @@
           </div>
         </div>
       </form>
-      <form class="text-left w-64">
+      <form class="text-left">
         <div class="text-base font-medium mb-2 text-[#4C4C4D]">
           Тип аккаунта
         </div>
@@ -148,9 +148,11 @@
         </p>
         <p
           v-if="$store.state.user.user?.date_expired"
-          class="text-sm landing-4 font-normal text-[#606061]"
+          class="text-sm landing-4 mt-1 font-normal text-[#606061]"
         >
-          <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }}(дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+          <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
         <div class="mt-2">
           <router-link to="/settings/tarif">
@@ -283,12 +285,15 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.state.user.user
+    },
     tarifText () {
-      switch (this.$store.state.user.user?.tarif) {
+      switch (this.user?.tarif) {
         case 'trial':
           return 'Пробная версия'
         case 'free':
-          return 'Лицензия истекла'
+          return '<Бесплатный тариф ЛидерТаск>'
         case 'expert':
           return 'Премиум'
         case 'business':
@@ -296,7 +301,7 @@ export default {
         case 'alpha':
           return 'Бизнес+'
         default:
-          return this.$store.state.user.user?.tarif
+          return this.user?.tarif
       }
     }
   },
@@ -304,6 +309,16 @@ export default {
     logout () {
       this.$store.dispatch(AUTH_LOGOUT)
     },
+    // getDateExpired () {
+    //   if (!this.user?.date_expired) return true
+    //   // добавляем Z в конец, чтобы он посчитал что это UTC время
+    //   let dateExpiredString = this.user?.date_expired
+    //   if (dateExpiredString[dateExpiredString.length - 1] !== 'Z') {
+    //     dateExpiredString = dateExpiredString + 'Z'
+    //     const dateExpired = new Date(dateExpiredString)
+    //     return dateExpired
+    //   }
+    // },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
       this.$router.push('/doitnow')
