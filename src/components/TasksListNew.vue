@@ -291,7 +291,6 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
 import treeview from 'vue3-treeview'
 // import onBoarding from '@/components/onBoarding/onBoarding.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
@@ -518,16 +517,6 @@ export default {
         this.removeTask(prevTask.uid)
       }
     }
-  },
-  mounted () {
-    window.getSelection().removeAllRanges()
-    // не удалять, без объявление сторы через useStore не работает закрытие на escape
-    const store = useStore()
-    document.addEventListener('keyup', function (evt) {
-      if (evt.keyCode === 27) {
-        store.dispatch('asidePropertiesToggle', false)
-      }
-    })
   },
   methods: {
     sortTaskChildren (task) {

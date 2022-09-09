@@ -239,8 +239,6 @@ import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
 import AsideMenuListTitle from '@/components/AsideMenu/AsideMenuListTitle.vue'
 import TasksSubmenuCalendar from '@/components/AsideMenu/TasksSubmenuCalendar.vue'
 
-import { useStore } from 'vuex'
-
 export default {
   components: {
     AsideMenuSkeleton,
@@ -282,16 +280,6 @@ export default {
     isReadySelected () {
       return this.$route.name === 'tasksReady'
     }
-  },
-  mounted () {
-    window.getSelection().removeAllRanges()
-    const store = useStore()
-    // не удалять, без объявление сторы через useStore не работает закрытие на escape
-    document.addEventListener('keyup', function (evt) {
-      if (evt.key === 'Escape') {
-        store.state.navigator.submenu.status = false
-      }
-    })
   },
   methods: {
     isUserDelegateToMeSelected (user) {
