@@ -8,7 +8,7 @@
       />
       <div class="flex items-center justify-between w-full">
         <NavBar
-          class="mb-[8px] pt-[8px]"
+          class="pt-[8px]"
           title="Цвета"
         />
         <div class="flex">
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div
-        class="grid gap-2 mt-3 grid-cols-1"
+        class="grid gap-2 grid-cols-1"
         :class="{
           'md:grid-cols-2 lg:grid-cols-4': isGridView,
           'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
