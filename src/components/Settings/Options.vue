@@ -1,5 +1,6 @@
 <template>
   <NavBar
+    class="pt-[8px]"
     title="Основные"
   />
   <form class="px-5 bg-white py-2 pb-[200px] rounded-xl">
