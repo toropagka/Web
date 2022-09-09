@@ -659,6 +659,9 @@ const mutations = {
     }
   },
   [NAVIGATOR_UPDATE_EMPLOYEE]: (state, employee) => {
+    const timestamp = Date.now()
+    const linkForUpdate = employee.fotolink.substring(0, employee.fotolink.length - 7)
+    employee.fotolink = `${linkForUpdate}&${timestamp}&size=b`
     for (const dep of state.navigator.new_emps) {
       for (let i = 0; i < dep.items.length; i++) {
         if (dep.items[i].uid === employee.uid) {
