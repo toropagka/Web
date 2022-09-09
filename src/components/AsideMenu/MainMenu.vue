@@ -202,6 +202,12 @@ export default {
   watch: {
     $route (to, from) {
       this.initActiveTab()
+      if (this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', false)
+      }
+      if (this.isAsideMobileExpanded) {
+        this.$store.dispatch('asideMobileToggle', false)
+      }
     },
     submenuStatus (newValue, oldValue) {
       if (!newValue) {
