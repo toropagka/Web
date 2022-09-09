@@ -96,7 +96,7 @@
               v-if="isEmployeesInOrg"
             >
               <div
-                v-for="emp in employees"
+                v-for="emp in orgEmployees"
                 :key="emp.uid"
               >
                 <div
@@ -184,14 +184,14 @@ export default {
     }
   },
   computed: {
-    employees () {
-      return this.$store.state.employees.employees
+    orgEmployees () {
+      return this.$store.state.navigator.navigator.emps.items
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
     },
     isEmployeesInOrg () {
-      return Object.keys(this.employees).length > 1
+      return this.orgEmployees.length > 1
     }
   },
   methods: {
@@ -206,7 +206,7 @@ export default {
     },
     setPerformerCurrentUser () {
       // ставим исполнителем себя
-      const currentUserEmail = this.employees[this.currentUserUid]?.email
+      const currentUserEmail = this.$store.state.employees.employees[this.currentUserUid]?.email
       this.changePerformer(currentUserEmail)
     },
     changePerformer (userEmail) {

@@ -1,9 +1,13 @@
-import axios from 'axios'
 import store from '@/store/index'
+import axios from 'axios'
 import { PUSH_BOARD } from '../actions/boards'
 import { PUSH_COLOR, PUSH_MYCOLOR } from '../actions/colors'
 import { PUSH_DEPARTMENT } from '../actions/departments'
-import { PUSH_EMPLOYEE, PUSH_EMPLOYEE_BY_EMAIL } from '../actions/employees'
+import {
+  PUSH_EMPLOYEE,
+  PUSH_EMPLOYEE_BY_EMAIL,
+  PUSH_EMPLOYEE_IF_NEED
+} from '../actions/employees'
 import {
   NAVIGATOR_CHANGE_EMPLOYEE_DEPARTMENT,
   NAVIGATOR_ERROR,
@@ -90,11 +94,15 @@ const actions = {
           if (resp.data.delegate_iam) {
             for (const dm of resp.data.delegate_iam.items) {
               dm.parentID = resp.data.delegate_iam.uid
+              const emp = { ...dm }
+              commit(PUSH_EMPLOYEE_IF_NEED, emp)
             }
           }
           if (resp.data.delegate_to_me) {
             for (const dt of resp.data.delegate_to_me.items) {
               dt.parentID = resp.data.delegate_to_me.uid
+              const emp = { ...dt }
+              commit(PUSH_EMPLOYEE_IF_NEED, emp)
             }
           }
           if (resp.data.emps.items) {
@@ -199,11 +207,15 @@ const actions = {
           if (resp.data.delegate_iam) {
             for (const dm of resp.data.delegate_iam.items) {
               dm.parentID = resp.data.delegate_iam.uid
+              const emp = { ...dm }
+              commit(PUSH_EMPLOYEE_IF_NEED, emp)
             }
           }
           if (resp.data.delegate_to_me) {
             for (const dt of resp.data.delegate_to_me.items) {
               dt.parentID = resp.data.delegate_to_me.uid
+              const emp = { ...dt }
+              commit(PUSH_EMPLOYEE_IF_NEED, emp)
             }
           }
           commit(NAVIGATOR_UPDATE_ASSIGNMENTS, resp)
@@ -371,15 +383,27 @@ const mutations = {
     if (indexEmps !== -1) {
       // Очень проблемная задача. Единственное, с чем работаем это массив emails, и он может либо придти пустым, либо быть пустым в сторе
       let changedEmail
-      for (let i = 0; i < state.navigator.new_emps[indexEmps].dep.emails.length; i++) {
-        if (!department.emails.includes(state.navigator.new_emps[indexEmps].dep.emails[i])) {
+      for (
+        let i = 0;
+        i < state.navigator.new_emps[indexEmps].dep.emails.length;
+        i++
+      ) {
+        if (
+          !department.emails.includes(
+            state.navigator.new_emps[indexEmps].dep.emails[i]
+          )
+        ) {
           changedEmail = state.navigator.new_emps[indexEmps].dep.emails[i]
           break
         }
       }
 
       for (let i = 0; i < department.emails.length; i++) {
-        if (!state.navigator.new_emps[indexEmps].dep.emails.includes(department.emails[i])) {
+        if (
+          !state.navigator.new_emps[indexEmps].dep.emails.includes(
+            department.emails[i]
+          )
+        ) {
           changedEmail = department.emails[i]
           break
         }
@@ -388,7 +412,9 @@ const mutations = {
       if (changedEmail) {
         let changedEmployee, oldDepartmentUid
         for (let i = 0; i < state.navigator.new_emps.length; i++) {
-          changedEmployee = state.navigator.new_emps[i].items.find(employee => employee.email === changedEmail)
+          changedEmployee = state.navigator.new_emps[i].items.find(
+            (employee) => employee.email === changedEmail
+          )
           if (changedEmployee) {
             oldDepartmentUid = state.navigator.new_emps[i].dep.uid
             break
@@ -398,7 +424,10 @@ const mutations = {
         // Т. к. при смене из отдела в отдел приходит 2 вебсинка, нужна проверка на emails. Если происходит смена из отдела во "Вне отдела", то придёт только один вебсинк
         // с пустым emails, и мы запишем его во "Вне отдела". При двух вебсинках сотрудник сначала запишется во "Вне отдела", а потом куда надо
         let uidDepartmentNew
-        if (department.emails && department.emails.includes(changedEmployee.email)) {
+        if (
+          department.emails &&
+          department.emails.includes(changedEmployee.email)
+        ) {
           uidDepartmentNew = state.navigator.new_emps[indexEmps].dep.uid
         } else {
           uidDepartmentNew = '00000000-0000-0000-0000-000000000000'
@@ -507,7 +536,7 @@ const mutations = {
   [NAVIGATOR_PUSH_COMMON_BOARD]: (state, board) => {
     if (
       !board.uid_parent ||
-        board.uid_parent === '00000000-0000-0000-0000-000000000000'
+      board.uid_parent === '00000000-0000-0000-0000-000000000000'
     ) {
       // adding projects to the root
       state.navigator.new_private_boards[1].items.push(board)
@@ -660,7 +689,10 @@ const mutations = {
   },
   [NAVIGATOR_UPDATE_EMPLOYEE]: (state, employee) => {
     const timestamp = Date.now()
-    const linkForUpdate = employee.fotolink.substring(0, employee.fotolink.length - 7)
+    const linkForUpdate = employee.fotolink.substring(
+      0,
+      employee.fotolink.length - 7
+    )
     employee.fotolink = `${linkForUpdate}&${timestamp}&size=b`
     for (const dep of state.navigator.new_emps) {
       for (let i = 0; i < dep.items.length; i++) {

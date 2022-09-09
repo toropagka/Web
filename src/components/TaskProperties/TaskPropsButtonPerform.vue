@@ -166,7 +166,7 @@
         >
           <div class="container-employee-popover">
             <div
-              v-for="emp in employees"
+              v-for="emp in orgEmployees"
               :key="emp.uid"
             >
               <div
@@ -256,8 +256,8 @@ export default {
   },
   emits: ['changePerformer', 'reAssign'],
   computed: {
-    employees () {
-      return this.$store.state.employees.employees
+    orgEmployees () {
+      return this.$store.state.navigator.navigator.emps.items
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
@@ -275,7 +275,7 @@ export default {
     },
     setPerformerCurrentUser () {
       // ставим исполнителем себя
-      const currentUserEmail = this.employees[this.currentUserUid]?.email
+      const currentUserEmail = this.$store.state.employees.employees[this.currentUserUid]?.email
       this.changePerformer(currentUserEmail)
     },
     changePerformer (userEmail) {

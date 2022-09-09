@@ -113,7 +113,7 @@
     <div class="flex justify-start mb-[25px] space-x-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
-        :employees-by-email="employeesByEmail"
+        :org-employees="orgEmployees"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
@@ -248,7 +248,7 @@ export default {
     user () { return this.$store.state.user.user },
     selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
-    employeesByEmail () { return this.$store.state.employees.employeesByEmail },
+    orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
     cardMessages () { return this.$store.state.cardfilesandmessages.messages },
     canAddFiles () { return this.user?.days_left > 0 },
     canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
