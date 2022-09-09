@@ -86,6 +86,7 @@
         @nodeOpened="nodeExpanding"
         @nodeFocus="nodeSelected"
         @nodeDragend="nodeDragEnd"
+        @keyup.esc.stop="onTaskTreeEsc"
       >
         <template #before-input="props">
           <div
@@ -519,6 +520,12 @@ export default {
     }
   },
   methods: {
+    onTaskTreeEsc () {
+      // делаем закрытие тут по keyup - потому что компонент tree
+      // полностью перехватывает keydown где то внутри себя
+      // смотри обработку document.addEventListener('keydown') в main.js
+      this.$store.dispatch('asidePropertiesToggle', false)
+    },
     sortTaskChildren (task) {
       const sortedChildrens = []
       for (let i = 0; i < this.storeTasks[task].children.length; i++) {
