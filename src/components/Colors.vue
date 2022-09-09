@@ -5,12 +5,12 @@
       @cancel="showColorsLimit = false"
       @ok="showColorsLimit = false"
     />
-    <div class="flex items-center justify-between w-full pt-[8px]">
+    <div class="flex items-center justify-between w-full">
       <NavBar
-        class="w-full"
+        class="w-full pt-[8px]"
         title="Цвета"
       />
-      <div class="flex flex-none">
+      <div class="flex flex-none px-[12px] pt-[8px]">
         <Icon
           :path="listView.path"
           :width="listView.width"

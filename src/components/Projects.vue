@@ -6,7 +6,7 @@
         title="Проекты"
       />
       <div
-        class="flex flex-none"
+        class="flex flex-none px-[12px] pt-[8px]"
       >
         <icon
           :path="listView.path"

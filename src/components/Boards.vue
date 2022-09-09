@@ -1,12 +1,12 @@
 <template>
   <div class="w-full">
-    <div class="flex items-center justify-between w-full pt-[8px]">
+    <div class="flex items-center justify-between w-full]">
       <NavBar
-        class="w-full"
+        class="w-full pt-[8px]"
         title="Доски"
       />
       <div
-        class="flex flex-none"
+        class="flex flex-none px-[12px] pt-[8px]"
       >
         <icon
           :path="listView.path"
