@@ -1,6 +1,5 @@
 <template>
-  <NavBar class="flex lg:hidden" />
-  <div class="w-full pt-[30px]">
+  <div class="w-full">
     <div>
       <ColorModalBoxColorsLimit
         v-if="showColorsLimit"
@@ -8,11 +7,10 @@
         @ok="showColorsLimit = false"
       />
       <div class="flex items-center justify-between w-full">
-        <p
-          class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold"
-        >
-          Цвета
-        </p>
+        <NavBar
+          class="mb-[8px] pt-[8px]"
+          title="Цвета"
+        />
         <div class="flex">
           <Icon
             :path="listView.path"
