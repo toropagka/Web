@@ -151,10 +151,19 @@ const TaskListChecker = {
     }
     return false
   },
-  tasksReady (task) {
+  tasksready (task) {
     if (
       task.uid_customer === user.value.current_user_uid &&
       task.status === TASK_STATUS.TASK_READY
+    ) {
+      return true
+    }
+    return false
+  },
+  tasksInWork (task) {
+    if (
+      task.uid_customer === user.value.current_user_uid &&
+      task.status === TASK_STATUS.TASK_IN_WORK
     ) {
       return true
     }
