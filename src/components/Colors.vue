@@ -1,87 +1,85 @@
 <template>
   <div class="w-full">
-    <div>
-      <ColorModalBoxColorsLimit
-        v-if="showColorsLimit"
-        @cancel="showColorsLimit = false"
-        @ok="showColorsLimit = false"
+    <ColorModalBoxColorsLimit
+      v-if="showColorsLimit"
+      @cancel="showColorsLimit = false"
+      @ok="showColorsLimit = false"
+    />
+    <div class="flex items-center justify-between w-full pt-[8px]">
+      <NavBar
+        class="w-full"
+        title="Цвета"
       />
-      <div class="flex items-center justify-between w-full">
-        <NavBar
-          class="pt-[8px]"
-          title="Цвета"
+      <div class="flex flex-none">
+        <Icon
+          :path="listView.path"
+          :width="listView.width"
+          :height="listView.height"
+          :box="listView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': !isGridView,
+            'text-gray-400': isGridView
+          }"
+          @click="updateGridView(false)"
         />
-        <div class="flex">
-          <Icon
-            :path="listView.path"
-            :width="listView.width"
-            :height="listView.height"
-            :box="listView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': !isGridView,
-              'text-gray-400': isGridView
-            }"
-            @click="updateGridView(false)"
-          />
-          <Icon
-            :path="gridView.path"
-            :width="gridView.width"
-            :height="gridView.height"
-            :box="gridView.viewBox"
-            class="cursor-pointer hover:text-gray-800 mr-2"
-            :class="{
-              'text-gray-800': isGridView,
-              'text-gray-400': !isGridView
-            }"
-            @click="updateGridView(true)"
-          />
-        </div>
+        <Icon
+          :path="gridView.path"
+          :width="gridView.width"
+          :height="gridView.height"
+          :box="gridView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': isGridView,
+            'text-gray-400': !isGridView
+          }"
+          @click="updateGridView(true)"
+        />
       </div>
-      <div
-        class="grid gap-2 grid-cols-1"
-        :class="{
-          'md:grid-cols-2 lg:grid-cols-4': isGridView,
-          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-        }"
-      >
-        <InputValue
-          v-if="showAddColor"
-          @save="addColor"
-          @cancel="onCancel"
-        />
-        <ListBlocAdd
-          v-else
-          @click.stop="showAddColor = true"
-        />
-        <template
-          v-for="color in colors"
-          :key="color.uid"
-        >
-          <ListBlocItem
-            :title="color.name"
-            :style="{
-              backgroundColor: getValidBackColor(color.back_color),
-              color: getValidForeColor(color.fore_color)
-            }"
-            @click="openProperties(color)"
-          >
-            <Icon
-              :box="colorIcon.viewBox"
-              :path="colorIcon.path"
-              height="24"
-              width="24"
-              w="-mt-[2px]"
-              h="-ml-[2px]"
-              class="text-[#606061]"
-              :style="{ color: getValidForeColor(color.fore_color) }"
-            />
-          </ListBlocItem>
-        </template>
-      </div>
-
-      <EmptyTasksListPics v-if="isEmpty" />
     </div>
+    <div
+      class="grid gap-2 grid-cols-1 pb-[30px]"
+      :class="{
+        'md:grid-cols-2 lg:grid-cols-4': isGridView,
+        'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+      }"
+    >
+      <InputValue
+        v-if="showAddColor"
+        @save="addColor"
+        @cancel="onCancel"
+      />
+      <ListBlocAdd
+        v-else
+        @click.stop="showAddColor = true"
+      />
+      <template
+        v-for="color in colors"
+        :key="color.uid"
+      >
+        <ListBlocItem
+          :title="color.name"
+          :style="{
+            backgroundColor: getValidBackColor(color.back_color),
+            color: getValidForeColor(color.fore_color)
+          }"
+          @click="openProperties(color)"
+        >
+          <Icon
+            :box="colorIcon.viewBox"
+            :path="colorIcon.path"
+            height="24"
+            width="24"
+            w="-mt-[2px]"
+            h="-ml-[2px]"
+            class="text-[#606061]"
+            :style="{ color: getValidForeColor(color.fore_color) }"
+          />
+        </ListBlocItem>
+      </template>
+    </div>
+
+    <EmptyTasksListPics v-if="isEmpty" />
   </div>
 </template>
 

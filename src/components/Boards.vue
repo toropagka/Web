@@ -1,10 +1,39 @@
 <template>
-  <NavBar
-    id="NavBarBoards"
-    title="Доски"
-    route="/board"
-  />
   <div class="w-full">
+    <div class="flex items-center justify-between w-full pt-[8px]">
+      <NavBar
+        class="w-full"
+        title="Доски"
+      />
+      <div
+        class="flex flex-none"
+      >
+        <icon
+          :path="listView.path"
+          :width="listView.width"
+          :height="listView.height"
+          :box="listView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': !isGridView,
+            'text-gray-400': isGridView
+          }"
+          @click="updateGridView(false)"
+        />
+        <icon
+          :path="gridView.path"
+          :width="gridView.width"
+          :height="gridView.height"
+          :box="gridView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': isGridView,
+            'text-gray-400': !isGridView
+          }"
+          @click="updateGridView(true)"
+        />
+      </div>
+    </div>
     <div v-if="!displayModal">
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
@@ -22,35 +51,6 @@
           <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
             {{ value.dep }}
           </p>
-          <div
-            v-if="index == 0"
-            class="flex"
-          >
-            <icon
-              :path="listView.path"
-              :width="listView.width"
-              :height="listView.height"
-              :box="listView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': !isGridView,
-                'text-gray-400': isGridView
-              }"
-              @click="updateGridView(false)"
-            />
-            <icon
-              :path="gridView.path"
-              :width="gridView.width"
-              :height="gridView.height"
-              :box="gridView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': isGridView,
-                'text-gray-400': !isGridView
-              }"
-              @click="updateGridView(true)"
-            />
-          </div>
         </div>
         <div
           class="grid gap-2 mt-3 grid-cols-1"

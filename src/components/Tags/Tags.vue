@@ -1,15 +1,15 @@
 <template>
-  <NavBar
-    class="pt-[8px]"
-    title="Метки"
-  />
   <TagModalBoxTagsLimit
     v-if="showTagsLimit"
     @cancel="showTagsLimit = false"
     @ok="showTagsLimit = false"
   />
   <div id="tags">
-    <div class="flex flex-col gap-[6px]">
+    <NavBar
+      class="pt-[8px]"
+      title="Метки"
+    />
+    <div class="flex flex-col gap-[6px] pb-[30px]">
       <TagInput
         v-if="showAddTag"
         class="place-self-start mb-[25px] w-[184px]"
