@@ -305,9 +305,9 @@ import TaskListModalBoxLicenseLimit from '@/components/TasksList/TaskListModalBo
 import TaskListUnboardingCard from '@/components/TasksList/TaskListUnboardingCard.vue'
 import TaskListEdit from '@/components/TasksList/TaskListEdit.vue'
 import TasksSkeleton from '@/components/TasksList/TasksSkeleton.vue'
+import { shouldAddTaskIntoList } from '@/websync/utils'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
-import { TASK_STATUS } from '@/constants'
 
 import * as TASK from '@/store/actions/tasks'
 
@@ -361,7 +361,6 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['changeTaskStatus'],
   data () {
     return {
       createTaskText: '',
@@ -1053,9 +1052,9 @@ export default {
       }
     },
     onChangeStatus (status, task) {
-      console.log('onChangeStatus', status, task)
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
-        if (!this.$store.state.navigator.navigator.settings.show_completed_tasks && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
+        task.status = status
+        if (!shouldAddTaskIntoList(task)) {
           const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
           const restoredTasksArray = []
           Object.values(prevTasksArray).forEach((item) => {
@@ -1074,8 +1073,6 @@ export default {
             // фокусим следующий итем и открываем его свойства
             document.getElementById(data.id).focus({ preventScroll: false })
           })
-        } else {
-          this.$emit('changeTaskStatus', status, task)
         }
       })
     }
