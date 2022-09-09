@@ -20,9 +20,9 @@ const getters = {
     if (!state.user?.date_expired) return true
     // добавляем Z в конец, чтобы он посчитал что это UTC время
     let dateExpiredString = state.user?.date_expired
-    if (dateExpiredString[dateExpiredString.length - 1] !== 'Z') {
-      dateExpiredString = dateExpiredString + 'Z'
-    }
+    const [dateExp, timeExp] = dateExpiredString.split(' ')
+    const [dayExp, monthExp, yearExp] = dateExp.split('.')
+    dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
     const dateExpired = new Date(dateExpiredString)
     const dateNow = new Date()
     return dateNow.getTime() > dateExpired.getTime()

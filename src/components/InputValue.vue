@@ -4,7 +4,7 @@
       ref="inputValue"
       v-model="value"
       type="text"
-      class="rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+      class="rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       @keyup.enter="onSave"
       @keyup.esc="onCancel"
       @blur="onSave"
