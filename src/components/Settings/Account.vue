@@ -138,17 +138,17 @@
         </div>
       </form>
       <form class="text-left w-64">
-        <div class="font-medium text-[roboto] mb-4 text-base landing-[19px]">
+        <div class="text-base font-medium mb-2 text-[#4C4C4D]">
           Тип аккаунта
         </div>
         <p
-          class="text-sm font-medium landing-4"
+          class="text-sm landing-4 font-medium text-[#606061]"
         >
           {{ tarifText }}
         </p>
         <p
           v-if="$store.state.user.user?.date_expired"
-          class="mt-1 text-sm font-normal font-[Roboto] landing-5 text-[#606061]"
+          class="text-sm landing-4 font-normal text-[#606061]"
         >
           <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
@@ -156,7 +156,7 @@
           <router-link to="/settings/tarif">
             <button
               type="button"
-              class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
+              class="text-[14px] landing-[13px] text-[#007BE5]"
             >
               Управление тарифом
             </button>
