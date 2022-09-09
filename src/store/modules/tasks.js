@@ -753,6 +753,7 @@ const actions = {
         data: { name: data.value }
       })
         .then((resp) => {
+          commit(TASK.CHANGE_TASK_NAME, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -1201,6 +1202,14 @@ const mutations = {
   [TASK.REMOVE_TAG_REQUEST]: (state, uid) => {
     visitChildren([state.tags[uid]], (value) => delete state.tags[value.uid])
     delete state.tags[uid]
+  },
+  [TASK.CHANGE_TASK_NAME]: (state, data) => {
+    // в некоторых разделах (например в очереди) newtasks пустые, поэтому может возникнуть ошибка
+    try {
+      state.newtasks[data.tasks[0].uid].name = data.tasks[0].name
+    } catch (e) {
+      console.log(e)
+    }
   },
   [TASK.PUSH_TAG]: (state, resp) => {
     state.tags[resp.data.uid] = resp.data
