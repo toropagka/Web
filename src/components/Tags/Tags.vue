@@ -1,17 +1,15 @@
 <template>
-  <NavBar class="flex lg:hidden" />
+  <NavBar
+    class="pt-[8px]"
+    title="Метки"
+  />
   <TagModalBoxTagsLimit
     v-if="showTagsLimit"
     @cancel="showTagsLimit = false"
     @ok="showTagsLimit = false"
   />
   <div id="tags">
-    <p
-      class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold pt-[30px]"
-    >
-      Метки
-    </p>
-    <div class="flex flex-col gap-[6px] mt-[25px]">
+    <div class="flex flex-col gap-[6px]">
       <TagInput
         v-if="showAddTag"
         class="place-self-start mb-[25px] w-[184px]"
