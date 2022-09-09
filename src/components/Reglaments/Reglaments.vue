@@ -1,100 +1,102 @@
 <template>
-  <div class="w-full pt-[30px]">
-    <div
-      v-if="!displayModal"
-    >
-      <ReglamentAddLimit
-        v-if="showAddLimit"
-        @cancel="showAddLimit = false"
-        @ok="showAddLimit = false"
+  <ReglamentAddLimit
+    v-if="showAddLimit"
+    @cancel="showAddLimit = false"
+    @ok="showAddLimit = false"
+  />
+  <div
+    v-if="!displayModal"
+    class="w-full"
+  >
+    <div class="flex items-center justify-between w-full">
+      <NavBar
+        class="w-full pt-[8px]"
+        title="Регламенты"
       />
-      <div
-        v-for="(reg, index) in reglaments"
-        :key="index"
-      >
-        <div
-          class="flex w-full"
-          :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
-        >
-          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-            {{ reg.dep }}
-          </p>
-          <div
-            v-if="index == 0"
-            class="flex"
-          >
-            <icon
-              :path="listView.path"
-              :width="listView.width"
-              :height="listView.height"
-              :box="listView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': !isGridView,
-                'text-gray-400': isGridView
-              }"
-              @click="updateGridView(false)"
-            />
-            <icon
-              :path="gridView.path"
-              :width="gridView.width"
-              :height="gridView.height"
-              :box="gridView.viewBox"
-              class="cursor-pointer hover:text-gray-800 mr-2"
-              :class="{
-                'text-gray-800': isGridView,
-                'text-gray-400': !isGridView
-              }"
-              @click="updateGridView(true)"
-            />
-          </div>
-        </div>
-        <div
-          class="grid gap-2 mt-3 grid-cols-1"
+      <div class="flex flex-none px-[12px] pt-[8px]">
+        <Icon
+          :path="listView.path"
+          :width="listView.width"
+          :height="listView.height"
+          :box="listView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
           :class="{
-            'md:grid-cols-2 lg:grid-cols-4': isGridView,
-            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+            'text-gray-800': !isGridView,
+            'text-gray-400': isGridView
           }"
-        >
-          <template
-            v-for="reglament in reg.items"
-            :key="reglament.uid"
-          >
-            <router-link
-              :to="'/reglaments/' + reglament.uid"
-            >
-              <ReglamentBlocItem
-                :reglament="reglament"
-              />
-            </router-link>
-          </template>
-          <ReglamentBlocEmpty
-            v-if="!reg.is_my_dep && reg.items.length === 0"
-          />
-          <InputValue
-            v-if="showAddReglament && addReglamentDepartment === reg.uid"
-            @save="onAddNewReglament"
-            @cancel="showAddReglament = false"
-          />
-          <ListBlocAdd
-            v-else-if="reg.is_my_dep"
-            title="Добавить регламент"
-            @click.stop="clickAddReglament(reg.uid)"
-          />
-        </div>
+          @click="updateGridView(false)"
+        />
+        <Icon
+          :path="gridView.path"
+          :width="gridView.width"
+          :height="gridView.height"
+          :box="gridView.viewBox"
+          class="cursor-pointer hover:text-gray-800 mr-2"
+          :class="{
+            'text-gray-800': isGridView,
+            'text-gray-400': !isGridView
+          }"
+          @click="updateGridView(true)"
+        />
       </div>
+    </div>
+    <div
+      v-for="(reg, index) in reglaments"
+      :key="index"
+    >
       <div
-        v-if="currentUserIsAdmin"
-        class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
-        @click.stop="clickShowAll"
+        class="flex w-full"
+        :class="{ 'justify-between': index == 0, 'mt-[28px]': index != 0 }"
       >
-        <p
-          v-if="items.length"
-          class="font-roboto text-[17px] leading-[22px]"
-        >
-          {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+        <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
+          {{ reg.dep }}
         </p>
       </div>
+      <div
+        class="grid gap-2 mt-3 grid-cols-1"
+        :class="{
+          'md:grid-cols-2 lg:grid-cols-4': isGridView,
+          'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
+        }"
+      >
+        <template
+          v-for="reglament in reg.items"
+          :key="reglament.uid"
+        >
+          <router-link
+            :to="'/reglaments/' + reglament.uid"
+          >
+            <ReglamentBlocItem
+              :reglament="reglament"
+            />
+          </router-link>
+        </template>
+        <ReglamentBlocEmpty
+          v-if="!reg.is_my_dep && reg.items.length === 0"
+        />
+        <InputValue
+          v-if="showAddReglament && addReglamentDepartment === reg.uid"
+          @save="onAddNewReglament"
+          @cancel="showAddReglament = false"
+        />
+        <ListBlocAdd
+          v-else-if="reg.is_my_dep"
+          title="Добавить регламент"
+          @click.stop="clickAddReglament(reg.uid)"
+        />
+      </div>
+    </div>
+    <div
+      v-if="currentUserIsAdmin"
+      class="flex items-center w-full my-[28px] text-[#7e7e80] hover:text-[#424242] cursor-pointer"
+      @click.stop="clickShowAll"
+    >
+      <p
+        v-if="items.length"
+        class="font-roboto text-[17px] leading-[22px]"
+      >
+        {{ showAllReglaments ? 'Показать только доступные' : 'Показать все регламенты' }}
+      </p>
     </div>
     <EmptyTasksListPics v-if="isEmpty" />
   </div>
@@ -142,6 +144,7 @@ import ReglamentBlocEmpty from '@/components/Reglaments/ReglamentBlocEmpty.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import ReglamentAddLimit from '@/components/Reglaments/ReglamentAddLimit.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 // import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -162,7 +165,8 @@ export default {
     ReglamentBlocEmpty,
     ReglamentAddLimit,
     ListBlocAdd,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    NavBar
   },
   data () {
     return {
