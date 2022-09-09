@@ -288,7 +288,7 @@ export default {
     const store = useStore()
     // не удалять, без объявление сторы через useStore не работает закрытие на escape
     document.addEventListener('keyup', function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.key === 'Escape') {
         store.state.navigator.submenu.status = false
       }
     })
