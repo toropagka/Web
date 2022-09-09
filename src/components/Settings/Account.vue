@@ -150,7 +150,7 @@
           v-if="$store.state.user.user?.date_expired"
           class="text-sm landing-4 mt-1 font-normal text-[#606061]"
         >
-          <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }}(дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
           <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
           <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
@@ -309,16 +309,16 @@ export default {
     logout () {
       this.$store.dispatch(AUTH_LOGOUT)
     },
-    // getDateExpired () {
-    //   if (!this.user?.date_expired) return true
-    //   // добавляем Z в конец, чтобы он посчитал что это UTC время
-    //   let dateExpiredString = this.user?.date_expired
-    //   if (dateExpiredString[dateExpiredString.length - 1] !== 'Z') {
-    //     dateExpiredString = dateExpiredString + 'Z'
-    //     const dateExpired = new Date(dateExpiredString)
-    //     return dateExpired
-    //   }
-    // },
+    getDateExpired () {
+      if (!this.user?.date_expired) return true
+      // добавляем Z в конец, чтобы он посчитал что это UTC время
+      let dateExpiredString = this.user?.date_expired
+      const [dateExp, timeExp] = dateExpiredString.split(' ')
+      const [dayExp, monthExp, yearExp] = dateExp.split('.')
+      dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
+      const dateExpired = new Date(dateExpiredString).toLocaleString('default', { year: 'numeric', month: 'numeric', day: 'numeric' })
+      return dateExpired
+    },
     startOnBoarding () {
       this.$store.dispatch(USER_START_ONBOARDING)
       this.$router.push('/doitnow')
