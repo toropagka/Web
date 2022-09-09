@@ -862,6 +862,7 @@ export default {
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
+      this.$store.dispatch('asidePropertiesToggle', false)
       this.$store.dispatch(
         TASK.CHANGE_TASK_DATE,
         {
