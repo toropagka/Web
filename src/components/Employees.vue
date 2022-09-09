@@ -1,7 +1,6 @@
 <template>
-  <NavBar class="flex lg:hidden" />
   <div
-    class="w-full pb-[28px] pt-[30px]"
+    class="w-full pb-[28px] pt-[20px]"
   >
     <div
       v-if="displayModal"
@@ -99,7 +98,15 @@
           class="group flex items-center w-full"
           :class="{ 'justify-between': index === 0, 'mt-[28px]': index !== 0 }"
         >
-          <p class="font-roboto text-[#424242] text-[19px] leading-[22px] font-bold w-11/12 break-words">
+          <NavBar
+            v-if="index === 0"
+            class="h-[22px!important]"
+            title="Сотрудники"
+          />
+          <p
+            v-else
+            class="font-roboto text-[#424242] text-[19px] leading-[22px] font-bold w-11/12 break-words"
+          >
             {{ value.dep }}
           </p>
           <div
