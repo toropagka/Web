@@ -405,6 +405,9 @@ export default {
     editorsCanEdit () {
       return this.currReglament?.editors?.includes(this.$store.state.user.user.current_user_email)
     },
+    userType () {
+      return this.$store.state.employees.employees[this.$store.state.user.user.current_user_uid].type
+    },
     canEdit () {
       return (this.currReglament?.email_creator === this.user.current_user_email) || (this.editorsCanEdit) || (this.userType === 2 || this.userType === 1)
     },
