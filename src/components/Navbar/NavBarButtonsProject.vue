@@ -128,7 +128,6 @@ export default {
       this.showDeleteProject = true
     },
     clickAddProject () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
       if (Object.keys(this.$store.state.projects.projects).length >= 10 && this.$store.getters.isLicenseExpired) {
         this.showProjectsLimit = true

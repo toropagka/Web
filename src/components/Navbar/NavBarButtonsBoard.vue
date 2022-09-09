@@ -167,7 +167,6 @@ export default {
       this.showDeleteBoard = true
     },
     clickAddBoard () {
-      const user = this.$store.state.user.user
       // если лицензия истекла
       if (Object.keys(this.$store.state.boards.boards).length >= 3 && this.$store.getters.isLicenseExpired) {
         this.showBoardsLimit = true

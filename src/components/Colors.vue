@@ -143,7 +143,6 @@ export default {
   },
   methods: {
     addColor (text) {
-      const user = this.$store.state.user.user
       // если лицензия истекла
       if (Object.keys(this.$store.state.colors.mycolors).length >= 3 && this.$store.getters.isLicenseExpired) {
         this.showColorsLimit = true
