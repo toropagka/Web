@@ -10,7 +10,7 @@
       :contenteditable="isEditable"
       :data-placeholder="placeholderComment"
       @blur="changeComment($event)"
-      @keydown.esc="$event.target.blur()"
+      @keydown.esc="onEsc"
       @paste="onPasteComment($event)"
       v-html="currHtmlText"
     />
@@ -144,6 +144,9 @@ export default {
       this.isEditable = false
       if (text === this.comment) return
       this.$emit('changeComment', text)
+    },
+    onEsc (e) {
+      e.target.blur()
     }
   }
 }
