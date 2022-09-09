@@ -191,7 +191,7 @@
                 class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
                 @click="showEditphone = true"
               >
-                Изменить телефон
+                {{ userPhone().length ? 'Изменить номер телефона' : 'Добавить номер телефона' }}
               </button>
             </form>
           </div>
