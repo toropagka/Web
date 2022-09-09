@@ -512,9 +512,6 @@ export default {
         uid: this.selectedTaskUid
       }
       this.$store.dispatch(TASK.REMOVE_TASK, data.uid)
-        .then(() => {
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
-        })
     },
     deleteTaskMsg (uid) {
       this.$store.dispatch(DELETE_MESSAGE_REQUEST, { uid: uid }).then(
@@ -762,7 +759,6 @@ export default {
 
         if (!shouldAddTaskIntoList(this.selectedTask)) {
           this.$store.commit(TASK.REMOVE_TASK, taskUid)
-          this.$store.dispatch(TASK.DAYS_WITH_TASKS)
           this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: taskUid, tasks: this.$store.state.tasks.newtasks }).then(resp => {
             if (!resp) {
               this.$store.dispatch('asidePropertiesToggle', false)

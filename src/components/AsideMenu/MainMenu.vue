@@ -173,6 +173,8 @@ import EventAlert from '@/components/EventAlert.vue'
 import AsideMenuListItem from '@/components/AsideMenu/AsideMenuListItem.vue'
 import AsideMenuListButton from '@/components/AsideMenu/AsideMenuListButton.vue'
 
+import * as TASK from '@/store/actions/tasks.js'
+
 export default {
   components: {
     InspectorLimit,
@@ -252,6 +254,9 @@ export default {
     },
     changeTab (tab) {
       // изменение текущей вкладки
+      if (tab === 'tasks') {
+        this.$store.dispatch(TASK.DAYS_WITH_TASKS)
+      }
       this.selectTab(tab)
       this.$store.state.navigator.submenu.status = true
     }
