@@ -1,9 +1,11 @@
 <template>
+  <NavBar
+    id="NavBarProjects"
+    title="Проекты"
+    route="/project"
+  />
   <div class="w-full">
-    <div
-      v-if="!displayModal"
-      class="pt-[30px]"
-    >
+    <div v-if="!displayModal">
       <ProjectModalBoxProjectsLimit
         v-if="showProjectsLimit"
         @cancel="showProjectsLimit = false"
@@ -127,6 +129,7 @@ import { setLocalStorageItem } from '@/store/helpers/functions'
 import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -144,7 +147,8 @@ export default {
     ProjectBlocItem,
     ListBlocAdd,
     ProjectModalBoxProjectsLimit,
-    EmptyTasksListPics
+    EmptyTasksListPics,
+    NavBar
   },
   data () {
     return {
