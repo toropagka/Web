@@ -218,7 +218,7 @@
           v-model:content="currText"
           content-type="html"
           :toolbar="'full'"
-          class="h-auto mb-5 bg-white"
+          class="h-auto mb-5 bg-white reglament-editor"
           @paste="pasteEvent"
         />
       </div>
@@ -728,3 +728,8 @@ export default {
   }
 }
 </script>
+<style>
+  .ql-container.reglament-editor > .ql-editor {
+    padding: 12px 145px;
+  }
+</style>
