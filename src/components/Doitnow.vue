@@ -1,6 +1,7 @@
 <template>
-  <div class="pt-[8px] w-full">
+  <div class="w-full">
     <NavBar
+      class="pt-[8px]"
       title="Очередь"
     />
     <div
