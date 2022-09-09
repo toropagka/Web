@@ -36,22 +36,20 @@ export function getInspectorMessage (type, task, payload = 'performer') {
   const customer = store?.state?.employees?.employees[task.uid_customer]
   const performer = store?.state?.employees?.employees[task.uid_performer]
   const customerName =
-  customer?.name.length > 30
-    ? customer?.name.substring(0, 30) + '...'
-    : customer?.name ??
-    '[Удаленный сотрудник] '
+    customer?.name.length > 30
+      ? customer?.name.substring(0, 30) + '...'
+      : customer?.name ?? '[Удаленный сотрудник] '
   const performerName =
-  performer?.name.length > 30
-    ? performer?.name.substring(0, 30) + '...'
-    : performer?.name ??
-    '[Удаленный сотрудник]'
+    performer?.name.length > 30
+      ? performer?.name.substring(0, 30) + '...'
+      : performer?.name ?? '[Удаленный сотрудник]'
   const performerPhone =
-    store?.state?.employees?.employees[task.uid_performer]?.phone.split(
+    store?.state?.employees?.employees[task.uid_performer]?.phone?.split(
       ' '
     )[0] ?? '[Неизвестный номер телефона]'
 
   const customerPhone =
-    store?.state?.employees?.employees[task.uid_customer]?.phone.split(
+    store?.state?.employees?.employees[task.uid_customer]?.phone?.split(
       ' '
     )[0] ?? '[Неизвестный номер телефона]'
 
@@ -101,7 +99,10 @@ export function getInspectorMessage (type, task, payload = 'performer') {
       if (payload === 'performer') {
         textMessage = 'Я позвонил исполнителю на номер ' + performerPhone + '.'
       } else if (payload === 'customer') {
-        textMessage = 'Исполнитель игнорирует задачу более 24 часов, я позвонил Заказчику на номер ' + customerPhone + '.'
+        textMessage =
+          'Исполнитель игнорирует задачу более 24 часов, я позвонил Заказчику на номер ' +
+          customerPhone +
+          '.'
       }
       return textMessage
     case PERFOMER_DOESNT_HAVE_PHONE_NUMBER_MESSAGE_TYPE:
