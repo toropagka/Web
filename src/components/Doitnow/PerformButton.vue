@@ -6,30 +6,32 @@
     <!-- Поручить -->
     <div
       v-if="taskType === 1"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
     >
-      <Icon
-        :height="change.height"
-        :width="change.width"
-        :box="change.viewBox"
-        :path="change.path"
-        class="ml-[19px]"
-      />
-      <span class="ml-[12px] w-[70px]"> Поручить </span>
+      <div class="w-[16px] h-[16px] flex items-center justify-center">
+        <Icon
+          :height="change.height"
+          :width="change.width"
+          :box="change.viewBox"
+          :path="change.path"
+        />
+      </div>
+      <span class="ml-[10px] w-[70px]">Поручить</span>
     </div>
     <!-- Исполнитель -->
     <div
       v-else-if="taskType === 2"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
     >
-      <Icon
-        :height="change.height"
-        :width="change.width"
-        :box="change.viewBox"
-        :path="change.path"
-        class="ml-[19px]"
-      />
-      <span class="text-center ml-[11px] w-[70px]"> Изменить исполнителя </span>
+      <div class="w-[16px] h-[16px] flex items-center justify-center">
+        <Icon
+          :height="change.height"
+          :width="change.width"
+          :box="change.viewBox"
+          :path="change.path"
+        />
+      </div>
+      <span class="ml-[10px] w-[70px]">Изменить исполнителя</span>
       <button
         class="btn-close-popover"
         @click.stop="setPerformerCurrentUser"
@@ -52,31 +54,33 @@
     <!-- Перепоручить -->
     <div
       v-else-if="taskType === 3"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
     >
-      <Icon
-        :height="change.height"
-        :width="change.width"
-        :box="change.viewBox"
-        :path="change.path"
-        class="ml-[19px]"
-      />
-      <span class="text-center w-[70px] ml-[12px]"> Изменить исполнителя </span>
+      <div class="w-[16px] h-[16px] flex items-center justify-center">
+        <Icon
+          :height="change.height"
+          :width="change.width"
+          :box="change.viewBox"
+          :path="change.path"
+        />
+      </div>
+      <span class="w-[70px] ml-[10px]">Изменить исполнителя</span>
     </div>
     <!-- Взять на исполнение -->
     <div
       v-else-if="taskType === 5"
-      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2  whitespace-nowrap text-[#3e3e3f]"
+      class="flex items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
       @click.stop="setPerformerCurrentUser"
     >
-      <Icon
-        :height="change.height"
-        :width="change.width"
-        :box="change.viewBox"
-        :path="change.path"
-        class="ml-[19px]"
-      />
-      <span class="text-center w-[70px] ml-[12px]"> Взять на исполнение </span>
+      <div class="w-[16px] h-[16px] flex items-center justify-center">
+        <Icon
+          :height="change.height"
+          :width="change.width"
+          :box="change.viewBox"
+          :path="change.path"
+        />
+      </div>
+      <span class="text-center w-[70px] ml-[10px]"> Взять на исполнение </span>
     </div>
     <template
       #content="{ close }"
