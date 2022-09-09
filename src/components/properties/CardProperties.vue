@@ -251,7 +251,7 @@ export default {
     employees () { return this.$store.state.employees.employees },
     orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
     cardMessages () { return this.$store.state.cardfilesandmessages.messages },
-    canAddFiles () { return this.user?.days_left > 0 },
+    canAddFiles () { return !this.$store.getters.isLicenseExpired },
     canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
     selectedColumnName () {
       const columnUid = this.selectedCard?.uid_stage
@@ -427,7 +427,7 @@ export default {
     },
     createCardMessage () {
       // если лицензия истекла
-      if (this.user.days_left <= 0) {
+      if (this.$store.getters.isLicenseExpired) {
         this.showMessagesLimit = true
         return
       }

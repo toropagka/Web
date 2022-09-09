@@ -1,7 +1,5 @@
 import {
-  LOCALIZATION_REQUEST,
-  LOCALIZATION_ERROR,
-  LOCALIZATION_SUCCESS
+  LOCALIZATION_ERROR, LOCALIZATION_REQUEST, LOCALIZATION_SUCCESS
 } from '../actions/localization'
 
 import axios from 'axios'
@@ -12,8 +10,7 @@ const state = {
   hasLoadedOnce: false
 }
 
-const getters = {
-}
+const getters = {}
 
 const actions = {
   [LOCALIZATION_REQUEST]: ({ commit, dispatch }) => {
@@ -24,12 +21,16 @@ const actions = {
       let language = 'russian'
       if (navigator.language.includes('en')) language = 'english'
 
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/localize/strings?language=' + language
+      const url =
+        process.env.VUE_APP_LEADERTASK_API +
+        'api/v1/localize/strings?language=' +
+        language
       axios({ url: url, method: 'GET' })
-        .then(resp => {
+        .then((resp) => {
           commit(LOCALIZATION_SUCCESS, resp)
           resolve(resp)
-        }).catch(err => {
+        })
+        .catch((err) => {
           commit(LOCALIZATION_ERROR, err)
           reject(err)
         })
@@ -38,7 +39,7 @@ const actions = {
 }
 
 const mutations = {
-  [LOCALIZATION_REQUEST]: state => {
+  [LOCALIZATION_REQUEST]: (state) => {
     state.status = 'loading'
   },
   [LOCALIZATION_SUCCESS]: (state, resp) => {
@@ -46,7 +47,7 @@ const mutations = {
     state.localization = resp?.data?.rows
     state.hasLoadedOnce = true
   },
-  [LOCALIZATION_ERROR]: state => {
+  [LOCALIZATION_ERROR]: (state) => {
     state.status = 'error'
     state.hasLoadedOnce = true
   }

@@ -448,7 +448,7 @@ export default {
     },
     clickAddEmployee () {
       // если лицензия истекла
-      if (this.user.days_left <= 0) {
+      if (this.$store.getters.isLicenseExpired) {
         this.showUsersLimit = true
         return
       }
