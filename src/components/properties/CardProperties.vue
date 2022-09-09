@@ -245,6 +245,7 @@ export default {
   computed: {
     status () { return this.$store.state.cardfilesandmessages.status },
     selectedCard () { return this.$store.state.cards.selectedCard },
+    selectedCardUid () { return this.selectedCard?.uid },
     user () { return this.$store.state.user.user },
     selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
@@ -292,7 +293,7 @@ export default {
     }
   },
   watch: {
-    selectedCard (oldValue, newValue) {
+    selectedCardUid (oldValue, newValue) {
       this.currentQuote = false
       this.cardMessageInputValue = ''
     }
