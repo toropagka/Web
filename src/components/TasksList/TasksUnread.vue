@@ -4,6 +4,7 @@
       id="NavBarUnread"
       class="pt-[8px]"
       title="Непрочитанные"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -25,14 +26,13 @@ export default {
     PropertiesRight,
     NavBarTasks
   },
-  data () {
-    return {
-      date: new Date(),
-      uid: 'fa042915-a3d2-469c-bd5a-708cf0339b89'
-    }
-  },
   mounted () {
-    this.$store.dispatch(TASK.UNREAD_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.UNREAD_TASKS_REQUEST)
+    }
   }
 }
 </script>

@@ -4,8 +4,11 @@
       id="NavBarInFocus"
       class="pt-[8px]"
       title="Задачи в фокусе"
+      @reload="reload"
     />
-    <TasksListNew :new-task-props="{ focus: 1 }" />
+    <TasksListNew
+      :new-task-props="{ focus: 1 }"
+    />
     <propertiesRight />
   </div>
 </template>
@@ -23,14 +26,13 @@ export default {
     PropertiesRight,
     NavBarTasks
   },
-  data () {
-    return {
-      date: new Date(),
-      uid: '6fc44cc6-9d45-4052-917e-25b1189ab141'
-    }
-  },
   mounted () {
-    this.$store.dispatch(TASK.IN_FOCUS_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.IN_FOCUS_TASKS_REQUEST)
+    }
   }
 }
 

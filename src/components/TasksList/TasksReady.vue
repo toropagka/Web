@@ -4,6 +4,7 @@
       id="NavBarReady"
       class="pt-[8px]"
       title="Готово к сдаче"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -32,7 +33,12 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(TASK.READY_FOR_COMPLITION_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.READY_FOR_COMPLITION_TASKS_REQUEST)
+    }
   }
 }
 </script>

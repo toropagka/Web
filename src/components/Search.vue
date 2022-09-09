@@ -4,6 +4,7 @@
       id="NavBarSearch"
       class="pt-[8px]"
       :title="'Поиск: ' + searchText"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -34,13 +35,16 @@ export default {
     }
   },
   mounted () {
-    this.searchTasks(this.searchText)
+    this.reload()
   },
   methods: {
     searchTasks (text) {
       this.$store.dispatch(TASK.SEARCH_TASK, text).then((resp) => {
         console.log('Search Tasks', resp)
       })
+    },
+    reload () {
+      this.searchTasks(this.searchText)
     }
   }
 }

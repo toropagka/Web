@@ -4,6 +4,7 @@
       id="NavBarOverdue"
       class="pt-[8px]"
       title="Просроченные"
+      @reload="reload"
     />
     <TasksListNew
       hide-input
@@ -25,14 +26,13 @@ export default {
     PropertiesRight,
     NavBarTasks
   },
-  data () {
-    return {
-      date: new Date(),
-      uid: '46418722-a720-4c9e-b255-16db4e590c34'
-    }
-  },
   mounted () {
-    this.$store.dispatch(TASK.OVERDUE_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.OVERDUE_TASKS_REQUEST)
+    }
   }
 }
 </script>

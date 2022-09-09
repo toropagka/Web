@@ -4,6 +4,7 @@
       id="NavBarUnsorted"
       class="pt-[8px]"
       title="Неразобранные"
+      @reload="reload"
     />
     <TasksListNew />
     <PropertiesRight />
@@ -22,14 +23,13 @@ export default {
     PropertiesRight,
     NavBarTasks
   },
-  data () {
-    return {
-      date: new Date(),
-      uid: '5183b619-3968-4c3a-8d87-3190cfaab014'
-    }
-  },
   mounted () {
-    this.$store.dispatch(TASK.UNSORTED_TASKS_REQUEST)
+    this.reload()
+  },
+  methods: {
+    reload () {
+      this.$store.dispatch(TASK.UNSORTED_TASKS_REQUEST)
+    }
   }
 }
 </script>
