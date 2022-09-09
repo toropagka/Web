@@ -1,9 +1,11 @@
 <template>
+  <NavBar
+    id="NavBarBoards"
+    title="Доски"
+    route="/board"
+  />
   <div class="w-full">
-    <div
-      v-if="!displayModal"
-      class="pt-[30px]"
-    >
+    <div v-if="!displayModal">
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
@@ -131,6 +133,7 @@ import listView from '@/icons/list-view.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import BoardInputValue from './Board/BoardInputValue.vue'
 import { uuidv4 } from '@/helpers/functions'
+import NavBar from '@/components/Navbar/NavBar.vue'
 
 export default {
   components: {
@@ -138,7 +141,8 @@ export default {
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
     ListBlocAdd,
-    BoardInputValue
+    BoardInputValue,
+    NavBar
   },
   data () {
     return {
