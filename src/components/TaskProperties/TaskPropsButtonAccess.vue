@@ -403,12 +403,6 @@ export default {
 .custom-checkbox:not(:disabled):active + label::after {
   border-color: #b3d7ff;
 }
-/* стили для чекбокса, находящегося в фокусе */
-.custom-checkbox:focus + label::after {
-}
-/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
-.custom-checkbox:focus:not(:checked) + label::after {
-}
 .custom-checkbox:checked + label::after {
   background-image: url("data:image/svg+xml,%3csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 20'%3e%3cpath fill='%23000' d='M24.4107 1.30299C25.2766 2.02718 25.3681 3.2892 24.6148 4.1218L11.8142 18.2718C10.8103 19.3815 9.06094 19.4991 7.9062 18.5344L0.902667 12.6839C0.0362917 11.9601 -0.0558157 10.6982 0.69694 9.86518C1.44969 9.0322 2.76226 8.94364 3.62864 9.66738L9.58691 14.6447L21.4789 1.49931C22.2321 0.666707 23.5447 0.578813 24.4107 1.30299z'/%3e%3c/svg%3e");
 }
@@ -461,7 +455,7 @@ export default {
   width: 16px;
   height: 20px;
   top: 5px;
-  color: #3F3F4O;
+  color: '#3F3F4O';
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;

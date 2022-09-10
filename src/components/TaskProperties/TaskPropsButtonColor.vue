@@ -237,7 +237,7 @@ export default {
   width: 16px;
   height: 20px;
   top: 5px;
-  color: #3F3F4O;
+  color: '#3F3F4O';
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;
