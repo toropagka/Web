@@ -518,7 +518,7 @@ export default {
           this.$store.dispatch('asidePropertiesToggle', false)
         }
         this.$store.commit(TASK.REMOVE_TASK, prevTask.uid)
-        // this.removeTask(prevTask.uid)
+        this.showConfirm = false
       }
     }
   },
