@@ -1,25 +1,3 @@
-<script>
-import Employee from '@/components/Notifications/Employee'
-import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
-export default {
-  components: {
-    Employee
-  },
-  computed: {
-    employees () {
-      return this.$store.state.employees.employees
-    }
-  },
-  methods: {
-
-    redirect (notification) {
-      const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
-      window.location.href = link
-      this.$store.commit(NAVIGATOR_SUCCESS)
-    }
-  }
-}
-</script>
 <template>
   <NotificationGroup group="top">
     <div class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none z-50">
@@ -111,3 +89,26 @@ export default {
     </div>
   </NotificationGroup>
 </template>
+
+<script>
+import Employee from '@/components/Notifications/Employee'
+import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
+export default {
+  components: {
+    Employee
+  },
+  computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    }
+  },
+  methods: {
+
+    redirect (notification) {
+      const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
+      window.location.href = link
+      this.$store.commit(NAVIGATOR_SUCCESS)
+    }
+  }
+}
+</script>
