@@ -1,7 +1,7 @@
 <template>
   <div class="px-[16px] pt-[15px]">
-    <AsideMenuSkeleton v-if="status == 'loading'" />
-    <div v-if="status == 'success'">
+    <AsideMenuSkeleton v-if="status === 'loading'" />
+    <div v-if="status === 'success'">
       <TasksSubmenuCalendar
         class="pl-[6px] mb-[10px]"
         @dayclick="onDayClick"
@@ -265,9 +265,6 @@ export default {
     isOverdueSelected () {
       return this.$route.name === 'tasksOverdue'
     },
-    isUnsortedSelected () {
-      return this.$route.name === 'tasksUnsorted'
-    },
     isUnreadSelected () {
       return this.$route.name === 'tasksUnread'
     },
@@ -283,22 +280,10 @@ export default {
   },
   methods: {
     isUserDelegateToMeSelected (user) {
-      if (
-        this.$route.name === 'tasksDelegateToMe' &&
-        this.$route.params.employee_uid === user.uid
-      ) {
-        return true
-      }
-      return false
+      return this.$route.name === 'tasksDelegateToMe' && this.$route.params.employee_uid === user.uid
     },
     isUserDelegateByMeSelected (user) {
-      if (
-        this.$route.name === 'tasksDelegateByMe' &&
-        this.$route.params.employee_uid === user.uid
-      ) {
-        return true
-      }
-      return false
+      return this.$route.name === 'tasksDelegateByMe' && this.$route.params.employee_uid === user.uid
     },
     onDayClick (date) {
       const today = new Date()
@@ -325,6 +310,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
