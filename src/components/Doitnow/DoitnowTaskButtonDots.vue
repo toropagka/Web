@@ -2,16 +2,31 @@
   <PopMenu
     placement="bottom"
   >
-    <div class="mt-3 tags-custom">
+    <div
+      style="color: gray"
+    >
       <svg
-        style="width: 24px; height: 24px"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"
-        />
-      </svg>
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        width="20"
+        height="20"
+        class="inline-block"
+      ><path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        fill="currentColor"
+        d="M10 14C11.1046 14 12 14.8954 12 16C12 17.1046 11.1046 18 10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14Z"
+      /><path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        fill="currentColor"
+        d="M10 8C11.1046 8 12 8.89543 12 10C12 11.1046 11.1046 12 10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8Z"
+      /><path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        fill="currentColor"
+        d="M10 2C11.1046 2 12 2.89543 12 4C12 5.10457 11.1046 6 10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2Z"
+      /></svg>
     </div>
     <template #menu>
       <PopMenuHeader

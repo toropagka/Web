@@ -156,6 +156,7 @@ import TaskPropsChatMessageText from '@/components/TaskProperties/TaskPropsChatM
 import TaskPropsChatMessageFile from '@/components/TaskProperties/TaskPropsChatMessageFile.vue'
 
 import { getInspectorMessage, isKnownInspectorMessageType } from '@/inspector/message'
+import { TASK_STATUS } from '@/constants'
 import linkify from 'vue-linkify'
 
 import * as INSPECTOR from '@/store/actions/inspector'
@@ -222,7 +223,7 @@ export default {
         isMessage: !message.uid_file && message.uid_creator !== 'inspector',
         isInspectorMessage: message.uid_creator === 'inspector',
         isMyMessage: message.uid_creator === this.currentUserUid,
-        shouldShowInspectorButtons: message?.performer_answer == null && ![1, 5, 7, 8].includes(this.task.status) && (this.selectedTask.uid_performer === this.currentUserUid)
+        shouldShowInspectorButtons: message?.performer_answer == null && ![TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status) && (this.selectedTask.uid_performer === this.currentUserUid)
       }))
     }
   },

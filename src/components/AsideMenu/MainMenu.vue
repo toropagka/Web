@@ -196,9 +196,6 @@ export default {
     },
     activeTab () {
       return this.$store.state.navigator.submenu.activeTab
-    },
-    submenuStatus () {
-      return this.$store.state.navigator.submenu.status
     }
   },
   watch: {
@@ -209,11 +206,6 @@ export default {
       }
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
-      }
-    },
-    submenuStatus (newValue, oldValue) {
-      if (!newValue) {
-        this.initActiveTab()
       }
     }
   },

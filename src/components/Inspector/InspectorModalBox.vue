@@ -65,6 +65,7 @@ import Overlay from '@/components/modals/Overlay.vue'
 import InspectorContent from '@/components/Inspector/InspectorContent.vue'
 import { computed } from '@vue/reactivity'
 import { uuidv4 } from '@/helpers/functions'
+import { TASK_STATUS } from '@/constants'
 
 export default {
   components: {
@@ -189,7 +190,7 @@ export default {
       this.delegatedTask.uid = uuidv4()
       this.delegatedTask.uid_parent = '00000000-0000-0000-0000-000000000000'
       this.delegatedTask.uid_customer = this.user.current_user_uid
-      this.delegatedTask.status = 0
+      this.delegatedTask.status = TASK_STATUS.NOT_BEGIN
       this.delegatedTask.type = 1
       this.delegatedTask._addToList = false
       this.$store.dispatch('CREATE_TASK', this.delegatedTask).then((resp) => {

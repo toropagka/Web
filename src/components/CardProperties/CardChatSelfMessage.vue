@@ -9,10 +9,13 @@ export default {
     CardChatDeletedMessageContent
   },
   props: {
-    message: Object
+    message: {
+      type: Object,
+      default: () => {}
+    }
   },
 
-  emits: ['onQuoteMessage, onDeleteMessage'],
+  emits: ['onQuoteMessage', 'onDeleteMessage'],
 
   methods: {
 

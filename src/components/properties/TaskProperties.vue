@@ -1033,8 +1033,6 @@ export default {
 {
   @apply text-black !important;
 }
-.calendar-properties .vc-container .is-today .vc-day-content  {
-}
 .calendar-properties .vc-container .is-today:hover .vc-day-content {
   @apply bg-orange-400
 }
@@ -1110,9 +1108,6 @@ export default {
   font-weight: normal !important;
   border-radius: 7px !important;
 }
-.calendar-properties .vc-highlight
-{
-}
 .calendar-properties .vc-highlights .vc-highlight, .vc-highlights .vc-highlight:hover
 {
   color:black !important;
@@ -1158,9 +1153,6 @@ export default {
 .calendar-properties .vc-weekday
 {
   color: var(--black);
-}
-.calendar-properties .vc-container .vc-day-content:hover:not(.is-disabled)
-{
 }
 .calendar-properties .is-not-in-month
 {

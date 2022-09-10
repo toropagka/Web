@@ -240,23 +240,21 @@
                 :class="{ showselect: ActiveSelect == 1 }"
               >
                 <div class="form-group">
-                  <div class="form-everymonth-container">
-                    <div
-                      v-for="day in 28"
-                      :key="day"
-                      class="form_radio_btn-custom"
+                  <div
+                    v-for="weekDay in 28"
+                    :key="weekDay"
+                    class="form_radio_btn-custom"
+                  >
+                    <input
+                      :id="'m1_' + weekDay"
+                      ref="SeriesMonthDay"
+                      v-model="SeriesMonthDay"
+                      type="radio"
+                      name="radio"
+                      :value="weekDay"
+                      :checked="selectedTask.SeriesMonthDay === weekDay"
                     >
-                      <input
-                        :id="'m1_' + day"
-                        ref="SeriesMonthDay"
-                        v-model="SeriesMonthDay"
-                        type="radio"
-                        name="radio"
-                        :value="day"
-                        :checked="selectedTask.SeriesMonthDay === day"
-                      >
-                      <label :for="'m1_' + day">{{ day }}</label>
-                    </div>
+                    <label :for="'m1_' + weekDay">{{ weekDay }}</label>
                   </div>
                 </div>
               </div>
@@ -352,23 +350,21 @@
                 :class="{ showselect: ActiveYartype == 1 }"
               >
                 <div class="form-group">
-                  <div class="form-everyyear-container">
-                    <div
-                      v-for="day in 28"
-                      :key="day"
-                      class="form_radio_btn-custom"
+                  <div
+                    v-for="weekDay in 28"
+                    :key="weekDay"
+                    class="form_radio_btn-custom"
+                  >
+                    <input
+                      :id="'y1_' + weekDay"
+                      ref="SeriesYearMonthDay"
+                      v-model="SeriesYearMonthDay"
+                      type="radio"
+                      name="radio"
+                      :value="weekDay"
+                      :checked="selectedTask.SeriesYearMonthDay === weekDay"
                     >
-                      <input
-                        :id="'y1_' + day"
-                        ref="SeriesYearMonthDay"
-                        v-model="SeriesYearMonthDay"
-                        type="radio"
-                        name="radio"
-                        :value="day"
-                        :checked="selectedTask.SeriesYearMonthDay === day"
-                      >
-                      <label :for="'y1_' + day">{{ day }}</label>
-                    </div>
+                    <label :for="'y1_' + weekDay">{{ weekDay }}</label>
                   </div>
                 </div>
               </div>

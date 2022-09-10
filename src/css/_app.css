@@ -68,10 +68,6 @@ input:focus {outline: 0;}
   margin-right: 5px;
   color:#9E9E9E;
 }
-.any-calendar
-{
-
-}
 .any-list-custom
 {
   padding: 4px 0px 4px 0px;
@@ -327,10 +323,6 @@ input:focus {outline: 0;}
   border-radius: 25%;
   border: none;
 }
-.custom-method
-{
-
-}
 .date-section{
   width:100%;
   display: inline-block;
@@ -412,11 +404,6 @@ input:focus {outline: 0;}
 .input-group-btn,
 .input-group .form-control {
   display: table-cell;
-}
-.input-group-addon:not(:first-child):not(:last-child),
-.input-group-btn:not(:first-child):not(:last-child),
-.input-group .form-control:not(:first-child):not(:last-child) {
-
 }
 .input-group-addon,
 .input-group-btn {
@@ -528,7 +515,7 @@ input:focus {outline: 0;}
   width: 16px;
   height: 20px;
   top: 5px;
-  color: #3F3F4O;
+  color: '#3F3F4O';
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;
@@ -1001,11 +988,6 @@ fieldset[disabled] .btn {
   background-color: #d4aa70;
   border-radius: 100%;
 }
-.form-send-message
-{
-  width: 100%;
-  display: table;
-}
 input {
   outline: 0;
   outline-offset: 0;
@@ -1123,12 +1105,7 @@ input {
 
   border-color: #b3d7ff;
 }
-/* стили для чекбокса, находящегося в фокусе */
-.custom-checkbox:focus+label::after {
-}
 /* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
-.custom-checkbox:focus:not(:checked)+label::after {
-}
 .custom-checkbox:checked+label::after {
   background-image: url("data:image/svg+xml,%3csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 20'%3e%3cpath fill='%23000' d='M24.4107 1.30299C25.2766 2.02718 25.3681 3.2892 24.6148 4.1218L11.8142 18.2718C10.8103 19.3815 9.06094 19.4991 7.9062 18.5344L0.902667 12.6839C0.0362917 11.9601 -0.0558157 10.6982 0.69694 9.86518C1.44969 9.0322 2.76226 8.94364 3.62864 9.66738L9.58691 14.6447L21.4789 1.49931C22.2321 0.666707 23.5447 0.578813 24.4107 1.30299z'/%3e%3c/svg%3e");
 }
@@ -1171,12 +1148,6 @@ input {
 
   border-color: #b3d7ff;
 }
-/* стили для чекбокса, находящегося в фокусе */
-.custom-checkbox-tags:focus+label::after {
-}
-/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
-.custom-checkbox-tags:focus:not(:checked)+label::after {
-}
 .custom-checkbox-tags:checked+label::after {
   background-image: url("data:image/svg+xml,%3csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 20'%3e%3cpath fill='%23000' d='M24.4107 1.30299C25.2766 2.02718 25.3681 3.2892 24.6148 4.1218L11.8142 18.2718C10.8103 19.3815 9.06094 19.4991 7.9062 18.5344L0.902667 12.6839C0.0362917 11.9601 -0.0558157 10.6982 0.69694 9.86518C1.44969 9.0322 2.76226 8.94364 3.62864 9.66738L9.58691 14.6447L21.4789 1.49931C22.2321 0.666707 23.5447 0.578813 24.4107 1.30299z'/%3e%3c/svg%3e");
 }
@@ -1200,9 +1171,6 @@ label
   background: #F4F5F7;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
-}
-.form-send-message .input-group
-{
 }
 .text-group-design
 {
@@ -1368,9 +1336,6 @@ label
 {
   margin-top: 0;
 }
-.form-everymonth-container
-{
-}
 .btn-day-month
 {
   padding: 5px;
@@ -1396,10 +1361,6 @@ label
 {
   margin-right: 10px;
   margin-top: 2px;
-}
-.form-everyyear-container
-{
-
 }
 .btn-day-year
 {
@@ -1549,9 +1510,6 @@ label
 #tooltip[data-popper-placement^='right'] > #arrow {
   left: -4px;
 }
-.popper
-{
-}
 .nopadding {
   padding: 0;
   margin-right: 5px;
@@ -1562,50 +1520,6 @@ label
   margin: 10px 0 0 15px;
   padding-left: 5px;
   border: 1px solid rgba(62, 59, 54, 0.15);
-}
-.example-1
-{
-  width: 40px;
-}
-.example-1 input[type=file]
-{
-  outline:0;
-  opacity:0;
-  width: 40px;
-  pointer-events: none;
-  user-select:none
-}
-.example-1 .label
-{
-  width: 40px;
-  cursor: pointer;
-  text-align: center;
-  top: 10px;
-  height: 40px;
-}
-.example-1 .label svg
-{
-  width: 40px;
-  position: relative;
-  top: 10px;
-}
-.example-1 .label i
-{
-  display:block;
-  font-size:42px;
-  padding-bottom:16px
-}
-.example-1 .label i,.example-1 .label .title
-{
-  color:grey;
-  transition:200ms color
-}
-.example-1 .label:hover
-{
-}
-.example-1 .label:hover i,.example-1 .label:hover .title
-{
-  color:#000
 }
 .comment-custom {
   border: 1px solid white;
@@ -1727,117 +1641,6 @@ label
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-.tabs-component {
-}
-
-.tabs-component-tabs {
-  border-bottom-left-radius: 7px;
-  border-top-left-radius: 7px;
-  margin-bottom: 5px;
-}
-
-@media (min-width: 700px) {
-  .tabs-component-tabs {
-    align-items: stretch;
-    display: flex;
-    justify-content: flex-start;
-  }
-}
-
-.tabs-component-tab {
-  color: #999;
-  font-size: 14px;
-  font-weight: 600;
-  margin-right: 0;
-  list-style: none;
-}
-
-.tabs-component-tab:not(:last-child) {
-
-}
-
-.tabs-component-tab:hover {
-  color: #666;
-}
-
-.tabs-component-tab.is-active {
-  color: #000;
-}
-
-.tabs-component-tab.is-disabled * {
-  color: #cdcdcd;
-  cursor: not-allowed !important;
-}
-
-@media (min-width: 700px) {
-  .tabs-component-tab:first-child {
-    color: black;
-    background: #f0f0f0;
-    padding: 4px;
-    margin: 0;
-    float: left;
-    line-height: 9px;
-    height: 20px;
-    border-bottom-left-radius: 7px;
-    border-top-left-radius: 7px;
-    font-size: 10px;
-    transition: transform .3s ease;
-  }
-  .tabs-component-tab:last-child {
-    color: black;
-    background: #f0f0f0;
-    padding: 4px;
-    margin: 0;
-    float: left;
-    line-height: 9px;
-    height: 20px;
-    border-bottom-right-radius: 7px;
-    border-top-right-radius: 7px;
-    font-size: 10px;
-    transition: transform .3s ease;
-  }
-  .tabs-component-tab {
-    color: black;
-    background: #f0f0f0;
-    padding: 4px;
-    margin: 0;
-    float: left;
-    line-height: 9px;
-    height: 20px;
-    font-size: 10px;
-    transition: transform .3s ease;
-  }
-  .tabs-component-tab.is-active {
-    background: #FF9123;
-    color: #ffffff;
-    cursor: pointer;
-    z-index: 2;
-    transform: translateY(0);
-  }
-}
-
-.tabs-component-tab-a {
-  align-items: center;
-  color: inherit;
-  display: flex;
-  font-weight: normal;
-  text-decoration: none;
-}
-
-.tabs-component-panels {
-}
-
-@media (min-width: 700px) {
-  .tabs-component-panels {
-
-
-  }
-}
-
-.calendar-properties
-{
-
-}
 .any-list-custom .custom-dropdown
 {
   display: none;
@@ -1946,10 +1749,6 @@ label
   content:attr(data-placeholder);
   color:gray
 }
-.checklist-list li
-{
-
-}
 .checkdellist
 {
   text-decoration: none;
@@ -2016,9 +1815,6 @@ label
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
 }
-.vc-timestamp-select-arrow
-{
-}
 .timeselectstart
 {
 
@@ -2049,17 +1845,6 @@ audio::-webkit-media-controls-enclosure {
   background-color: transparent;
   border-bottom: 1px solid #f0f0f0;
 }
-audio::-webkit-media-controls-timeline {}
-audio::-webkit-media-controls-volume-control-container {}
-audio::-webkit-media-controls-volume-control-container.closed {}
-audio::-webkit-media-controls-volume-slider-container {}
-audio::-webkit-media-controls-volume-slider {}
-audio::-webkit-media-controls-seek-back-button {}
-audio::-webkit-media-controls-seek-forward-button {}
-audio::-webkit-media-controls-fullscreen-button {}
-audio::-webkit-media-controls-rewind-button {}
-audio::-webkit-media-controls-return-to-realtime-button {}
-audio::-webkit-media-controls-toggle-closed-captions-button {}
 .btn-timestamp
 {
   background-color: white;
@@ -2197,8 +1982,6 @@ audio::-webkit-media-controls-toggle-closed-captions-button {}
 .form_checkbox_btn-custom input[type=checkbox] {
   display: none;
 }
-.form_checkboxbtn-custom {
-}
 .form_checkbox_btn-custom label {
   cursor: pointer;
   user-select: none;
@@ -2234,17 +2017,12 @@ audio::-webkit-media-controls-toggle-closed-captions-button {}
   color: #666;
 }
 
-
-
-
-
 .form_label {
   position: relative;
   min-height: 88px;
 }
 
 .form_text {
-  vertical-align: top;
   display: block;
   margin-bottom: 6px;
   font-weight: 500;

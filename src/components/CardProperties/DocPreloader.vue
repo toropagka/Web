@@ -114,12 +114,30 @@ export default {
     CardChatMessageOptionsPopMenu
   },
   props: {
-    fileUid: String,
-    fileName: String,
-    fileExtension: String,
-    fileSize: String,
-    fileDateCreate: String,
-    isFileUploading: Boolean,
+    fileUid: {
+      type: String,
+      default: ''
+    },
+    fileName: {
+      type: String,
+      default: ''
+    },
+    fileExtension: {
+      type: String,
+      default: ''
+    },
+    fileSize: {
+      type: String,
+      default: ''
+    },
+    fileDateCreate: {
+      type: String,
+      default: ''
+    },
+    isFileUploading: {
+      type: Boolean,
+      default: false
+    },
     canDelete: {
       type: Boolean,
       default: true

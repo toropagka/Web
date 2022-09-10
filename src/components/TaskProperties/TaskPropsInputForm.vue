@@ -16,6 +16,7 @@
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages'
+import { TASK_STATUS } from '@/constants'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput'
 import { uuidv4 } from '@/helpers/functions'
 
@@ -83,7 +84,7 @@ export default {
             .then((resp) => {
               this.isloading = false
               if (this.task.type === 2 || this.task.uid.type === 3) {
-                if ([1, 5, 7, 8].includes(this.task.status)) {
+                if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
                   this.selectedTask.status = 9
                 }
               }
@@ -122,7 +123,7 @@ export default {
 
           this.selectedTask.has_msgs = true
           if (this.selectedTask.type === 2 || this.selectedTask.type === 3) {
-            if ([1, 5, 7, 8].includes(this.selectedTask.status)) {
+            if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.selectedTask.status)) {
               if (((this.selectedTask.uid_customer === this.cusers.current_user_uid) && ((this.selectedTask.status === 1) || (this.selectedTask.status === 5)))) {
                 this.selectedTask.status = 9
               }
@@ -160,13 +161,13 @@ export default {
       this.$store.dispatch(FILES.CREATE_FILES_REQUEST, data)
         .then((resp) => {
           if (this.task.type === 2 || this.task.type === 3) {
-            if ([1, 5, 7, 8].includes(this.task.status)) {
-              this.selectedTask.status = 9
+            if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
+              this.selectedTask.status = TASK_STATUS.TASK_REFINE
             }
           }
           this.selectedTask.has_files = true
-          if (this.task.uid_customer === this.user.current_user_uid && (this.task.status === 5 || this.task.status === 7)) {
-            this.selectedTask.status = 9
+          if (this.task.uid_customer === this.user.current_user_uid && (this.task.status === TASK_STATUS.TASK_READY || this.task.status === TASK_STATUS.TASK_CANCELLED)) {
+            this.selectedTask.status = TASK_STATUS.TASK_REFINE
           }
         })
       this.infoComplete = true

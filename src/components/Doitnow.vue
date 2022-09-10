@@ -72,37 +72,9 @@
       v-if="displayModal && !isLoading"
       class="max-w-xl mx-auto flex-center flex-col items-center justify-center"
     >
-      <div
-        class="flex flex-col"
-      >
-        <img
-          class="mx-auto mt-10"
-          width="320"
-          height="314"
-          src="@/assets/images/emptydoitnow.png"
-          alt="Empty task image"
-        >
-        <p class="font-bold p-3">
-          Работайте только с одной конкретной задачей и не отвлекайтесь на другие
-        </p>
-        <ul class="list-decimal pl-[30px]">
-          <li class="p-3 text-sm">
-            Очередь выдает по одной задаче в один момент времени
-          </li>
-          <li class="p-3 text-sm">
-            У вас нет возможности выбрать задачу и вы не знаете, какая будет следующей
-          </li>
-          <li class="p-3 text-sm">
-            В Очередь попадают непрочитанные и просроченные задачи и поручения, а также поручения и задачи на сегодня
-          </li>
-        </ul>
-        <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-          @click="okToModal"
-        >
-          Понятно
-        </button>
-      </div>
+      <DoitnowOnboarding
+        @okToModal="okToModal"
+      />
     </div>
   </div>
 </template>
@@ -122,9 +94,11 @@ import Icon from '@/components/Icon.vue'
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { TASK_STATUS } from '@/constants'
 
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
+import DoitnowOnboarding from './Doitnow/DoitnowOnboarding.vue'
 
 export default {
   components: {
@@ -134,32 +108,31 @@ export default {
     DoitnowTask,
     Icon,
     DoitnowNotificationTasks,
-    NavBar
+    NavBar,
+    DoitnowOnboarding
   },
-  setup () {
+  data () {
     return {
+      unreadTasks: [],
+      overdueTasks: [],
+      todayTasks: [],
+      readyTasks: [],
+      unreadDelegateByMe: [],
+      unreadDelegateToMe: [],
+      readyTasksReaded: [],
+      readyTasksUnreaded: [],
+      openedTasks: [],
+      slidesCopy: [],
+      projectTasks: [],
+      unsortedTasks: [],
+      overdueReaded: [],
+      notifiesCopy: [],
+      tasksLoaded: false,
+      childrens: [],
+      isTaskMessagesLoading: false,
       arrowForw
     }
   },
-  data: () => ({
-    unreadTasks: [],
-    overdueTasks: [],
-    todayTasks: [],
-    readyTasks: [],
-    unreadDelegateByMe: [],
-    unreadDelegateToMe: [],
-    readyTasksReaded: [],
-    readyTasksUnreaded: [],
-    openedTasks: [],
-    slidesCopy: [],
-    projectTasks: [],
-    unsortedTasks: [],
-    overdueReaded: [],
-    notifiesCopy: [],
-    tasksLoaded: false,
-    childrens: [],
-    isTaskMessagesLoading: false
-  }),
   computed: {
     tasksCount () {
       return (
@@ -170,9 +143,6 @@ export default {
         this.todayTasks.length +
         this.notifiesCopy.length
       )
-    },
-    currentLocation () {
-      return window.location.origin
     },
     firstTask () {
       if (this.slidesCopy.length && this.justRegistered) {
@@ -308,7 +278,7 @@ export default {
                 this.unreadDelegateToMe.unshift(result[0][i])
               } else {
                 // Готово к сдаче
-                if (result[0][i].status === 5) {
+                if (result[0][i].status === TASK_STATUS.TASK_READY) {
                   this.readyTasksUnreaded.push(result[0][i])
                 } else {
                   // Доступ
@@ -351,11 +321,11 @@ export default {
               this.todayTasks = [...result[2]]
               this.openedTasks = [...this.openedTasks]
               // удаляем из массивов задачи со статусом "завершено"
-              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.readyTasks = this.readyTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.todayTasks = this.todayTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.openedTasks = this.openedTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
             })
         })
         .then(() => {

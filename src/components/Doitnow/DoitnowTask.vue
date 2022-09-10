@@ -50,56 +50,18 @@
             :no-nl="false"
             :no-html="false"
             :style="{ color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
-            :class="{ 'uppercase': !task._isEditable && colors[task.uid_marker] && colors[task.uid_marker].uppercase, 'text-gray-500': task.status == 1 || task.status == 7, 'line-through': task.status == 1 || task.status == 7 }"
+            :class="{ 'uppercase': !task._isEditable && colors[task.uid_marker] && colors[task.uid_marker].uppercase, 'text-gray-500': task.status == TASK_STATUS.TASK_COMPLETED || task.status == TASK_STATUS.TASK_CANCELLED, 'line-through': task.status == TASK_STATUS.TASK_COMPLETED || task.status == TASK_STATUS.TASK_CANCELLED }"
             @focusout="clearTaskFocus(task)"
             @dblclick.stop="editTaskName(task)"
             @keydown.enter="updateTask($event, task)"
           />
         </div>
-        <Popper
-          class="items-center"
-          :class="isDark ? 'dark' : 'light'"
-          placement="bottom"
-          @click.stop="toggleTaskHoverPopper(true)"
-          @open:popper="toggleTaskHoverPopper(true)"
-          @close:popper="toggleTaskHoverPopper(false)"
-        >
-          <Icon
-            :path="dots.path"
-            class="text-gray-600 dark:text-white cursor-pointer ml-1"
-            :box="dots.viewBox"
-            :width="dots.width"
-            :style="{ color: 'gray' }"
-            :height="dots.height"
-          />
-          <template #content>
-            <div class="flex flex-col">
-              <!-- date create -->
-              <div class="flex flex-col gap-[4px] px-[10px] text-[#7e7e80] text-[13px] leading-[15px] font-roboto">
-                <div class="text-[#4c4c4d] text-[14px] leading-[16px] font-medium">
-                  Дата создания:
-                </div>
-                {{ dateClear(task.date_create) }}
-                <div class="my-[4px] flex h-px bg-[#dddddd]" />
-              </div>
-              <!-- link -->
-              <span
-                class="h-[30px] flex items-center gap-[10px] px-[10px] py-[6px] cursor-pointer hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
-                @click="copyUrl(task)"
-              >
-                Копировать как ссылку
-              </span>
-              <!-- only files -->
-              <span
-                class="h-[30px] flex items-center gap-[10px] px-[10px] py-[6px] cursor-pointer hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
-                :class="showOnlyFiles ? 'bg-slate-200' : ''"
-                @click="showOnlyFiles = !showOnlyFiles"
-              >
-                В чате показывать только файлы
-              </span>
-            </div>
-          </template>
-        </Popper>
+        <DoitnowTaskButtonDots
+          :date-create="selectedTask?.date_create"
+          :only-files="showOnlyFiles"
+          @copyUrl="copyUrl(task)"
+          @toggleFiles="showOnlyFiles = !showOnlyFiles"
+        />
       </div>
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
@@ -148,6 +110,7 @@
               </div>
               <img
                 v-else
+                :alt="employees[task.uid_customer]?.name"
                 :src="employees[task.uid_customer]?.fotolink"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
@@ -169,6 +132,7 @@
               class="flex"
             >
               <img
+                :alt="employees[task.uid_performer]?.name"
                 :src="employees[task.uid_performer] ? employees[task.uid_performer]?.fotolink : ''"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
@@ -240,13 +204,14 @@
         @changeComment="onChangeComment"
       />
       <Checklist
-        v-if="task.uid"
+        v-if="task?.checklist || checklistshow || checklistSavedNow"
         class="mt-3 checklist-custom font-medium"
-        :task-uid="task.uid"
-        :checklist="task.checklist"
-        :is-customer="task.uid_customer === user?.current_user_uid"
-        :is-performer="task.uid_performer === user?.current_user_uid"
-        :task="task"
+        :checklist="task?.checklist"
+        :can-edit="canEditChecklist"
+        :can-check="canCheckChecklist"
+        :add-new="checklistshow"
+        @changeChecklist="onChangeChecklist"
+        @endEdit="onAddChecklistComplete"
       />
       <div
         v-if="task.uid"
@@ -404,7 +369,7 @@
         <span class="ml-[10px] w-[70px]">Отложить</span>
       </div>
       <PerformButton
-        v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
+        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
         class="hover:cursor-pointer"
         :task-type="task.type"
         :current-user-uid="user?.current_user_uid"
@@ -414,7 +379,7 @@
       />
       <!-- Change access -->
       <div
-        v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
+        v-if="task.status !== TASK_STATUS.NOTE && (task.type !== TASK_STATUS.TASK_IN_WORK || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
         class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
         @click="() => onChangeAccess(task.emails)"
       >
@@ -432,7 +397,7 @@
         />
       </div>
       <SetDate
-        v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
+        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && task.uid_customer === user?.current_user_uid"
         class="hover:cursor-pointer"
         :name="'Назначить срок'"
         :date-begin="task.date_begin"
@@ -467,16 +432,17 @@
 <script>
 import { copyText } from 'vue3-clipboard'
 import { uuidv4 } from '@/helpers/functions'
+import { TASK_STATUS } from '@/constants'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
-import Popper from 'vue3-popper'
 import SetDate from '@/components/Doitnow/SetDate.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
 import TaskPropsChatMessages from '@/components/TaskProperties/TaskPropsChatMessages.vue'
 import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.vue'
+import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
@@ -493,7 +459,6 @@ import file from '@/icons/file.js'
 import inaccess from '@/icons/inaccess.js'
 import doublecheck from '@/icons/doublecheck.js'
 import close from '@/icons/doitnow/close.js'
-import dots from '@/icons/doitnow/dots.js'
 import pauseD from '@/icons/doitnow/pause.js'
 import msgs from '@/icons/msgs.js'
 import taskcomment from '@/icons/taskcomment.js'
@@ -523,12 +488,12 @@ export default {
     SetDate,
     TaskPropsChatMessages,
     TaskPropsCommentEditor,
+    DoitnowTaskButtonDots,
     PerformButton,
     Checklist,
     TaskPropsInputForm,
     DoitnowStatusModal,
     contenteditable,
-    Popper,
     TaskStatus,
     SlideBody,
     MessageSkeleton
@@ -546,10 +511,6 @@ export default {
       default: () => ([])
     },
     colors: {
-      type: Object,
-      default: () => ({})
-    },
-    tags: {
       type: Object,
       default: () => ({})
     },
@@ -573,10 +534,6 @@ export default {
       type: Array,
       default: () => ([])
     },
-    tasksCount: {
-      type: Number,
-      default: () => 0
-    },
     isTaskMessagesLoading: {
       type: Boolean,
       default: false
@@ -584,55 +541,30 @@ export default {
   },
   emits: ['clickTask', 'nextTask', 'changeValue', 'readTask'],
   data (props) {
-    const name = props.task.name
-    let isTaskHoverPopperActive = false
-    const checklistshow = true
-    const toggleTaskHoverPopper = (val) => {
-      isTaskHoverPopperActive = val
-    }
-    const showConfirm = false
-    const showAllMessages = false
-    const isChatVisible = false
-    const createChecklist = () => {
-      checklistshow.value = true
-    }
-    const currentAnswerMessageUid = ''
-    const statuses = [
-      undefined, // we don't have 0 status
-      readyStatus,
-      readyStatus,
-      note,
-      inwork,
-      readyStatus,
-      pause,
-      canceled,
-      canceled,
-      improve
-    ]
     return {
-      isTaskHoverPopperActive,
-      toggleTaskHoverPopper,
-      isChatVisible,
+      // * variables * //
+      isChatVisible: false,
       showStatusModal: false,
       lastSelectedStatus: '',
-      createChecklist,
-      showConfirm,
-      checklistshow,
-      currentAnswerMessageUid,
-      showAllMessages,
+      showConfirm: false,
+      checklistshow: false,
+      checklistSavedNow: false,
+      currentAnswerMessageUid: '',
+      showAllMessages: false,
+      name: props.task.name,
+      isloading: false,
+      showOnlyFiles: false,
+
+      // * imports * //
       taskoptions,
+      TASK_STATUS,
       close,
-      statuses,
       file,
-      dots,
       pause,
       inaccess,
       msgs,
-      name,
       pauseD,
       openTask,
-      isloading: false,
-      showOnlyFiles: false,
       check,
       doublecheck,
       taskcomment,
@@ -652,14 +584,15 @@ export default {
       arrowForw
     }
   },
-  mutations: {
-    PopperState (val) {
-      this.isTaskHoverPopperActive = val
-    }
-  },
   computed: {
-    currentLocation () {
-      return window.location.origin
+    canEditChecklist () {
+      return (this.task?.type === 1 || this.task?.type === 2) && this.user.tarif !== 'free'
+    },
+    canCheckChecklist () {
+      return (this.canEditChecklist || this.task?.type === 3) && this.user.tarif !== 'free'
+    },
+    selectedTask () {
+      return this.$store.state.tasks.selectedTask
     },
     taskMessagesAndFiles () {
       return this.$store.state.taskfilesandmessages.messages
@@ -735,28 +668,12 @@ export default {
         ? statusColor[this.task.status]
         : 'text-gray-500 dark:text-gray-100'
     },
-    performerName () {
-      return this.employees[this.task.uid_performer]?.name ?? '???'
-    },
-    customerName () {
-      return this.employees[this.task.uid_customer]?.name ?? '???'
-    },
     isTaskComplete () {
-      return this.task.status === 1 || this.task.status === 7
+      return this.task.status === TASK_STATUS.TASK_COMPLETED || this.task.status === TASK_STATUS.TASK_CANCELLED
     },
     backgroundColor () {
       return this.getValidBackColor(
         this.colors[this.task.uid_marker]?.back_color
-      )
-    },
-    checkBoxText () {
-      return `${this.countChecklist(this.task.checklist).done} / ${
-        this.countChecklist(this.task.checklist).undone
-      }`
-    },
-    forecolor () {
-      return this.getValidForeColor(
-        this.colors[this.task.uid_marker]?.fore_color
       )
     },
     uppercase () {
@@ -802,13 +719,30 @@ export default {
     }
   },
   watch: {
-    task (newval, oldval) {
+    task () {
       this.showAllMessages = false
       this.isChatVisible = false
       this.name = this.task.name
     }
   },
   methods: {
+    onChangeChecklist (checklist) {
+      const data = {
+        uid_task: this.task?.uid,
+        checklist: checklist
+      }
+      this.checklistSavedNow = true
+      this.$store.dispatch(TASK.CHANGE_TASK_CHECKLIST, data).then(
+        resp => {
+          this.$emit('changeValue', { checklist: checklist })
+        }
+      ).finally(() => {
+        this.checklistSavedNow = false
+      })
+    },
+    onAddChecklistComplete () {
+      this.checklistshow = false
+    },
     sendTaskMsg (msg) {
       const date = new Date()
       const month = this.pad2(date.getUTCMonth() + 1)
@@ -834,7 +768,7 @@ export default {
       }
 
       this.$store.dispatch(MSG.CREATE_MESSAGE_REQUEST, data)
-        .then((resp) => {
+        .then(() => {
           const lastInspectorMessage = this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2].uid_creator === 'inspector' ? this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2] : false
           console.log('lastInspectorMessage: ', lastInspectorMessage)
           if (lastInspectorMessage) {
@@ -847,8 +781,8 @@ export default {
           }
 
           if (this.task.type === 2 || this.task.type === 3) {
-            if ([1, 5, 7, 8].includes(this.task.status)) {
-              this.$emit('changeValue', { status: 9 })
+            if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
+              this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
             }
           }
         })
@@ -864,9 +798,6 @@ export default {
     },
     readTask () {
       this.$emit('readTask')
-    },
-    resetFocusChecklist () {
-      this.checklistshow = false
     },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
@@ -894,9 +825,6 @@ export default {
         }
       })
     },
-    dateClear (time) {
-      return new Date(time).getDate() + '.' + (new Date(time).getMonth() + 1) + '.' + new Date(time).getFullYear()
-    },
     removeTask (uid) {
       if (this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', false)
@@ -920,13 +848,13 @@ export default {
           loadFile = true
           this.isloading = true
           this.$store.dispatch(FILES.CREATE_FILES_REQUEST, data).then(
-            resp => {
+            () => {
               this.isloading = false
               // ставим статус "на доработку" когда прикладываем файл
               if (this.task.type === 2 || this.task.type === 3) {
-                if ([1, 5, 7, 8].includes(this.task.status)) {
-                  if (((this.task.uid_customer === this.cusers?.current_user_uid) && ((this.task.status === 1) || (this.task.status === 5)))) {
-                    this.$emit('changeValue', { status: 9 })
+                if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
+                  if (((this.task.uid_customer === this.cusers?.current_user_uid) && ((this.task.status === TASK_STATUS.TASK_COMPLETED) || (this.task.status === TASK_STATUS.TASK_READY)))) {
+                    this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
                   }
                 }
               }
@@ -980,7 +908,7 @@ export default {
     },
     deleteTaskMsg (uid) {
       this.$store.dispatch(MSG.DELETE_MESSAGE_REQUEST, { uid: uid })
-        .then((resp) => {
+        .then(() => {
           this.$store.state.tasks.selectedTask.has_msgs = true
           this.$store.state.taskfilesandmessages.messages.find(message => message.uid === uid).deleted = 1
         })
@@ -1004,13 +932,6 @@ export default {
         _isEditing: false
       }
       this.$emit('changeValue', data)
-    },
-    showChat () {
-      if (!this.isChatVisible) {
-        this.isChatVisible = true
-      } else {
-        this.isChatVisible = false
-      }
     },
     scrollDown () {
       this.showAllMessages = true
@@ -1071,7 +992,7 @@ export default {
         value: emails
       }
       this.$store.dispatch(TASK.CHANGE_TASK_ACCESS, data)
-        .then((resp) => {
+        .then(() => {
           const data = {
             emails: emails
           }
@@ -1079,58 +1000,19 @@ export default {
         })
       this.nextTask()
     },
-    onChangeProject (projectUid) {
-      const data = {
-        uid: this.task.uid,
-        value: projectUid
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_PROJECT, data)
-        .then((resp) => {
-          const data = {
-            uid_project: projectUid
-          }
-          this.$emit('changeValue', data)
-        })
-    },
-    onChangeColor (colorUid) {
-      const data = {
-        uid: this.task.uid,
-        value: colorUid
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_COLOR, data)
-        .then((resp) => {
-          const data = {
-            uid_marker: colorUid
-          }
-          this.$emit('changeValue', data)
-        })
-    },
-    onChangeTags (tags) {
-      const data = {
-        uid: this.task.uid,
-        tags: tags
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_TAGS, data)
-        .then((resp) => {
-          const data = {
-            tags: [...tags]
-          }
-          this.$emit('changeValue', data)
-        })
-    },
     onClick (task) {
       this.$emit('clickTask', task)
     },
     reDo () {
       if (this.childrens?.length) {
         if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
-          this.lastSelectedStatus = 7
+          this.lastSelectedStatus = TASK_STATUS.TASK_CANCELLED
         }
         if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer !== this.user.current_user_uid) {
-          this.lastSelectedStatus = 8
+          this.lastSelectedStatus = TASK_STATUS.TASK_REJECTED
         }
         if (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
-          this.lastSelectedStatus = 9
+          this.lastSelectedStatus = TASK_STATUS.TASK_REFINE
         }
         this.changeStatus(this.lastSelectedStatus, true)
         return
@@ -1139,23 +1021,23 @@ export default {
       if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 7
+          value: TASK_STATUS.TASK_CANCELLED
         })
-        this.$emit('changeValue', { status: 7 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_CANCELLED })
       }
       if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer !== this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 8
+          value: TASK_STATUS.TASK_REJECTED
         })
-        this.$emit('changeValue', { status: 8 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_REJECTED })
       }
       if (this.task.uid_performer !== this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 9
+          value: TASK_STATUS.TASK_REFINE
         })
-        this.$emit('changeValue', { status: 9 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
       }
       this.nextTask()
     },
@@ -1168,9 +1050,9 @@ export default {
         this.showStatusModal = true
         if ((this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) ||
         (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid)) {
-          this.lastSelectedStatus = 1
+          this.lastSelectedStatus = TASK_STATUS.TASK_COMPLETED
         } else {
-          this.lastSelectedStatus = 5
+          this.lastSelectedStatus = TASK_STATUS.TASK_READY
         }
         return
       }
@@ -1181,13 +1063,13 @@ export default {
           uid: this.task.uid,
           value: 1
         })
-        this.$emit('changeValue', { status: 1 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_COMPLETED })
       } else {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 5
         })
-        this.$emit('changeValue', { status: 5 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_READY })
       }
       this.nextTask()
     },
@@ -1195,9 +1077,9 @@ export default {
       this.readTask()
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
         uid: this.task.uid,
-        value: 6
+        value: TASK_STATUS.TASK_PAUSED
       })
-      this.$emit('changeValue', { status: 6 })
+      this.$emit('changeValue', { status: TASK_STATUS.TASK_PAUSED })
       this.nextTask()
     },
     onReAssignToUser: function (userEmail) {
@@ -1262,7 +1144,7 @@ export default {
           })
     },
     changeStatus (status, isModalAnswer) {
-      if (this.childrens?.length && !(isModalAnswer) && [1, 5, 7, 8].includes(status)) {
+      if (this.childrens?.length && !(isModalAnswer) && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
         this.lastSelectedStatus = status
         this.showStatusModal = true
         return
@@ -1282,6 +1164,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

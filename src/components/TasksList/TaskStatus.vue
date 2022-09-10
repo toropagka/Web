@@ -2,7 +2,7 @@
 import Icon from '@/components/Icon.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
-
+import { TASK_STATUS } from '@/constants'
 // Statuses icons
 import readyStatus from '@/icons/ready-status.js'
 import note from '@/icons/note.js'
@@ -77,11 +77,11 @@ export default {
   },
   methods: {
     showStatusOrNot (type, status) {
-      if (type === 1 && [0, 1, 3, 4, 6, 7].includes(status)) {
+      if (type === 1 && [TASK_STATUS.NOT_BEGIN, TASK_STATUS.TASK_COMPLETED, TASK_STATUS.NOTE, TASK_STATUS.TASK_IN_WORK, TASK_STATUS.TASK_PAUSED, TASK_STATUS.TASK_CANCELLED].includes(status)) {
         return true
-      } else if (type === 2 && [0, 1, 3, 4, 6, 7, 9].includes(status)) {
+      } else if (type === 2 && [TASK_STATUS.NOT_BEGIN, TASK_STATUS.TASK_COMPLETED, TASK_STATUS.NOTE, TASK_STATUS.TASK_IN_WORK, TASK_STATUS.TASK_PAUSED, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REFINE].includes(status)) {
         return true
-      } else if (type === 3 && [0, 4, 5, 6, 8].includes(status)) {
+      } else if (type === 3 && [TASK_STATUS.NOT_BEGIN, TASK_STATUS.TASK_IN_WORK, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_PAUSED, TASK_STATUS.TASK_REJECTED].includes(status)) {
         return true
       } else {
         return false

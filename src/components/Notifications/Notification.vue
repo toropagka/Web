@@ -1,25 +1,3 @@
-<script>
-import Employee from '@/components/Notifications/Employee'
-import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
-export default {
-  components: {
-    Employee
-  },
-  computed: {
-    employees () {
-      return this.$store.state.employees.employees
-    }
-  },
-  methods: {
-
-    redirect (notification) {
-      const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
-      window.location.href = link
-      this.$store.commit(NAVIGATOR_SUCCESS)
-    }
-  }
-}
-</script>
 <template>
   <NotificationGroup group="top">
     <div class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none z-50">
@@ -42,7 +20,7 @@ export default {
           >
             <div class="p-4">
               <div class="flex items-start">
-                <div class="shrink-0">
+                <div class="shrink-0 mt-[2px]">
                   <svg
                     class="w-6 h-6 text-green-400"
                     xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +56,7 @@ export default {
                     :fotolink="employees[notification.obj.obj.uid_customer].fotolink"
                     :name="employees[notification.obj.obj.uid_customer].name"
                   />
-                  <p class="text-sm font-semibold text-gray-500 truncate">
+                  <p class="text-sm font-semibold text-gray-500 mt-2 truncate">
                     {{ notification.text }}
                   </p>
                 </div>
@@ -111,3 +89,26 @@ export default {
     </div>
   </NotificationGroup>
 </template>
+
+<script>
+import Employee from '@/components/Notifications/Employee'
+import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
+export default {
+  components: {
+    Employee
+  },
+  computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    }
+  },
+  methods: {
+
+    redirect (notification) {
+      const link = `${window.location.origin}/task/${notification.obj.obj.uid}`
+      window.location.href = link
+      this.$store.commit(NAVIGATOR_SUCCESS)
+    }
+  }
+}
+</script>
