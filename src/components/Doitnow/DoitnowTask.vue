@@ -50,7 +50,7 @@
             :no-nl="false"
             :no-html="false"
             :style="{ color: getValidForeColor(colors[task.uid_marker]?.fore_color) }"
-            :class="{ 'uppercase': !task._isEditable && colors[task.uid_marker] && colors[task.uid_marker].uppercase, 'text-gray-500': task.status == 1 || task.status == 7, 'line-through': task.status == 1 || task.status == 7 }"
+            :class="{ 'uppercase': !task._isEditable && colors[task.uid_marker] && colors[task.uid_marker].uppercase, 'text-gray-500': task.status == TASK_STATUS.TASK_COMPLETED || task.status == TASK_STATUS.TASK_CANCELLED, 'line-through': task.status == TASK_STATUS.TASK_COMPLETED || task.status == TASK_STATUS.TASK_CANCELLED }"
             @focusout="clearTaskFocus(task)"
             @dblclick.stop="editTaskName(task)"
             @keydown.enter="updateTask($event, task)"
@@ -406,7 +406,7 @@
         <span class="ml-[10px] w-[70px]">Отложить</span>
       </div>
       <PerformButton
-        v-if="task.status !== 3 && task.type !== 4 && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
+        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
         class="hover:cursor-pointer"
         :task-type="task.type"
         :current-user-uid="user?.current_user_uid"
@@ -416,7 +416,7 @@
       />
       <!-- Change access -->
       <div
-        v-if="task.status !== 3 && (task.type !== 4 || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
+        v-if="task.status !== TASK_STATUS.NOTE && (task.type !== TASK_STATUS.TASK_IN_WORK || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
         class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
         @click="() => onChangeAccess(task.emails)"
       >
@@ -434,7 +434,7 @@
         />
       </div>
       <SetDate
-        v-if="task.status !== 3 && task.type !== 4 && task.uid_customer === user?.current_user_uid"
+        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && task.uid_customer === user?.current_user_uid"
         class="hover:cursor-pointer"
         :name="'Назначить срок'"
         :date-begin="task.date_begin"
@@ -469,6 +469,7 @@
 <script>
 import { copyText } from 'vue3-clipboard'
 import { uuidv4 } from '@/helpers/functions'
+import { TASK_STATUS } from '@/constants'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
@@ -601,6 +602,7 @@ export default {
 
       // * imports * //
       taskoptions,
+      TASK_STATUS,
       close,
       file,
       dots,
@@ -707,7 +709,7 @@ export default {
         : 'text-gray-500 dark:text-gray-100'
     },
     isTaskComplete () {
-      return this.task.status === 1 || this.task.status === 7
+      return this.task.status === TASK_STATUS.TASK_COMPLETED || this.task.status === TASK_STATUS.TASK_CANCELLED
     },
     backgroundColor () {
       return this.getValidBackColor(
@@ -805,8 +807,8 @@ export default {
           }
 
           if (this.task.type === 2 || this.task.type === 3) {
-            if ([1, 5, 7, 8].includes(this.task.status)) {
-              this.$emit('changeValue', { status: 9 })
+            if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
+              this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
             }
           }
         })
@@ -879,9 +881,9 @@ export default {
               this.isloading = false
               // ставим статус "на доработку" когда прикладываем файл
               if (this.task.type === 2 || this.task.type === 3) {
-                if ([1, 5, 7, 8].includes(this.task.status)) {
-                  if (((this.task.uid_customer === this.cusers?.current_user_uid) && ((this.task.status === 1) || (this.task.status === 5)))) {
-                    this.$emit('changeValue', { status: 9 })
+                if ([TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status)) {
+                  if (((this.task.uid_customer === this.cusers?.current_user_uid) && ((this.task.status === TASK_STATUS.TASK_COMPLETED) || (this.task.status === TASK_STATUS.TASK_READY)))) {
+                    this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
                   }
                 }
               }
@@ -1072,13 +1074,13 @@ export default {
     reDo () {
       if (this.childrens?.length) {
         if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
-          this.lastSelectedStatus = 7
+          this.lastSelectedStatus = TASK_STATUS.TASK_CANCELLED
         }
         if (this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer !== this.user.current_user_uid) {
-          this.lastSelectedStatus = 8
+          this.lastSelectedStatus = TASK_STATUS.TASK_REJECTED
         }
         if (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) {
-          this.lastSelectedStatus = 9
+          this.lastSelectedStatus = TASK_STATUS.TASK_REFINE
         }
         this.changeStatus(this.lastSelectedStatus, true)
         return
@@ -1087,23 +1089,23 @@ export default {
       if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 7
+          value: TASK_STATUS.TASK_CANCELLED
         })
-        this.$emit('changeValue', { status: 7 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_CANCELLED })
       }
       if (this.task.uid_performer === this.user?.current_user_uid && this.task.uid_customer !== this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 8
+          value: TASK_STATUS.TASK_REJECTED
         })
-        this.$emit('changeValue', { status: 8 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_REJECTED })
       }
       if (this.task.uid_performer !== this.user?.current_user_uid && this.task.uid_customer === this.user?.current_user_uid) {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
-          value: 9
+          value: TASK_STATUS.TASK_REFINE
         })
-        this.$emit('changeValue', { status: 9 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_REFINE })
       }
       this.nextTask()
     },
@@ -1116,9 +1118,9 @@ export default {
         this.showStatusModal = true
         if ((this.task.uid_performer === this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid) ||
         (this.task.uid_performer !== this.user.current_user_uid && this.task.uid_customer === this.user.current_user_uid)) {
-          this.lastSelectedStatus = 1
+          this.lastSelectedStatus = TASK_STATUS.TASK_COMPLETED
         } else {
-          this.lastSelectedStatus = 5
+          this.lastSelectedStatus = TASK_STATUS.TASK_READY
         }
         return
       }
@@ -1129,13 +1131,13 @@ export default {
           uid: this.task.uid,
           value: 1
         })
-        this.$emit('changeValue', { status: 1 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_COMPLETED })
       } else {
         this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
           uid: this.task.uid,
           value: 5
         })
-        this.$emit('changeValue', { status: 5 })
+        this.$emit('changeValue', { status: TASK_STATUS.TASK_READY })
       }
       this.nextTask()
     },
@@ -1143,9 +1145,9 @@ export default {
       this.readTask()
       this.$store.dispatch(TASK.CHANGE_TASK_STATUS, {
         uid: this.task.uid,
-        value: 6
+        value: TASK_STATUS.TASK_PAUSED
       })
-      this.$emit('changeValue', { status: 6 })
+      this.$emit('changeValue', { status: TASK_STATUS.TASK_PAUSED })
       this.nextTask()
     },
     onReAssignToUser: function (userEmail) {
@@ -1210,7 +1212,7 @@ export default {
           })
     },
     changeStatus (status, isModalAnswer) {
-      if (this.childrens?.length && !(isModalAnswer) && [1, 5, 7, 8].includes(status)) {
+      if (this.childrens?.length && !(isModalAnswer) && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
         this.lastSelectedStatus = status
         this.showStatusModal = true
         return

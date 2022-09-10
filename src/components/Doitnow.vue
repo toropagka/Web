@@ -122,6 +122,7 @@ import Icon from '@/components/Icon.vue'
 import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import { TASK_STATUS } from '@/constants'
 
 import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
@@ -308,7 +309,7 @@ export default {
                 this.unreadDelegateToMe.unshift(result[0][i])
               } else {
                 // Готово к сдаче
-                if (result[0][i].status === 5) {
+                if (result[0][i].status === TASK_STATUS.TASK_READY) {
                   this.readyTasksUnreaded.push(result[0][i])
                 } else {
                   // Доступ
@@ -351,11 +352,11 @@ export default {
               this.todayTasks = [...result[2]]
               this.openedTasks = [...this.openedTasks]
               // удаляем из массивов задачи со статусом "завершено"
-              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.readyTasks = this.readyTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.todayTasks = this.todayTasks.filter(task => (task.status !== 1) && (task.status !== 8))
-              this.openedTasks = this.openedTasks.filter(task => (task.status !== 1) && (task.status !== 8))
+              this.unreadTasks = this.unreadTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.readyTasks = this.readyTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.todayTasks = this.todayTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
+              this.openedTasks = this.openedTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
             })
         })
         .then(() => {
