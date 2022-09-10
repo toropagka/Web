@@ -513,10 +513,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    tags: {
-      type: Object,
-      default: () => ({})
-    },
     employees: {
       type: Object,
       default: () => ({})
@@ -536,10 +532,6 @@ export default {
     childrens: {
       type: Array,
       default: () => ([])
-    },
-    tasksCount: {
-      type: Number,
-      default: () => 0
     },
     isTaskMessagesLoading: {
       type: Boolean,
@@ -596,9 +588,6 @@ export default {
     },
     canCheckChecklist () {
       return (this.canEditChecklist || this.task?.type === 3) && this.user.tarif !== 'free'
-    },
-    currentLocation () {
-      return window.location.origin
     },
     selectedTask () {
       return this.$store.state.tasks.selectedTask
@@ -735,9 +724,6 @@ export default {
     }
   },
   methods: {
-    toggleTaskHoverPopper (val) {
-      this.isTaskHoverPopperActive = val
-    },
     onChangeChecklist (checklist) {
       const data = {
         uid_task: this.task?.uid,
@@ -1011,45 +997,6 @@ export default {
           this.$emit('changeValue', data)
         })
       this.nextTask()
-    },
-    onChangeProject (projectUid) {
-      const data = {
-        uid: this.task.uid,
-        value: projectUid
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_PROJECT, data)
-        .then(() => {
-          const data = {
-            uid_project: projectUid
-          }
-          this.$emit('changeValue', data)
-        })
-    },
-    onChangeColor (colorUid) {
-      const data = {
-        uid: this.task.uid,
-        value: colorUid
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_COLOR, data)
-        .then(() => {
-          const data = {
-            uid_marker: colorUid
-          }
-          this.$emit('changeValue', data)
-        })
-    },
-    onChangeTags (tags) {
-      const data = {
-        uid: this.task.uid,
-        tags: tags
-      }
-      this.$store.dispatch(TASK.CHANGE_TASK_TAGS, data)
-        .then(() => {
-          const data = {
-            tags: [...tags]
-          }
-          this.$emit('changeValue', data)
-        })
     },
     onClick (task) {
       this.$emit('clickTask', task)

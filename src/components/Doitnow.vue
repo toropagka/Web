@@ -136,30 +136,28 @@ export default {
     DoitnowNotificationTasks,
     NavBar
   },
-  setup () {
+  data () {
     return {
+      unreadTasks: [],
+      overdueTasks: [],
+      todayTasks: [],
+      readyTasks: [],
+      unreadDelegateByMe: [],
+      unreadDelegateToMe: [],
+      readyTasksReaded: [],
+      readyTasksUnreaded: [],
+      openedTasks: [],
+      slidesCopy: [],
+      projectTasks: [],
+      unsortedTasks: [],
+      overdueReaded: [],
+      notifiesCopy: [],
+      tasksLoaded: false,
+      childrens: [],
+      isTaskMessagesLoading: false,
       arrowForw
     }
   },
-  data: () => ({
-    unreadTasks: [],
-    overdueTasks: [],
-    todayTasks: [],
-    readyTasks: [],
-    unreadDelegateByMe: [],
-    unreadDelegateToMe: [],
-    readyTasksReaded: [],
-    readyTasksUnreaded: [],
-    openedTasks: [],
-    slidesCopy: [],
-    projectTasks: [],
-    unsortedTasks: [],
-    overdueReaded: [],
-    notifiesCopy: [],
-    tasksLoaded: false,
-    childrens: [],
-    isTaskMessagesLoading: false
-  }),
   computed: {
     tasksCount () {
       return (
@@ -170,9 +168,6 @@ export default {
         this.todayTasks.length +
         this.notifiesCopy.length
       )
-    },
-    currentLocation () {
-      return window.location.origin
     },
     firstTask () {
       if (this.slidesCopy.length && this.justRegistered) {
