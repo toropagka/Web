@@ -24,7 +24,12 @@ export default {
   components: {
     ModalBox
   },
-  props: ['files'],
+  props: {
+    files: {
+      type: Array,
+      default: () => []
+    }
+  },
   emits: ['cancel'],
   computed: {
     fileLabel () { return this.files.length > 1 ? 'файлы' : 'файл' }
