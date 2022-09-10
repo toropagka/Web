@@ -242,13 +242,14 @@
         @changeComment="onChangeComment"
       />
       <Checklist
-        v-if="task.uid"
+        v-if="task?.checklist || checklistshow || checklistSavedNow"
         class="mt-3 checklist-custom font-medium"
-        :task-uid="task.uid"
-        :checklist="task.checklist"
-        :is-customer="task.uid_customer === user?.current_user_uid"
-        :is-performer="task.uid_performer === user?.current_user_uid"
-        :task="task"
+        :checklist="task?.checklist"
+        :can-edit="canEditChecklist"
+        :can-check="canCheckChecklist"
+        :add-new="checklistshow"
+        @changeChecklist="onChangeChecklist"
+        @endEdit="onAddChecklistComplete"
       />
       <div
         v-if="task.uid"
@@ -593,6 +594,8 @@ export default {
       showStatusModal: false,
       lastSelectedStatus: '',
       showConfirm: false,
+      checklistshow: false,
+      checklistSavedNow: false,
       currentAnswerMessageUid: '',
       showAllMessages: false,
       name: props.task.name,
@@ -629,6 +632,12 @@ export default {
     }
   },
   computed: {
+    canEditChecklist () {
+      return (this.task?.type === 1 || this.task?.type === 2) && this.user.tarif !== 'free'
+    },
+    canCheckChecklist () {
+      return (this.canEditChecklist || this.task?.type === 3) && this.user.tarif !== 'free'
+    },
     currentLocation () {
       return window.location.origin
     },
@@ -766,6 +775,23 @@ export default {
   methods: {
     toggleTaskHoverPopper (val) {
       this.isTaskHoverPopperActive = val
+    },
+    onChangeChecklist (checklist) {
+      const data = {
+        uid_task: this.task?.uid,
+        checklist: checklist
+      }
+      this.checklistSavedNow = true
+      this.$store.dispatch(TASK.CHANGE_TASK_CHECKLIST, data).then(
+        resp => {
+          this.$emit('changeValue', { checklist: checklist })
+        }
+      ).finally(() => {
+        this.checklistSavedNow = false
+      })
+    },
+    onAddChecklistComplete () {
+      this.checklistshow = false
     },
     sendTaskMsg (msg) {
       const date = new Date()

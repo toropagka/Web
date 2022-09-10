@@ -1,54 +1,149 @@
 <template>
-  <div v-if="renderedChecklist.checklist[0].text.length">
-    <div
-      v-for="check, index of renderedChecklist.checklist"
-      :key="index"
-    >
+  <div>
+    <div class="flex flex-col gap-[12px]">
       <div
-        class="flex items-start group"
+        v-for="check, index of arrChecklist"
+        :key="index"
+        class="group flex items-start gap-[10px] w-full"
       >
-        <div style="min-width: 10px;">
-          <input
-            v-model="check.checked"
-            type="checkbox"
-            class="m-1 w-[20px] h-[20px] rounded-[4px] mr-2 border-gray-300 bg-gray-100"
-            :disabled="isCustomer || isPerformer ? false : true"
-            @change="saveChecklist(index)"
+        <div
+          class="flex-none"
+          :class="{ 'cursor-pointer': canCheck }"
+          @click="clickChecklist(index)"
+        >
+          <svg
+            v-if="check.checked"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-          <label />
+            <rect
+              width="20"
+              height="20"
+              rx="4"
+              fill="#F4F5F7"
+            />
+            <path
+              d="M15.6471 7.12003L9.30532 13.6361C8.83473 14.1213 8.07283 14.1213 7.60224 13.6361L4.35294 10.2625C3.88235 9.77728 3.88235 8.99166 4.35294 8.50642C4.82353 8.02118 5.58543 8.02118 6.05602 8.50642L8.45378 11.0019L13.944 5.36393C14.4146 4.87869 15.1765 4.87869 15.6471 5.36393C16.1176 5.84917 16.1176 6.63479 15.6471 7.12003Z"
+              fill="#4C4C4D"
+            />
+            <rect
+              x="0.5"
+              y="0.5"
+              width="19"
+              height="19"
+              rx="3.5"
+              stroke="black"
+              stroke-opacity="0.1"
+            />
+          </svg>
+          <svg
+            v-else
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              width="20"
+              height="20"
+              rx="4"
+              fill="#F4F5F7"
+            />
+            <rect
+              x="0.5"
+              y="0.5"
+              width="19"
+              height="19"
+              rx="3.5"
+              stroke="black"
+              stroke-opacity="0.1"
+            />
+          </svg>
         </div>
-        <input
-          :id="'check_' + index"
+        <contenteditable
           v-model="check.text"
           tag="div"
-          style="max-width: 80%;"
-          placeholder="добавить чек-лист..."
-          spellcheck="false"
-          :class="{ 'ml-1 text-gray-500 line-through': check.checked }"
-          :contenteditable="isCustomer"
+          placeholder="Добавить"
+          class="self-center w-[500px] font-roboto font-medium text-[13px] leading-[15px]"
+          :class="{ 'text-[#979799] line-through': check.checked, 'text-[#4c4c4d]': !check.checked }"
+          :contenteditable="canEdit"
           :no-n-l="true"
           :no-h-t-m-l="true"
-          @keyup.enter="updateChecklist(index)"
-          @blur="saveChecklist(index)"
+          @keydown.enter.prevent="$event.target.blur()"
+          @blur="updateChecklist(index)"
+        />
+        <div
+          v-if="canEdit"
+          class="flex-none invisible group-hover:visible cursor-pointer"
+          @click="removeChecklist(index)"
         >
-        <Icon
-          v-show="isCustomer"
-          :path="close.path"
-          class="invisible group-hover:visible px-2 py-1.5 text-gray-400 dark:text-white float-right mt-0.5 cursor-pointer"
-          :box="close.viewBox"
-          :width="8"
-          :height="8"
-          @click="removeChecklistItem(index)"
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.1798 10.0034L14.7632 6.42841C14.9201 6.27149 15.0082 6.05866 15.0082 5.83674C15.0082 5.61483 14.9201 5.402 14.7632 5.24508C14.6062 5.08816 14.3934 5 14.1715 5C13.9496 5 13.7368 5.08816 13.5798 5.24508L10.0048 8.82841L6.42983 5.24508C6.27291 5.08816 6.06008 5 5.83817 5C5.61625 5 5.40342 5.08816 5.2465 5.24508C5.08958 5.402 5.00142 5.61483 5.00142 5.83674C5.00142 6.05866 5.08958 6.27149 5.2465 6.42841L8.82983 10.0034L5.2465 13.5784C5.16839 13.6559 5.1064 13.748 5.06409 13.8496C5.02178 13.9511 5 14.0601 5 14.1701C5 14.2801 5.02178 14.389 5.06409 14.4906C5.1064 14.5921 5.16839 14.6843 5.2465 14.7617C5.32397 14.8399 5.41614 14.9018 5.51768 14.9442C5.61923 14.9865 5.72816 15.0082 5.83817 15.0082C5.94818 15.0082 6.0571 14.9865 6.15865 14.9442C6.2602 14.9018 6.35236 14.8399 6.42983 14.7617L10.0048 11.1784L13.5798 14.7617C13.6573 14.8399 13.7495 14.9018 13.851 14.9442C13.9526 14.9865 14.0615 15.0082 14.1715 15.0082C14.2815 15.0082 14.3904 14.9865 14.492 14.9442C14.5935 14.9018 14.6857 14.8399 14.7632 14.7617C14.8413 14.6843 14.9033 14.5921 14.9456 14.4906C14.9879 14.389 15.0097 14.2801 15.0097 14.1701C15.0097 14.0601 14.9879 13.9511 14.9456 13.8496C14.9033 13.748 14.8413 13.6559 14.7632 13.5784L11.1798 10.0034Z"
+              fill="#7E7E80"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        v-if="addNewNow"
+        class="flex items-start gap-[10px] w-full"
+      >
+        <div class="flex-none">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              width="20"
+              height="20"
+              rx="4"
+              fill="#F4F5F7"
+            />
+            <rect
+              x="0.5"
+              y="0.5"
+              width="19"
+              height="19"
+              rx="3.5"
+              stroke="black"
+              stroke-opacity="0.1"
+            />
+          </svg>
+        </div>
+        <contenteditable
+          id="addNewCheckListEdit"
+          v-model="addNewText"
+          tag="div"
+          placeholder="Добавить"
+          class="self-center w-[500px] font-roboto font-medium text-[13px] leading-[15px] text-[#4c4c4d]"
+          :contenteditable="true"
+          :no-n-l="true"
+          :no-h-t-m-l="true"
+          @keydown.enter.prevent="addChecklist(true)"
+          @blur="addChecklist(false)"
         />
       </div>
     </div>
     <button
-      v-show="isCustomer"
-      class="mt-2.5 text-sm p-1 px-2 rounded-lg text-gray-500 flex font-medium"
-      @click="addEmptyChecklist(false)"
+      v-if="canEdit && !addNewNow"
+      class="mt-[12px] flex items-center gap-[10px] cursor-pointer w-full"
+      @click="needAddChecklist"
     >
       <svg
-        class="mr-1.5"
         width="20"
         height="20"
         viewBox="0 0 20 20"
@@ -60,164 +155,135 @@
           fill="#7E7E80"
         />
       </svg>
-
-      Добавить
+      <div class="font-roboto font-medium text-[13px] leading-[15px] text-[#7e7e80]">
+        Добавить
+      </div>
     </button>
   </div>
 </template>
 
 <script>
-import * as TASK from '@/store/actions/tasks.js'
-import Icon from '@/components/Icon.vue'
-import close from '@/icons/close.js'
+import contenteditable from 'vue-contenteditable'
 
 export default {
   components: {
-    Icon
+    contenteditable
   },
   props: {
-    taskUid: {
-      type: String,
-      default: ''
-    },
-    task: {
-      type: Object,
-      default: () => {}
-    },
-    isCustomer: {
-      type: Boolean,
-      default: false
-    },
-    isPerformer: {
-      type: Boolean,
-      default: false
-    },
     checklist: {
       type: String,
       default: ''
+    },
+    addNew: {
+      type: Boolean,
+      default: false
+    },
+    canCheck: {
+      type: Boolean,
+      default: false
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
     }
   },
+  emits: ['changeChecklist', 'endEdit'],
   data () {
     return {
-      close,
-      processedChecklist: null,
-      shouldUpdate: false,
-      renderedChecklist: []
+      arrChecklist: [],
+      addNewNow: false,
+      addNewText: ''
     }
   },
   computed: {
-    computedChecklist () {
-      const _renderedChecklist = []
 
-      if (!this.checklist) {
-        _renderedChecklist.push({ checked: false, text: '' })
-        return _renderedChecklist
-      }
-
-      // нормализуем перенос строки (разные на windows и на mac)
-      const chlist = this.checklist.replaceAll('\r\n', '\n').replaceAll('\r', '\n').replaceAll('\n', '\r\n')
-      for (const check of chlist.split('\r\n\r\n')) {
-        _renderedChecklist.push({ checked: !!+check.split('\r\n')[0], text: check.split('\r\n')[1] })
-      }
-      return _renderedChecklist
-    }
   },
   watch: {
-    taskUid (oldValue, newValue) {
-      if (oldValue !== newValue) this.shouldUpdate.value = true
+    checklist: {
+      immediate: true,
+      handler: function (val) {
+        this.arrChecklist = []
+        if (val) {
+          // нормализуем перенос строки (разные на windows и на mac)
+          const chlist = val.replaceAll('\r\n', '\n').replaceAll('\r', '\n').replaceAll('\n', '\r\n')
+          for (const check of chlist.split('\r\n\r\n')) {
+            const checkValues = check.split('\r\n')
+            this.arrChecklist.push({ checked: !!+checkValues[0], text: checkValues[1] })
+          }
+        }
+      }
     },
-    computedChecklist (oldValue, newValue) {
-      if (this.shouldUpdate) {
-        this.renderedChecklist.checklist = oldValue
-        this.shouldUpdate = false
+    addNew: {
+      immediate: true,
+      handler: function (val) {
+        if (val) {
+          this.needAddChecklist()
+        }
       }
     }
-  },
-  created () {
-    this.renderedChecklist.checklist = this.computedChecklist
-    for (let i = 0; i < this.renderedChecklist.checklist; i++) {
-      if (!this.renderedChecklist.checklist[i].text.length) {
-        this.renderedChecklist.checklist.splice(i, 1)
-      }
-    }
-    console.log(this.renderedChecklist, 'created')
-  },
-  mounted: function () {
-    this.$nextTick(() => {
-      document.getElementById('check_0')?.focus()
-    })
   },
   methods: {
-    processChecklist () {
-      this.processedChecklist = ''
-      for (const [i, check] of this.renderedChecklist.checklist.entries()) {
-        if (!check.text) continue
-        this.processedChecklist += (check.checked ? '1' : '0') + '\r\n' + check.text
-        if (i !== this.renderedChecklist.checklist.length - 1) {
-          this.processedChecklist += '\r\n\r\n'
-        }
-      }
-      if (!Object.keys(this.$store.state.tasks.newtasks).includes(this.taskUid)) {
-        this.$store.commit(TASK.ADD_TO_NEWTASKS, this.task)
-      }
-      this.$store.state.tasks.newtasks[this.taskUid].info.cheklist = this.processedChecklist
-      this.$store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: this.taskUid, checklist: this.processedChecklist })
-      this.$store.state.tasks.selectedTask = this.processedChecklist
-      console.log(this.$store.state.tasks.selectedTask)
+    removeChecklist (index) {
+      if (!this.canEdit) return
+      //
+      this.arrChecklist.splice(index, 1)
+      this.saveChanges()
     },
-    addEmptyChecklist (index = -1) {
-      if (!index && index !== 0) {
-        this.renderedChecklist.checklist.push({ checked: false, text: '' })
-        this.$nextTick(() => {
-          document.getElementById('check_' + (this.renderedChecklist.checklist.length - 1))?.focus()
-        })
-      } else {
-        this.renderedChecklist.checklist.splice(index + 1, 0, { checked: false, text: '' })
-        this.$nextTick(() => {
-          document.getElementById('check_' + (index + 1))?.focus()
-        })
-      }
+    clickChecklist (index) {
+      if (!this.canCheck) return
+      //
+      const check = this.arrChecklist[index]
+      check.checked = !check.checked
+      this.saveChanges()
     },
-    removeChecklistItem (index) {
-      this.renderedChecklist.checklist.splice(index, 1)
-      this.processChecklist()
+    needAddChecklist () {
+      if (this.addNewNow) return
+      if (!this.canEdit) return
+      //
+      this.addNewText = ''
+      this.addNewNow = true
+      this.$nextTick(function () {
+        const addEdit = document.getElementById('addNewCheckListEdit')
+        if (addEdit) addEdit.focus({ preventScroll: false })
+      })
     },
-    saveChecklist (index) {
-      if (this.renderedChecklist.checklist.length === 1) {
-        return false
+    addChecklist (needAddNew) {
+      this.addNewNow = false
+      this.$emit('endEdit')
+      const text = this.addNewText.trim()
+      if (text && this.canEdit) {
+        this.arrChecklist.push({ checked: false, text: text })
+        this.saveChanges()
+        if (needAddNew) this.needAddChecklist()
       }
-      if (!this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
-        this.renderedChecklist.checklist.splice(index, 1)
-        return
-      }
-      this.renderedChecklist.checklist[index].text = this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
-      this.processChecklist()
     },
     updateChecklist (index) {
-      if (!this.renderedChecklist.checklist[this.renderedChecklist.checklist.length - 1].text) {
-        return false
-      }
-      if (!this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')) {
-        if (this.renderedChecklist.checklist.length === 1) {
-          return false
-        }
-        this.renderedChecklist.checklist.splice(index, 1)
+      if (!this.canEdit) return
+      //
+      const check = this.arrChecklist[index]
+      const text = check.text.trim()
+      if (text) {
+        check.text = text
+        this.saveChanges()
       } else {
-        this.renderedChecklist.checklist[index].text = this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
-        this.processChecklist()
-        this.addEmptyChecklist(index)
-        console.log(this.$store.state.tasks.selectedTask)
+        this.removeChecklist(index)
       }
+    },
+    saveChanges () {
+      let checklist = ''
+      this.arrChecklist.forEach(check => {
+        if (check.text) {
+          if (checklist) checklist += '\r\n\r\n'
+          checklist += check.checked ? '1\r\n' : '0\r\n'
+          checklist += check.text
+        }
+      })
+      this.$emit('changeChecklist', checklist)
     }
   }
 }
 </script>
 
-<style>
-[contenteditable=true]:empty:before{
-  content: attr(placeholder);
-  pointer-events: none;
-  display: block; /* For Firefox */
-  color: gray
-}
+<style scoped>
+
 </style>
