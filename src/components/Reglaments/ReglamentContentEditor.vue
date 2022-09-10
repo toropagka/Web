@@ -206,6 +206,9 @@
               class="mr-3"
               :photo="editorFoto(editor)"
               :name="editorName(editor)"
+              :email="editor"
+              :can-edit="canEdit"
+              @removeReglamentEditor="removeReglamentEditor"
             />
           </div>
         </div>
@@ -545,6 +548,10 @@ export default {
       } else {
         this.currEditors.push(email)
       }
+    },
+    removeReglamentEditor (email) {
+      const index = this.currEditors.findIndex(editor => editor.toLowerCase() === email.toLowerCase())
+      this.currEditors.splice(index, 1)
     },
     checkEditor (email) {
       return this.currEditors.includes(email)
