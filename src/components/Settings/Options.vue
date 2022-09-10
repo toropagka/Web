@@ -226,10 +226,6 @@ export default {
   border-color: gray;
 }
 
-/* стили для чекбокса, находящегося в фокусе */
-.custom-checkbox-orange:focus + label::before {
-}
-
 /* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
 .custom-checkbox-orange:focus:not(:checked) + label::before {
   border-color: gray;
@@ -245,8 +241,6 @@ export default {
 /* стили для чекбокса, находящегося в состоянии disabled */
 .custom-checkbox-orange:disabled + label::before {
   background-color: #e9ecef;
-}
-.custom-select {
 }
 /* remove the original arrow */
 .custom-select {
