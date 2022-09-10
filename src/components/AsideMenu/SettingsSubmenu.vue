@@ -221,20 +221,6 @@ export default {
       if (this.isAsideMobileExpanded) {
         this.$store.dispatch('asideMobileToggle', false)
       }
-    },
-    selectSubMenuItem (isSelected, cbOpenView) {
-      // закрываем сабменю
-      this.$store.state.navigator.submenu.status = false
-      // если вкладка не поменялась - ничего не делаем
-      if (isSelected) return
-      // закрываем свойства
-      if (this.isPropertiesMobileExpanded) {
-        this.$store.dispatch('asidePropertiesToggle', false)
-      }
-      if (this.isAsideMobileExpanded) {
-        this.$store.dispatch('asideMobileToggle', false)
-      }
-      cbOpenView()
     }
   }
 }

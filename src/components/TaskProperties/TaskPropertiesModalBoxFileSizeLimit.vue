@@ -26,8 +26,8 @@ export default {
   },
   props: {
     files: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   },
   emits: ['cancel'],
