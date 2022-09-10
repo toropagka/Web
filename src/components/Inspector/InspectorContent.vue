@@ -43,34 +43,44 @@ export default {
   },
   props: {
     messages: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     selectEmployee: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     selectProject: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     selectTag: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     selectColor: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     selectAccess: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     selectTime: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     actionConfirmNewParams: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     actionConfirmDelegate: {
-      type: Function
+      type: Function,
+      default: () => 1
     },
     lastSelected: {
-      type: Function
+      type: Function,
+      default: () => 1
     }
   },
   watch: {

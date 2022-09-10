@@ -18,7 +18,10 @@ export default {
   },
 
   props: {
-    message: Object
+    message: {
+      type: Object,
+      default: () => ({})
+    }
   },
 
   emits: ['onQuoteMessage', 'onDeleteFile'],

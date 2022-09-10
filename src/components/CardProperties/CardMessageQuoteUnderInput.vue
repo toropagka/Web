@@ -1,8 +1,14 @@
 <script>
 export default {
   props: {
-    quoteMessage: Object,
-    employee: Object
+    quoteMessage: {
+      type: Object,
+      default: () => {}
+    },
+    employee: {
+      type: Object,
+      default: () => {}
+    }
   },
   emits: ['onClearQuote']
 }

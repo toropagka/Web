@@ -55,8 +55,14 @@ export default {
       type: String,
       default: ''
     },
-    onlyFiles: Boolean,
-    showDelete: Boolean
+    onlyFiles: {
+      type: Boolean,
+      default: false
+    },
+    showDelete: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['copyUrl', 'deleteTask', 'toggleFiles'],
   computed: {

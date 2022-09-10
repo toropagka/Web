@@ -66,11 +66,26 @@ export default {
     CardChatMessageOptionsPopMenu
   },
   props: {
-    fileUid: String,
-    fileName: String,
-    fileExtension: String,
-    fileDateCreate: String,
-    preloaderColor: String,
+    fileUid: {
+      type: String,
+      default: ''
+    },
+    fileName: {
+      type: String,
+      default: ''
+    },
+    fileExtension: {
+      type: String,
+      default: ''
+    },
+    fileDateCreate: {
+      type: String,
+      default: ''
+    },
+    preloaderColor: {
+      type: String,
+      default: ''
+    },
     canDelete: {
       type: Boolean,
       default: true

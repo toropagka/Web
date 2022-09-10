@@ -10,10 +10,22 @@ export default {
     PopMenuHeader
   },
   props: {
-    dateCreate: String,
-    showFilesOnly: Boolean,
-    creator: String,
-    canEdit: Boolean
+    dateCreate: {
+      type: String,
+      default: ''
+    },
+    showFilesOnly: {
+      type: Boolean,
+      default: false
+    },
+    creator: {
+      type: String,
+      default: ''
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
+    }
   },
 
   emits: ['clickRemoveButton', 'toggleShowOnlyFiles'],

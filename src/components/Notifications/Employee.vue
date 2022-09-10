@@ -1,15 +1,3 @@
-<script>
-export default {
-  props: {
-    fotolink: {
-      type: String
-    },
-    name: {
-      type: String
-    }
-  }
-}
-</script>
 <template>
   <div class="flex items-center">
     <img
@@ -23,3 +11,18 @@ export default {
     </p>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    fotolink: {
+      type: String,
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    }
+  }
+}
+</script>

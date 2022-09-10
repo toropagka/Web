@@ -12,7 +12,7 @@ export default {
       default: true
     }
   },
-  emits: ['onQuoteMessage']
+  emits: ['onQuoteMessage', 'onDeleteMessage']
 }
 
 </script>

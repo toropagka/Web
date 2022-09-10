@@ -272,10 +272,12 @@ export default {
       default: ''
     },
     deletedStatus: {
-      type: String
+      type: String,
+      default: ''
     },
     status: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   emits: ['answer', 'deleted'],

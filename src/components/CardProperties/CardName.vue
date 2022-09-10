@@ -1,7 +1,10 @@
 <script>
 export default {
   props: {
-    cardName: String,
+    cardName: {
+      type: String,
+      default: ''
+    },
     canEdit: Boolean
   },
   emits: ['changeName']
