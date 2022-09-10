@@ -23,6 +23,7 @@
           tag="div"
           style="max-width: 80%;"
           placeholder="добавить чек-лист..."
+          spellcheck="false"
           :class="{ 'ml-1 text-gray-500 line-through': check.checked }"
           :contenteditable="isCustomer"
           :no-n-l="true"
@@ -161,6 +162,8 @@ export default {
       }
       this.$store.state.tasks.newtasks[this.taskUid].info.cheklist = this.processedChecklist
       this.$store.dispatch('CHANGE_TASK_CHECKLIST', { uid_task: this.taskUid, checklist: this.processedChecklist })
+      this.$store.state.tasks.selectedTask = this.processedChecklist
+      console.log(this.$store.state.tasks.selectedTask)
     },
     addEmptyChecklist (index = -1) {
       if (!index && index !== 0) {
@@ -203,6 +206,7 @@ export default {
         this.renderedChecklist.checklist[index].text = this.renderedChecklist.checklist[index].text.replace(/\r?\n|\r/g, '')
         this.processChecklist()
         this.addEmptyChecklist(index)
+        console.log(this.$store.state.tasks.selectedTask)
       }
     }
   }
