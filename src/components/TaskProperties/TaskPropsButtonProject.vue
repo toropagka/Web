@@ -148,10 +148,12 @@ export default {
     }
   },
   emits: ['changeProject'],
-  data: () => ({
-    currProject: this?.selectedProject,
-    collapsedProject: []
-  }),
+  data () {
+    return {
+      currProject: this?.selectedProject,
+      collapsedProject: []
+    }
+  },
   computed: {
     projects () {
       return this.$store.state.projects.projects
@@ -175,9 +177,6 @@ export default {
     }
   },
   methods: {
-    print (val) {
-      console.log(val)
-    },
     onShowSelectProject () {
       this.currProject = this.selectedProject
       this.collapsedProject = []

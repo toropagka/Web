@@ -64,7 +64,10 @@
 <script>
 export default {
   props: {
-    focus: Boolean
+    focus: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['toggleFocus'],
   methods: {
