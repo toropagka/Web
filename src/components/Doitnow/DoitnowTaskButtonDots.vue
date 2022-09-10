@@ -2,7 +2,9 @@
   <PopMenu
     placement="bottom"
   >
-    <div class="mt-3">
+    <div
+      style="color: gray"
+    >
       <svg
         fill="currentColor"
         viewBox="0 0 20 20"
