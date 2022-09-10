@@ -131,19 +131,31 @@
       </span>
     </div>
     <div class="tag-label cursor-default p-1 py-1.5 px-2 text-xs whitespace-nowrap rounded-[4px] flex items-center max-w-full text-white border-red-500 bg-opacity-50 bg-red-500 h-[30px]">
-      <img
+      <div
         v-if="employees[karma.taskJson.uid_customer]"
-        :src="employees[karma.taskJson.uid_customer].fotolink"
-        width="40"
-        height="40"
-        class="w-[22px] h-[22px] rounded-[5px] border border-black/10"
+        class="flex items-center "
       >
-      <p
-        v-if="employees[karma.taskJson.uid_customer]"
-        class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
+        <img
+          :src="employees[karma.taskJson.uid_customer].fotolink"
+          width="40"
+          height="40"
+          class="w-[22px] h-[22px] rounded-[5px] border border-black/10"
+        >
+        <p
+          class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
+        >
+          {{ employees[karma.taskJson.uid_customer].name }}
+        </p>
+      </div>
+      <div
+        v-else
       >
-        {{ employees[karma.taskJson.uid_customer].name ?? employees[karma.taskJson.uid_customer].email ?? "Удаленный сотрудник" }}
-      </p>
+        <p
+          class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
+        >
+          {{ karma.taskJson.email_customer }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -158,6 +170,9 @@ export default {
   computed: {
     employees () {
       return this.$store.state.employees.employees
+    },
+    customerName () {
+      return this.employees[this.karma.taskJson.uid_customer].name ?? this.karma.taskJson.email_customer
     }
   },
   methods: {
