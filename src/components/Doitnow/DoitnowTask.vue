@@ -56,50 +56,12 @@
             @keydown.enter="updateTask($event, task)"
           />
         </div>
-        <Popper
-          class="items-center"
-          :class="isDark ? 'dark' : 'light'"
-          placement="bottom"
-          @click.stop="toggleTaskHoverPopper(true)"
-          @open:popper="toggleTaskHoverPopper(true)"
-          @close:popper="toggleTaskHoverPopper(false)"
-        >
-          <Icon
-            :path="dots.path"
-            class="text-gray-600 dark:text-white cursor-pointer ml-1"
-            :box="dots.viewBox"
-            :width="dots.width"
-            :style="{ color: 'gray' }"
-            :height="dots.height"
-          />
-          <template #content>
-            <div class="flex flex-col">
-              <!-- date create -->
-              <div class="flex flex-col gap-[4px] px-[10px] text-[#7e7e80] text-[13px] leading-[15px] font-roboto">
-                <div class="text-[#4c4c4d] text-[14px] leading-[16px] font-medium">
-                  Дата создания:
-                </div>
-                {{ dateClear(task.date_create) }}
-                <div class="my-[4px] flex h-px bg-[#dddddd]" />
-              </div>
-              <!-- link -->
-              <span
-                class="h-[30px] flex items-center gap-[10px] px-[10px] py-[6px] cursor-pointer hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
-                @click="copyUrl(task)"
-              >
-                Копировать как ссылку
-              </span>
-              <!-- only files -->
-              <span
-                class="h-[30px] flex items-center gap-[10px] px-[10px] py-[6px] cursor-pointer hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
-                :class="showOnlyFiles ? 'bg-slate-200' : ''"
-                @click="showOnlyFiles = !showOnlyFiles"
-              >
-                В чате показывать только файлы
-              </span>
-            </div>
-          </template>
-        </Popper>
+        <DoitnowTaskButtonDots
+          :date-create="selectedTask?.date_create"
+          :only-files="showOnlyFiles"
+          @copyUrl="copyUrl(task)"
+          @toggleFiles="showOnlyFiles = !showOnlyFiles"
+        />
       </div>
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-medium w-[720px]">
@@ -475,11 +437,11 @@ import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
-import Popper from 'vue3-popper'
 import SetDate from '@/components/Doitnow/SetDate.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
 import TaskPropsChatMessages from '@/components/TaskProperties/TaskPropsChatMessages.vue'
 import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.vue'
+import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
@@ -496,7 +458,6 @@ import file from '@/icons/file.js'
 import inaccess from '@/icons/inaccess.js'
 import doublecheck from '@/icons/doublecheck.js'
 import close from '@/icons/doitnow/close.js'
-import dots from '@/icons/doitnow/dots.js'
 import pauseD from '@/icons/doitnow/pause.js'
 import msgs from '@/icons/msgs.js'
 import taskcomment from '@/icons/taskcomment.js'
@@ -526,12 +487,12 @@ export default {
     SetDate,
     TaskPropsChatMessages,
     TaskPropsCommentEditor,
+    DoitnowTaskButtonDots,
     PerformButton,
     Checklist,
     TaskPropsInputForm,
     DoitnowStatusModal,
     contenteditable,
-    Popper,
     TaskStatus,
     SlideBody,
     MessageSkeleton
@@ -589,7 +550,6 @@ export default {
   data (props) {
     return {
       // * variables * //
-      isTaskHoverPopperActive: false,
       isChatVisible: false,
       showStatusModal: false,
       lastSelectedStatus: '',
@@ -606,7 +566,6 @@ export default {
       taskoptions,
       close,
       file,
-      dots,
       pause,
       inaccess,
       msgs,
@@ -640,6 +599,9 @@ export default {
     },
     currentLocation () {
       return window.location.origin
+    },
+    selectedTask () {
+      return this.$store.state.tasks.selectedTask
     },
     taskMessagesAndFiles () {
       return this.$store.state.taskfilesandmessages.messages
@@ -874,9 +836,6 @@ export default {
           console.log(event)
         }
       })
-    },
-    dateClear (time) {
-      return new Date(time).getDate() + '.' + (new Date(time).getMonth() + 1) + '.' + new Date(time).getFullYear()
     },
     removeTask (uid) {
       if (this.isPropertiesMobileExpanded) {
