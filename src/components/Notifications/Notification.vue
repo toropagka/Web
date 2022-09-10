@@ -42,7 +42,7 @@ export default {
           >
             <div class="p-4">
               <div class="flex items-start">
-                <div class="shrink-0">
+                <div class="shrink-0 mt-[2px]">
                   <svg
                     class="w-6 h-6 text-green-400"
                     xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@ export default {
                     :fotolink="employees[notification.obj.obj.uid_customer].fotolink"
                     :name="employees[notification.obj.obj.uid_customer].name"
                   />
-                  <p class="text-sm font-semibold text-gray-500 truncate">
+                  <p class="text-sm font-semibold text-gray-500 mt-2 truncate">
                     {{ notification.text }}
                   </p>
                 </div>
