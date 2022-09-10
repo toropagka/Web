@@ -1,5 +1,5 @@
 <template>
-  <modal-box-notification-instruction
+  <ModalBoxNotificationInstruction
     v-model="shouldShowModalBox"
     button="warning"
     has-button
@@ -33,7 +33,7 @@
       target="_blank"
       class="text-blue-400"
     >Firefox</a>
-  </modal-box-notification-instruction>
+  </ModalBoxNotificationInstruction>
   <ModalBox
     v-if="showInviteModalBox"
     title="Вас пригласили в компанию"
@@ -43,7 +43,7 @@
     @decline="declineInviteModalBox"
     @cancel="cancelInviteModalBox"
   />
-  <main-section
+  <MainSection
     v-if="isContentLoaded"
     class="flex xl:ml-[292px] overflow-auto h-screen"
   >
@@ -63,7 +63,7 @@
       :z-index="'z-20'"
       @overlay-click="overlayClick"
     />
-    <properties-right />
+    <PropertiesRight />
 
     <ErrorNotification />
     <Notification />
@@ -72,7 +72,7 @@
     <div class="flex-1 px-3 overflow-auto scroll-style">
       <slot />
     </div>
-  </main-section>
+  </MainSection>
   <AppSkeleton v-else />
 </template>
 

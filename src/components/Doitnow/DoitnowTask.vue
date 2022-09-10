@@ -110,6 +110,7 @@
               </div>
               <img
                 v-else
+                :alt="employees[task.uid_customer]?.name"
                 :src="employees[task.uid_customer]?.fotolink"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
@@ -131,6 +132,7 @@
               class="flex"
             >
               <img
+                :alt="employees[task.uid_performer]?.name"
                 :src="employees[task.uid_performer] ? employees[task.uid_performer]?.fotolink : ''"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
@@ -545,48 +547,27 @@ export default {
   },
   emits: ['clickTask', 'nextTask', 'changeValue', 'readTask'],
   data (props) {
-    const name = props.task.name
-    const checklistshow = true
-    const showConfirm = false
-    const showAllMessages = false
-    const isChatVisible = false
-    const createChecklist = () => {
-      checklistshow.value = true
-    }
-    const currentAnswerMessageUid = ''
-    const statuses = [
-      undefined, // we don't have 0 status
-      readyStatus,
-      readyStatus,
-      note,
-      inwork,
-      readyStatus,
-      pause,
-      canceled,
-      canceled,
-      improve
-    ]
     return {
-      isChatVisible,
+      // * variables * //
+      isChatVisible: false,
       showStatusModal: false,
       lastSelectedStatus: '',
-      createChecklist,
-      showConfirm,
-      checklistshow,
-      currentAnswerMessageUid,
-      showAllMessages,
+      showConfirm: false,
+      currentAnswerMessageUid: '',
+      showAllMessages: false,
+      name: props.task.name,
+      isloading: false,
+      showOnlyFiles: false,
+
+      // * imports * //
       taskoptions,
       close,
-      statuses,
       file,
       pause,
       inaccess,
       msgs,
-      name,
       pauseD,
       openTask,
-      isloading: false,
-      showOnlyFiles: false,
       check,
       doublecheck,
       taskcomment,
@@ -687,28 +668,12 @@ export default {
         ? statusColor[this.task.status]
         : 'text-gray-500 dark:text-gray-100'
     },
-    performerName () {
-      return this.employees[this.task.uid_performer]?.name ?? '???'
-    },
-    customerName () {
-      return this.employees[this.task.uid_customer]?.name ?? '???'
-    },
     isTaskComplete () {
       return this.task.status === 1 || this.task.status === 7
     },
     backgroundColor () {
       return this.getValidBackColor(
         this.colors[this.task.uid_marker]?.back_color
-      )
-    },
-    checkBoxText () {
-      return `${this.countChecklist(this.task.checklist).done} / ${
-        this.countChecklist(this.task.checklist).undone
-      }`
-    },
-    forecolor () {
-      return this.getValidForeColor(
-        this.colors[this.task.uid_marker]?.fore_color
       )
     },
     uppercase () {
@@ -754,13 +719,16 @@ export default {
     }
   },
   watch: {
-    task (newval, oldval) {
+    task () {
       this.showAllMessages = false
       this.isChatVisible = false
       this.name = this.task.name
     }
   },
   methods: {
+    toggleTaskHoverPopper (val) {
+      this.isTaskHoverPopperActive = val
+    },
     sendTaskMsg (msg) {
       const date = new Date()
       const month = this.pad2(date.getUTCMonth() + 1)
@@ -786,7 +754,7 @@ export default {
       }
 
       this.$store.dispatch(MSG.CREATE_MESSAGE_REQUEST, data)
-        .then((resp) => {
+        .then(() => {
           const lastInspectorMessage = this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2].uid_creator === 'inspector' ? this.taskMessagesAndFiles[this.taskMessagesAndFiles.length - 2] : false
           console.log('lastInspectorMessage: ', lastInspectorMessage)
           if (lastInspectorMessage) {
@@ -816,9 +784,6 @@ export default {
     },
     readTask () {
       this.$emit('readTask')
-    },
-    resetFocusChecklist () {
-      this.checklistshow = false
     },
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
@@ -869,7 +834,7 @@ export default {
           loadFile = true
           this.isloading = true
           this.$store.dispatch(FILES.CREATE_FILES_REQUEST, data).then(
-            resp => {
+            () => {
               this.isloading = false
               // ставим статус "на доработку" когда прикладываем файл
               if (this.task.type === 2 || this.task.type === 3) {
@@ -929,7 +894,7 @@ export default {
     },
     deleteTaskMsg (uid) {
       this.$store.dispatch(MSG.DELETE_MESSAGE_REQUEST, { uid: uid })
-        .then((resp) => {
+        .then(() => {
           this.$store.state.tasks.selectedTask.has_msgs = true
           this.$store.state.taskfilesandmessages.messages.find(message => message.uid === uid).deleted = 1
         })
@@ -953,13 +918,6 @@ export default {
         _isEditing: false
       }
       this.$emit('changeValue', data)
-    },
-    showChat () {
-      if (!this.isChatVisible) {
-        this.isChatVisible = true
-      } else {
-        this.isChatVisible = false
-      }
     },
     scrollDown () {
       this.showAllMessages = true
@@ -1020,7 +978,7 @@ export default {
         value: emails
       }
       this.$store.dispatch(TASK.CHANGE_TASK_ACCESS, data)
-        .then((resp) => {
+        .then(() => {
           const data = {
             emails: emails
           }
@@ -1034,7 +992,7 @@ export default {
         value: projectUid
       }
       this.$store.dispatch(TASK.CHANGE_TASK_PROJECT, data)
-        .then((resp) => {
+        .then(() => {
           const data = {
             uid_project: projectUid
           }
@@ -1047,7 +1005,7 @@ export default {
         value: colorUid
       }
       this.$store.dispatch(TASK.CHANGE_TASK_COLOR, data)
-        .then((resp) => {
+        .then(() => {
           const data = {
             uid_marker: colorUid
           }
@@ -1060,7 +1018,7 @@ export default {
         tags: tags
       }
       this.$store.dispatch(TASK.CHANGE_TASK_TAGS, data)
-        .then((resp) => {
+        .then(() => {
           const data = {
             tags: [...tags]
           }
@@ -1231,6 +1189,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
