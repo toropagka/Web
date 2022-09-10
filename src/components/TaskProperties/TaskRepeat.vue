@@ -242,20 +242,20 @@
                 <div class="form-group">
                   <div class="form-everymonth-container">
                     <div
-                      v-for="day in 28"
-                      :key="day"
+                      v-for="weekDay in 28"
+                      :key="weekDay"
                       class="form_radio_btn-custom"
                     >
                       <input
-                        :id="'m1_' + day"
+                        :id="'m1_' + weekDay"
                         ref="SeriesMonthDay"
                         v-model="SeriesMonthDay"
                         type="radio"
                         name="radio"
-                        :value="day"
-                        :checked="selectedTask.SeriesMonthDay === day"
+                        :value="weekDay"
+                        :checked="selectedTask.SeriesMonthDay === weekDay"
                       >
-                      <label :for="'m1_' + day">{{ day }}</label>
+                      <label :for="'m1_' + weekDay">{{ weekDay }}</label>
                     </div>
                   </div>
                 </div>
@@ -354,20 +354,20 @@
                 <div class="form-group">
                   <div class="form-everyyear-container">
                     <div
-                      v-for="day in 28"
-                      :key="day"
+                      v-for="weekDay in 28"
+                      :key="weekDay"
                       class="form_radio_btn-custom"
                     >
                       <input
-                        :id="'y1_' + day"
+                        :id="'y1_' + weekDay"
                         ref="SeriesYearMonthDay"
                         v-model="SeriesYearMonthDay"
                         type="radio"
                         name="radio"
-                        :value="day"
-                        :checked="selectedTask.SeriesYearMonthDay === day"
+                        :value="weekDay"
+                        :checked="selectedTask.SeriesYearMonthDay === weekDay"
                       >
-                      <label :for="'y1_' + day">{{ day }}</label>
+                      <label :for="'y1_' + weekDay">{{ weekDay }}</label>
                     </div>
                   </div>
                 </div>

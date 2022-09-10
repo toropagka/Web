@@ -16,14 +16,30 @@ export default {
   },
 
   props: {
-    key: String,
-    messages: Array,
-    currentUserUid: String,
-    employees: Object,
-    showFilesOnly: Boolean
+    key: {
+      type: String,
+      default: ''
+    },
+    messages: {
+      type: Array,
+      default: () => []
+    },
+    currentUserUid: {
+      type: String,
+      default: ''
+    },
+    employees: {
+      type: Object,
+      default: () => ({})
+    },
+    showFilesOnly: {
+      type: Boolean,
+      default: false
+    }
   },
 
-  emits: ['onQuote, onDeleteMessage', 'onDeleteFile'],
+  emits: ['onQuote', 'onDeleteMessage', 'onDeleteFile'],
+
   computed: {
     cardmessages () {
       const mutatedMessages = this.messages.map((message) => ({
@@ -66,7 +82,7 @@ export default {
     },
 
     setCurrentQuote (quoteMessage) {
-      this.$emit('onQuote', quoteMessage)
+      this.$emit('onQuote')
     },
 
     deleteMessage (uid) {

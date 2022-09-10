@@ -2,10 +2,12 @@
 export default {
   props: {
     fotolink: {
-      type: String
+      type: String,
+      default: ''
     },
     name: {
-      type: String
+      type: String,
+      default: ''
     }
   }
 }

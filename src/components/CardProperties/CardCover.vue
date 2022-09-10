@@ -70,8 +70,14 @@ export default {
     PopMenuItem
   },
   props: {
-    coverColor: String,
-    coverLink: String,
+    coverColor: {
+      type: String,
+      default: ''
+    },
+    coverLink: {
+      type: String,
+      default: ''
+    },
     canEdit: Boolean
   },
   emits: ['onChangeCardColor', 'onChangeCardClearCover', 'onChangeCardCover'],

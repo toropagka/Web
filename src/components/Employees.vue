@@ -154,19 +154,19 @@
         }"
       >
         <template
-          v-for="user in value.items"
-          :key="user.uid"
+          v-for="userValue in value.items"
+          :key="userValue.uid"
         >
           <ListBlocItem
-            :title="user.name"
-            :sub-title="user.email"
-            :right-icon="empIcon(user)"
-            :selected="selectedEmployee === user.email"
-            @click.stop="showUserProperties(user)"
+            :title="userValue.name"
+            :sub-title="userValue.email"
+            :right-icon="empIcon(userValue)"
+            :selected="selectedEmployee === userValue.email"
+            @click.stop="showUserProperties(userValue)"
           >
             <img
-              v-if="user.fotolink"
-              :src="user.fotolink"
+              v-if="userValue.fotolink"
+              :src="userValue.fotolink"
               class="rounded-[6px]"
               width="20"
               height="20"
