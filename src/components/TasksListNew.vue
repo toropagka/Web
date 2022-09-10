@@ -514,7 +514,11 @@ export default {
     },
     lastSelectedTask (newTask, prevTask) {
       if (newTask.uid !== prevTask.uid && prevTask.name === '') {
-        this.removeTask(prevTask.uid)
+        if (this.isPropertiesMobileExpanded) {
+          this.$store.dispatch('asidePropertiesToggle', false)
+        }
+        this.$store.commit(TASK.REMOVE_TASK, prevTask.uid)
+        // this.removeTask(prevTask.uid)
       }
     }
   },
