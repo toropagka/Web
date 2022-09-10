@@ -3,25 +3,12 @@
     class="mt-[8px]"
     title="Карма"
   />
+  <!--  -->
   <div
     v-if="user.tarif !== 'alpha' && user.tarif !== 'trial'"
     class="grid grid-cols-1 gap-4 p-5 bg-white rounded mt-2"
   >
-    <div class="text-center">
-      <h1 class="text-5xl text-gray-600 font-bold mb-5">
-        Карма - функция тарифа Бизнес+
-      </h1>
-      <h3 class="text-2xl mb-5">
-        Узнайте свою личную продуктивность и продуктивность команды по выполненным поручениям в Лидертаск.
-      </h3>
-
-      <a
-        href="https://www.leadertask.ru/alpha"
-        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E]  rounded-md hover:bg-slate-200 hover:text-[#422b14] text-xl font-bold py-2 px-12"
-      >
-        Купить
-      </a>
-    </div>
+    <KarmaNoLicenceWindow />
   </div>
   <div
     v-else
@@ -223,7 +210,7 @@
                     v-if="employees[karma.taskJson.uid_customer]"
                     class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
                   >
-                    {{ employees[karma.taskJson.uid_customer].name }}
+                    {{ employees[karma.taskJson.uid_customer].name ?? employees[karma.taskJson.uid_customer].email ?? "Удаленный сотрудник" }}
                   </p>
                 </div>
               </div>
@@ -240,12 +227,14 @@ import * as chartConfig from '@/components/Charts/chart.config.js'
 import KarmaSkeleton from '@/components/Settings/KarmaSkeleton.vue'
 import LineChart from '@/components/Charts/LineChart.vue'
 import NavBar from '@/components/Navbar/NavBar.vue'
+import KarmaNoLicenceWindow from '../Common/KarmaNoLicenceWindow.vue'
 
 export default {
   components: {
     NavBar,
     KarmaSkeleton,
-    LineChart
+    LineChart,
+    KarmaNoLicenceWindow
   },
   data () {
     return {
