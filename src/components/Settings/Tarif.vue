@@ -8,15 +8,17 @@
       Тип аккаунта
     </div>
     <p
-      class="text-sm font-medium landing-4"
+      class="text-sm landing-4 font-medium text-[#606061]"
     >
       {{ tarifText }}
     </p>
     <p
       v-if="$store.state.user.user?.date_expired"
-      class="mt-1 text-sm font-normal font-[Roboto] landing-5 text-[#606061]"
+      class="text-sm landing-4 mt-1 font-normal text-[#606061]"
     >
-      <a>{{ $store.state.user.user?.date_expired }}({{ $store.state.user.user?.days_left ?? 0 }})</a>
+      <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+      <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+      <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
     </p>
     <div class="mt-[15px]">
       <p class="text-base font-medium">
@@ -167,6 +169,18 @@ export default {
       } else {
         return 'Продлить лицензию'
       }
+    }
+  },
+  methods: {
+    getDateExpired () {
+      if (!this.user?.date_expired) return true
+      // добавляем Z в конец, чтобы он посчитал что это UTC время
+      let dateExpiredString = this.user?.date_expired
+      const [dateExp, timeExp] = dateExpiredString.split(' ')
+      const [dayExp, monthExp, yearExp] = dateExp.split('.')
+      dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
+      const dateExpired = new Date(dateExpiredString).toLocaleString('default', { year: 'numeric', month: 'numeric', day: 'numeric' })
+      return dateExpired
     }
   }
 }
