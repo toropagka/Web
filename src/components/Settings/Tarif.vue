@@ -8,13 +8,13 @@
       Тип аккаунта
     </div>
     <p
-      class="text-sm landing-4 font-medium text-[#606061]"
+      class="text-sm landing-4 font-medium"
     >
       {{ tarifText }}
     </p>
     <p
       v-if="$store.state.user.user?.date_expired"
-      class="text-sm landing-4 mt-1 font-normal text-[#606061]"
+      class="text-sm landing-5 font-[Roboto] mt-1 font-normal"
     >
       <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
       <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
