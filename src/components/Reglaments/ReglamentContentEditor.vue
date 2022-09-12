@@ -7,11 +7,6 @@
       @cancel="showConfirm = false"
       @yes="removeReglament"
     />
-    <ReglamentModalSave
-      v-if="showSaveModal"
-      @onSave="setEdit"
-      @close="showSaveModal = false"
-    />
     <div class="w-full top-[0px] sticky left-0 right-0 z-[5]">
       <div class="bg-[#f4f5f7] pt-[5px]">
         <div
@@ -69,8 +64,8 @@
             <ReglamentSmallButton
               :disabled="disabledButtons"
               :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
-              title="Сохранить"
               @click="onSaveReglamentButtonClick"
+              title="Сохранить"
             >
               <svg
                 width="20"
@@ -88,7 +83,7 @@
             <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
               :disabled="disabledButtons"
-              @click="showSaveModal = true"
+              @click="setEdit"
             >
               <svg
                 width="20"
@@ -346,7 +341,6 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import * as REGLAMENTS from '@/store/actions/reglaments'
 import * as QUESTIONS from '@/store/actions/reglament_questions'
 import * as ANSWER from '@/store/actions/reglament_answers'
-import ReglamentModalSave from './ReglamentModalSave.vue'
 
 export default {
   components: {
@@ -357,8 +351,7 @@ export default {
     PopMenuItem,
     ReglamentPropsMenuItemUser,
     ReglamentQuestion,
-    EmployeeProfile,
-    ReglamentModalSave
+    EmployeeProfile
   },
   props: {
     reglament: {
@@ -378,8 +371,7 @@ export default {
       buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
       isFormInvalid: false,
       showEmployees: false,
-      buttonDisabled: false,
-      showSaveModal: false
+      buttonDisabled: false
     }
   },
   computed: {
