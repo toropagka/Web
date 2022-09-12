@@ -16,15 +16,6 @@
     @exitEditMode="isEditing = false"
   />
   <div v-else>
-    <!-- <div
-      class="flex justify-end h-[30px]"
-    >
-      <div class="flex justify-center items-center">
-        <NavBarButtonsReglament
-          :reglament-uid="reglament.uid"
-        />
-      </div>
-    </div> -->
     <div class="flex justify-between items-center mt-4">
       <h1
         v-if="!isTesting"
@@ -217,7 +208,6 @@ import ReglamentEditLimit from '@/components/Reglaments/ReglamentEditLimit.vue'
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-// import NavBarButtonsReglament from '@/components/Navbar/NavBarButtonsReglament'
 import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEditor'
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import ReglamentTest from '@/components/Reglaments/ReglamentTest'
@@ -227,7 +217,6 @@ export default {
   components: {
     ReglamentTest,
     ReglamentContentEditor,
-    // NavBarButtonsReglament,
     QuillEditor,
     ReglamentSmallButton,
     ReglamentEditLimit,
