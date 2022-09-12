@@ -124,7 +124,9 @@
                 :class="{ 'uppercase': !props.node.info._isEditable && colors[props.node.info.uid_marker] && colors[props.node.info.uid_marker].uppercase, 'text-gray-500': props.node.info.status == 1 || props.node.info.status == 7, 'line-through': props.node.info.status == 1 || props.node.info.status == 7, 'font-extrabold': props.node.info.readed == 0 }"
                 :style="{ color: getValidForeColor(colors[props.node.info.uid_marker]?.fore_color) }"
                 @focusout="clearTaskFocus(props.node.info)"
-                @keydown.enter="updateTask($event, props.node.info); props.node.info._isEditable = false;"
+                @keydown.enter="updateTask($event, props.node.info)"
+                @keydown.enter.exact.prevent
+                @keydown.shift.enter.exact.prevent
               />
             </div>
             <!-- Tags, Overdue, Customer, Performer -->
@@ -812,6 +814,10 @@ export default {
       return false
     },
     updateTask (event, task) {
+      if (task.name.length === 0) {
+        this.showError = true
+        return
+      }
       if (task._isEditable) {
         task.enterPress = true
         task.name = task.name.replace(/\r?\n|\r/g, '')
