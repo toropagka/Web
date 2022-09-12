@@ -82,7 +82,6 @@ export default {
   width: 0;
   height: 0;
   opacity: 0;
-  position: absolute;
 }
 .answer input:checked ~ .checkmark {
   @apply border-none bg-[#FF9123]
