@@ -86,6 +86,7 @@
             class="form-control taskName-custom dark:bg-gray-900 dark:text-gray-100 dark:border-gray-900"
             data-placeholder="Task Name"
             style="font-weight: bold; font-size: 18px"
+            spellcheck="false"
             :contenteditable="selectedTask?.uid_customer === user?.current_user_uid"
             @blur="changeName($event)"
             @focus="$refs.TaskName.focus()"
