@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import { copyText } from 'vue3-clipboard'
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
@@ -171,9 +170,6 @@ export default {
     taskMessages () {
       return this.$store.state.taskfilesandmessages.messages
     },
-    taskFiles () {
-      return this.$store.state.taskfilesandmessages.files
-    },
     employees () {
       return this.$store.state.employees.employees
     },
@@ -220,7 +216,7 @@ export default {
     }
   },
   watch: {
-    firstTask (newtask, oldtask) {
+    firstTask (newtask) {
       if (newtask && newtask.uid && !this.isNotify) {
         this.isTaskMessagesLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
@@ -332,15 +328,6 @@ export default {
           this.tasksLoaded = true
         })
     },
-    linkToTask () {
-      copyText(`${window.location.origin}/task/${this.firstTask.uid}`, undefined, (error, event) => {
-        if (error) {
-          console.log(error)
-        } else {
-          console.log(event)
-        }
-      })
-    },
     setSlidesCopy () {
       for (let i = 0; i < this.slides.length; i++) {
         if (this.slides[i].visible) {
@@ -357,14 +344,6 @@ export default {
     },
     readTask: function () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
-    },
-    dateToLabelFormat: function (calendarDate) {
-      const day = calendarDate.getDate()
-      const month = calendarDate.toLocaleString('default', { month: 'short' })
-      const weekday = calendarDate.toLocaleString('default', {
-        weekday: 'short'
-      })
-      return day + ' ' + month + ', ' + weekday
     },
     nextTask: function () {
       for (let i = 0; i < this.slides.length; i++) {
