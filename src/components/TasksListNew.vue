@@ -815,7 +815,6 @@ export default {
     },
     updateTask (event, task) {
       if (task.name.length === 0) {
-        this.showError = true
         return
       }
       if (task._isEditable) {
@@ -913,7 +912,6 @@ export default {
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
-      this.$store.commit(TASK.SELECT_TASK, uid)
     },
     addSubtask (parent) {
       this.orderNewSubtask = this.orderNewSubtask - 1
