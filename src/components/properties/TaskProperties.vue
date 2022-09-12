@@ -806,6 +806,9 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_TAGS, data).then(
         resp => {
           this.selectedTask.tags = [...tags]
+          if (this.storeTasks[this.selectedTask.uid]) {
+            this.storeTasks[this.selectedTask.uid].info.tags = [...tags]
+          }
         }
       )
     },
