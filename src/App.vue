@@ -4,7 +4,7 @@
     :is="$route.meta.layout || 'div'"
     class="h-screen overflow-auto"
   >
-    <router-view />
+    <router-view class="overflow-auto" />
   </component>
 </template>
 <script>
