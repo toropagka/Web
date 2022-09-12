@@ -80,6 +80,8 @@
         />
       </div>
     </div>
+    <!--
+      Убрали эту настройку перед релизом табов. Она не работает.
     <div
       class="mt-[45px] flex gap-[10px] items-center"
       :class="{'cursor-pointer': isCanEdit}"
@@ -131,6 +133,8 @@
         Все буквы прописные
       </div>
     </div>
+
+    -->
     <div
       class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
