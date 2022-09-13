@@ -5,7 +5,7 @@
   <div v-if="audioLoaded">
     <figure>
       <audio
-        class="w-full"
+        class="w-[280px]"
         controls
         :src="audioSrc"
       >
