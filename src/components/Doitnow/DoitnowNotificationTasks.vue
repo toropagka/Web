@@ -2,12 +2,12 @@
   <div class="flex justify-between items-center">
     <div class="flex flex-col justify-center items-center py-6 px-5 bg-white rounded-lg text-[25px] font-bold grow">
       <div
-        class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center"
+        class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center text-[#424242]"
       >
         Пройти регламент "{{ name }}"
       </div>
       <button
-        class="w-xl-1/6 mt-[35px] w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+        class="w-xl-1/6 mt-[35px] w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] text-lg px-10 rounded-md hover:bg-slate-200  font-medium"
         @click="gotoReglamentContent"
       >
         Пройти регламент
