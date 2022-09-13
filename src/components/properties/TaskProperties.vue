@@ -719,7 +719,7 @@ export default {
       )
     },
     shouldShowFreePerformer () {
-      if (this.user.tarif === 'free') {
+      if (this.user.tarif === 'free' || this.$store.getters.isLicenseExpired) {
         this.showFreeModalPerform = true
       }
     },
