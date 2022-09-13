@@ -212,7 +212,7 @@ export default {
     },
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
-      return tarif !== 'alpha' && tarif !== 'trial'
+      return (tarif !== 'alpha' && tarif !== 'trial') || this.$store.getters.isLicenseExpired
     }
   },
   watch: {

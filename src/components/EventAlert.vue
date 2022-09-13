@@ -52,6 +52,7 @@ export default {
     getTarifText () {
       switch (this.tarif) {
         case 'free':
+        case 'alpha':
           return 'Купите лицензию, чтобы использовать все функции приложения'
         case 'trial':
           return 'Вам доступны все функции приложения. По истечении срока вы перейдет в режим ограниченной функциональности'
@@ -62,6 +63,8 @@ export default {
     getTarifTitle () {
       switch (this.tarif) {
         case 'free':
+          return 'Истекла лицензия'
+        case 'alpha':
           return 'Истекла лицензия'
         case 'trial':
           return 'Пробный период'
