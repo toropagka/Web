@@ -246,8 +246,7 @@ export default {
       return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
     },
     commonBoards () {
-      const currentUserEmail = this.user.current_user_email.toLowerCase()
-      const arrCommonBoards = this.boardsCanEdit.filter(board => board.email_creator.toLowerCase() !== currentUserEmail)
+      const arrCommonBoards = this.boardsCanEdit.filter(board => board.members[this.user.current_user_uid] !== 0)
       arrCommonBoards.sort((board1, board2) => {
         return board1.name.localeCompare(board2.name)
       })
