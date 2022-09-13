@@ -26,6 +26,7 @@
         <div class="flex-initial ml-[10px] overflow-hidden w-full">
           <p
             class="font-roboto text-[13px] leading-[15px] font-medium truncate"
+            :style="{'color': titleColor}"
           >
             {{ title }}
           </p>
@@ -118,6 +119,10 @@ export default {
       default: ''
     },
     subTitle: {
+      type: String,
+      default: ''
+    },
+    titleColor: {
       type: String,
       default: ''
     },
