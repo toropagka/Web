@@ -1,6 +1,6 @@
 <template>
   <div class="mt-[34px]">
-    <p class="text-base font-medium">
+    <p class="text-base font-medium text-[#4C4C4D]">
       Владелец лицензии
     </p>
     <div class="flex mt-[15px]">
@@ -20,13 +20,13 @@
           />
         </svg>
       </span>
-      <span class="text-sm">
+      <span class="text-sm text-[#606061]">
         {{ user?.owner_title }}
       </span>
     </div>
   </div>
   <div class="mt-[34px]">
-    <p class="text-base font-medium">
+    <p class="text-base font-medium text-[#4C4C4D]">
       Почта владельца лицензии
     </p>
     <div class="flex mt-[17px]">
@@ -44,7 +44,7 @@
           />
         </svg>
       </span>
-      <span class="text-sm">
+      <span class="text-sm text-[#606061]">
         {{ user?.owner_email }}
       </span>
     </div>

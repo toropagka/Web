@@ -5,10 +5,10 @@
   />
   <form class="px-5 text-lg bg-white p-2 rounded-xl pb-[150px]">
     <div class="mt-[15px]">
-      <p class="text-base font-medium">
+      <p class="text-base font-medium text-[#4C4C4D]">
         Как с нами связаться:
       </p>
-      <div class="flex mt-[15px]">
+      <div class="flex mt-[15px] text-[#606061]">
         <span class="relative mr-1.5">
           <svg
             width="25"
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div
-      class="flex mt-[17px]"
+      class="flex mt-[17px] text-[#606061]"
     >
       <span class="relative mr-1.5">
         <svg
@@ -68,7 +68,7 @@
           />
         </svg>
       </span>
-      <span class="text-sm mb-2">
+      <span class="text-sm mb-2 text-[#606061]">
         Telegram/WhatsApp/VK
       </span>
     </div>
