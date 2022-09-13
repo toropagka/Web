@@ -159,7 +159,9 @@
         >
           <ListBlocItem
             :title="userValue.name"
+            title-color="#4C4C4D"
             :sub-title="userValue.email"
+            sub-title-color="#606061"
             :right-icon="empIcon(userValue)"
             :selected="selectedEmployee === userValue.email"
             @click.stop="showUserProperties(userValue)"

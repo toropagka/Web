@@ -1,4 +1,5 @@
 import {
+  RESET_ONBOARDING_STATE,
   USER_JUST_REGISTERED_TOGGLE,
   USER_START_ONBOARDING,
   USER_VIEWED_MODAL
@@ -55,6 +56,14 @@ const mutations = {
     if (data === false) {
       localStorage.removeItem('justRegistered')
     }
+  },
+  [RESET_ONBOARDING_STATE]: (state) => {
+    state.justRegistered = null
+    state.visitedModals = null
+    state.hideNavBar = false
+    state.newUserTasks = false
+    state.showOnboarding = false
+    state.showModals = null
   }
 }
 

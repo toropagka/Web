@@ -141,7 +141,6 @@ const TaskListChecker = {
   },
   tasksOverdue (task) {
     console.log(task)
-    console.log('in overdue ')
     if (
       task.email_performer &&
       task.email_performer === user.value.current_user_email &&
@@ -151,7 +150,7 @@ const TaskListChecker = {
     }
     return false
   },
-  tasksready (task) {
+  tasksReady (task) {
     if (
       task.uid_customer === user.value.current_user_uid &&
       task.status === TASK_STATUS.TASK_READY

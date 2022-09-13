@@ -65,7 +65,7 @@
       class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
+      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage) && !displayModal"
       class="ml-0 pt-[15px] z-[2] grow"
     />
     <div
