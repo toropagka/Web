@@ -17,6 +17,7 @@ import { RESET_STATE_PROJECT } from '../actions/projects'
 import { RESET_REGLAMENTS_STATE } from '../actions/reglaments'
 import { RESET_DEPARTMENTS_STATE } from '../actions/departments'
 import { RESET_EMPLOYEE_STATE } from '../actions/employees'
+import { RESET_ONBOARDING_STATE } from '@/store/actions/onboarding'
 
 const state = {
   token: localStorage.getItem('user-token') || '',
@@ -154,12 +155,15 @@ const actions = {
       localStorage.removeItem('user-token')
       localStorage.removeItem('user-refresh-token')
       localStorage.removeItem('visitedModals')
+      localStorage.removeItem('justRegistered')
+      localStorage.removeItem('slides')
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/exit'
       commit(RESET_STATE_BOARD)
       commit(RESET_STATE_PROJECT)
       commit(RESET_REGLAMENTS_STATE)
       commit(RESET_DEPARTMENTS_STATE)
       commit(RESET_EMPLOYEE_STATE)
+      commit(RESET_ONBOARDING_STATE)
       axios
         .get(url)
         .then((resp) => {
