@@ -255,7 +255,7 @@ export default {
         name: name,
         is_right: answer.is_right,
         needToCreate: answer.needToCreate,
-        needToUpdate: answer.needToUpdate,
+        needToUpdate: true,
         invalid: name === ''
       }
       this.$emit('updateAnswerName', data)
