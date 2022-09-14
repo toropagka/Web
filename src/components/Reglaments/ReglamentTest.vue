@@ -64,7 +64,7 @@
         />
       </template>
       <p
-        class="font-[500] text-[16px] mt-10 leading-[26px] text-center"
+        class="font-[700] text-[16px] text-[#2E2E2E] mt-10 leading-[26px] text-center"
       >
         Пожалуйста, еще раз внимательно ознакомьтесь с регламентом и пройдите текст повторно
       </p>

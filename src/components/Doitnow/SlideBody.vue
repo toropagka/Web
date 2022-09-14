@@ -14,7 +14,7 @@
       class="flex flex-col items-center w-8/12"
     >
       <div
-        class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
+        class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
       >
         Добро пожаловать в ЛидерТаск Web!
       </div>
@@ -57,7 +57,7 @@
     >
       <div class="flex flex-col items-center">
         <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
+          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
         >
           Установите фото профиля (аватар) в ЛидерТаск
         </div>
@@ -85,7 +85,7 @@
       class="flex flex-col items-center"
     >
       <div
-        class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
+        class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
       >
         Добавьте сотрудников
       </div>
@@ -128,7 +128,7 @@
     >
       <div class="flex flex-col items-center">
         <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
+          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
         >
           Добавьте ваши правила и регламенты
         </div>
@@ -160,7 +160,7 @@
     >
       <div class="flex flex-col items-center">
         <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
+          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
         >
           Поручите задачи
         </div>

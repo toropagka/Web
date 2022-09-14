@@ -10,7 +10,7 @@
     </div>
     <div
       v-if="correctAnswers.length"
-      class="font-[400] text-[16px] my-1 min-w-[10px] min-h-[10px] px-1 break-words"
+      class="font-[400] text-[#4C4C4D] text-[16px] my-1 min-w-[10px] min-h-[10px] px-1 break-words"
     >
       Правильные ответы:
       <ul>
