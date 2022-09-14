@@ -37,5 +37,7 @@ export function removeBoard (obj) {
 
 export function addBoard (obj) {
   store.commit(BOARD.PUSH_BOARD, [obj])
-  store.commit(NAVIGATOR.NAVIGATOR_PUSH_COMMON_BOARD, obj)
+  if (store.state.navigator.navigator.new_private_boards[1].items.findIndex(board => board.uid === obj.uid) === -1) {
+    store.commit(NAVIGATOR.NAVIGATOR_PUSH_COMMON_BOARD, obj)
+  }
 }
