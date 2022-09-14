@@ -330,7 +330,7 @@ export default {
     },
     setSlidesCopy () {
       for (let i = 0; i < this.slides.length; i++) {
-        if (this.slides[i].visible) {
+        if (this.slides[i].visible === 'true' || this.slides[i].visible === true) {
           this.slidesCopy.push(this.slides[i])
         }
       }
@@ -346,9 +346,6 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
     nextTask: function () {
-      for (let i = 0; i < this.slides.length; i++) {
-        console.log(this.slides[i].name === 'welcome')
-      }
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return
