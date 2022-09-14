@@ -8,7 +8,6 @@ import {
   FILE_SUCCESS,
   GET_FILE,
   MERGE_FILES_WITH_MESSAGES,
-  MYFILES,
   REFRESH_FILES,
   TOGGLE_UPLOAD_STATUS
 } from '../actions/taskfiles'
@@ -39,7 +38,6 @@ const state = {
   /* files */
   files: [],
   file: '',
-  myfiles: {},
   uploadStarted: false,
   fileAbortController: null
 }
@@ -52,7 +50,6 @@ const actions = {
       commit('abortFileAbortController')
       const fileAbortController = new AbortController()
       commit('initFileAbortController', fileAbortController)
-      commit(FILES_REQUEST)
       const url =
         process.env.VUE_APP_LEADERTASK_API +
         'api/v1/tasksfiles/bytask?uid=' +
@@ -152,7 +149,6 @@ const actions = {
   },
   [INSPECTOR_MESSAGES_REQUEST]: ({ commit, dispatch }, taskUid) => {
     return new Promise((resolve, reject) => {
-      commit(MESSAGES_REQUEST)
       const url =
         process.env.VUE_APP_INSPECTOR_API + 'message?uid_task=' + taskUid
       axios({ url: url, method: 'GET' })
@@ -224,12 +220,10 @@ const mutations = {
     state.status = 'loading'
   },
   [MESSAGES_SUCCESS]: (state, resp) => {
-    state.status = 'success'
     state.chatMessages = resp.data.msgs
     state.hasLoadedOnce = true
   },
   [INSPECTOR_MESSAGES_SUCCESS]: (state, resp) => {
-    state.status = 'success'
     state.inspectorMessages = resp.data
     state.hasLoadedOnce = true
   },
@@ -251,17 +245,14 @@ const mutations = {
     state.status = 'loading'
   },
   [FILES_SUCCESS]: (state, resp) => {
-    state.status = 'success'
     state.files = resp?.data?.files || []
     state.hasLoadedOnce = true
   },
   [FILE_SUCCESS]: (state, resp) => {
-    state.status = 'success'
     state.file = resp.data.files
     state.hasLoadedOnce = true
   },
   [CREATE_FILE_REQUEST]: (state, resp) => {
-    state.status = 'success'
     state.hasLoadedOnce = true
   },
   [CHANGE_MESSAGE]: (state, data) => {
@@ -283,7 +274,6 @@ const mutations = {
     state.messages.push(data)
   },
   [CREATE_FILES_REQUEST]: (state, resp) => {
-    state.status = 'success'
     state.hasLoadedOnce = true
     for (let i = 0; i < state.messages.length; i++) {
       state.messages = state.messages.filter((item) => !item.loading)
@@ -292,13 +282,6 @@ const mutations = {
       file.msg = file.file_name
       state.messages.push(file)
     }
-  },
-  [MYFILES]: (state, myfiles) => {
-    state.status = 'success'
-    for (const taskfile of myfiles) {
-      state.myfiles[taskfile.uid_creator] = taskfile
-    }
-    state.hasLoadedOnce = true
   },
   [FILES_ERROR]: (state) => {
     state.status = 'error'
@@ -339,6 +322,7 @@ const mutations = {
     state.messages.sort((a, b) => {
       return new Date(a.date_create) - new Date(b.date_create)
     })
+    state.status = 'success'
   },
   [TOGGLE_UPLOAD_STATUS]: (state) => {
     state.uploadStarted = !state.uploadStarted
