@@ -5,7 +5,7 @@
   />
   <!--  -->
   <div
-    v-if="user.tarif !== 'alpha' && user.tarif !== 'trial'"
+    v-if="user.tarif !== 'alpha' && user.tarif !== 'trial' || $store.getters.isLicenseExpired"
     class="grid grid-cols-1 gap-4 p-5 bg-white rounded mt-2"
   >
     <KarmaNoLicenceWindow />

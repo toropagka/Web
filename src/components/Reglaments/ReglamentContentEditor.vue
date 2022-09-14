@@ -64,8 +64,8 @@
             <ReglamentSmallButton
               :disabled="disabledButtons"
               :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
-              @click="onSaveReglamentButtonClick"
               title="Сохранить"
+              @click="onSaveReglamentButtonClick"
             >
               <svg
                 width="20"

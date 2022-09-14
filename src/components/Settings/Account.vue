@@ -47,7 +47,7 @@
         <input
           v-model="oldPassword"
           type="text"
-          style="-webkit-text-security: disc;"
+          style="-webkit-text-security: disc"
           autocomplete=""
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
@@ -71,7 +71,7 @@
         <input
           v-model="newPassword"
           type="text"
-          style="-webkit-text-security: disc;"
+          style="-webkit-text-security: disc"
           autocomplete=""
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
@@ -83,7 +83,7 @@
         <input
           v-model="confirmNewPassword"
           type="text"
-          style="-webkit-text-security: disc;"
+          style="-webkit-text-security: disc"
           autocomplete=""
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         >
@@ -141,18 +141,29 @@
         <div class="text-base font-medium mb-2 text-[#4C4C4D]">
           Тип аккаунта
         </div>
-        <p
-          class="text-sm landing-4 font-medium text-[#606061]"
-        >
+        <p class="text-sm landing-4 font-medium text-[#606061]">
           {{ tarifText }}
         </p>
         <p
           v-if="$store.state.user.user?.date_expired"
           class="text-sm landing-4 mt-1 font-normal text-[#606061]"
         >
-          <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
-          <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
-          <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a
+            v-if="
+              user.tarif !== 'free' &&
+                user.tarif !== 'trial' &&
+                $store.state.user.user?.days_left != 0
+            "
+          >Лицензия истекает {{ getDateExpired() }} (дней:
+            {{ $store.state.user.user?.days_left ?? 0 }})</a>
+          <a
+            v-if="user.tarif === 'free' || (user.tarif !== 'free' &&
+              user.tarif !== 'trial' && $store.state.user.user?.days_left == 0)"
+          >Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+          <a
+            v-if="user.tarif === 'trial'"
+          >Мы активировали Вам пробную версию, в которой доступны 100% функций
+            ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
         </p>
         <div class="mt-2">
           <router-link to="/settings/tarif">
@@ -193,7 +204,11 @@
                 class="mt-2 text-[14px] landing-[13px] text-[#007BE5]"
                 @click="showEditphone = true"
               >
-                {{ userPhone().length ? 'Изменить номер телефона' : 'Добавить номер телефона' }}
+                {{
+                  userPhone().length
+                    ? 'Изменить номер телефона'
+                    : 'Добавить номер телефона'
+                }}
               </button>
             </form>
           </div>
@@ -309,7 +324,10 @@ export default {
       const [dateExp, timeExp] = dateExpiredString.split(' ')
       const [dayExp, monthExp, yearExp] = dateExp.split('.')
       dateExpiredString = `${yearExp}-${monthExp}-${dayExp}T${timeExp}Z`
-      const dateExpired = new Date(dateExpiredString).toLocaleString('default', { year: 'numeric', month: 'numeric', day: 'numeric' })
+      const dateExpired = new Date(dateExpiredString).toLocaleString(
+        'default',
+        { year: 'numeric', month: 'numeric', day: 'numeric' }
+      )
       return dateExpired
     },
     startOnBoarding () {
@@ -318,11 +336,26 @@ export default {
       this.startSlides()
     },
     startSlides () {
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: true })
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addAvatar', visible: true })
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addEmployees', visible: true })
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: true })
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'delegateTasks', visible: true })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, {
+        name: 'welcome',
+        visible: true
+      })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, {
+        name: 'addAvatar',
+        visible: true
+      })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, {
+        name: 'addEmployees',
+        visible: true
+      })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, {
+        name: 'addReglaments',
+        visible: true
+      })
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, {
+        name: 'delegateTasks',
+        visible: true
+      })
     },
     changeUserPhoto (event) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
@@ -352,7 +385,11 @@ export default {
     changeUserPassword () {
       const oldPassword = this.oldPassword
       const newPassword = this.newPassword
-      const isFieldNotEmptyAndRight = oldPassword && this.newPassword && this.confirmNewPassword && this.newPassword === this.confirmNewPassword
+      const isFieldNotEmptyAndRight =
+        oldPassword &&
+        this.newPassword &&
+        this.confirmNewPassword &&
+        this.newPassword === this.confirmNewPassword
       const data = {
         old_password: oldPassword,
         new_password: newPassword
@@ -365,7 +402,7 @@ export default {
           this.confirmNewPassword = ''
         })
 
-        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).catch(err => {
+        this.$store.dispatch(AUTH_CHANGE_PASSWORD, data).catch((err) => {
           this.invalidOldPassword = err.error
           this.oldPassword = ''
           this.confirmNewPassword = ''
@@ -376,15 +413,17 @@ export default {
         this.newPassError = true
       }
       // проверяем пустое поле старого пароля
-      oldPassword ? this.emptyOldPass = false : this.emptyOldPass = true
+      oldPassword ? (this.emptyOldPass = false) : (this.emptyOldPass = true)
       // проверяем пустые поля нового пароля
-      this.newPassword && this.confirmNewPassword ? this.emptyNewPasses = false : this.emptyNewPasses = true
+      this.newPassword && this.confirmNewPassword
+        ? (this.emptyNewPasses = false)
+        : (this.emptyNewPasses = true)
     },
 
     changeUserPhone (phone) {
       this.showEditphone = false
       const date = new Date()
-      const timezone = date.getTimezoneOffset() / 60 * (-1)
+      const timezone = (date.getTimezoneOffset() / 60) * -1
       const data = {
         phone: phone,
         timezone: timezone
@@ -419,13 +458,11 @@ export default {
 </script>
 
 <style scoped>
-
-.circle-image{
+.circle-image {
   display: inline-block;
   border-radius: 10px;
-
 }
-.circle-image img{
+.circle-image img {
   width: 106px;
   height: 106px;
 }

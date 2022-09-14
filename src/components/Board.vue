@@ -97,7 +97,6 @@
                 v-else
                 class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
                 :class="{ 'cursor-default': !column.CanEditStage }"
-                :style="{ color: getContrastYIQ(column.Color) }"
               >
                 {{ column.Name }}
               </p>

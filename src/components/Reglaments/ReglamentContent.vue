@@ -363,7 +363,7 @@ export default {
   },
   methods: {
     setEdit () {
-      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
+      if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {
         this.showEditLimit = true
         return
       }
@@ -371,7 +371,7 @@ export default {
       this.isEditing = true
     },
     startTheReglament () {
-      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
+      if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {
         this.showTestLimit = true
         return
       }

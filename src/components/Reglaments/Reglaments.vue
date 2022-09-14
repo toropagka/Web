@@ -279,7 +279,7 @@ export default {
       this.$store.state.reglaments.showAll = !this.showAllReglaments
     },
     clickAddReglament (uid) {
-      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
+      if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {
         this.showAddLimit = true
         return
       }

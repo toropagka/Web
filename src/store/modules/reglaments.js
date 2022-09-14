@@ -201,6 +201,8 @@ const mutations = {
     for (let i = 0; i < state.reglamentQuestions.length; i++) {
       if (state.reglamentQuestions[i].uid === data.uid) {
         state.reglamentQuestions[i].name = data.name
+        state.reglamentQuestions[i].needToCreate = data.needToCreate
+        state.reglamentQuestions[i].needToUpdate = data.needToUpdate
         state.reglamentQuestions[i].invalid = data.invalid
         return
       }

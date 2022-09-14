@@ -115,7 +115,7 @@
           <PopMenuItem
             v-for="(dep, index) in allDepartments"
             :key="index"
-            class="max-w-[150px] truncate"
+            class="w-[360px] truncate"
             @click="setDepartment(index)"
           >
             {{ dep.name }}

@@ -5,7 +5,8 @@ export default {
     return {
       intervalId: 0,
       text: ('Идет загрузка файла. Пожалуйста, подождите'),
-      dots: ('.')
+      dots: ('.'),
+      videoBlob: null
     }
   },
   mounted () {
@@ -21,8 +22,13 @@ export default {
       const fileBlob = new Blob([resp.data], { type: type + '/' + format })
       const urlCreator = window.URL || window.webkitURL
       const fileURL = urlCreator.createObjectURL(fileBlob)
-      this.dots = '.'
-      window.location.href = fileURL
+      if (type === 'video') {
+        this.videoBlob = fileURL
+      } else {
+        this.text = 'Файл был успешно загружен'
+        this.dots = '.'
+        window.location.href = fileURL
+      }
       clearInterval(this.intervalId)
     }).catch((err) => {
       this.text = err
@@ -34,8 +40,18 @@ export default {
 
 </script>
 <template>
-  {{ fileHasBeenLoaded }}
-  <p class="text-[40px] font-[700] mt-10 ml-[18%]">
+  <p
+    v-if="!videoBlob"
+    class="text-[40px] font-[700] mt-10 ml-[18%]"
+  >
     {{ text }} {{ dots }}
   </p>
+  <video
+    v-if="videoBlob"
+    :key="videoBlob"
+    class="w-full h-full"
+    :src="videoBlob"
+    autoplay
+    controls
+  />
 </template>

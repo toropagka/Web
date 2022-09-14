@@ -61,7 +61,6 @@ export default {
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASK_DELEGATE_ME, uid)
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     reload () {
       this.selectAnotherEmployee(this.employeeUid)

@@ -159,8 +159,7 @@
         @click="shouldShowInspector"
       />
       <EventAlert
-        v-if="user?.tarif === 'trial' || user?.tarif === 'free'"
-        :message-text="user?.tarif === 'trial' ? 'Пробная версия' : 'У Вас истекла лицензия, пожалуйста, обновите тариф'"
+        v-if="$store.getters.isLicenseExpired"
         :tarif="user?.tarif"
       />
     </div>
@@ -234,7 +233,7 @@ export default {
       return this.activeTab === code
     },
     shouldShowInspector () {
-      if (this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') {
+      if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {
         this.showFreeModal = true
         return
       }
