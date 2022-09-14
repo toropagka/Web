@@ -18,7 +18,7 @@
         <div>
           <router-link to="/tasks/today">
             <button
-              class="bg-[#FF912380] px-[18px] py-[16px] font-[500] rounded-[8px] text-black text-[16px] text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
+              class="bg-[#FF912380] px-[18px] py-[16px] font-[500] rounded-[8px] text-[#3D3E40] text-[16px] text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
             >
               Запланировать
             </button>
