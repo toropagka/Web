@@ -146,7 +146,6 @@ import ReglamentAddLimit from '@/components/Reglaments/ReglamentAddLimit.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 import NavBar from '@/components/Navbar/NavBar.vue'
 
-// import * as TASK from '@/store/actions/tasks'
 import * as NAVIGATOR from '@/store/actions/navigator'
 import * as REGLAMENTS from '@/store/actions/reglaments'
 import * as SLIDES from '@/store/actions/slides.js'
@@ -214,22 +213,6 @@ export default {
     },
     reglaments () {
       const reglaments = []
-      /*
-      const currentUserEmail = this.user.current_user_email.toLowerCase()
-      const myItems = this.items.filter(reglament => reglament.email_creator.toLowerCase() === currentUserEmail)
-      const otherItems = this.items.filter(reglament => reglament.email_creator.toLowerCase() !== currentUserEmail)
-      reglaments.push({
-        dep: 'Мои регламенты',
-        items: myItems
-      })
-      if (otherItems.length) {
-        reglaments.push({
-          dep: 'Другие регламенты',
-          items: otherItems
-        })
-      }
-      return reglaments
-      */
       const common = {
         dep: 'Общие регламенты',
         uid: '',

@@ -3,6 +3,7 @@
     :title="reglament.name"
     :sub-title="author"
     sub-title-color="#7E7E80"
+    title-color="#4C4C4D"
     :right-icon="iconCheck"
   >
     <svg
