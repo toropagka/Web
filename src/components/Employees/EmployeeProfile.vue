@@ -24,7 +24,7 @@
         />
       </svg>
     </div>
-    <span class="text-[12px] shrink-0">
+    <span class="text-[12px] shrink-0 text-[#4C4C4D] font-medium">
       {{ name }}
     </span>
   </div>
