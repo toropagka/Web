@@ -18,7 +18,7 @@
 
     <div
       v-if="task.mode === 'slide' && task.visible"
-      class="py-6 px-5 w-full bg-white rounded-lg"
+      class="pt-[45px] pb-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
         :name="task.name"
