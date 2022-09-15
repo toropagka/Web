@@ -133,11 +133,11 @@
     </div>
     <div
       v-if="!isTesting && contributors.length"
-      class="mt-5"
+      class="mt-5 mb-5"
     >
       <button
         class="flex items-center font-['Roboto'] text-[#424242] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium hover:text-black transition"
-        @click="showEmployees = !showEmployees"
+        @click="showEmployeesHandler"
       >
         <span class="mr-1.5">Сотрудники, прошедшие регламент</span>
         <svg
@@ -151,7 +151,7 @@
             fill-rule="evenodd"
             clip-rule="evenodd"
             d="M0.750134 0.493017C0.397701 0.850149 0.40151 1.42536 0.758642 1.7778L5.17757 6.13858C5.51147 6.46809 6.04134 6.48919 6.40039 6.18728L11.1876 2.16194C11.5716 1.83903 11.6211 1.26594 11.2982 0.881909C10.9753 0.497881 10.4022 0.448338 10.0182 0.771252L5.86461 4.26382L2.03491 0.484509C1.67778 0.132076 1.10257 0.135885 0.750134 0.493017Z"
-            fill="#4C4C4D"
+            :fill="showEmployees ? '#7E7E80' : '#4C4C4D'"
           />
         </svg>
       </button>
@@ -369,6 +369,9 @@ export default {
       }
 
       this.isEditing = true
+    },
+    showEmployeesHandler () {
+      this.showEmployees = !this.showEmployees
     },
     startTheReglament () {
       if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {

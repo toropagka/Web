@@ -130,7 +130,7 @@
         <TaskRepeat
           v-if="selectedTask?.uid_customer === user?.current_user_uid && selectedTask?.SeriesType !== 0"
           :class="isDark ? 'dark' : 'light'"
-          @click="showFreeModalRepeat = (user.tarif === 'free')"
+          @click="showFreeModalRepeat = (user.tarif === 'free' || isLicenseExpired)"
         />
         <!-- Кнопка Проект -->
         <TaskPropsButtonProject
@@ -278,7 +278,7 @@
     <CardMessageInput
       v-model="taskMsg"
       class="mt-[16px]"
-      :can-add-files="user?.tarif !== 'free'"
+      :can-add-files="isLicenseExpired"
       @cantWriteMessages="showFreeModalChat = true"
       @createCardMessage="sendTaskMsg"
       @createCardFile="createTaskFile"
@@ -404,6 +404,7 @@ export default {
       if (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) return true
       return false
     },
+    isLicenseExpired () { return !this.$store.getters.isLicenseExpired },
     modalBoxDeleteText () {
       let text = 'Вы действительно хотите удалить задачу?'
       if (this.tasks[this.selectedTaskUid]?.children?.length > 0) {
@@ -411,8 +412,8 @@ export default {
       }
       return text
     },
-    canEditChecklist () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free' },
-    canCheckChecklist () { return (this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free' },
+    canEditChecklist () { return ((this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free') || this.isLicenseExpired },
+    canCheckChecklist () { return ((this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free') || this.isLicenseExpired },
     canEditComment () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) },
     messageQuoteUser () {
       if (!this.currentAnswerMessageUid) return ''
@@ -592,7 +593,7 @@ export default {
       })
     },
     createChecklist () {
-      if (this.user.tarif === 'free') {
+      if (this.user.tarif === 'free' || this.isLicenseExpired) {
         this.showFreeModalCheck = true
         return
       }
@@ -719,7 +720,7 @@ export default {
       )
     },
     shouldShowFreePerformer () {
-      if (this.user.tarif === 'free' || this.$store.getters.isLicenseExpired) {
+      if (this.user.tarif === 'free' || this.isLicenseExpired) {
         this.showFreeModalPerform = true
       }
     },
