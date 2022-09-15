@@ -47,13 +47,14 @@
       </div>
       <div
         v-if="!displayModal"
+        class="mb-[35px]"
       >
-        <p class="text-xl font-bold mt-10 text-center">
+        <p class="text-xl font-medium mt-10 text-center">
           Задач пока нет.<br> Создайте задачи на сегодня или запланируйте завтрашний день.
         </p>
         <div class="grid grid-cols-1">
           <button
-            class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] h-[51px] mr-auto ml-auto mt-[35px] whitespace-nowrap"
+            class="w-[238px] h-[40px] bg-[#FF912380] px-2 rounded-[8px] text-[#3D3E40] text-sm hover:bg-[#F5DEB3] mr-auto ml-auto mt-[35px] whitespace-nowrap font-medium font-[16px]"
             @click="goToNextDay"
           >
             Запланировать завтра
