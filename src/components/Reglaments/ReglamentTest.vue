@@ -70,7 +70,7 @@
       </p>
       <div class="w-full flex justify-center">
         <button
-          class="flex bg-[#FF912380] p-3 px-10 mt-10 mb-5 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          class="flex bg-[#F2B679] text-[14px] leading-[16px] font-[500] p-3 px-10 mt-10 mb-5 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
           @click="confirm(isPassed)"
         >
           Завершить
