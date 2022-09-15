@@ -257,7 +257,7 @@
       <div class="flex justify-center">
         <button
           v-if="canEdit"
-          class="flex items-center justify-center rounded-[8px] mt-5 w-[220px] mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
+          class="flex items-center justify-center rounded-[8px] mt-5 w-[220px] mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8] text-[#2E2E2E]"
           @click.stop="onAddQuestion"
         >
           Создать вопрос

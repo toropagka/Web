@@ -44,7 +44,7 @@
       >
         <!-- header -->
         <button
-          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center"
+          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
           @click="nextTask"
         >
           <span class="pr-2">Следующая задача</span>

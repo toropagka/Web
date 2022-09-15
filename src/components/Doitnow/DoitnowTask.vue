@@ -18,7 +18,7 @@
 
     <div
       v-if="task.mode === 'slide' && task.visible"
-      class="py-6 px-5 w-full bg-white rounded-lg"
+      class="pt-[45px] pb-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
         :name="task.name"
@@ -294,10 +294,10 @@
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
       <div
-        class="rounded-lg hover:cursor-pointer hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white  mb-[20px] whitespace-nowrap text-center "
+        class="rounded-lg hover:cursor-pointer hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white mb-[20px] whitespace-nowrap text-center text-[#424242] "
         @click="nextTask"
       >
-        <span class="ml-[44px] w-[70px]">Следующая задача</span>
+        <span class="ml-[40px] w-[70px]">Следующая задача</span>
         <Icon
           class="ml-[68px]"
           :height="arrowForw.height"

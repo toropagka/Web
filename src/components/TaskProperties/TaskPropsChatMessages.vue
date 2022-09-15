@@ -223,7 +223,7 @@ export default {
         isMessage: !message.uid_file && message.uid_creator !== 'inspector',
         isInspectorMessage: message.uid_creator === 'inspector',
         isMyMessage: message.uid_creator === this.currentUserUid,
-        shouldShowInspectorButtons: message?.performer_answer == null && ![TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status) && (this.selectedTask.uid_performer === this.currentUserUid)
+        shouldShowInspectorButtons: message?.performer_answer == null && ![TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(this.task.status) && (this.selectedTask?.uid_performer === this.currentUserUid)
       }))
     }
   },
