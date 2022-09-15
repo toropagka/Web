@@ -42,12 +42,11 @@
         allowfullscreen
         class="border rounded-xl"
       />
-      <button
-        class="w-[238px] mt-[35px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        class="mt-[35px]"
+        text="Понятно"
         @click="clickSuccess"
-      >
-        Понятно
-      </button>
+      />
     </div>
 
     <!-- addAvatar -->
@@ -71,12 +70,10 @@
           </article>
         </div>
       </div>
-      <button
-        class="w-[238px] h-[40px] text-[14px] justify-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        text="Загрузить"
         @click="clickAddAvatar"
-      >
-        Загрузить
-      </button>
+      />
     </div>
 
     <!-- addEmployees -->
@@ -112,13 +109,11 @@
         allowfullscreen
         class="border rounded-xl"
       />
-      <button
-        v-if="name === 'addEmployees'"
-        class="w-[238px] mt-[35px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        class="mt-[35px]"
+        text="Добавить сотрудников"
         @click="clickAddEmployees"
-      >
-        Добавить сотрудников
-      </button>
+      />
     </div>
 
     <!-- addReglaments -->
@@ -145,12 +140,10 @@
           </article>
         </div>
       </div>
-      <button
-        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        text="Создать регламент"
         @click="clickAddReglament"
-      >
-        Создать регламент
-      </button>
+      />
     </div>
 
     <!-- delegateTasks -->
@@ -183,23 +176,23 @@
           </article>
         </div>
       </div>
-      <button
+      <SlideBodyButton
         v-if="name === 'delegateTasks'"
-        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+        text="Поручить задачу"
         @click="showInspector = true"
-      >
-        Поручить задачу
-      </button>
+      />
     </div>
   </div>
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import SlideBodyButton from './SlideBodyButton.vue'
 import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
 import * as SLIDES from '@/store/actions/slides.js'
 export default {
   components: {
-    InspectorModalBox
+    InspectorModalBox,
+    SlideBodyButton
   },
   props: {
     name: {
