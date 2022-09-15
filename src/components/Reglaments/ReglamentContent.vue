@@ -133,12 +133,11 @@
     </div>
     <div
       v-if="!isTesting && contributors.length"
-      class="mt-5"
+      class="mt-5 mb-5"
     >
       <button
         class="flex items-center font-['Roboto'] text-[#424242] dark:bg-gray-700 dark:text-gray-100 rounded-lg text-[13px] font-medium hover:text-black transition"
-        :class="{'text-[#7E7E80] underline': showEmployees}"
-        @click="showEmployees = !showEmployees"
+        @click="showEmployeesHandler"
       >
         <span class="mr-1.5">Сотрудники, прошедшие регламент</span>
         <svg
@@ -370,6 +369,9 @@ export default {
       }
 
       this.isEditing = true
+    },
+    showEmployeesHandler () {
+      this.showEmployees = !this.showEmployees
     },
     startTheReglament () {
       if ((this.user.tarif !== 'alpha' && this.user.tarif !== 'trial') || this.$store.getters.isLicenseExpired) {
