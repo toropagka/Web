@@ -358,7 +358,7 @@ export default {
       </defs>
     </svg>
     <p
-      class="font-[700] text-[22px] leading-[26px] text-center"
+      class="font-[700] text-[#2E2E2E] text-[22px] leading-[26px] text-center"
     >
       Поздравляем, вы прошли регламент!
     </p>
