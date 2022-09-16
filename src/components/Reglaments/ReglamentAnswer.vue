@@ -16,7 +16,7 @@
       :ref="answer.uid + 'input'"
       :placeholder="answerPlaceholder(answer)"
       spellcheck="false"
-      class="font-[500] text-[14px] px-4 pt-4 leading-6 min-h-[60px] break-words"
+      class="font-[500] text-[14px] leading-[25px] font-['Roboto'] px-4 pt-4 min-h-[60px] break-words"
       :class="{'cursor-editing': isEditing, 'invalid': answer.invalid }"
       :contenteditable="isEditing"
       @blur="false"
