@@ -4,9 +4,7 @@
       class="pt-[8px]"
       :board-uid="boardUid"
     />
-    <div
-      class="w-full h-[calc(100%-56px)] flex flex-col"
-    >
+    <div class="w-full h-[calc(100%-56px)] flex flex-col">
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
@@ -17,7 +15,7 @@
         class="grid gap-2 mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
       >
         <template
-          v-for="(board) in subBoards"
+          v-for="board in subBoards"
           :key="board.uid"
         >
           <BoardBlocItem
@@ -89,7 +87,12 @@ export default {
       return this.currentBoard?.email_creator === user.current_user_email
     },
     loadBoard () {
-      if (!this.currentBoard || !Object.keys(this.$store.state.boards.boards).includes(this.$route.params.board_id)) {
+      if (
+        !this.currentBoard ||
+        !Object.keys(this.$store.state.boards.boards).includes(
+          this.$route.params.board_id
+        )
+      ) {
         this.$router.push('/board')
         return
       }

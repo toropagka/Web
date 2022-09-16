@@ -52,7 +52,7 @@
   />
   <div
     v-if="!displayModal"
-    class="w-full"
+    class="w-full pb-6"
   >
     <div class="flex items-center justify-between w-full">
       <NavBar
