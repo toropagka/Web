@@ -25,9 +25,11 @@ const actions = {
         boardUid
       axios({ url: url, method: 'GET', signal: cardsAbortController.signal })
         .then((resp) => {
-          resp.boardUid = boardUid
-          resp.rootState = rootState
-          commit(CARD.BOARD_CARDS_SUCCESS, resp)
+          if (resp) {
+            resp.boardUid = boardUid
+            resp.rootState = rootState
+            commit(CARD.BOARD_CARDS_SUCCESS, resp)
+          }
           resolve(resp)
         })
         .catch((err) => {
@@ -450,7 +452,7 @@ const mutations = {
   InitCardsAbortController: (state, controller) => {
     state.cardsAbortController = controller
   },
-  abortCardsController: (state) => {
+  abortCardsAbortController: (state) => {
     if (state.cardsAbortController) {
       state.cardsAbortController.abort()
     }
